@@ -1,0 +1,336 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META CONTENT="text/html; charset=windows-1251" HTTP-EQUIV=Content-Type>
+<META NAME=VI60_defaultClientScript CONTENT=JavaScript>
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<STYLE>
+		BODY
+		{
+			overflow:hidden;
+		}
+		INPUT, SELECT, OPTION, TEXTAREA
+		{
+			background:#EEF;
+			color:#000;
+			border:1px solid #000;
+			margin:2px;
+			cursor:hand;
+			font-family:Tahoma,Arial;
+			font-size:8pt;
+			overflow:hidden;
+		}
+		A
+		{
+			color:#F00;
+			font-family:Tahoma,Arial;
+			font-size:8pt;
+			text-decoration:none;
+		}
+	</STYLE>
+<TITLE>Говорящий хрен</TITLE>
+<SCRIPT LANGUAGE=javascript>
+		<!--
+        var myAgent;
+        var Merlin;
+        var stub = 1;
+        var range = null;
+        var position = 0;
+        var reading = false;
+        var smallTimer = 0;
+        var hliter = null;
+        var timer = null;
+        var urlhistory = new Array();
+
+
+                Merlin.Stop();
+                Merlin.Play("Wave");
+                Merlin.Speak("Привет, кекс!|Здорово, братэлло!|Хай, херр юзер!|Здравствуй, милашка!");
+                Merlin.Play("RestPose");
+                if (file1.value = getCookie("!LAST!")) Go();
+                setInterval("if (reading && myAgent.AudioOutput.Status==0 && smallTimer > 5) {ReadNext();smallTimer = 0;} else smallTimer++;", 100);
+                setInterval("if (www.document.body) www.document.body.onclick = SetPosition;", 1000);
+
+        Carrot =
+        {
+            status = "idle",
+            Speaker : {
+                            try
+                            {
+                                var myAgent = new ActiveXObject("Agent.Control.2");
+                                myAgent.Connected = true;
+                                myAgent.Characters.Load("Merlin");
+                                var Merlin = myAgent.Characters("Merlin");
+                                Merlin.LanguageID = 0x0419;
+                                   Merlin.Show();
+                                return Merlin;
+                            }
+                            catch (Exception)
+                            {
+                                return null;
+                            }
+                      },
+            Read : function(text)
+            {
+                Carrot.Speaker.Speak(text);
+            },
+            Stop : function()
+            {
+                Carrot.Speaker.Stop();
+            },
+
+        //----------------------------------------------------------------------
+            setPos : function(pos)
+            {
+                if (www.event.srcElement.tagName=="A")
+                {
+                    Carrot.loadPage(www.event.srcElement.href);
+                    return false;
+                }
+        //		if (!ResetRange(position)) return;
+                if (pos)
+                {
+                    Carrot.range.collapse(true);
+                    Carrot.range.move("textedit", -1);
+                    Carrot.range.move("sentence", pos);
+                    Carror.pos = pos;
+                }
+                else
+                {
+                    var newrange = www.document.body.createTextRange();
+                    newrange.moveToPoint(www.event.x, www.event.y);
+                    newrange.expand("sentence");
+                    newrange.collapse(true);
+                    Carrot.range.move("textedit", -1);
+                    for (fwd=0,Carrot.pos=0;Carrot.range.compareEndPoints("StartToStart", newrange)==-1&&(fwd=Carrot.range.move("sentence", 100))!=0;Carrot.pos+=fwd);
+                    for (;Carrot.range.compareEndPoints("StartToStart", newrange)==1&&Carrot.range.move("sentence", -1)!=0;Carrot.pos--);
+                }
+            },
+        //----------------------------------------------------------------------
+            setupPage : function()
+            {
+                try
+                {
+                    if (!www.document.body) return false;
+                    if (!Carrot.range)
+                    {
+                        Carrot.range = www.document.body.createTextRange();
+                    }
+
+                    if (!Carrot.box)
+                    {
+                        Carrot.box = www.document.createElement("DIV");
+                        Carrot.box.timer = null;
+                        Carrot.box.Morph = function (c,t,l,w,h)
+                        {
+                            var n = 25;
+                            if (c==0)
+                            {
+                                clearTimeout(timer);
+                                top_delta = ((ct = Carrot.box.offsetTop) - t)/n;
+                                left_delta = ((cl = Carrot.box.offsetLeft) - l)/n;
+                                width_delta = ((cw = Carrot.box.offsetWidth) - w)/n;
+                                hight_delta = ((ch = Carrot.box.offsetHeight) - h)/n;
+                                timer = setTimeout("Carrot.box.Morph(" + (c + 1) + ");", 10);
+                            }
+                            else if (c>n)
+                                clearTimeout(Carrot.box.timer);
+                            else
+                            {
+                                Carrot.box.style.top = Math.round(ct -= top_delta) + 'px';
+                                Carrot.box.style.left = Math.round(cl -= left_delta) + 'px';
+                                Carrot.box.style.width = Math.round(cw -= width_delta) + 'px';
+                                Carrot.box.style.height = Math.round(ch -= hight_delta) + 'px';
+                                Carrot.box.timer = setTimeout("Carrot.box.Morph(" + (c + 1) + ");", 10);
+                            }
+                        }
+                        Carrot.box.style.position = "absolute";
+                        Carrot.box.style.backgroundColor = "rgb(0,255,150)";
+                        Carrot.box.style.filter = "alpha(opacity=25)";
+                        Carrot.box.style.zIndex = "-1";
+                        www.document.body.appendChild(Carrot.box);
+                    }
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            },
+        //----------------------------------------------------------------------
+            loadPage : function(url)
+            {
+                try
+                {
+                    Carrot.range = null;
+                    Carrot.box = null;
+                    Carrot.history[Carrot.history.length] = Carrot.currentUrl;
+                    Carrot.currentUrl = url;
+                    www.location.href = url;
+                    file1.value = url;
+                }
+                catch (Exception)
+                {
+
+                }
+            },
+            currentUrl : new String(),
+            history : new Array(),
+            range : null,
+            box : null,
+            pos : 0
+        }
+
+        function UnLoad()
+        {
+        //	reading = false;
+
+        }
+
+        function Go()
+        {
+            UnLoad();
+        //	if (href.indexOf("http:") > -1)
+            try
+            {
+                www.location.href = file1.value;
+                urlhistory[urlhistory.length] = file1.value;
+                setCookie("!LAST!", file1.value, 365);
+                position = (position = parseInt(getCookie(file1.value.substr(file1.value.length-10,6)))) ? position : 0;
+                if (!reading)
+                {
+                    //Merlin.Stop();
+                    ReadSentence((position > 0) ? "Я остановился на предложении " + position + "." : "Еще не читал...");
+                }
+
+            }
+            catch (Exception)
+            {
+                //Merlin.Stop();
+                ReadSentence("К сожалению, не могу читать этот текст. (Не могу открыть страницу.)");
+                return;
+            }
+            //setCookie("!LAST!", href, 365);
+        }
+
+        function ReadSentence(text)
+        {
+            Merlin.Play("RestPose");
+            if (text)
+                Merlin.Speak(text);
+        }
+
+        function ResetRange(newposition)
+        {
+
+        }
+
+        function SetPosition()
+        {
+        }
+
+        function ReadNext()
+        {
+            if (!ResetRange(position)) return;
+            for (i=1;(fwd=range.moveEnd("sentence")>0)&&i<stub;i++);
+            range.execCommand("BackColor","","transparent");
+            range.execCommand("ForeColor","","#ff3300");
+            range.scrollIntoView(true);
+            ReadSentence(range.text);
+            hliter.morph(0,2*range.offsetTop-range.boundingTop-2,range.boundingLeft-2,range.boundingWidth,range.boundingHeight);
+            for (i=1;range.moveStart("sentence")>0&&i<stub;i++);
+            if (!fwd)
+            {
+                Merlin.Speak("Текст кончился. Его длина - " + position + " предложений.");
+                Merlin.Play("Greet");
+                Merlin.Speak("Спасибо за внимание!");
+                Merlin.Play("RestPose");
+                reading = false;
+            }
+            status = "Идет чтение в районе предложения номер " + position + "...";
+            position+=stub;
+        }
+
+
+        function setCookie(name, value, savefor, path, domain, secure)
+        {
+            var expires = null;
+            if (savefor)
+            {
+                now = new Date();
+                now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+                expires = now.toGMTString();
+            }
+
+            var curCookie = name + "=" + escape(value) +
+                ((expires) ? ";expires=" + expires : "") +
+                ((path) ? ";path=" + path : "") +
+                ((domain) ? ";domain=" + domain : "") +
+                ((secure) ? ";secure" : "");
+                document.cookie = curCookie;
+        }
+
+        function getCookie(name)
+        {
+            var prefix = name + "="
+            var cookieStartIndex = document.cookie.indexOf(prefix)
+            if (cookieStartIndex == -1)
+                return false
+            var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+            if (cookieEndIndex == -1)
+                cookieEndIndex = document.cookie.length
+            return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+        }
+
+        //-->
+	</SCRIPT>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Говорящий хрен — talking character (TTS) with Merlin. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, TTS, Merlin">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v2.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v2.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v2.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Говорящий хрен">
+<META PROPERTY="og:description" CONTENT="Говорящий хрен — talking character (TTS) with Merlin. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v2.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Говорящий хрен">
+<META NAME="twitter:description" CONTENT="Говорящий хрен — talking character (TTS) with Merlin. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY BOTTOMMARGIN=0 LEFTMARGIN=0 RIGHTMARGIN=0 TOPMARGIN=0 ONLOAD="InitAgent();" ONUNLOAD="UnLoad();">
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0 HEIGHT="100%">
+	<TR HEIGHT=1>
+		<TD><A HREF="http://kusaku.su/" TITLE="made by kusaku">&nbsp;kusaku&nbsp;</A></TD>
+		<TD><INPUT TYPE=button VALUE="в начало" ONCLICK="ResetRange(0);"><INPUT TYPE=button VALUE="читать/стоп" ONCLICK="Merlin.Stop();reading=!reading;"><INPUT TYPE="button" VALUE="тихо!" ONCLICK="Merlin.Stop();"><INPUT ONCLICK="myAgent.PropertySheet.Visible = true;myAgent.ShowDefaultCharacterProperties()" TYPE=button VALUE=установки></TD>
+		<TD><INPUT ONCHANGE="stub=(stub=parseInt(this.value))?stub:1;this.value=stub;" SIZE=1 VALUE=1></TD>
+		<TD WIDTH="100%"><INPUT RTYPE="file" ID=file1 STYLE="WIDTH: 99%">
+		<TD><INPUT TYPE=button VALUE="Go!" ONCLICK="Go(file1.value);"><INPUT TYPE=button VALUE="(back)" ONCLICK="if (urlhistory.length > 1) {file1.value = urlhistory[urlhistory.length - 2]; urlhistory.length -= 2; Go();}"></TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=5><IFRAME SRC="about:blank" HEIGHT="100%" WIDTH="100%" ID=www FRAMEBORDER=0 FRAMESPACING=0></IFRAME></TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>

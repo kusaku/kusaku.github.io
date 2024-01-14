@@ -1,0 +1,321 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META NAME=VI60_defaultClientScript CONTENT=JavaScript>
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE>JS Script Debugger</TITLE>
+<META NAME="description" CONTENT="JS Script Debugger — explore and debug JavaScript. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/tools/jsdebug.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/tools/jsdebug.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/tools/jsdebug.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="JS Script Debugger">
+<META PROPERTY="og:description" CONTENT="JS Script Debugger — explore and debug JavaScript. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/tools/jsdebug.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="JS Script Debugger">
+<META NAME="twitter:description" CONTENT="JS Script Debugger — explore and debug JavaScript. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<STYLE>
+BODY
+{
+ background:#696 url('../physfac/bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:scroll;
+ margin:0px;
+ padding:0px;
+ font-family:arial;
+ color:#363;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+ overflow:hidden;
+}
+</STYLE>
+
+<SCRIPT>
+<!--
+
+var objects = new Array();
+var names = new Array();
+var skipnames = new Array();
+var hwnd;
+var TTrace;
+var tracing = false;
+var path = new String();
+
+function ExploreObject(obj, pref, hwnd, nochilds)
+{	
+	
+	hwnd.status = pref;
+	for (i=0; i<objects.length; i++)
+		if (obj == objects[i])
+		{
+			hwnd.document.write("<font color=red>" + pref + "</font> refers to <a href=#ind" + (i + 1) + "><font color=red>" + names[i] + "</font></a><br>");
+			return;
+		}
+		
+	objects[objects.length] = obj;
+	hwnd.document.write("<a name=ind" + objects.length + " >");
+	names[names.length] = pref;
+		
+	try 
+	{
+/*********************** for object ************************/		
+        if (typeof(obj)=="object")
+        {
+            var i = 0;
+            var prop = null;
+            for (prop in obj)
+            {
+                i++;
+                var skip = false;
+                for (i=0; i<skipnames.length; i++)
+                    if (prop == skipnames[i])
+                    {
+                        hwnd.document.writeln("name of object <font color=red>" + pref + "." + prop + "</font> skipped due rules...<br>");
+                        skip = true;
+                        break;
+                    }                               
+                if (skip) continue;
+                                    
+                if (typeof(obj[prop])=="object" && obj[prop]!=null && !nochilds)
+                {
+                    hwnd.document.writeln("<font color=red>" + pref + "." + prop + "</font> is <font color=blue>object</font> and has properties:" + "<br>");
+                    hwnd.document.writeln("<blockquote style='border:1px solid blue'>");
+                    try
+                    {
+                        hwnd.status=hwnd.status + " now";
+                        ExploreObject(obj[prop], pref + "." + prop, hwnd, nochilds);
+                        hwnd.status=hwnd.status + " done";
+                    }
+                    catch(Exception)
+                    {
+                        hwnd.document.writeln("<font color=red>stack overflow. please, simplify exploring...</font>");
+                    }
+                    hwnd.document.writeln("</blockquote>");
+                    hwnd.document.writeln("end of properties of <font color=red>" + pref + "." + prop + "</font><br>");
+                }           
+                else
+                    try
+                    {
+			var objprop = obj[prop] + "";
+			objprop = objprop.replace(/&/gi,"&amp;");
+			objprop = objprop.replace(/</gi,"&lt;");
+			objprop = objprop.replace(/>/gi,"&gt;");
+                        hwnd.document.writeln("<font color=green> " + pref + "." + prop + "</font> : <pre>'<font color=blue>" + objprop + "</font>'</pre> and is <font color=blue>" + typeof(obj[prop]) + "</font>.<br>");
+                    }
+                    catch(Exception)
+                    {
+                        hwnd.document.writeln("cannot acces property <font color=red>" + pref + "." + prop + "</font>...<br>");
+                    }
+                
+            }
+            if (i==0) hwnd.document.writeln("<font color=red>" + pref + "</font> : <font color=blue>&lt;has no properties&gt;</font><br>");
+        }
+/*********************** for object ************************/
+/*********************** for other ************************/
+        else
+            try
+            {
+		var objprop = obj + "";
+		objprop = objprop.replace(/&/gi,"&amp;");
+		objprop = objprop.replace(/</gi,"&lt;");
+		objprop = objprop.replace(/>/gi,"&gt;");
+                hwnd.document.writeln("<font color=green> " + pref + "</font> : <pre>'<font color=blue>" + objprop + "</font>'</pre> and is <font color=blue>" + typeof(obj) + "</font>.<br>");
+            }
+            catch(Exception)
+            {
+                hwnd.document.writeln("cant acces property <font color=red>" + pref  + "</font>...<br>");
+            }
+/*********************** for other ************************/
+	}
+	catch(Exception)
+	{
+		hwnd.document.writeln("<div style='border:1px solid red'>properties viewing fault for <font color=red>" + pref + "</font>...</div>");	
+	}
+		
+	hwnd.document.writeln("</a>");
+}
+
+function Str2Arr(str, delim)
+{	
+	return str.split(delim);
+}
+
+function GetRealObject(nativeObj)
+{
+	var OIerar = Str2Arr(path, ".");	
+	var obj = nativeObj;
+	var safeObj = nativeObj;
+	var safePath = "";
+	for (i=0; i<OIerar.length; i++)
+		try
+		{	
+			//alert("trying to get  " +  "obj['" + OIerar[i] + "']" + " -:- " + eval("obj['" + OIerar[i] + "']"));
+			obj = eval("obj['" + OIerar[i] + "']");
+			if (typeof(obj)=="undefined") throw Exception;
+			safePath += OIerar[i] + ".";
+			safeObj = obj;
+		}
+		catch(Exception)
+		{
+			alert("object " + OIerar[i] + " does not exist, exploring last real object..(" + safePath + ")");
+			path = safePath;
+			if (tracing) StopTrace();
+			break;
+		}
+	//alert(safeObj + ":" + path);
+	return safeObj;
+}
+
+function BeginExplore(str)
+{
+	path = str;    
+	objects = new Array();
+	names = new Array();
+	skipnames = Str2Arr(myform.skipwords.value, " ");
+	hwnd = window.open("about:blank");	
+	hwnd.location.href = "about:blank";
+	hwnd.document.writeln("<html>");
+	hwnd.document.writeln("<head>");
+	hwnd.document.writeln("<title>Exploring " + path + "</title>");
+	hwnd.document.writeln("</head>");
+	hwnd.document.writeln("<body>");
+	var obj2explore = GetRealObject(my_frame);
+	//alert(obj2explore);
+	ExploreObject(obj2explore, path, hwnd, myform.nochilds.checked);
+	hwnd.document.writeln("</body>");
+	hwnd.document.writeln("</html>");
+}
+
+function PrepareWindow(href)
+{
+	try
+	{
+		my_frame.document.location.href = href;
+	}
+	catch(Exception)
+	{
+		alert("object has been changed!!!");
+		try
+		{
+			window.location.href = href;
+		}
+		catch(Exception)
+		{
+			self.history.go();
+		}		
+	}
+}
+	
+function BeginTrace(str)
+{
+	TTrace = setInterval("path = myform.whatto.value; myform.values.value = GetRealObject(my_frame);", parseInt(myform.period.value));
+}
+
+function StopTrace()
+{
+	clearInterval(TTrace);
+}
+
+function setCookie(name, value, savefor, path, domain, secure) 
+{
+	var expires = null;
+	if (savefor)
+	{
+		now = new Date();
+		now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+		expires = now.toGMTString();
+	}
+
+	var curCookie = name + "=" + escape(value) +
+		((expires) ? ";expires=" + expires : "") +
+		((path) ? ";path=" + path : "") +
+		((domain) ? ";domain=" + domain : "") +
+		((secure) ? ";secure" : "");
+		document.cookie = curCookie;
+}
+
+function getCookie(name)
+{
+	var prefix = name + "="
+	var cookieStartIndex = document.cookie.indexOf(prefix)
+	if (cookieStartIndex == -1)
+		return false
+	var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+	if (cookieEndIndex == -1)
+		cookieEndIndex = document.cookie.length
+	return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+
+function StartUp()
+{
+	var s;
+	myform.urlhref.value = (s = getCookie(0)) ? s : "";
+	myform.whatto.value = (s = getCookie(1)) ? s : "";
+	myform.skipwords.value = (s = getCookie(2)) ? s : myform.skipwords.value;
+}
+
+function ShutDown()
+{
+	setCookie(0, myform.urlhref.value, 365);
+	setCookie(1, myform.whatto.value, 1);
+	setCookie(2, myform.skipwords.value, 365);
+}
+
+window.onload = new Function("StartUp();");
+window.onunload = new Function("ShutDown();");
+
+//-->
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<form id=myform style="BACKGROUND-COLOR: tan">
+href:<INPUT id=urlhref >
+<INPUT type="button" value="Prepare" onclick="PrepareWindow(myform.urlhref.value);">
+|object:<INPUT id=whatto value=self >| no childs <INPUT type="checkbox" id=nochilds>
+<INPUT type="button" value="Explore" onclick="BeginExplore(myform.whatto.value);" id=button1 name=button1>
+|<INPUT type="button" value="Trace" onclick="if (tracing) {this.value = 'Trace'; StopTrace();} else {this.value = 'Stop'; BeginTrace(myform.whatto.value);} tracing=!tracing;">
+| Period:<INPUT id=period name=period size=3 maxlength=3  value=50>ms 
+<INPUT id=values>
+<br><TEXTAREA id=skipwords style="HEIGHT: 60px; WIDTH: 99%">all nextSibling previousSibling childNodes children lastChild firstChild parentNode parentElement filters document documentElement event activeElement innerHTML outerHTML
+</TEXTAREA>
+</form>
+<iframe id=my_frame style="HEIGHT: 80%; WIDTH: 100%"></iframe>
+</BODY>
+</HTML>

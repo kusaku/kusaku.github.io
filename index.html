@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirill Arkhipenko (Кирилл Архипенко) - kusaku.su</title>
+    <meta name="description" content="Personal website of Kirill Arkhipenko (Кирилл Архипенко). Projects and tools including Story Point Poker and Location History Browser.">
+    <meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, retrewerter, developer, software engineer, projects, tools">
+    <meta name="author" content="Kirill Arkhipenko">
+    <link rel="canonical" href="https://kusaku.su/">
+    <link rel="alternate" hreflang="en" href="https://kusaku.su/">
+    <link rel="alternate" hreflang="ru" href="https://kusaku.su/">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <meta property="og:title" content="Kirill Arkhipenko (Кирилл Архипенко) - kusaku.su">
+    <meta property="og:description" content="Personal website of Kirill Arkhipenko. Projects and tools including Story Point Poker and Location History Browser.">
+    <meta property="og:url" content="https://kusaku.su/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kusaku.su">
+    <meta property="og:image" content="https://kusaku.su/avatar.webp">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Kirill Arkhipenko (Кирилл Архипенко) - kusaku.su">
+    <meta name="twitter:description" content="Personal website of Kirill Arkhipenko. Projects and tools including Story Point Poker and Location History Browser.">
+    <meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+    
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+    <meta name="geo.region" content="DE">
+    
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"Kirill Arkhipenko","alternateName":["Кирилл Архипенко","kusaku","retrewert","aks1983"],"url":"https://kusaku.su/","image":"https://kusaku.su/avatar.webp","sameAs":["https://github.com/kusaku","https://www.linkedin.com/in/kirill-arkhipenko/","https://t.me/aks1983","https://vk.com/id109300","https://ok.ru/profile/570720576532"],"description":"Personal website of Kirill Arkhipenko. Projects and tools including Story Point Poker and Location History Browser."}
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <style>
+        /* Light mode base styles */
+        html.light body { background: #ffffff; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.light .text-gray-600, html.light .text-gray-500 { color: #57606a; }
+        html.light .text-gray-700, html.light .text-gray-900 { color: #24292f; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        
+        /* Dark mode base styles */
+        html.dark body { background: #0d1117; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.dark .text-gray-600, html.dark .text-gray-500 { color: #8b949e; }
+        html.dark .text-gray-700, html.dark .text-gray-900 { color: #c9d1d9; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        
+        /* Theme toggle */
+        html.light .theme-btn.theme-active { background-color: #0969da; color: #ffffff; }
+        html.dark .theme-btn.theme-active { background-color: #1f6feb; color: #c9d1d9; }
+        html.light .theme-btn.theme-active:hover { background-color: #0969da; color: #ffffff; }
+        html.dark .theme-btn.theme-active:hover { background-color: #1f6feb; color: #c9d1d9; }
+        html.light .theme-btn:hover { background-color: #f3f4f6; color: #171515; }
+        html.dark .theme-btn:hover { background-color: #21262d; color: #c9d1d9; }
+
+        /* Project link hover colors */
+        html.light .group:hover .group-hover\:text-blue-600 { color: #0969da; }
+        html.dark .group:hover .group-hover\:text-blue-600 { color: #1f6feb; }
+        html.light .group:hover .group-hover\:text-green-600 { color: #16a34a; }
+        html.dark .group:hover .group-hover\:text-green-600 { color: #3fb950; }
+        html.light .group:hover .group-hover\:text-purple-600 { color: #9333ea; }
+        html.dark .group:hover .group-hover\:text-purple-600 { color: #a855f7; }
+        
+        /* Contact link hover colors */
+        html.light .contact-github:hover, html.light .contact-github:hover * { color: #171515; }
+        html.dark .contact-github:hover, html.dark .contact-github:hover * { color: #c9d1d9; }
+        
+        html.light .contact-linkedin:hover, html.light .contact-linkedin:hover * { color: #0077b5; }
+        html.dark .contact-linkedin:hover, html.dark .contact-linkedin:hover * { color: #4da3d4; }
+        
+        html.light .contact-instagram:hover, html.light .contact-instagram:hover * { color: #e1306c; }
+        html.dark .contact-instagram:hover, html.dark .contact-instagram:hover * { color: #fd1d1d; }
+        
+        html.light .contact-vk:hover, html.light .contact-vk:hover * { color: #0077ff; }
+        html.dark .contact-vk:hover, html.dark .contact-vk:hover * { color: #4da3ff; }
+        
+        html.light .contact-ok:hover, html.light .contact-ok:hover * { color: #ee8208; }
+        html.dark .contact-ok:hover, html.dark .contact-ok:hover * { color: #ff9d2e; }
+        
+        html.light .contact-max:hover, html.light .contact-max:hover * { color: #9333ea; }
+        html.dark .contact-max:hover, html.dark .contact-max:hover * { color: #a855f7; }
+        
+        html.light .contact-telegram:hover, html.light .contact-telegram:hover * { color: #24a1de; }
+        html.dark .contact-telegram:hover, html.dark .contact-telegram:hover * { color: #5bb3e8; }
+        
+        html.light .contact-whatsapp:hover, html.light .contact-whatsapp:hover * { color: #25d366; }
+        html.dark .contact-whatsapp:hover, html.dark .contact-whatsapp:hover * { color: #4ade80; }
+        
+        html.light .contact-email:hover, html.light .contact-email:hover * { color: #111827; }
+        html.dark .contact-email:hover, html.dark .contact-email:hover * { color: #c9d1d9; }
+        
+        html.light .contact-about:hover, html.light .contact-about:hover * { color: #f59e0b; }
+        html.dark .contact-about:hover, html.dark .contact-about:hover * { color: #fbbf24; }
+        
+        /* Bio modal */
+        html.dark #bio-modal .bg-white { background-color: #161b22; }
+        html.dark #bio-modal h2, html.dark #bio-modal h3, html.dark #bio-modal .text-gray-700, html.dark #bio-modal .text-gray-900 { color: #c9d1d9; }
+        html.dark #bio-modal p, html.dark #bio-modal .text-gray-600, html.dark #bio-modal .text-gray-500 { color: #8b949e; }
+        html.light #bio-modal button:hover { color: #111827; }
+        html.dark #bio-modal button:hover { color: #c9d1d9; }
+    </style>
+    <script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+            ['system', 'light', 'dark'].forEach(key => {
+                const btn = document.getElementById(`theme-${key}`);
+                if (btn) btn.classList.toggle('theme-active', key === theme);
+            });
+        };
+        
+        const setTheme = theme => {
+            theme === 'system' ? localStorage.removeItem('theme') : localStorage.theme = theme;
+            applyTheme();
+        };
+        
+        const initEmail = () => {
+            const emailLink = document.getElementById('email-link');
+            const emailText = document.getElementById('email-text');
+            if (emailLink && emailText) {
+                const email = atob('bWVAa3VzYWt1LnN1');
+                emailLink.href = `mailto:${email}?subject=Hello&body=Hi%20Kirill%2C%20I%20found%20you%20via%20your%20site`;
+                emailText.textContent = email;
+            }
+        };
+        
+        const toggleBio = () => {
+            const modal = document.getElementById('bio-modal');
+            if (!modal) return;
+            const isHidden = modal.classList.toggle('hidden');
+            document.body.style.overflow = isHidden ? '' : 'hidden';
+        };
+        
+        const closeBio = () => {
+            document.getElementById('bio-modal')?.classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+        
+        const init = () => {
+            applyTheme();
+            initEmail();
+            ['system', 'light', 'dark'].forEach(theme => 
+                document.getElementById(`theme-${theme}`)?.addEventListener('click', () => setTheme(theme))
+            );
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (!localStorage.theme || localStorage.theme === 'system') applyTheme();
+            });
+        };
+        
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+    </script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="absolute top-4 right-4">
+        <div id="theme-toggle" class="flex items-center gap-1 bg-white rounded-lg p-1 shadow-md border border-gray-200">
+            <button id="theme-light" class="theme-btn px-3 py-1.5 rounded text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100" title="Light mode" aria-label="Light theme">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </button>
+            <button id="theme-dark" class="theme-btn px-3 py-1.5 rounded text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100" title="Dark mode" aria-label="Dark theme">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+            <button id="theme-system" class="theme-btn px-3 py-1.5 rounded text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100" title="System (follow OS setting)" aria-label="System theme">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-4xl w-full">
+        <div class="text-center mb-12">
+            <img src="avatar.webp" alt="Kirill Arkhipenko" class="w-32 h-32 rounded-full mx-auto mb-6 object-cover">
+            <p class="text-xl text-gray-600">My projects and tools</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <a href="https://storypoint-poker.kusaku.su" class="bg-white rounded-lg shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group">
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4">
+                        <svg class="w-16 h-16 text-gray-900 group-hover:text-blue-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors">Story Point Poker</h2>
+                    <p class="text-gray-600 mb-4">Agile planning poker for team estimation</p>
+                    <span class="text-sm text-gray-900 group-hover:text-blue-600 font-medium transition-colors">storypoint-poker.kusaku.su →</span>
+                </div>
+            </a>
+
+            <a href="https://location-history.kusaku.su" class="bg-white rounded-lg shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group">
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4">
+                        <svg class="w-16 h-16 text-gray-900 group-hover:text-green-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 text-gray-900 group-hover:text-green-600 transition-colors">Location History</h2>
+                    <p class="text-gray-600 mb-4">Google Location History visualization tool</p>
+                    <span class="text-sm text-gray-900 group-hover:text-green-600 font-medium transition-colors">location-history.kusaku.su →</span>
+                </div>
+            </a>
+
+            <a href="legacy/index.html" class="bg-white rounded-lg shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group">
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4">
+                        <svg class="w-16 h-16 text-gray-900 group-hover:text-purple-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 text-gray-900 group-hover:text-purple-600 transition-colors">Legacy Projects</h2>
+                    <p class="text-gray-600 mb-4">Collection of old projects and experiments</p>
+                    <span class="text-sm text-gray-900 group-hover:text-purple-600 font-medium transition-colors">View legacy projects →</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex flex-wrap justify-center items-center gap-6 text-gray-600">
+            <a href="https://github.com/kusaku/" target="_blank" rel="noopener noreferrer" class="contact-github flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+            <a href="https://www.linkedin.com/in/kirill-arkhipenko/" target="_blank" rel="noopener noreferrer" class="contact-linkedin flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://www.instagram.com/kirill.arkhipenko/" target="_blank" rel="noopener noreferrer" class="contact-instagram flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>Instagram</span>
+            </a>
+            <a href="https://vk.com/id109300" target="_blank" rel="noopener noreferrer" class="contact-vk flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M0 11.52C0 6.0894 0 3.37413 1.687065 1.687065C3.37413 0 6.0894 0 11.52 0H12.48C17.9106 0 20.62585 0 22.31295 1.687065C24 3.37413 24 6.0894 24 11.52V12.48C24 17.9106 24 20.62585 22.31295 22.31295C20.62585 24 17.9106 24 12.48 24H11.52C6.0894 24 3.37413 24 1.687065 22.31295C0 20.62585 0 17.9106 0 12.48V11.52ZM12.77 17.29005C7.3 17.29005 4.18005 13.54005 4.05005 7.30005H6.79005C6.88005 11.88005 8.9 13.82005 10.5 14.22005V7.30005H13.0801V11.25005C14.6601 11.08005 16.3199 9.28005 16.8799 7.30005H19.45995C19.02995 9.74005 17.22995 11.54005 15.94995 12.28005C17.22995 12.88005 19.28005 14.45005 20.06005 17.29005H17.21995C16.60995 15.39005 15.0901 13.92005 13.0801 13.72005V17.29005H12.77Z"/>
+                </svg>
+                <span>VK</span>
+            </a>
+            <a href="https://ok.ru/profile/570720576532" target="_blank" rel="noopener noreferrer" class="contact-ok flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M24,20.48c0,1.94-1.57,3.51-3.51,3.51H3.51C1.57,24,0,22.43,0,20.48V3.51C0,1.57,1.57,0,3.51,0h17.02C22.47,0,24,1.57,24,3.51V20.48z M12,3.58c-2.38,0-4.31,1.93-4.31,4.31c0,2.38,1.93,4.31,4.31,4.31s4.31-1.93,4.31-4.31C16.31,5.51,14.38,3.58,12,3.58z M12,9.68c-0.98,0-1.78-0.8-1.78-1.78s0.8-1.78,1.78-1.78s1.78,0.8,1.78,1.78S12.98,9.68,12,9.68z M13.52,15.66c1.73-0.35,2.76-1.17,2.82-1.21c0.51-0.41,0.59-1.14,0.18-1.65c-0.41-0.51-1.14-0.59-1.65-0.18c-0.01,0.01-1.11,0.85-2.93,0.86c-1.82-0.01-2.94-0.85-2.95-0.86c-0.51-0.41-1.24-0.32-1.65,0.18c-0.41,0.51-0.32,1.24,0.18,1.65c0.06,0.04,1.13,0.88,2.91,1.23l-2.47,2.58c-0.45,0.47-0.44,1.21,0.03,1.66c0.23,0.22,0.52,0.33,0.81,0.33c0.31,0,0.61-0.12,0.84-0.36l2.3-2.45l2.53,2.46c0.46,0.46,1.2,0.46,1.66,0c0.46-0.46,0.46-1.2,0-1.66L13.52,15.66z"/>
+                </svg>
+                <span>OK</span>
+            </a>
+            <a href="https://max.ru/u/f9LHodD0cOJMkWVidqLSZI2cHirWBKOE0J48IDxH6DSITPRG592w97cXxxQ" target="_blank" rel="noopener noreferrer" class="contact-max flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.27 23.93c-2.35 0-3.44-.34-5.34-1.71-1.2 1.54-5 2.75-5.17.69 0-1.55-.34-2.86-.73-4.29C.57 16.86.05 14.9.05 12.06.05 5.27 5.61.17 12.21.17c6.6 0 11.77 5.35 11.77 11.95a11.77 11.77 0 0 1-11.71 11.81m.1-17.9c-3.21-.17-5.71 2.06-6.27 5.54-.46 2.89.35 6.4 1.05 6.58.33.08 1.17-.59 1.69-1.11a5.94 5.94 0 0 0 2.9 1.03 6.11 6.11 0 0 0 6.4-5.7 6.11 6.11 0 0 0-5.76-6.34Z"/>
+                </svg>
+                <span>MAX</span>
+            </a>
+            <a href="https://t.me/aks1983?text=Hi%20Kirill%2C%20I%20found%20you%20via%20your%20site" target="_blank" rel="noopener noreferrer" class="contact-telegram flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                <span>Telegram</span>
+            </a>
+            <a href="https://wa.me/491722079748?text=Hi%20Kirill%2C%20I%20found%20you%20via%20your%20site" target="_blank" rel="noopener noreferrer" class="contact-whatsapp flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+                <span>WhatsApp</span>
+            </a>
+            <a id="email-link" href="#" class="contact-email flex items-center gap-2 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                <span id="email-text"></span>
+            </a>
+            <a id="bio-toggle" href="#" onclick="toggleBio(); return false;" class="contact-about flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                <span>About</span>
+            </a>
+        </div>
+    </div>
+
+    <div id="bio-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onclick="if(event.target===this) closeBio()">
+        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900">About</h2>
+                    <button onclick="closeBio()" class="text-gray-500 text-2xl leading-none transition-colors">&times;</button>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 mb-6">
+                    <div class="flex-shrink-0">
+                        <img src="photo.webp" alt="Kirill Arkhipenko" class="w-64 h-64 md:w-80 md:h-80 rounded-lg object-cover shadow-lg">
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Kirill Arkhipenko</h3>
+                        <p class="text-gray-600 text-sm mb-4">Кирилл Архипенко</p>
+                    </div>
+                </div>
+                <div class="prose prose-sm max-w-none text-gray-700">
+                    <p class="mb-4">I spend a noticeable portion of my life trying to understand how things work, why they fail, and why people keep insisting this time will be different.</p>
+                    <p class="mb-4">I like systems because they eventually tell the truth. Under enough load, pressure, or human optimism, everything reveals its weak spots. I find a strange comfort in that. Complexity tends to be self-inflicted, clarity is always expensive, and the most permanent decisions are usually labeled "temporary."</p>
+                    <p class="mb-4">I'm interested in technology, architecture, games, and the quiet joy of making something less complicated than it was before. I don't believe in perfect solutions. I believe in trade-offs you can live with and explain without creative storytelling.</p>
+                    <p class="mb-4">Most days I try to build things that last longer than the enthusiasm that created them, avoid unnecessary drama, and remain curious enough to not turn into a walking checklist of opinions.</p>
+                    <p class="mt-6 font-medium">Sincerely yours,<br>Kirill Arkhipenko</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

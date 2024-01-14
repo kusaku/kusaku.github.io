@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects - Legacy Projects</title>
+<meta name="description" content="JavaScript and HTML projects from early web development days">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, JavaScript, HTML">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/projects.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Projects - Legacy Projects - Kirill Arkhipenko">
+<meta property="og:description" content="JavaScript and HTML projects from early web development days. Author: Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/projects.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Projects - Legacy Projects - Kirill Arkhipenko">
+<meta name="twitter:description" content="JavaScript and HTML projects from early web development days. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Modern card styling */
+        .project-card {
+            transition: all 0.2s ease-in-out;
+        }
+        html.light .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+        }
+        html.light .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-6">
+                <a href="/legacy/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to legacy projects
+                </a>
+            </nav>
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Projects</h1>
+            <p class="text-lg text-gray-600 max-w-3xl">A collection of JavaScript and HTML projects from early web development days</p>
+        </header>
+
+        <!-- Physics Faculty -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Physics Faculty <span class="text-lg font-normal text-gray-600">(2000/2001)</span></h2>
+            <p class="text-gray-600 mb-2">A collection of physics simulations created during university studies. These interactive visualizations demonstrate particle physics concepts including "ideal gas" and "Brownian motion", plus a physics-based volleyball game, all using JavaScript. This was an attempt to create a 2D physics sandbox.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Background: During university, we studied numerical calculus methods including Euler integration, Runge-Kutta methods, and Verlet integration for solving differential equations. These simulations apply these numerical methods to real physics problems, demonstrating particle collisions, velocity distributions, statistical mechanics, and how different integration techniques affect accuracy and stability in particle simulations.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Simulations:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/projects/physfac/maxwell.html" class="text-blue-600 hover:underline">Maxwell Distribution Original →</a> - Original version from 2001</li>
+                    <li><a href="/legacy/javascript/projects/physfac/maxwell_modern.html" class="text-blue-600 hover:underline">Maxwell Distribution Modern →</a> - Modern version, works in current browsers</li>
+                    <li><a href="/legacy/javascript/projects/physfac/brown.html" class="text-blue-600 hover:underline">Brownian Motion Original →</a> - Original version from 2001</li>
+                    <li><a href="/legacy/javascript/projects/physfac/brown_modern.html" class="text-blue-600 hover:underline">Brownian Motion Modern →</a> - Modern version, works in current browsers</li>
+                    <li><a href="/legacy/javascript/projects/physfac/chball.html" class="text-blue-600 hover:underline">chasBall Original →</a> - Original version from 2001</li>
+                    <li><a href="/legacy/javascript/projects/physfac/chball_modern.html" class="text-blue-600 hover:underline">chasBall Modern →</a> - Modern version, works in current browsers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Questionnaire -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Questionnaire <span class="text-lg font-normal text-gray-600">(2001)</span></h2>
+            <p class="text-gray-600 mb-2">Online questionnaire implementing the MMPI (Minnesota Multiphasic Personality Inventory) test for Career Guidance. Features sequential question navigation, answer tracking, and result export.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">This was my experiment with dynamic forms and data processing. The system allows users to navigate through multiple questions sequentially, with the ability to go back and forth, save progress, and export results. It demonstrates early web-based form handling and client-side data processing techniques.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/projects/questionnaire/questionnaire_full.html" class="text-blue-600 hover:underline">Questionnaire Full →</a> - Demo version with 5 test questions and text-based answer export</li>
+                    <li><a href="/legacy/javascript/projects/questionnaire/questionnaire_demo.html" class="text-blue-600 hover:underline">Questionnaire Demo →</a> - Production version with MMPI questions, answer persistence, and export functionality</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tetris -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Tetris <span class="text-lg font-normal text-gray-600">(2001)</span></h2>
+            <p class="text-gray-600 mb-2">Classic Tetris game implementation in JavaScript. Features standard Tetris gameplay with falling tetromino pieces, line clearing, and score tracking.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">An early dynamic HTML experiment focused on creating a self-playing Tetris. From v1.4 onward, versions include an AI "Computer plays" mode using a <code>BestPosition</code> algorithm for optimal piece placement. This was my exploration into AI gameplay years before it became mainstream. The AI occasionally makes mistakes due to race conditions in the legacy JavaScript code, adding an element of unpredictability. Self-play AI available in v1.4+, v1.5, and Modern (not in v1.3 Beta).</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/projects/tetris/tetris_v1.3_beta.html" class="text-blue-600 hover:underline">Tetris v1.3 Beta →</a> - Beta version</li>
+                    <li><a href="/legacy/javascript/projects/tetris/tetris_v1.4_enhanced.html" class="text-blue-600 hover:underline">Tetris v1.4 Enhanced →</a> - Enhanced version</li>
+                    <li><a href="/legacy/javascript/projects/tetris/tetris_v1.5_original.html" class="text-blue-600 hover:underline">Tetris v1.5 Original →</a> - Original v1.5 standalone version (2001)</li>
+                    <li><a href="/legacy/javascript/projects/tetris/tetris_v1.5.html" class="text-blue-600 hover:underline">Tetris v1.5 →</a> - Website-integrated version (2004)</li>
+                    <li><a href="/legacy/javascript/projects/tetris/tetris_modern.html" class="text-blue-600 hover:underline">Tetris Modern →</a> - Modernized version with self-playing AI</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Carrot (TTS) -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Carrot (Text-to-Speech Book Reader) <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <div class="mb-4 flex items-start gap-4">
+                <img src="/legacy/javascript/projects/carrot/peedy-parrot.webp" alt="Peedy Parrot - Microsoft Agent" class="w-32 h-32 object-contain flex-shrink-0">
+                <div>
+                    <p class="text-gray-600 mb-2">A text-to-speech book reading tool that loads HTML/text pages and reads them aloud with text highlighting. I used this tool to read many books from free online libraries like <a href="https://lib.ru/" class="text-blue-600 hover:underline">lib.ru</a>.</p>
+                    <p class="text-gray-600 text-sm italic">The original version used <strong>Microsoft Agent</strong> technology with text-to-speech synthesis. Microsoft Agent was an animated character system (like the Office Assistant) that appeared as an animated parrot (Peedy) on screen while reading. This technology required Internet Explorer with ActiveX support and is no longer available in modern browsers.</p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/projects/carrot/carrot_v1.html" class="text-blue-600 hover:underline">Carrot v1 →</a> - Library/helper class version with readerTTS object (IE only, incomplete)</li>
+                    <li><a href="/legacy/javascript/projects/carrot/carrot_v1.5b.html" class="text-blue-600 hover:underline">Carrot v1.5b →</a> - Full-featured version using Microsoft Agent with Merlin character (IE only)</li>
+                    <li><a href="/legacy/javascript/projects/carrot/carrot_v1.5c.html" class="text-blue-600 hover:underline">Carrot v1.5c →</a> - Version 1.5c with pitch control feature (IE only)</li>
+                    <li><a href="/legacy/javascript/projects/carrot/carrot_v2.html" class="text-blue-600 hover:underline">Carrot v2 →</a> - Refactored object-oriented version (IE only)</li>
+                    <li><a href="/legacy/javascript/projects/carrot/carrot_modern.html" class="text-blue-600 hover:underline">Carrot Modern →</a> - Works in modern browsers using Web Speech API.</li>
+                </ul>
+                <p class="text-sm text-gray-600 mt-4"><strong>Note:</strong> The original versions require Microsoft Agent and ActiveX support, which only works in old Internet Explorer browsers. The modernized version uses Web Speech API and works in modern browsers, but can only access iframe content from the same domain (CORS restrictions).</p>
+            </div>
+        </div>
+
+        <!-- Menushnik -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Menushnik <span class="text-lg font-normal text-gray-600">(2003)</span></h2>
+            <p class="text-gray-600 mb-2">A dynamic menu system with site map generation. Features hierarchical menu structures defined in XML, automatic site map generation from menu data, and support for locked/unlocked menu items. Includes recursive menu exploration and HTML site map output.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">A menu management system that generates site maps automatically from menu definitions. Supports nested menu structures, locked items that require unlocking, and generates navigable HTML site maps showing the complete site structure.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/projects/menushnik/menushnik.html" class="text-blue-600 hover:underline">Menushnik (legacy) →</a> - Original version with menu, site map, and unlock functionality</li>
+                    <li><a href="/legacy/javascript/projects/menushnik/menushnik_modern.html" class="text-blue-600 hover:underline">Menushnik Modern →</a> - Works in modern browsers</li>
+                </ul>
+                <p class="text-sm text-gray-600"><strong>Note:</strong> The original version uses ActiveX (Microsoft.XMLDOM) and <code>document.all</code>, which do not work in modern browsers. The modern version recreates the same functionality using standard DOM and embedded menu data.</p>
+            </div>
+        </div>
+
+        <!-- Homepage -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Homepage <span class="text-lg font-normal text-gray-600">(2004)</span></h2>
+            <p class="text-gray-600 mb-2">A complete personal website from 2004 featuring a multi-page portfolio, interactive games, and various web applications. The site includes a modernized menu system, draggable widgets (clock and links), chess and Tetris games, portfolio showcase, resume, webcam integration, comics, Winamp skins gallery, and a collection of JavaScript utilities.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">This was my personal homepage project showcasing web development skills, portfolio work, and interactive JavaScript applications. The site features a hierarchical XML-based menu system (Menushnik), draggable floating widgets, multiple games (Chess with emoji pieces, Tetris), portfolio pages with image galleries, webcam integration, comics, and various utilities. The original site used Internet Explorer-specific features (ActiveX, document.all) which have been modernized to work in current browsers while preserving the original design and functionality.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/projects/homepage/index.html" class="text-blue-600 hover:underline font-medium">Open Homepage →</a>
+            </div>
+        </div>
+
+        <!-- CRM Charts -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">CRM Charts <span class="text-lg font-normal text-gray-600">(2013)</span></h2>
+            <p class="text-gray-600 mb-2">An interactive chart visualization tool built with Kinetic.js and HTML5 Canvas. The solution features draggable client cards that are rendered in canvas, allowing users to interactively arrange and connect data cards. Features dynamic chart generation, interactive sliders, and mockup generation capabilities. Includes comprehensive documentation and examples.</p>
+            <p class="text-gray-600 mb-2 text-sm italic">This was a work project from 2013 to improve one of Microsoft Dynamic CRM / SharePoint plugins. The task was to convert the existing Flash-based chart visualization to HTML5, making it compatible with modern browsers and mobile devices. Built using Kinetic.js for canvas manipulation and HTML5 technologies to replace Flash functionality.</p>
+            <p class="text-gray-600 mb-4 text-sm">The solution draws "cards" and connects them with paths. The path drawing algorithm uses A* graph path search to find optimal routes between connected cards.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/projects/crm-charts/index.html" class="text-blue-600 hover:underline font-medium">Open CRM Charts →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

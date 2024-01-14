@@ -1,0 +1,452 @@
+<!doctype html public "-//w3c//dtd html 3.2 final//ru">
+<html>
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta name="generator" content="microsoft visual studio 6.0">
+<title>regionmaker by kusaku</title>
+<meta name="description" content="Region maker tool. Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/tools/regionmaker.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/tools/regionmaker.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/tools/regionmaker.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="regionmaker by kusaku">
+<meta property="og:description" content="Region maker tool. Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/tools/regionmaker.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="regionmaker by kusaku">
+<meta name="twitter:description" content="Region maker tool. Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<style>
+BODY
+{
+ margin:5px;
+ padding:5px;
+ background:#696 url('../physfac/bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:auto;
+}
+
+A
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+A:hover
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:active
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:visited
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+P
+{
+ color:#363;
+ margin:.5em 1em .5em 1em;
+ font-size:10pt;
+ font-weight:normal;
+ text-align:justify;
+}
+
+HR
+{
+ margin:0px;
+ height:1px;
+ width:100%;
+ color:#9c9;
+ text-align:center;
+}
+
+TABLE 
+{
+ border:none;
+ border-collapse:collapse;
+}
+
+TH 
+{
+ color:#363;
+ font-size:12pt;
+ font-weight:bold;
+}
+
+TD 
+{
+ margin:5px;
+ padding:0px;
+ color:#363;
+ font-size:10pt;
+ border:none;
+ vertical-align:middle;
+ text-align:center;
+}
+
+TABLE.simple
+{
+ border:1px solid #9c9;
+ border-top-width:10px;
+}
+
+TABLE.simple TD
+{ 
+ border:1px solid #9c9;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA, APPLET
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+ overflow:hidden;
+}
+
+.menu_passive,.menu_active,.menu_hover
+{
+ margin:1px;
+ padding:1px;
+ border-width:1px;
+ border-style:solid;
+ text-align:center;
+ font-family:arial;
+ font-size:10pt;
+ font-weight:100;
+ cursor:hand;
+}
+
+.menu_hover
+{
+ border-top-color:#9c9;
+ border-right-color:#363;
+ border-bottom-color:#363;
+ border-left-color:#9c9;
+ color:#9c9;
+}
+
+.menu_active
+{
+ padding:2px 0px 0px 2px;
+ border-top-color:#363;
+ border-right-color:#9c9;
+ border-bottom-color:#9c9;
+ border-left-color:#363;
+ color:#fc6;
+}
+
+.menu_passive
+{
+ border-color:#696;
+ color:#363;
+}
+
+</style>
+</HEAD>
+<script language=javascript>
+<!--
+var areas = new Array();
+var current;
+var numofAreas = 0;
+var dragstate = false;
+var workstate = false;
+var zoom = 1;
+var imageurl;
+var _imgh = 0; 
+var _imgw = 0;
+var shapesBank = new Array("poly", "circle", "rect");
+var maxnumofpointsBank = new Array(10e5, 2, 2);
+var minnumofpointsBank = new Array(4, 2, 2);
+var lastx, lasty;
+
+function Area()
+{
+	this.type = document.myform.linktype[document.myform.linktype.selectedIndex].value;
+	this.linkname = document.myform.linkname.value;
+	this.linktoframe = document.myform.linktoframe[document.myform.linktoframe.selectedIndex].value;
+	this.linktourl = document.myform.linktourl.value;
+	this.linkalttext = document.myform.linkalttext.value;
+	this.islink = document.myform.linkyes.checked;
+	this.numofpoints = 0;
+	this.maxnumofpoints = maxnumofpointsBank[this.type];
+	this.minnumofpoints = minnumofpointsBank[this.type];
+	this.xcoords = new Array();
+	this.ycoords = new Array();
+	this.putPoint = new Function("x", "y", "if (this.numofpoints < this.maxnumofpoints) {this.xcoords[this.numofpoints] = x;this.ycoords[this.numofpoints] = y;this.numofpoints++;} else if (confirm('  .  ?')) addArea();");
+	this.undoPoint = new Function("if (this.numofpoints > 0) this.numofpoints--;");
+	this.getCode = GetCode;
+}
+
+function GetCode()
+{
+	var s = new String()
+	with (this) if (numofpoints >= minnumofpoints && numofpoints <= maxnumofpoints)
+		{
+			s += "<area shape=\"" + shapesBank[type] + "\" ";
+			s += (islink) ? "href=\"" + linktourl + "\" " : "nohref ";
+			s += (linktoframe == "") ? "" : " target='" + linktoframe + "'";
+			s += "coords=\"" + xcoords[0] + "," + ycoords[0] + ((type == 1) ? "," + Math.round(Math.sqrt((xcoords[0] - xcoords[1])*(xcoords[0] - xcoords[1]) + (ycoords[0] - ycoords[1])*(ycoords[0] - ycoords[1]))) : "");
+			if (type != 1) for (i=0;i<numofpoints-1;i++) s += "," + xcoords[i] + "," + ycoords[i];
+			s += "\" alt=\"" + linkalttext + "\">";
+		}
+		else s += "! !  !";
+	return s;
+}		
+
+function mouseDown()
+{
+	if (current)
+	{
+		var nowx = Math.round(event.clientX / zoom);
+		var nowy = Math.round(event.clientY / zoom);
+		if (nowx != lastx && nowy != lasty) current.putPoint(nowx, nowy);
+		lastx = nowx;
+		lasty = nowy;
+	}
+}
+
+function mouseUp()
+{
+	if (current)
+	{
+		var nowx = Math.round(event.clientX / zoom);
+		var nowy = Math.round(event.clientY / zoom);
+		if (nowx != lastx && nowy != lasty) current.putPoint(nowx, nowy);
+		lastx = nowx;
+		lasty = nowy;
+	}
+}
+		
+function loadImg()
+{
+	imageurl = document.myform.imageurl.value;
+	_img.style.height = "";
+	_img.style.width = "";
+	_img.src = imageurl;
+	_imgh = _img.offsetHeight;
+	_imgw = _img.offsetWidth;
+}
+
+function changeZoom()
+{
+	zoom = parseFloat(myform.imagezoom[myform.imagezoom.selectedIndex].value);
+	_img.style.height = Math.round(_imgh * zoom);
+	_img.style.width = Math.round(_imgw * zoom);
+}
+
+
+function deletePoint()
+{
+	if (current) current.undoPoint();
+}
+
+function newArea()
+{
+	if (current && current.numofpoints >= current.minnumofpoints && confirm("  ?")) addArea();
+	current = new Area();
+}
+
+function addArea()
+{
+	if (current && current.numofpoints >= current.minnumofpoints)
+	{
+		myform.areamngr.add(new Option(current.linkname + ":" + current.linkalttext + " - " + shapesBank[current.type], numofAreas));
+		areas[numofAreas] = current;
+		numofAreas++;
+	}
+	else alert(" :  ");
+}
+
+
+function removeArea()
+{
+	if (numofAreas > 0)
+	{
+		var areaToRemove = parseInt(myform.areamngr[myform.areamngr.selectedIndex].value);
+		for (i = areaToRemove; i < numofAreas; i++) areas[i] = areas[i + 1];
+		numofAreas--;
+		myform.areamngr.remove(myform.areamngr.selectedIndex);
+	}
+}
+
+function makeCode()
+{
+	var st = new String();
+	for (k=0; k < numofAreas; k++) st += areas[k].getCode() + "\n";
+	myform.areacode.value = st;
+
+}
+
+
+
+//-->
+</script>
+
+<body>
+	<div style="BORDER-BOTTOM: #9c9 1px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 1px solid; HEIGHT: 50%; OVERFLOW: auto; WIDTH: 100%">
+		<img id=_img>
+	</div>
+	
+<form name=myform>
+<table align=center class=simple width=100%>
+	<tr>
+		<td>
+			<table align=center class=simple>
+				<tr>
+					<th colSpan=2></th>
+				</tr>
+				<tr>
+					<td>URL :</td>
+					<td><input maxLength=100 name=imageurl style="WIDTH: 90%"></td>
+				</tr>
+				<tr>
+					<td colSpan=2>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout="this.className='menu_passive'" onmouseup="this.className='menu_hover'" onclick="loadImg();" onmousedown="this.className='menu_active'"> 
+							
+						</div>			
+					</td>
+				</tr>
+				<tr>
+					<td> :</td>
+					<td>
+						<select name=imagezoom onchange=changeZoom()>
+							<option value="1" selected></option>
+							<option value="2"> </option>
+							<option value="4"> </option> 
+							<option value="8"> </option>
+						</select> 
+					</td>
+				</tr>
+				<tr>
+					<th colSpan=2></th>
+				</tr>
+				<tr>
+					<td>  ():</td>
+					<td>
+						<select name=linktype>
+							<option value="2"></option>
+							<option value="1"></option> 
+							<option value="0" selected></option>
+						</select> 
+					</td>
+				</tr>
+				<tr>
+					<td> :</td>
+					<td><input maxLength=100 value=linkname name=linkname style="WIDTH: 90%"></td>
+				</tr>		
+				<tr>
+					<td> :</td>
+					<td>
+						<input type="radio" name=islink id=linkyes checked onfocus="myform.linktourl.disabled = this.checked;"> 
+						<input type="radio" name=islink id=linknot onfocus="myform.linktourl.disabled = !this.checked;"> .
+					</td>
+				</tr>
+				<tr>
+					<td>  URL:</td>
+					<td><input maxLength=100 value=http://www.physfac.nm.ru/ name=linktourl style="WIDTH: 90%"></td>
+				</tr>
+				<tr>
+					<td> :</td>
+					<td>
+						<select name=linktoframe style="WIDTH: 90%">
+							<option value="" selected>  </option>
+							<option value="_self"> </option>
+							<option value="_parent">-</option> 
+							<option value="_top"> -</option>
+							<option value="_blank"> </option>
+						</select> 
+					</td>
+				</tr>
+				<tr>
+					<td>-:</td>
+					<td><input maxLength=100 value="click me now!" name=linkalttext style="WIDTH: 90%"></td>
+				</tr>
+				<tr>
+					<td colSpan=2>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout  = "this.className   = 'menu_passive'" onmouseup="this.className='menu_hover'" onclick="if (ie) newArea();" onmousedown="this.className='menu_active'"> 
+							 
+						</div>			
+					</td>
+					<td>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout  = "this.className   = 'menu_passive'" onmouseup="this.className='menu_hover'" onclick="if (ie) deletePoint();" onmousedown="this.className='menu_active'"> 
+							 
+						</div>			
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width=100% style="vertical-align:top;">			
+			<select name=areamngr size=10 style="width:90%;"></select>
+			<table align=center style="width:90%;margin:5px">
+				<tr>
+					<td>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout  = "this.className   = 'menu_passive'" onmouseup="this.className='menu_hover'" onclick="if (ie) addArea();" onmousedown="this.className='menu_active'">
+							
+						</div>
+					</td>
+					<td>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout  = "this.className   = 'menu_passive'" onmouseup="this.className='menu_hover'" onclick="if (ie) removeArea();" onmousedown="this.className='menu_active'">
+							
+						</div>
+					</td>
+					<td>
+						<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout  = "this.className   = 'menu_passive'" onmouseup="this.className='menu_hover'" onclick="if (ie) makeCode();" onmousedown="this.className='menu_active'">
+							 
+						</div>
+					</td>
+				</tr>
+			</table>
+			<textarea name=areacode style="width:90%;" rows=4></textarea>
+		</td>
+	</tr>
+</table>
+</form>
+	
+<script language=javascript>
+	<!--
+		var ie = (document.all) ? true : false;
+		if (ie)
+		{
+		_img.onmousedown = mouseDown;
+		_img.onmouseup = mouseUp;
+		}
+	//--> 
+	</script>
+</body >
+</html>

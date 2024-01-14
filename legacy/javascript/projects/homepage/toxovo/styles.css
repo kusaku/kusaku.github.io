@@ -1,0 +1,63 @@
+BODY
+{
+ margin:0px;
+ font-family:Tahoma,Arial;
+ font-size:8pt;
+}
+
+TABLE
+{
+ border-collapse:collapse;
+}
+
+TD
+{
+ font-size:8pt;
+}
+
+IMG
+{
+ border:0px;
+}
+
+A{color:#FF0000; text-decoration:none;}
+A:hover{color:#FF0000;text-decoration:none;}
+A:active{color:#FF0000;text-decoration:none;}
+A:visited{color:#FF0000;text-decoration:none;}
+
+P
+{
+ font-size:8pt;
+ padding:0px;
+ margin:0px;
+ text-align:justify;
+}
+
+HR
+{
+ height:1px;
+ width:100%;
+ color:#FF0000;
+}
+
+TABLE.menu_a, TABLE.menu_p
+{
+ border:0px;
+}
+
+TABLE.menu_a TD, TABLE.menu_p TD
+{
+ cursor:hand;
+ color:#FF0000;
+ padding:0px;
+}
+
+TABLE.menu_a
+{
+ background:#99CC00;
+}
+
+TABLE.menu_p
+{
+ background:#FFFF00;
+}

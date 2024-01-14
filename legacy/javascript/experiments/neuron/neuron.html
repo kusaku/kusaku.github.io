@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<OBJECT CLASSID=clsid:D45FD31B-5C6E-11D1-9EC1-00C04FD7081F ID=Agent>
+<PARAM NAME="_cx" VALUE="847">
+<PARAM NAME="_cy" VALUE="847"></OBJECT>
+<SCRIPT LANGUAGE=javascript>
+<!--
+var Peedy, LoadRequestUNC, LoadRequestURL;
+
+function Window_OnLoad()
+{
+	LoadRequestUNC = Agent.Characters.Load ("Peedy", "Peedy.acs")
+	if (LoadRequestUNC.Status != 0)
+		LoadRequestURL = Agent.Characters.Load ("Peedy", "http://agent.microsoft.com/agent2/chars/peedy/peedy.acf") 
+	else 	
+		Peedy = Agent.Characters("Peedy");
+	Peedy.Show();
+}
+
+var superBrain;
+
+function Neuron(nighbors, value, center)
+{
+	this.nighbors = nighbors;
+	this.value = value;
+	this.center = center;
+	this.active = false;
+	this.activetimer = 0;
+}
+
+function Impulse(neuron)
+{
+	this.neuron = neuron;
+	this.go = new Function("var a = Math.floor(this.neuron.nighbors.length*Math.random());  this.neuron = this.neuron.nighbors[a];");
+}
+
+function ActiveCenter()
+{
+	this.neurons = new Array();
+	this.refresh = reFresh;
+//	this.refresh();
+	this.matchcenter = null;
+	this.percent = 0;
+	this.findmatch = findMatch;
+}
+
+function reFresh()
+{
+	this.neurons = new Array();
+	for (var i=0; i<superBrain.impulses.length; i++)
+		this.neurons[this.neurons.length] = superBrain.impulses[i].neuron;
+//	for (var i=0; i<this.neurons.length; i++)
+//		alert(this.neurons[i].value);
+//	this.neurons = this.neurons2;
+}	
+
+function findMatch()
+{
+	var matches = new Array(superBrain.centers.length);
+	for (var i=0; i<matches.length; i++) matches[i] = 0;
+	for (var i=0; i<superBrain.centers.length; i++)
+		for (var k=0; k<superBrain.centers[i].neurons.length; k++)
+			for (var l=0; l<this.neurons.length; l++)
+				if (superBrain.centers[i].neurons[k] == this.neurons[l]) matches[i]++;
+	var max = 0;
+	var max_ind = 0;
+	for (var i=0; i<matches.length; i++)
+		if (matches[i] > max) 
+		{
+			max = matches[i];
+			max_ind = i;
+		}
+//	alert(max + ":" + max_ind + ":" + matches[0]);
+	this.matchcenter = superBrain.centers[max_ind];
+	this.percent = max / superBrain.centers[max_ind].neurons.length;
+}
+
+function Center(name, neurons)
+{
+	this.name = name;
+//	this.subcenters = new Array();
+	this.neurons = neurons;
+}
+
+function Brain()
+{
+	this.centers = new Array();
+	this.impulses = new Array();
+	this.acenters = new ActiveCenter();
+	this.think = Think;
+	this.addcenter = addCenter;
+}
+
+function Think()
+{
+	for (var i=0; i<this.impulses.length; i++)
+		this.impulses[i].go();
+//	for (var i=0; i<this.acenters.neurons.length; i++)
+		this.acenters.refresh();
+	SpeakOut();
+}
+
+function addCenter(name, neurons)
+{
+	this.centers[this.centers.length] = new Center(name, neurons);
+}
+
+function Activator(value)
+{
+/*	superBrain.acenters.findmatch;
+
+	else
+	{
+		mc = superBrain.acenters.matchcenter;
+		neuron = new Neuron(superBrain.acenters.neurons, value, mc);
+		mc.neurons[mc.neurons.length] = neuron;
+	}
+	for (var i=0; i<superBrain.acenters.neurons.length; i++) {status = i}
+//		superBrain.acenters.neurons[i].nighbors[superBrain.acenters.neurons[i].nighbors.length] = neuron;
+*/
+	superBrain.acenters.findmatch;
+	status = superBrain.acenters.percent;
+	if (superBrain.acenters.percent < 0.1)
+	{
+		superBrain.addcenter("center_" + value, superBrain.acenters.neurons);
+		newcenter = superBrain.centers[superBrain.centers.length - 1]
+		neuron = new Neuron(superBrain.acenters.neurons, value, newcenter);
+		newcenter.neurons[newcenter.neurons.length] = neuron;
+		nbhds = superBrain.acenters.neurons;
+		for (var i=0; i<nbhds.length; i++)
+			nbhds[i].nighbors[nbhds[i].nighbors.length] = neuron;
+	}
+	else
+	{
+		realcenter = superBrain.acenters.matchcenter;
+		neuron = new Neuron(superBrain.acenters.neurons, value, realcenter);
+		nbhds = superBrain.acenters.neurons;
+		for (var i=0; i<nbhds.length; i++)
+			nbhds[i].nighbors[nbhds[i].nighbors.length] = neuron;
+	}
+}
+
+function SpeakOut()
+{
+	s = new String();
+	for (var i=0; i<superBrain.acenters.neurons.length; i++)
+		s += superBrain.acenters.neurons[i].value + " ";
+	s += ".";
+	Peedy.Speak(s)
+}
+
+s_n = new Array(new Neuron(null, "a", null),
+				new Neuron(null, "b", null),
+				new Neuron(null, "c", null));
+
+s_c = new Center("start_abc", s_n);
+
+s_n[0].nighbors = new Array(s_n[1], s_n[2]);
+s_n[1].nighbors = new Array(s_n[0], s_n[2]);
+s_n[2].nighbors = new Array(s_n[0], s_n[1]);
+s_n[0].center = s_c;
+s_n[1].center = s_c;
+s_n[2].center = s_c;
+
+s_i = new Array(new Impulse(s_n[0]),
+                new Impulse(s_n[1]));
+
+
+superBrain = new Brain();
+superBrain.centers[0] = s_c;
+superBrain.impulses = s_i;
+superBrain.acenters.refresh();
+
+//superBrain.think();
+
+//-->
+</SCRIPT>
+
+
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Neural network demo with Peedy character (Activator, Think, FindMatch). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, neural network, Peedy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_net_peedy.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_net_peedy.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_net_peedy.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Neuron Net Peedy - Kirill Arkhipenko">
+<META PROPERTY="og:description" CONTENT="Neural network demo with Peedy character (Activator, Think, FindMatch). Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_net_peedy.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Neuron Net Peedy - Kirill Arkhipenko">
+<META NAME="twitter:description" CONTENT="Neural network demo with Peedy character (Activator, Think, FindMatch). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY ONLOAD="Window_OnLoad()">
+<FORM NAME=MyForm>
+<INPUT ID=text1 NAME=text1>
+<INPUT ONCLICK=Activator(MyForm.text1.value) TYPE=button VALUE=Push>
+<INPUT ONCLICK=superBrain.think() TYPE=button VALUE=Think>
+<INPUT ONCLICK=superBrain.acenters.findmatch() TYPE=button VALUE=FindMatch>
+</FORM>
+</BODY>
+</HTML>

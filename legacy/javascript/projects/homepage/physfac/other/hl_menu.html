@@ -1,0 +1,209 @@
+<HTML>
+<HEAD>
+<TITLE>Half-Life menu</TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<SCRIPT LANGUAGE=javascript>
+<!--
+/****************************************
+**           HALF-LIFE MENU            **
+**  (c) kusaku 2001 No rights reserved **
+**      free to distribute and use     **
+**         mailto:me@kusaku.su         **
+****************************************/
+
+// this is simle script that emulates burning effect in Half-Life menu (ohh, yeahh!..)
+// it will work only in EI 5 or later because of using 
+// visual filters (so, check your version before use).
+// to place item use sample code at the end of script
+// array index of item and its number must coincide!
+// to clip image try smaller dimension of item
+// you can also specify href string as optional parameter
+
+var MOUSEOUT = 0;
+var MOUSEOVER = 1;
+var MOUSEDOWN = 2;
+var MOUSEUP = 5;
+var menu_items = new Array();
+var fadeStep = 3; //how much steps of opacity will be displayed
+var fadeTime = 100; //how long opacity will vary (milliseconds)
+
+fadeTime /= fadeStep;
+fadeStep = 100 / fadeStep + 1
+
+function menu_item(number, name, srcOff, srcOn, srcAct, w, h, href_string)
+{
+	this.number = number;
+	this.name = name;
+	this.imgOn = new Image();
+	this.imgOn.src = srcOn;	
+	this.imgOnOPST = 0;
+	this.imgOff = new Image();
+	this.imgOff.src = srcOff;	
+	this.imgOffOPST = 100;
+	this.imgAct = new Image();
+	this.imgAct.src = srcAct;	
+	this.imgActOPST = 0;
+	this.w = w;
+	this.h = h;
+	this.getCode = getCode;
+	this.timeID = null;
+	this.fade = fade;
+	this.status = 1;
+	this.isFading = false;
+	this.isMe = isMe;
+	this.href_string = href_string;
+}
+
+function fade(direction)
+{
+	switch (direction)
+		{
+		case MOUSEOVER:
+			if (this.imgOffOPST < 100 || this.imgOnOPST < 100 || this.imgActOPST > 0)	
+			{
+				this.imgOffOPST = 100;
+				this.imgOnOPST += fadeStep;					
+				this.imgActOPST = 0;
+			}
+			else this.isFading = false;
+			
+		break;
+		case MOUSEOUT:
+			if (this.imgOffOPST < 100 || this.imgOnOPST > 0 || this.imgActOPST > 0)
+			{
+				this.imgOffOPST = 100;
+				this.imgOnOPST -= fadeStep;					
+				this.imgActOPST = 0;
+			}
+			else this.isFading = false;
+		break;
+		case MOUSEDOWN:
+			if (this.imgOffOPST < 100 || this.imgOnOPST < 100 || this.imgActOPST < 100)
+			{
+				this.imgOffOPST = 100;
+				this.imgOnOPST = 100;					
+				this.imgActOPST += fadeStep;
+			}
+			else this.isFading = false;			
+		break;
+		case MOUSEUP:
+			if (this.imgOffOPST < 100 || this.imgOnOPST < 100 || this.imgActOPST > 0)
+			{
+				this.imgOffOPST = 100;
+				this.imgOnOPST = 100;					
+				this.imgActOPST -= fadeStep;
+			}
+			else this.isFading = false;			
+		break;
+		default: this.isFading = false;
+		}
+	if (!this.isFading) clearInterval(this.timeID)
+	with (Math)
+	{
+	document.all[this.name + "Off"].filters.alpha.opacity = min(max(0,this.imgOffOPST),100);
+	document.all[this.name + "On"].filters.alpha.opacity = min(max(0,this.imgOnOPST),100);
+	document.all[this.name + "Act"].filters.alpha.opacity = min(max(0,this.imgActOPST),100);
+	}
+}
+
+function isMe(id)
+{
+	if (id.indexOf(this.name) != -1) return this;
+	else return false;
+}
+
+function getCode()
+{
+	s = new String();	
+	s += '<div style="overflow:hidden;width:' + this.w + ';height:' + this.h + ';" id="' + this.name + '">\n';
+	s += (this.href_string) ? '<a ' + this.href_string + '>' : '' ;
+	s += '<img src="' + this.imgOff.src + '" style="border:none;position:absolute;;filter:alpha(Opacity=100, Style=0);" id="' + this.name + 'Off">\n';
+	s += '<img src="' + this.imgOn.src + '" style="border:none;position:absolute;filter:alpha(Opacity=0, Style=0);" id="' + this.name + 'On">\n';
+	s += '<img src="' + this.imgAct.src + '" style="border:none;position:absolute;filter:alpha(Opacity=0, Style=0);" id="' + this.name + 'Act">\n';
+	s += (this.href_string) ? '</a>' : '' ;
+	s += '</div>\n';
+	return s;
+}
+
+function mHandler(my_event)
+{
+	who = event.srcElement.id;
+	for (i=0; i < menu_items.length; i++)
+		{
+		var me = menu_items[i].isMe(who);		
+		if (me) 
+			{
+			if (me.isFading) clearInterval(me.timeID);
+			me.timeID = setInterval("menu_items[" + me.number + "].fade(" + my_event + ");", fadeTime);
+			me.isFading = true;
+			}
+		}
+}
+
+menu_items[0] = new menu_item(0, //this number must match array index!
+							"menenuitemone", //any word, that doesn't match other
+							"ngOff.gif", //passive image
+							"ngOn.gif", //mouseover image
+							"ngAct.gif", //active image
+							250,50, // x y dimensions
+							"href='physfac/index.html/' alt='what r u waiting for?' target='_blank'"); //optional href string
+menu_items[1] = new menu_item(1,
+							"menenuitemtwo", 
+							"ngOff.gif",
+							"ngOn.gif",
+							"ngAct.gif",							
+							40,50);
+menu_items[2] = new menu_item(2,
+							"physfac_is_champion",
+							"ngAct.gif",
+							"ngOff.gif",
+							"ngOn.gif",							
+							300,100,
+							"href='hl_menu.html' target='_self'");
+
+//-->
+</SCRIPT>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY style="background:black;color:silver;font-family:arial;">
+<span id="aa" onmouseover="mHandler(MOUSEOVER)" onmouseout="mHandler(MOUSEOUT)" onmousedown="mHandler(MOUSEDOWN)" onmouseup="mHandler(MOUSEUP)">
+<script language=javascript>
+<!--
+document.write(menu_items[0].getCode());
+//-->
+</script>
+</span>
+<span id="bb" onmouseover="mHandler(MOUSEOVER)" onmouseout="mHandler(MOUSEOUT)" onmousedown="mHandler(MOUSEDOWN)" onmouseup="mHandler(MOUSEUP)">
+<script language=javascript>
+<!--
+document.write(menu_items[1].getCode());
+//-->
+</script>
+</span>
+<span id="cc" onmouseover="mHandler(MOUSEOVER)" onmouseout="mHandler(MOUSEOUT)" onmousedown="mHandler(MOUSEDOWN)" onmouseup="mHandler(MOUSEUP)">
+<script language=javascript>
+<!--
+document.write(menu_items[2].getCode());
+//-->
+</script>
+</span>
+<a href="aaa" id="eee"></a>
+</BODY>
+</HTML>

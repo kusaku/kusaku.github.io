@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Array Reduction Variant - QuickBasic Programs</title>
+<meta name="description" content="Array Reduction Variant - QuickBasic program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/quickbasic/array-reduction-variant.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/quickbasic/array-reduction-variant.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/quickbasic/array-reduction-variant.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Array Reduction Variant - QuickBasic Programs">
+<meta property="og:description" content="Array Reduction Variant - QuickBasic program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/quickbasic/array-reduction-variant.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Array Reduction Variant - QuickBasic Programs">
+<meta name="twitter:description" content="Array Reduction Variant - QuickBasic program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/vb.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-number { color: #79c0ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+        html.dark .hljs-function { color: #d2a8ff; }
+        html.dark .hljs-variable { color: #ffa657; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/quickbasic/quickbasic.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to QuickBasic Programs
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Array Reduction Variant</h1>
+        <p class="text-gray-600 mb-6">A variant of the array reduction algorithm that reduces a 2k×2k array to k×k by extracting unique elements. This version uses a different approach: it fills the result array position by position, searching through the original array for values that haven't been used yet in the result array. The algorithm ensures no duplicates by checking each candidate value against all previously filled positions in the result array.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-vb">CLS
+INPUT k
+n = 2 * k
+
+DIM a(n, n), b(n / 2, n / 2)
+
+RANDOMIZE VAL(MID$(TIME$, 8, 2))
+
+FOR i = 1 TO n
+FOR j = 1 TO n
+a(i, j) = INT(RND * k * k) + 1
+NEXT j, i
+
+
+FOR i = 1 TO n
+FOR j = 1 TO n
+
+        PRINT a(i, j);
+NEXT j
+PRINT
+NEXT i
+
+
+b(1, 1) = a(1, 1)
+
+FOR i = 1 TO n / 2
+FOR j = 1 TO n / 2
+        IF (i + j) = 2 GOTO 100
+        b(i, j) = -1
+        FOR di = 1 TO n
+        FOR dj = 1 TO n
+                ab = a(di, dj)
+                FOR ki = 1 TO i
+                FOR kj = 1 TO j
+                IF b(ki, kj) = ab GOTO 50
+                NEXT kj
+                NEXT ki
+                b(i, j) = ab
+                GOTO 100
+50 :    PRINT ab; i; j
+        NEXT dj
+        NEXT di
+100 : REM
+NEXT j
+NEXT i
+
+
+PRINT
+
+FOR i = 1 TO n / 2
+FOR j = 1 TO n / 2
+PRINT b(i, j);
+NEXT j
+PRINT
+NEXT i
+END</code></pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequential Rename - Perl Utilities</title>
+<meta name="description" content="Sequential Rename - Perl utility by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Perl">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/perl/sequential-rename.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/perl/sequential-rename.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/perl/sequential-rename.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Sequential Rename - Perl - Kirill Arkhipenko">
+<meta property="og:description" content="Perl utility by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/perl/sequential-rename.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sequential Rename - Perl - Kirill Arkhipenko">
+<meta name="twitter:description" content="Perl utility by Kirill Arkhipenko. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/perl/perl.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Perl Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Sequential Rename <span class="text-xl font-normal text-gray-600">(2003)</span></h1>
+        <p class="text-gray-600 mb-6">Recursively renames all files in a directory tree with sequential zero-padded numbers (0000001.ext, 0000002.ext, etc.). Preserves file extensions and directory structure. Useful for organizing large collections of files with consistent naming.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Usage:</h2>
+            <pre class="bg-gray-100 dark:bg-gray-800 p-4 rounded"><code class="language-bash">perl rename.pl &lt;directory&gt;</code></pre>
+            <p class="text-sm text-gray-600 mt-2">Renames all files recursively with 7-digit zero-padded sequential numbers while preserving extensions.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-perl">#!/usr/bin/perl
+#
+sub tree {
+	my(@filenames);
+	my($root) = $_[0];
+	my($i) = 0;
+	print "\nexploring $root ";
+	opendir ROOT, $root;
+	my(@filelist) = readdir ROOT;
+	closedir ROOT;
+	foreach $name (@filelist) {
+		if ($name ne '.' and $name ne '..') { 
+			$name = $root . "\\" . $name;
+			if (-f $name) {
+				@filenames = (@filenames, $name);
+				$i++;
+				print "."  if ($i % 100 == 0);
+			}			
+			@filenames = (@filenames, tree($name)) if (-d $name); 
+		}
+	}
+	print "\n$root: $i files...\n";
+	return @filenames;
+}
+
+@filenames = tree($ARGV[0]) or die "indir fail...";
+
+$i = 1;
+
+foreach $filename (@filenames) {
+	$filename =~ /^(.*)\\(.*)\.(.*)$/;
+    $path = $1;
+    $name = $2;
+    $ext = $3;
+    $counter = sprintf('%07d', $i);
+	rename "$filename", "$path\\$counter.$ext"  or print "rename $filename to $path\\$counter.$ext fail...";
+	$i++;
+}</code></pre>
+        </div>
+    </div>
+</body>
+</html>

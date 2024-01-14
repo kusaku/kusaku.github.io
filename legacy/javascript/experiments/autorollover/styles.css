@@ -1,0 +1,120 @@
+BODY
+{
+ margin:0px;
+ font-family:Tahoma,Arial;
+ font-size:10pt;
+ overflow:auto;
+}
+
+TABLE
+{
+ border:none;
+ border-collapse:collapse;
+}
+
+TD
+{
+ color:fefefe;
+ font-family:Tahoma,Arial;
+ font-size:10pt;
+}
+
+TH
+{
+ color:fefefe;
+ font-family:Tahoma,Arial;
+ font-size:10pt;
+ font-weight:bold;
+}
+
+IMG
+{
+ border:0px;
+}
+
+IMG.photo
+{
+ background:#cccccc;
+ border:1px solid #999999;
+ border-left-width: 10px;
+ cursor:hand;
+}
+
+IMG.gray
+{
+ background:#cccccc;
+ border:1px solid #999999;
+ border-left-width: 10px;
+ cursor:hand;
+ filter:gray alpha(opacity=50);
+}
+
+A{color:#ffff00; text-decoration:none;}
+A:hover{color:#ffffff;text-decoration:none;}
+A:active{color:#ff0000;text-decoration:none;}
+A:visited{color:#ffff00; text-decoration:none;}
+
+P
+{
+ color:fefefe;
+ font-family:Tahoma,Arial;
+ font-size:10pt;
+ padding:0px;
+ margin:5px;
+ text-align:justify;
+}
+
+UL
+{
+ color:fefefe;
+ padding:0px;
+ padding-left:3em;
+ margin:5px;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA
+{
+ background:#cccccc;
+ color:#000000;
+ border:1px solid #999999;
+ margin:2px;
+ cursor:hand;
+ font-family:Tahoma,Arial;
+ font-size:8pt;
+ overflow:auto;
+}
+
+HR
+{
+ text-align:center;
+ height:1px;
+ width:100%;
+ color:#ffff00;
+ padding:0px;
+ margin:0px;
+}
+
+#tooltip
+{
+ color: #fefefe;
+ position: absolute;
+ border: 1px solid #ff0000;
+ background: #000000;
+ padding: 3px;
+ font-weight:bold;
+ filter: alpha(opacity=75);
+}
+
+IMG.imgOff
+{
+ ffilter: Gray();
+}
+
+IMG.imgOn
+{
+ ffilter: Gray();
+}
+
+IMG.imgAct
+{
+}

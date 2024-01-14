@@ -1,0 +1,1412 @@
+<HTML>
+<HEAD>
+<TITLE>..::Тетрис от kusaku::..</TITLE>
+<META HTTP-EQUIV="Content-Language" content="ru">
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<META NAME="author" CONTENT="kusaku">
+<META NAME="robots" CONTENT="index,all">
+<META NAME="revisit-after" CONTENT="15 days">
+<META NAME="title" CONTENT="Домашняя страница kusaku / дизайн и программирование / поиск работы">
+<META NAME="description" CONTENT="Классическая игра Тетрис на JavaScript. Играйте в тетрис онлайн от kusaku. Браузерная версия тетриса.">
+<META NAME="keywords" CONTENT="тетрис, tetris, javascript, игра, kusaku, онлайн тетрис, браузерная игра">
+<LINK rel="canonical" href="https://kusaku.su/legacy/javascript/projects/homepage/tetris.html">
+<META property="og:title" content="Тетрис от kusaku - JavaScript Tetris Game">
+<META property="og:description" content="Классическая игра Тетрис на JavaScript. Играйте в тетрис онлайн от kusaku. Браузерная версия тетриса.">
+<META property="og:url" content="https://kusaku.su/legacy/javascript/projects/homepage/tetris.html">
+<META property="og:type" content="website">
+<META property="og:site_name" content="kusaku.su">
+<META property="og:image" content="https://kusaku.su/avatar.webp">
+<META name="twitter:card" content="summary">
+<META name="twitter:title" content="Тетрис от kusaku - JavaScript Tetris Game">
+<META name="twitter:description" content="Классическая игра Тетрис на JavaScript. Играйте в тетрис онлайн от kusaku. Браузерная версия тетриса.">
+<META name="twitter:image" content="https://kusaku.su/avatar.webp">
+<LINK rel="icon" type="image/png" sizes="32x32" href="https://kusaku.su/favicon-32x32.png">
+<LINK rel="icon" type="image/png" sizes="16x16" href="https://kusaku.su/favicon-16x16.png">
+<LINK rel="apple-touch-icon" sizes="180x180" href="https://kusaku.su/apple-touch-icon.png">
+<LINK rel="stylesheet" href="styles.css" type="text/css">
+<LINK rel="stylesheet" href="menushnik_modern.css" type="text/css">
+<STYLE type="text/css">
+BODY
+{
+ overflow:hidden;
+}
+
+TABLE.tetris
+{
+ border:1px solid #cccccc;
+ border-collapse:collapse; 
+ margin:5px;
+}
+
+TABLE.tetris TD
+{
+ border:none;
+}
+
+TABLE.tetris TD.empty
+{ 
+ background:transparent;
+}
+
+TABLE.tetris TD.red
+{ 
+ background:red;
+}
+
+TABLE.tetris TD.orange
+{ 
+ background:orange;
+}
+
+TABLE.tetris TD.yellow
+{ 
+ background:yellow;
+}
+
+TABLE.tetris TD.green
+{ 
+ background:green;
+}
+
+TABLE.tetris TD.aqua
+{ 
+ background:aqua;
+}
+
+TABLE.tetris TD.blue
+{ 
+ background:blue;
+}
+
+TABLE.tetris TD.purple
+{ 
+ background:purple;
+}
+
+TABLE.tetris TD.gray
+{ 
+ background:gray;
+}
+
+TABLE.tetris TD.brown
+{ 
+ background:brown;
+}
+
+TABLE.tetris TD.aquamarine
+{ 
+ background:aquamarine;
+}
+
+TABLE.tetris TD.honeydew
+{ 
+ background:honeydew;
+}
+
+TABLE.tetris TD.tomato
+{ 
+ background:tomato;
+}
+
+TABLE.tetris TD.palevioletred
+{ 
+ background:palevioletred;
+}
+
+TABLE.tetris TD.dimgray
+{ 
+ background:dimgray;
+}
+
+TABLE.tetris TD.greenyellow
+{
+ background:greenyellow;
+}
+
+TABLE.tetris TD.filled
+{
+ background:#999999;
+}
+
+.menu_passive,.menu_active,.menu_hover
+{
+ margin:5px;
+ padding:5px;
+ border-width:1px;
+ border-style:solid;
+ text-align:center;
+ font-family:Tahoma, Arial;
+ font-size:12pt;
+ font-weight:900;
+ cursor:hand;
+}
+
+.menu_hover
+{
+ padding:4px 6px 6px 4px;
+ border-top-color:#cccccc;
+ border-right-color:#000000;
+ border-bottom-color:#000000;
+ border-left-color:#cccccc;
+ background:#999999;
+ color:#ffffff;
+}
+
+.menu_active
+{
+ padding:6px 4px 4px 6px;
+ border-top-color:#000000;
+ border-right-color:#cccccc;
+ border-bottom-color:#cccccc;
+ border-left-color:#000000;
+ background:#999999;
+ color:#ffffff;
+}
+
+.menu_passive
+{
+ border-color:#999999;
+ background:#cccccc;
+ color:#000000;
+}
+</STYLE>
+<SCRIPT language="JavaScript" src="menushnik_modern.js">
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/JavaScript" src="floater_modern.js">
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/JavaScript">
+var menu_file = "menushnik.xml";
+</SCRIPT>
+<SCRIPT LANGUAGE=JAVASCRIPT>
+<!--
+/*(c) kusaku 2001 */
+/*(c) kusaku 2003 - redesign */
+
+var tetrisrows = 20;
+var tetriscolumns = 10;
+var cellhi = 12;
+var cellwi = cellhi;
+var firstplay = true;
+var totalscore = 0;
+var tetris;
+var shapes;
+var shtraff = 50;
+var actions = new Array();
+var enabledAction = false;
+var maxRecords = 5;
+var top10 = new Array(maxRecords);
+var TSAct;
+
+// CollectGarbage was an IE-only function, provide a no-op replacement
+function CollectGarbage() {
+	// No-op: garbage collection is handled automatically by modern browsers
+}
+
+var speeds = new Array(1000, 900, 800, 725, 650, 550, 500, 425, 350, 300, 250, 200, 150, 125, 100, 75, 50);
+var colorStyles = new Array("empty", "red", "orange", "yellow", "green", "aqua", "blue", "purple", "gray", "brown", "aquamarine", "honeydew", "tomato", "palevioletred", "dimgray", "greenyellow", "filled");
+var simpleStyles = new Array("empty", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled");
+
+var shapesForTetris = new Array(
+	new Array(new Array(1,1,1),
+			  new Array(0,0,1)),
+	new Array(new Array(2,2,2),
+			  new Array(0,2,0)),
+	new Array(new Array(3,3,3),
+			  new Array(3,0,0)),
+	new Array(new Array(4,4,0),
+			  new Array(0,4,4)),
+	new Array(new Array(0,5,5),
+			  new Array(5,5,0)),
+	new Array(new Array(6,6),
+			  new Array(6,6)),
+	new Array(new Array(7,7,7,7)));
+	
+var shapesForPentix = new Array(
+	new Array(new Array(1,1,1,1,1)),
+	new Array(new Array(2,2,2,2),
+			  new Array(0,0,0,2)),
+	new Array(new Array(3,3,3,3),
+			  new Array(0,0,3,0)),
+	new Array(new Array(4,4,4,4),
+			  new Array(0,4,0,0)),
+	new Array(new Array(5,5,5,5),
+			  new Array(5,0,0,0)),
+	new Array(new Array(6,6,6),
+			  new Array(0,6,6)),
+	new Array(new Array(7,7,7),
+			  new Array(7,7,0)),
+	new Array(new Array(8,8,8),
+			  new Array(8,0,8)),
+	new Array(new Array(9,9,9),
+			  new Array(0,0,9),
+			  new Array(0,0,9)),
+	new Array(new Array(10,10,0),
+			  new Array(0,10,10),
+			  new Array(0,0,10)),
+	new Array(new Array(11,11,11),
+			  new Array(0,11,0),
+			  new Array(0,11,0)),
+	new Array(new Array(0,12,0),
+			  new Array(12,12,12),
+			  new Array(0,12,0)),
+	new Array(new Array(0,13,0),
+			  new Array(13,13,13),
+			  new Array(0,0,13)),
+	new Array(new Array(14,14,0),
+			  new Array(0,14,0),
+			  new Array(0,14,14)),
+	new Array(new Array(0,15,15),
+			  new Array(0,15,0),
+			  new Array(15,15,0)),			  			  
+	new Array(new Array(0,16,0),
+			  new Array(16,16,16),
+			  new Array(16,0,0)))
+
+
+function Game(rows, columns, gamename, playername, score, field, fieldNext, scorefield, speed, level, allownext, selfmode)
+{
+	this.EMPTY = 0;
+	this.FILLED = 16;
+	this.CHANGESHAPE = 0;
+	this.ADDSHAPE = 1;
+	this.rows = rows;
+	this.columns = columns;
+	this.gamename = gamename;
+	this.playername = playername;
+	this.scoreSucc = 0;
+	this.score = score;
+	this.speed = speed;
+	this.level = level;
+	this.allownext = allownext;
+	this.selfmode = selfmode;
+	this.active = true;
+	this.field = field;
+	this.fieldNext = fieldNext;
+	this.scorefield = scorefield;
+	this.getField = GetField;
+	this.getCells = GetCells;
+	this.getShape = GetShape;
+	this.addcutElements = AddCutElements;
+	this.checkLines = CheckLines;
+	this.deleteLine = DeleteLine;
+	this.driver = Driver;
+	this.shapeFall = new Function("if (this.shape.state==this.shape.FREEFALL) {this.shape.setState(this.shape.DROP);" + this.gamename + ".driver(" + this.gamename + ".shape)}");
+	this.destroy = Destroy;
+	this.selfPlay = SelfPlay;
+	this.cell = this.getField(this.level);
+	this.speeds = speeds;
+	this.changeSpeed = new Function("speed", "clearInterval(this.TSFall);this.TSFall=setInterval(this.gamename+\".shapeFall()\",this.speeds[this.speed]);");
+	this.logic = Logic;
+	
+	var shapelist = new Array(10);
+	for (var i=0;i!=10;i++)
+		shapelist[i] = this.getShape()
+	
+	this.shapelist = shapelist;
+	this.shape = this.shapelist[0];
+	this.next = this.shapelist[1];
+	this.shape.state = this.shape.FREEFALL
+	this.painter = new Drawer(this);
+	this.painter.redraw(true);
+	this.TSDriver = setInterval(this.gamename + ".driver(" + this.gamename + ".shape)", 1);
+	this.TSFall = setInterval(this.gamename + ".shapeFall()", this.speeds[this.speed]);
+}
+
+function Driver(that)
+{
+	with (that) switch (state)
+	{
+		case FREEFALL:
+			//this.painter.redraw(false);
+		break;
+		
+		case DROP:
+			setState(FREEFALL);
+			if (notIntersect(x, y + 1)) y++;
+			else state = STICKED;
+			this.painter.redraw(false);
+		break;
+		
+		case CHANGESHAPE:
+			setState(FREEFALL);
+			this.logic(this.CHANGESHAPE);
+		break;
+
+		case MOVELEFT:
+			setState(FREEFALL);
+			if (notIntersect(x - 1, y)) x--;
+			this.painter.redraw(false);
+		break;
+		
+		case MOVERIGHT:
+			setState(FREEFALL);
+			if (notIntersect(x + 1, y)) x++;
+			this.painter.redraw(false);
+		break;
+		
+		case ROTATELEFT:
+			setState(FREEFALL);
+			if (rotate(false)) this.painter.redraw(false);
+		break;
+		
+		case ROTATERIGHT:
+			setState(FREEFALL);
+			if (rotate(true)) this.painter.redraw(false);
+		break;
+		
+		case INACTIVE:
+		break;
+		
+		case STICKED:
+			this.logic(this.ADDSHAPE);
+		break;
+	}
+}
+
+function Logic(action)
+{
+	var allowchange = false;
+	
+	with (this) switch (action)
+	{
+		case CHANGESHAPE:
+			if (score >= shtraff * (1 + allownext))
+			{
+				allowchange = true;
+				scoreSucc = shtraff * (1 + allownext);
+				score -= scoreSucc;
+			}			
+		break;
+		case ADDSHAPE:
+			allowchange = true;
+			scoreSucc = shape.getNumOfNbh(shape.x, shape.y) - shape.getNumOfMpt(shape.x, shape.y);
+			shape.state = shape.INACTIVE;
+			addcutElements(shape,true);
+			scoreSucc *= checkLines(shape.y, shape.rows) + 1;
+			score += scoreSucc;
+			if (score / 100 - 1 > speed) changeSpeed(speed++);
+		break;
+	}
+	
+	if (allowchange)
+	with (this) 
+	if (next.notIntersect(next.x, next.y, next.rows, next.columns, next.elements))
+	{
+		if (selfmode) enabledAction = false;
+		for (var i=0;i!=9;i++)
+			this.shapelist[i] = this.shapelist[i+1];
+		this.shapelist[9] = this.getShape();			
+		this.shape = this.shapelist[0]
+		this.next = this.shapelist[1]
+		this.shape.setState(shape.FREEFALL);
+		this.painter.redraw(true);
+		if (selfmode) selfPlay(shape);
+	}
+	else destroy();
+	
+	CollectGarbage();
+}
+
+function Destroy()
+{
+	clearInterval(this.TSDriver);
+	clearInterval(this.TSFall);
+	
+	if (this.selfmode) clearTimeout(TSAct);
+
+	for (i=0;i!=this.rows;i++)
+		for (k=0;k!=this.columns;k++)
+			if (this.cell[i][k] != this.EMPTY) this.cell[i][k] = this.FILLED;
+
+	this.painter.redraw(false);
+
+	for (i=0;i!=5;i++)
+		for (k=0;k!=5;k++)
+			this.painter.fillCell(this.fieldNext, i, k, this.painter.styles[0]);
+	
+	this.active = false;
+	
+	saveData(this.playername, this.score);
+	displayTop10();
+}
+
+function GetField(level)
+{
+	var rowsToFill = Math.round(this.rows * level / 10 * 0.8);
+	
+	cells = new Array(this.rows);
+	for (i=0;i!=this.rows - rowsToFill;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++) cells[i][k] = this.EMPTY;
+	}
+	for (i=this.rows - rowsToFill;i!=this.rows;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++)
+			if (Math.random() > .45) cells[i][k] = this.EMPTY;
+			else cells[i][k] = Math.round(Math.random() * 14) + 1;
+	}
+	return cells;
+}
+
+
+function GetCells()
+{
+	var cells = new Array(this.rows);
+	for (i=0;i!=this.rows;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++) cells[i][k] = this.cell[i][k];
+	}
+	
+	if (this.shape.state != this.shape.INACTIVE)
+	for (i=0;i!=this.shape.rows;i++)
+		for (k=0;k!=this.shape.columns;k++)
+			if (this.shape.elements[i][k] != this.EMPTY)
+				cells[this.shape.y + i][this.shape.x + k] = this.shape.elements[i][k];
+
+	return cells;
+}
+
+function GetShape()
+{
+	var number = Math.floor(shapes.length * Math.random());	
+	var elements = shapes[number];
+	var x = Math.round((this.columns - elements[0].length)/2);
+	var y = Math.max(elements[0].length, elements.length) - Math.floor(elements[0].length/2);
+	
+	shape = new Shape(x, y, elements, elements.length, elements[0].length, this);
+	
+	var number = Math.round(4 * Math.random());
+	
+	for (n=0;n<number;n++) shape.rotate(true)
+
+	return shape;
+}
+
+
+function AddCutElements(inshape, add)
+{
+	for (i=0;i!=inshape.rows;i++)		
+		for (k=0;k!=inshape.columns;k++)
+			if (inshape.elements[i][k] != inshape.EMPTY)
+				this.cell[inshape.y + i][inshape.x + k] = (add) ? inshape.elements[i][k] : this.EMPTY;
+}
+
+function CheckLines(y, height)
+{
+	var lines = 0;
+	for (i=y;i!=y + height;i++)
+	{
+		var haveFullLine = true;
+		for (k=0;k!=this.columns;k++) haveFullLine = haveFullLine && (this.cell[i][k] != this.EMPTY);
+		if (haveFullLine) 
+		{
+			lines++;
+			this.deleteLine(i);
+			i--;
+		}
+	}
+	return lines;
+}
+
+function DeleteLine(number)
+{
+	for (i=number;i!=1;i--)		
+		for (k=0;k!=this.columns;k++)
+			this.cell[i][k] = this.cell[i - 1][k];
+}
+
+function BestPosition(game, inshape)
+{
+	var plshape = inshape.clone();
+	var usefullness = 0;
+
+	this.mostusefull = -100000;
+	this.bestx = inshape.x;
+	this.besty = inshape.y;
+	this.bestrot = 0;
+	this.bpshape;
+	
+	for (var rot=0;rot<4;rot++)
+	{
+		var maxxpos = game.columns - plshape.columns + 1;
+		for (plshape.x=0;plshape.x!=maxxpos;plshape.x++)
+		{
+			plshape.y = inshape.y;
+			while (plshape.notIntersect(plshape.x, plshape.y + 1)) plshape.y++;
+			
+			usefullness = plshape.y + plshape.getNumOfNbh() - plshape.getNumOfMpt();			
+
+			if (arguments.length > 2)
+			{
+	 			game.addcutElements(plshape,true);
+				var s = "new BestPosition(game";
+				for(i=2;i!=arguments.length;i++)
+					s += ", arguments[" + i + "]";
+				s += ");"
+				var bestpos2nd = eval(s);				
+	 			usefullness += bestpos2nd.mostusefull;
+				game.addcutElements(plshape,false);
+			}
+
+			if (this.mostusefull < usefullness && plshape.y > inshape.y)
+			{
+				this.mostusefull = usefullness;
+				this.bestx = plshape.x;
+				this.bestrot = rot;
+			}
+			
+		}
+		plshape.x = inshape.x;
+		plshape.y = inshape.y;
+	if (!plshape.rotate(true)) break;
+	}
+}
+
+
+function SelfPlay(inshape)
+{
+	enabledAction = false;
+	actions.length = 0;
+	
+	if (this.allownext)
+		var bestpos = new BestPosition(this, this.shape, this.shapelist[1]);
+	else 
+		var bestpos = new BestPosition(this, this.shape);
+
+	var bestx = bestpos.bestx;
+	var bestrot = bestpos.bestrot;
+	
+	bestpos = null;
+	
+	CollectGarbage();
+		
+	var rotdir = (bestrot == 3) ? inshape.ROTATELEFT : inshape.ROTATERIGHT;
+
+	/*if (bestrot == 1) bestx += inshape.rows - inshape.corx - inshape.cory;
+	if (bestrot == 2) bestx += inshape.columns - 2 * inshape.corx;
+	if (bestrot == 3) bestx += inshape.cory - inshape.corx;*/
+	
+	bestrot = Math.min(4 - bestrot, bestrot);
+	
+	for (rot=0;rot!=bestrot;rot++) actions[rot] = rotdir;
+	for (i=bestrot;i!=bestrot + Math.abs(inshape.x - bestx);i++) actions[i] = (shape.x > bestx) ? inshape.MOVELEFT : inshape.MOVERIGHT;
+	for (i=bestrot + Math.abs(inshape.x - bestx);i!=100;i++) actions[i] = inshape.DROP;
+
+	enabledAction = true;
+	Manipulator(0, true);
+}
+
+
+function Shape(x, y, elements, rows, columns, game)
+{
+	this.ROTATELEFT = 1;
+	this.ROTATERIGHT = 2;
+	this.CHANGESHAPE = 3;
+	this.MOVERIGHT = 4;
+	this.MOVELEFT = 5;
+	this.DROP = 6;
+	this.FREEFALL = 7;
+	this.INACTIVE = 8;
+	this.STICKED = 9;
+	this.EMPTY = 0;
+	this.state = this.INACTIVE;
+	this.sticked = false;
+	this.game = game;
+	this.elements = elements;
+	this.rows = rows;
+	this.columns = columns;
+	this.x = x;
+	this.y = y;
+	this.corx = Math.floor(this.columns/2);
+	this.cory = Math.floor(this.rows/2);
+	this.setState = new Function("state", "if (this.state!=this.STICKED) this.state = state;");
+	this.clone = new Function("return new Shape(this.x, this.y, this.elements, this.rows, this.columns, this.game);");
+	this.notIntersect = NotIntersect;
+	this.getNumOfNbh = GetNumOfNbh;
+	this.getNumOfMpt = GetNumOfMpt;
+	this.rotate = Rotate;
+}
+
+
+function Rotate(clockwise)
+{
+	var rotated = false;
+	
+	with (this) if (clockwise)
+	{
+			stencil = new Array(columns);
+			for (i=0;i!=columns;i++)
+			{
+				stencil[i] = new Array(rows);
+				for (k=0; k!=rows; k++)
+				stencil[i][k] = elements[rows - k - 1][i];
+			}
+			if (notIntersect(x, y, columns, rows, stencil))
+			{
+				var t = columns;
+				columns = rows;
+				rows = t;
+				elements = stencil;
+				rotated = true;
+			}
+	}
+	else
+	{
+			stencil = new Array(columns);
+			for (i=0;i!=columns;i++)
+			{
+				stencil[i] = new Array(rows);
+				for (k=0;k!=rows;k++)
+				stencil[i][k] = elements[k][columns - i - 1];
+			}
+			if (notIntersect(x, y, columns, rows, stencil))
+			{
+				var t = columns;
+				columns = rows;
+				rows = t;
+				elements = stencil;
+				rotated = true;
+			}
+	}
+		
+	return rotated;
+}
+	
+
+function NotIntersect(x, y, rows, columns, stencil)
+{
+	x = (x) ? x : this.x;
+	y = (y) ? y : this.y;
+	rows = (rows) ? rows : this.rows;
+	columns = (columns) ? columns : this.columns;
+	stencil = (stencil) ? stencil : this.elements;
+	
+	if (x < 0 || x + columns > this.game.columns || y + rows > this.game.rows || y < 0) return false;
+	var answer = true;
+	for (i=0; i!=rows && answer; i++)
+		for (k=0; k!=columns && answer; k++)
+			answer = answer && !(this.game.cell[y + i][x + k] != this.game.EMPTY && stencil[i][k] != this.EMPTY);
+	return answer;
+}
+
+
+function GetNumOfNbh(x, y)
+{
+	if (x == null) x = this.x;
+	if (y == null) y = this.y;
+	var numofnbh = 0;
+	for (i=0;i!=this.rows;i++)		
+		for (k=0;k!=this.columns;k++)
+			if (this.elements[i][k] != this.EMPTY)
+			{
+				if (y + i == 0) numofnbh++;
+				else if (this.game.cell[y + i - 1][x + k] != this.game.EMPTY) numofnbh++;
+				if (y + i == this.game.rows - 1) numofnbh++;
+				else if (this.game.cell[y + i + 1][x + k] != this.game.EMPTY) numofnbh++;
+				if (x + k == 0) numofnbh++;
+				else if (this.game.cell[y + i][x + k - 1] != this.game.EMPTY) numofnbh++;
+				if (x + k == this.game.columns - 1) numofnbh++;
+				else if (this.game.cell[y + i][x + k + 1] != this.game.EMPTY) numofnbh++;
+			}
+	return numofnbh;
+}
+
+function GetNumOfMpt(x, y)
+{
+	if (x == null) x = this.x;
+	if (y == null) y = this.y;
+	var numofmpt = 0;
+	for (i=0;i!=this.rows;i++)		
+		for (k=0;k!=this.columns;k++)
+		if (this.elements[i][k] != this.EMPTY && y + i + 1 != this.game.rows)
+			if (i == this.rows - 1)
+				if (this.game.cell[y + i + 1][x + k] == this.game.EMPTY) numofmpt++; else;
+			else
+				if (this.elements[i + 1][k] == this.EMPTY && this.game.cell[y + i + 1][x + k] == this.game.EMPTY) numofmpt++;
+	return numofmpt;
+}
+
+function Drawer(game)
+{
+	this.game = game;
+	this.olddata = this.game.getCells();
+	this.newdata;
+	this.redraw = ReDraw;
+	this.fillCell = new Function("target", "row", "column", "cname", "target.rows[row].cells[column].className = cname;");
+	this.styles = styles;
+}
+
+function ReDraw(all)
+{
+	this.newdata = this.game.getCells();
+	
+	if (all) 
+	{
+		for (i=0;i!=this.game.rows;i++)	
+			for (k=0;k!=this.game.columns;k++)
+				this.fillCell(this.game.field, i, k, this.styles[this.newdata[i][k]]);
+
+		for (i=0;i!=5;i++)
+				for (k=0;k!=5;k++)
+					this.fillCell(this.game.fieldNext, i, k, this.styles[0]);
+					
+		if (this.game.allownext)
+		{
+			var xPos = Math.floor(2.5 - this.game.next.columns/2);
+			var yPos = Math.floor(2.5 - this.game.next.rows/2);			
+			with (this.game.next) 
+				for (i=0;i!=rows;i++)
+					for (k=0;k!=columns;k++)
+						this.fillCell(this.game.fieldNext, i + yPos, k + xPos, this.styles[elements[i][k]]);
+		}
+		
+		this.game.scorefield.innerHTML = "" + this.game.score + "(" + ((this.game.scoreSucc >= 0) ? "+" : "") + this.game.scoreSucc + ")";		
+	}
+	else	
+		for (i=0;i!=this.game.rows;i++)	
+			for (k=0;k!=this.game.columns;k++)
+				if (this.newdata[i][k] != this.olddata[i][k]) this.fillCell(this.game.field, i, k, this.styles[this.newdata[i][k]]);
+
+	this.olddata = this.newdata;
+}
+
+function setCookie(name, value, savefor, path, domain, secure)
+{
+	var expires = null;
+	if (savefor)
+	{
+		now = new Date();
+		now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+		expires = now.toGMTString();
+	}
+
+	var curCookie = name + "=" + escape(value) +
+		((expires) ? ";expires=" + expires : "") +
+		((path) ? ";path=" + path : "") +
+		((domain) ? ";domain=" + domain : "") +
+		((secure) ? ";secure" : "");
+		document.cookie = curCookie;
+}
+
+function getCookie(name)
+{
+	var prefix = name + "="
+	var cookieStartIndex = document.cookie.indexOf(prefix)
+	if (cookieStartIndex == -1)
+		return false
+	var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+	if (cookieEndIndex == -1)
+		cookieEndIndex = document.cookie.length
+	return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+function saveData(name, score)
+{
+	for (i=0;i!=maxRecords&&top10[i]&&score<=top10[i][1];i++);
+	for (k=maxRecords-1;k!=i-1;k--) top10[k] = top10[k - 1];
+	
+	top10[i] = new Array(name, score, new Date());
+	
+	for (i=0;i!=maxRecords&&top10[i];i++)
+	{	
+		//setCookie(i + "n", top10[i][0], 365, document.location.pathname, document.location.host, true);
+		//setCookie(i + "s", top10[i][1], 365, document.location.pathname, document.location.host, true);
+		//setCookie(i + "d", top10[i][2], 365, document.location.pathname, document.location.host, true);
+		setCookie(i + "n", top10[i][0], 365);
+		setCookie(i + "s", top10[i][1], 365);
+		setCookie(i + "d", top10[i][2], 365);
+	}
+}
+
+function getData()
+{
+	for (i=0;getCookie(i + "n")&&getCookie(i + "s")&&i<maxRecords;i++)
+		top10[i] = new Array(getCookie(i + "n"), parseInt(getCookie(i + "s")), getCookie(i + "d"));
+}
+
+function clearData()
+{
+	for (i=0;i<maxRecords;i++)
+		top10[i] = new Array("---", "0", "");
+	displayTop10();
+}
+
+function displayTop10()
+{
+	var s = new String()
+	
+	s = "<table class=flyer>";
+	s += "<tr><th colSpan=4>лидеры</th></tr>";
+	s += "<tr><th>#</th><th>имя</th><th>очки</th><th>дата</th></tr>";
+	
+	for (i=0;top10[i] && i < maxRecords;i++)
+		s += "<tr><td>" + (i + 1) + "</td><td>" + top10[i][0] + "</td><td>" + top10[i][1] + "</td><td nowrap>" + ((new Date(top10[i][2])).toLocaleString()) + "</td></tr>";
+		
+	s += "<tr><td colSpan=4><div class=\"menu_passive\" onmouseover=\"this.className='menu_hover'\" onmouseout=\"this.className='menu_passive'\"  onmouseup=\"this.className='menu_hover'\"  onmousedown=\"this.className='menu_active'\" onclick=\"clearData();\">очистить</DIV></td></tr>";
+	s += "<tr><td colSpan=4><div class=\"menu_passive\" onmouseover=\"this.className='menu_hover'\" onmouseout=\"this.className='menu_passive'\"  onmouseup=\"this.className='menu_hover'\"  onmousedown=\"this.className='menu_active'\" onclick=\"topten.style.visibility='hidden'\">закрыть</DIV></td></tr>";
+	s += "</table>";
+
+	topten.innerHTML = s;
+	topten.style.visibility = "visible";
+}
+
+function getFieldHTML(rows, columns, cellh, cellw, style, idName)
+{
+	var s = new String()
+
+	s = "<table id=" + idName + " name=" + idName + " class=" + style + ">";
+
+	for (i = 0;i!=rows;i++)
+	{
+		s+="<tr>";
+		for (k = 0;k!=columns;k++) s+="<td style=\"height:" + cellh + "px;width:" + cellw + "px;\"></td>\n";
+		s+="</tr>\n"
+	}
+
+	s += "</table>";
+
+	return s;
+}
+
+function Manipulator(number)
+{
+	clearTimeout(TSAct);// oh, shit!
+
+	var ms = (actions[number] == tetris.shape.DROP) ? 25 : 100;
+
+	if (enabledAction && number < actions.length)
+	{
+		tetris.shape.setState(actions[number]);
+		TSAct = setTimeout("Manipulator(" + (number + 1) + ");", ms);
+	}
+	else clearTimeout(TSAct);
+}
+
+function KeyHooker(code,keydn,keyup,keypress)
+{
+	if (tetris && !tetris.selfmode)
+	{
+		if (keyup) actions.length = 0;
+		if (keydn)
+		with (tetris) switch (code)
+		{
+			case 38 : shape.setState(shape.CHANGESHAPE);
+			break;
+			case 37 : //shape.setState(shape.MOVELEFT);
+			for (var i=0; i<10; i++)
+				actions[actions.length] = shape.MOVELEFT;
+			enabledAction = true;
+			Manipulator(0)
+			break;
+			case 90 : shape.setState(shape.ROTATELEFT);
+			break;
+			case 88 : shape.setState(shape.ROTATERIGHT);
+			break;
+			case 39 : //shape.setState(shape.MOVERIGHT);
+			for (var i=0; i<10; i++)
+				actions[actions.length] = shape.MOVERIGHT;
+			enabledAction = true;
+			Manipulator(0)
+			break;
+			case 40 : //shape.setState(shape.DROP);
+			for (var i=0; i<20; i++)
+				actions[actions.length] = shape.DROP;
+			enabledAction = true;
+			Manipulator(0)
+			break;
+			case 32 :
+				alert("Для продолжения нажмите OK...");
+			break;
+		}
+	}
+}
+
+function GetCompName()
+{
+	var glasn = new Array("a","e","i","o","y","u","oo","ee","er","ea","or","ur");
+	var sglasn = new Array("b","c","dr","pr","st","bl","cr","ks","ph","h","sh","ch","kh","x","k");
+	var slog = Math.ceil(Math.random() * 3)
+	var name = new String();
+
+	for (i=0;i < slog;i++)
+		name += sglasn[Math.floor(Math.random() * sglasn.length)] + glasn[Math.floor(Math.random() * glasn.length)];
+
+	return name;
+}
+
+function Init()
+{
+	if (!firstplay)
+	{
+		if (tetris.active) tetris.destroy();
+		tetris.painter.redraw(true);
+	}
+	else firstplay = false;
+
+	var speed = document.optform.playerSpeed[document.optform.playerSpeed.selectedIndex].value;
+	var level = document.optform.playerLevel[document.optform.playerLevel.selectedIndex].value;
+	var allownext = document.optform.playerAllowNext.checked;
+	var selfmode = document.optform.selfMode.checked;
+	var playername = document.optform.playerName.value;
+
+	if (selfmode)
+	{
+		document.optform.playerName.value = playername = GetCompName();
+	}
+
+	var tetrisRadio = document.getElementById('tetris');
+	var pentixRadio = document.getElementById('pentix');
+	var simpleStyleRadio = document.getElementById('simplestyle');
+	var colorStyleRadio = document.getElementById('colorstyle');
+
+	if (tetrisRadio && tetrisRadio.checked) shapes = shapesForTetris;
+	else if (pentixRadio && pentixRadio.checked) shapes = shapesForPentix;
+	else shapes = shapesForTetris; // Default fallback
+
+	if (simpleStyleRadio && simpleStyleRadio.checked) styles = simpleStyles;
+	else if (colorStyleRadio && colorStyleRadio.checked) styles = colorStyles;
+	else styles = simpleStyles; // Default fallback
+
+	tetris = new Game(tetrisrows,
+					  tetriscolumns,
+					  "tetris",
+					  playername,
+					  totalscore,
+					  tetrisfield,
+					  tetrisfieldnext,
+					  scoreboard,
+					  speed,
+					  level,
+					  allownext,
+					  selfmode);
+
+	if (selfmode) tetris.selfPlay(tetris.shape);
+}
+
+//-->
+</SCRIPT>
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 height="100%" width="100%">
+  <TR>
+    <TD height="100%" ><TABLE height="100%" border="0" cellpadding="0" cellspacing="0">
+      <TR bgcolor="#000000">
+        <TD><TABLE border=0 cellPadding=0 cellSpacing=0 height="100%">
+          <TR>
+            <TD align=middle height="100%">
+              <DIV class="pdmenu">
+                <SPAN id="menushnik"></SPAN>
+              </DIV>
+              <SCRIPT language="JavaScript" type="text/JavaScript">
+                if (typeof MakeMenu === 'function') {
+                  MakeMenu(menu_file, "menushnik");
+                } else {
+                  window.addEventListener('DOMContentLoaded', function() {
+                    if (typeof MakeMenu === 'function') {
+                      MakeMenu(menu_file, "menushnik");
+                    }
+                  });
+                }
+              </SCRIPT>
+            </TD>
+          </TR>
+          <TR>
+            <TD><IMG height=21 src="images/bush_01.gif" width=96></TD>
+          </TR>
+        </TABLE></TD>
+        <TD><TABLE border=0 cellPadding=0 cellSpacing=0>
+          <TR>
+            <TD><IMG height=69 src="images/morda.gif" width=292></TD>
+            <TD noWrap class=banner>здесь живёт<BR>kusaku</TD>
+          </TR>
+        </TABLE></TD>
+        <TD><IMG height=69 src="images/topright_01.gif" width=165></TD>
+      </TR>
+      <TR valign="top">
+        <TD><TABLE height="100%" border="0" cellpadding="0" cellspacing="0" background="images/bgbush.gif">
+          <TR>
+            <TD height="179"><IMG height=179 src="images/bush_02.gif" width=96></TD>
+          </TR>
+          <TR>
+            <TD height="100%"></TD>
+          </TR>
+        </TABLE></TD>
+        <TD><TABLE width="100%" height="100%" border=0 cellPadding=0 cellSpacing=0>
+          <TR>
+            <TD class=header>
+
+Тетрис от kusaku
+</TD>
+          </TR>
+          <TR>
+            <TD class=maintext height="100%" vAlign=top>
+              <TABLE border=0 cellPadding=0 cellSpacing=0 class=tetris>
+                <TR>
+                  <TD vAlign=top>
+                    <TABLE border=0 cellPadding=0 cellSpacing=0
+						height="100%" style="HEIGHT: 100%" width="100%">
+                      <TR>
+                        <TD align=middle>
+                          <DIV id=scoreboard
+							  class="" style="FONT-SIZE: 10pt; FONT-WEIGHT: bold"
+							 >welcome!</DIV></TD>
+                      </TR>
+                      <TR>
+                        <TD align=middle height="100%"
+							  style="HEIGHT: 100%"><DIV
+						  id=tetrisboard></DIV></TD>
+                      </TR>
+                      <TR>
+                        <TD align=middle>
+                          <DIV
+					  id=tetrisnextboard></DIV></TD>
+                      </TR>
+                  </TABLE></TD>
+                  <TD>
+                    <FORM id=optform name=optform>
+                      <TABLE class=flyer>
+                        <TR>
+                          <TD colSpan=2>
+                            <CENTER>
+                              <STRONG>tetris v1.5</STRONG>
+                          </CENTER></TD>
+                        </TR>
+                        <TR>
+                          <TD>Имя игрока:</TD>
+                          <TD><INPUT maxLength=20 name=playerName
+							  style="WIDTH: 80%" value=anonimous>
+                          </TD>
+                        </TR>
+                        <TR>
+                          <TD>Играть в:</TD>
+                          <TD><INPUT CHECKED id=tetris name=gametype
+							  type=radio>
+              тетрис
+                <INPUT id=pentix name=gametype
+							  type=radio>
+              пентикс. </TD>
+                        </TR>
+                        <TR>
+                          <TD>Фигуры:</TD>
+                          <TD><INPUT CHECKED id=simplestyle name=color
+							  type=radio>
+              простые
+                <INPUT id=colorstyle name=color type=radio>
+              цветные. </TD>
+                        </TR>
+                        <TR>
+                          <TD>Скорость:</TD>
+                          <TD><SELECT name=playerSpeed style="WIDTH: 80%">
+                              <OPTION value=0>медлительно</OPTION>
+                              <OPTION
+								value=1>тихо</OPTION>
+                              <OPTION selected
+								value=2>нормально</OPTION>
+                              <OPTION
+								value=3>ходко</OPTION>
+                              <OPTION
+								value=4>проворно</OPTION>
+                              <OPTION
+								value=5>бойко</OPTION>
+                              <OPTION
+								value=6>резво</OPTION>
+                              <OPTION
+								value=7>прытко</OPTION>
+                              <OPTION
+								value=8>шибко</OPTION>
+                              <OPTION
+								value=9>стремительно</OPTION>
+                            </SELECT>
+                          </TD>
+                        </TR>
+                        <TR>
+                          <TD>Уровень:</TD>
+                          <TD><SELECT name=playerLevel style="WIDTH: 80%">
+                              <OPTION selected value=0>тривиально</OPTION>
+                              <OPTION value=1>пустяково</OPTION>
+                              <OPTION
+								value=2>легко</OPTION>
+                              <OPTION
+								value=3>нетрудно</OPTION>
+                              <OPTION
+								value=4>нормально</OPTION>
+                              <OPTION
+								value=5>посильно</OPTION>
+                              <OPTION value=6>с хитрецой</OPTION>
+                              <OPTION
+								value=7>непросто</OPTION>
+                              <OPTION
+								value=8>замысловато</OPTION>
+                              <OPTION
+								value=9>головоломно</OPTION>
+                            </SELECT>
+                          </TD>
+                        </TR>
+                        <TR>
+                          <TD colSpan=2>
+                            <CENTER>
+                              Следующая фигура:
+                                <INPUT CHECKED
+							  name=playerAllowNext type=checkbox>
+                          </CENTER></TD>
+                        </TR>
+                        <TR>
+                          <TD colSpan=2>
+                            <CENTER>
+                              Компьютер играет сам:
+                                <INPUT name=selfMode
+							  type=checkbox>
+                          </CENTER></TD>
+                        </TR>
+                        <TR>
+                          <TD>
+                            <DIV class=menu_passive onclick="Init();"
+							  onmousedown="this.className='menu_active'"
+							  onmouseout="this.className='menu_passive'"
+							  onmouseover="this.className='menu_hover'"
+							  onmouseup="this.className='menu_hover'">Пуск </DIV></TD>
+                          <TD>
+                            <DIV class=menu_passive
+							  onclick="displayTop10();"
+							  onmousedown="this.className='menu_active'"
+							  onmouseout="this.className='menu_passive'"
+							  onmouseover="this.className='menu_hover'"
+							  onmouseup="this.className='menu_hover'">Top 5 </DIV></TD>
+                        </TR>
+                      </TABLE>
+                  </FORM></TD>
+                </TR>
+                <TR>
+                  <TD align=middle class=copyrght>No rights reserved. <BR>
+                    Freeware: use this on your own risk. <BR>
+                    This game is a part of <A
+						href="physfac/index.html">Physfac@RU</A> site.</TD>
+                  <TD align=middle class=copyrght>Управление: <BR>
+                    Пауза - Space Поворот Z - против / X - по часовой стрелке <BR>
+						      Движение &gt;- вправо / &lt;- влево / v- бросить, <BR>
+						      Выбрать следующюю фигуру с уменьшением очков - ^.</TD>
+                </TR>
+              </TABLE>
+<DIV id=topten
+style="BACKGROUND: #ffffff; BORDER-BOTTOM: #999999 1px solid; BORDER-LEFT: #999999 1px solid; BORDER-RIGHT: #999999 1px solid; BORDER-TOP: #999999 1px solid; CURSOR: hand; LEFT: 573px; POSITION: absolute; TOP: 13px; VISIBILITY: hidden">tetris
+v1.5</DIV>
+<SCRIPT language=javascript>
+<!--
+	// Modernized initialization for all browsers
+	function initTetris() {
+		var tetrisboardEl = document.getElementById('tetrisboard');
+		var tetrisnextboardEl = document.getElementById('tetrisnextboard');
+
+		if (tetrisboardEl) {
+			tetrisboardEl.innerHTML = getFieldHTML(tetrisrows, tetriscolumns, cellhi, cellwi, "tetris", "tetrisfield");
+		}
+		if (tetrisnextboardEl) {
+			tetrisnextboardEl.innerHTML = getFieldHTML(5, 5, cellhi, cellwi, "tetris", "tetrisfieldnext");
+		}
+
+		// Modern keyboard event handling
+		document.addEventListener('keydown', function(e) {
+			KeyHooker(e.keyCode || e.which, true, false, false);
+		});
+		document.addEventListener('keyup', function(e) {
+			KeyHooker(e.keyCode || e.which, false, true, false);
+		});
+
+		// Cleanup on page unload
+		window.addEventListener('beforeunload', function() {
+			if (!firstplay && tetris && tetris.active) {
+				tetris.destroy();
+			}
+		});
+
+		getData();
+	}
+
+	// Initialize when DOM is ready and all scripts are loaded
+	function tryInitTetris() {
+		if (typeof getFieldHTML === 'function' && typeof getData === 'function') {
+			initTetris();
+		} else {
+			setTimeout(tryInitTetris, 50);
+		}
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', tryInitTetris);
+	} else {
+		tryInitTetris();
+	}
+//-->
+</SCRIPT>
+<TABLE id="my_links" border=0 cellPadding=0 cellSpacing=0 style="left: 610px; position: absolute; top: 160px; width: 134px;" name="floater">
+  <TR bgcolor="#000000">
+    <TD style="cursor: pointer;" name="roller" class="floater">&nbsp;v</TD>
+    <TD style="cursor: move;" name="mover" class="floater" width="100%" align="center">ссылки</TD>
+    <TD style="cursor: pointer;" name="closer" class="floater">x&nbsp;</TD>
+  </TR>
+  <TR bgcolor="#FFFFFF">
+    <TD colSpan=3 name="content">
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/my">ЖЖ friends (my)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/com">ЖЖ friends (com)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/int">ЖЖ friends (int)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/gfx">ЖЖ friends (gfx)</a></p>
+      <p><a href="https://www.skazhi.ru/index.php?act=Search&CODE=getnew">skazhi.ru</a></p>
+  </TR>
+</TABLE>
+
+<TABLE id="my_clock" border=0 cellPadding=0 cellSpacing=0 style="left: 610px; position: absolute; top: 300px; width: 134px; height: 124px;" name="floater">
+  <TR bgcolor="#000000">
+    <TD style="cursor: pointer;" name="roller" class="floater">&nbsp;v</TD>
+    <TD style="cursor: move;" name="mover" class="floater" width="100%" height="1" align="center">часы</TD>
+    <TD style="cursor: pointer;" name="closer" class="floater">x&nbsp;</TD>
+  </TR>
+  <TR bgcolor="#FFFFFF">
+    <TD colSpan=3 name="content">
+      <A style="font-size: xx-small; color: #FF0000; position: absolute; left: 55px; top: 78px;" href="https://kusaku.su/">kusaku</A>
+<SCRIPT language="JavaScript" type="text/JavaScript">
+<!--
+(function() {
+    var clockContainer = document.getElementById('my_clock');
+    if (!clockContainer) return;
+
+    var contentCell = clockContainer.querySelector('[name="content"]');
+    if (!contentCell) return;
+
+    var digits = "12 &middot; &middot; 3 &middot; &middot; 6 &middot; &middot; 9 &middot; &middot;".split(" ");
+    var ieFace = [];
+    var ieHours = [];
+    var ieMinutes = [];
+    var ieSeconds = [];
+
+    // Create digit elements
+    for (var i = 0; i < digits.length; i++) {
+        var div = document.createElement('div');
+        div.id = 'ieFace_' + i;
+        div.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        div.innerHTML = digits[i];
+        contentCell.appendChild(div);
+        ieFace.push(div);
+    }
+
+    // Create hand elements
+    for (var i = 0; i < 20; i++) {
+        var divHours = document.createElement('div');
+        divHours.id = 'ieHours_' + i;
+        divHours.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divHours.innerHTML = '<strong>&middot;</strong>';
+        contentCell.appendChild(divHours);
+        ieHours.push(divHours);
+
+        var divMinutes = document.createElement('div');
+        divMinutes.id = 'ieMinutes_' + i;
+        divMinutes.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divMinutes.innerHTML = '&middot;';
+        contentCell.appendChild(divMinutes);
+        ieMinutes.push(divMinutes);
+
+        var divSeconds = document.createElement('div');
+        divSeconds.id = 'ieSeconds_' + i;
+        divSeconds.style.cssText = 'position:absolute;color:red;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divSeconds.innerHTML = '&middot;';
+        contentCell.appendChild(divSeconds);
+        ieSeconds.push(divSeconds);
+    }
+
+    function time_goes_by() {
+        var pi = Math.PI;
+        var date = new Date();
+
+        function assign(obj_q, r, arg, shift) {
+            obj_q.style.top = Math.round(r * Math.sin(arg) + shift) + "px";
+            obj_q.style.left = Math.round(r * Math.cos(arg) + shift) + "px";
+        }
+
+        for (var i = 0; i < digits.length; i++) {
+            assign(ieFace[i], 36, 2 * i * pi / digits.length - pi / 2, 60);
+        }
+
+        for (var i = 0; i < 20; i++) {
+            assign(ieHours[i], i, (date.getHours() / 6 + date.getMinutes() / 360) * pi - pi / 2, 60);
+            assign(ieMinutes[i], i * 1.4, (date.getMinutes() / 30 + date.getSeconds() / 1800) * pi - pi / 2, 60);
+            assign(ieSeconds[i], i * 1.5, date.getSeconds() / 30 * pi - pi / 2, 60);
+        }
+
+        setTimeout(time_goes_by, 1000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', time_goes_by);
+    } else {
+        time_goes_by();
+    }
+})();
+//-->
+</SCRIPT>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+          </TR>
+        </TABLE></TD>
+        <TD height="100%"><TABLE height="100%" border="0" cellpadding="0" cellspacing="0" background="images/bgright.gif">
+          <TR>
+            <TD height="50"><IMG src="images/topright_02.gif" width="165" height="50"></TD>
+          </TR>
+          <TR>
+            <TD height="100%"></TD>
+          </TR>
+          <TR>
+            <TD height="212" align="right" valign="bottom">
+<!--Rating@Mail.ru COUNTEr--><script language="JavaScript" type="text/javascript"><!--
+d=document;var a='';a+=';r='+escape(d.referrer)
+js=10//--></script><script language="JavaScript1.1" type="text/javascript"><!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script><script language="JavaScript1.2" type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12//--></script><script language="JavaScript1.3" type="text/javascript"><!--
+js=13//--></script><script language="JavaScript" type="text/javascript"><!--
+d.write('<a href="https://top.mail.ru/jump?from=942302"'+
+' target=_top><img src="https://d0.c6.be.a0.top.list.ru/counter'+
+'?id=942302;t=216;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border=0 height=31 width=88/><\/a>')
+if(11<js)d.write('<'+'!-- ')//--></script><noscript><a
+target=_top href="https://top.mail.ru/jump?from=942302"><img
+src="https://d0.c6.be.a0.top.list.ru/counter?js=na;id=942302;t=216"
+border=0 height=31 width=88
+alt="Рейтинг@Mail.ru"/></a></noscript><script language="JavaScript" type="text/javascript"><!--
+if(11<js)d.write('--'+'>')//--></script><!--/COUNTER-->
+            </TD>
+          </TR>
+        </TABLE></TD>
+      </TR>
+      <TR bgcolor="#CCCCCC">
+        <TD align="center"><A title="индексирование" href="robots.html">...</A></TD>
+        <TD align="center" class="copyrght">&copy; <A title="made by kusaku" href="https://kusaku.su">kusaku</A> 2004</TD>
+        <TD></TD>
+      </TR>
+    </TABLE></TD>
+    <TD WIDTH="100%" BGCOLOR=#CCCCCC></TD>
+  </TR>
+</TABLE>
+</BODY>
+</HTML>

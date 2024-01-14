@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turbo Pascal Projects - Legacy Projects</title>
+<meta name="description" content="Turbo Pascal programs from early programming days">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Turbo Pascal">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/turbopascal.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/turbopascal.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/turbopascal.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Turbo Pascal Projects - Legacy - Kirill Arkhipenko">
+<meta property="og:description" content="Turbo Pascal programs from early programming days. Author: Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/turbopascal.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Turbo Pascal Projects - Legacy - Kirill Arkhipenko">
+<meta name="twitter:description" content="Turbo Pascal programs from early programming days. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Modern card styling */
+        .project-card {
+            transition: all 0.2s ease-in-out;
+        }
+        html.light .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+        }
+        html.light .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-6">
+                <a href="/legacy/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to legacy projects
+                </a>
+            </nav>
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Turbo Pascal Projects</h1>
+            <p class="text-lg text-gray-600 max-w-3xl">A collection of Turbo Pascal programs from early programming days</p>
+        </header>
+
+        <!-- Other Programs -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Other Programs <span class="text-lg font-normal text-gray-600">(1996-1999)</span></h2>
+            <p class="text-gray-600 mb-4">Various Turbo Pascal programs including mathematical calculators, games, utilities, and experimental code.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Programs:</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li><a href="/legacy/turbopascal/other/broken-sort-algorithm.html" class="text-blue-600 hover:underline">Broken Sort Algorithm →</a> - An incomplete/broken sorting algorithm implementation. Attempts to sort an array but contains bugs (swap procedure doesn't actually swap array elements). Demonstrates...</li>
+                    <li><a href="/legacy/turbopascal/other/error-function-calculator.html" class="text-blue-600 hover:underline">Error Function Calculator →</a> - Calculates error function (erf) values using numerical approximation. Implements a physics/engineering calculation involving error functions, exponential functions...</li>
+                    <li><a href="/legacy/turbopascal/other/performance-test-error-function.html" class="text-blue-600 hover:underline">Performance Test with Error Function →</a> - A performance/debugging variant of the error function calculator. Includes debug output statements (write/writeln) to track calculation steps. Similar to...</li>
+                    <li><a href="/legacy/turbopascal/other/polynomial-root-solver.html" class="text-blue-600 hover:underline">Polynomial Root Solver →</a> - A polynomial equation solver that finds roots of equations up to degree 9. Takes coefficients as input and searches for roots in the range -100 to 100 by checking...</li>
+                    <li><a href="/legacy/turbopascal/other/reaction-test-game.html" class="text-blue-600 hover:underline">Reaction Test Game →</a> - A graphical reaction time test game. Displays arrows in different directions and measures user reaction time. Uses BGI graphics, tracks hits/errors, and calculates...</li>
+                    <li><a href="/legacy/turbopascal/other/reaction-test-game-variant.html" class="text-blue-600 hover:underline">Reaction Test Game (Variant) →</a> - A variant of the reaction test game with slightly different beep sound implementation. Uses BGI graphics to display directional arrows and measures user reaction...</li>
+                    <li><a href="/legacy/turbopascal/other/terminal-login-logger.html" class="text-blue-600 hover:underline">Terminal Login Logger →</a> - A command-line utility that logs terminal login sessions. Takes a log file path as a parameter, creates or appends to the file, records timestamp, username, and password. This was used to spoof users who were using dial-up for internet access.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- BBS Scripts -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">BBS Scripts <span class="text-lg font-normal text-gray-600">(1999)</span></h2>
+            <p class="text-gray-600 mb-4">Bulletin Board System scripts written in a Pascal-like scripting language. Includes registration questionnaire handlers and question creation utilities for BBS user management systems.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Programs:</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li><a href="/legacy/turbopascal/bbs/question-maker.html" class="text-blue-600 hover:underline">Question Maker →</a> - A BBS (Bulletin Board System) script for creating custom registration questions. Allows users to add questions to the registration questionnaire system. Supports different...</li>
+                    <li><a href="/legacy/turbopascal/bbs/registration-end.html" class="text-blue-600 hover:underline">Registration End →</a> - A BBS (Bulletin Board System) script that handles user registration questionnaires. Reads questions from a file, displays them to users with color formatting, collects answers...</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MP3 Tager -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">MP3 Tager <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <p class="text-gray-600 mb-4">An MP3 tag editor written in Turbo Pascal. Allows reading and editing ID3 tags in MP3 files, including title, artist, album, and other metadata fields.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Programs:</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li><a href="/legacy/turbopascal/mp3tager/file-i-o-utilities.html" class="text-blue-600 hover:underline">File I/O Utilities →</a> - File input/output utilities for reading and writing MP3 tag data.</li>
+                    <li><a href="/legacy/turbopascal/mp3tager/mp3-tag-editor.html" class="text-blue-600 hover:underline">MP3 Tag Editor →</a> - A command-line MP3 tag editor that reads and writes ID3v1 tags with text normalization features.</li>
+                    <li><a href="/legacy/turbopascal/mp3tager/string-utilities.html" class="text-blue-600 hover:underline">String Utilities →</a> - String manipulation utilities for text processing and normalization.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Gas Simulation -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Gas Simulation <span class="text-lg font-normal text-gray-600">(2003)</span></h2>
+            <p class="text-gray-600 mb-4">A gas particle physics simulation written in Turbo Pascal. Simulates gas particle behavior, oscillations, and molecular dynamics with graphical visualization using BGI graphics.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Programs:</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li><a href="/legacy/turbopascal/gas/8-particle-oscillation.html" class="text-blue-600 hover:underline">8-Particle Oscillation →</a> - An oscillation simulation with 8 particles.</li>
+                    <li><a href="/legacy/turbopascal/gas/gas-particle-simulation.html" class="text-blue-600 hover:underline">Gas Particle Simulation →</a> - A particle physics simulation program that models ideal gas behavior with object-oriented programming.</li>
+                    <li><a href="/legacy/turbopascal/gas/gas-simulation-first-version.html" class="text-blue-600 hover:underline">Gas Simulation (First Version) →</a> - An early version of the gas particle simulation program.</li>
+                    <li><a href="/legacy/turbopascal/gas/gas-simulation-pmor-variant.html" class="text-blue-600 hover:underline">Gas Simulation (PMOR Variant) →</a> - A variant with PMOR (parameter modification or optimization) features.</li>
+                    <li><a href="/legacy/turbopascal/gas/oscillation-simulation-version-1.html" class="text-blue-600 hover:underline">Oscillation Simulation (Version 1) →</a> - Version 1 of the oscillation simulation program.</li>
+                    <li><a href="/legacy/turbopascal/gas/oscillation-simulation.html" class="text-blue-600 hover:underline">Oscillation Simulation →</a> - A simulation program for oscillatory motion or wave behavior.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

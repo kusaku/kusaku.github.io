@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<STYLE>
+BODY {
+	BACKGROUND: url(me.jpg) #006; CURSOR: hand; MARGIN: 10px; OVERFLOW: hidden
+}
+IMG {
+	BORDER-BOTTOM: #66f 1px solid; BORDER-LEFT: #66f 1px solid; BORDER-RIGHT: #66f 1px solid; BORDER-TOP: #66f 1px solid
+}
+TABLE {
+	BACKGROUND: #03a; BORDER-BOTTOM: #66f 1px solid; BORDER-LEFT: #66f 1px solid; BORDER-RIGHT: #66f 1px solid; BORDER-TOP: #66f 1px solid; COLOR: #66f; FONT-FAMILY: arial; FONT-SIZE: 8pt; MARGIN: 0px; PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; PADDING-TOP: 10px
+}
+TD {
+	MARGIN: 0px; PADDING-BOTTOM: 3px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; PADDING-TOP: 3px
+}
+A {
+	COLOR: #99f; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #990; TEXT-DECORATION: none
+}
+A:active {
+	COLOR: #ff0; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #99f; TEXT-DECORATION: none
+}
+</STYLE>
+
+<SCRIPT language=javascript>
+<!--
+/*(c) kusaku 2001 */
+
+var defForce = -5e5;
+var dt = .001;
+var recrad = 15;
+var recx = 20;
+var recy = 20;
+var recvX = 500;
+var recvY = 500;
+var recdvX = 0;
+var recdvY = 0;
+var mx = 0;
+var my = 0;
+var minx;
+var maxx;
+var miny;
+var maxy;
+var recwidth;
+var recheigth;
+
+var flyer;
+var TTime;
+var TDraw;
+var dV;
+
+function UpdateBounds()
+{
+ minx = 0;
+ miny = 0;
+ maxx = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+ maxy = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+}
+
+function Integrate(x, y)
+{
+ var dist = Math.sqrt((recx - x)*(recx - x) + (recy - y)*(recy - y));
+ dist = (dist==0) ? 1 : dist;
+ dV = (dist < recrad) ? defForce * (recrad - dist)* dt : 0;
+ recdvX += dV * (x - recx)/dist;
+ recdvY += dV * (y - recy)/dist;
+}
+
+function Time()
+{
+ if (mx > recx && mx < recx + recwidth)
+ {
+  Integrate(recx, my);
+  Integrate(recx, my - recheigth);
+ }
+ if (my > recy && my < recy + recheigth)
+ {
+  Integrate(mx, recy);
+  Integrate(mx - recwidth, recy);
+ }
+ if (!(mx > recx && mx < recx + recwidth && my > recy && my < recy + recheigth))
+ {
+  Integrate(mx, my);
+  Integrate(mx, my - recheigth);
+  Integrate(mx - recwidth, my);
+  Integrate(mx - recwidth, my - recheigth);
+ }
+ Integrate(minx, recy);
+ Integrate(maxx - recwidth, recy);
+ Integrate(recx, miny);
+ Integrate(recx, maxy - recheigth);
+ recvX += recdvX;
+ recvY += recdvY;
+ recvX = (isNaN(recvX))?0:recvX;
+ recvY = (isNaN(recvY))?0:recvY;
+ if (recx < minx) {recx = minx + 1; recvX = 0}
+ if (recx > maxx - recwidth) {recx = maxx - recwidth - 1;recvX = 0}
+ if (recy < miny) {recy = miny + 1; recvY = 0}
+ if (recy > maxy - recheigth) {recy = maxy - recheigth - 1; recvY = 0}
+ recx += recvX * dt;
+ recy += recvY * dt;
+ recvX /= 1.01;
+ recvY /= 1.01;
+ recdvX = 0;
+ recdvY = 0;
+}
+
+function Draw()
+{
+ flyer.style.left = recx + "px";
+ flyer.style.top = recy + "px";
+}
+
+function Init()
+{
+ flyer = document.getElementById('flyer');
+
+ UpdateBounds();
+
+ recwidth = flyer.offsetWidth;
+ recheigth = flyer.offsetHeight;
+
+ if (recwidth < maxx - minx || recheigth < maxy - miny)
+{
+ TTime = window.setInterval(Time, 1);
+ TDraw = window.setInterval(Draw, 50);
+}
+}
+
+function mmProcess(e)
+{
+ e = e || window.event;
+ mx = (e.clientX + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0));
+ my = (e.clientY + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0));
+}
+
+if (document.addEventListener) document.addEventListener('mousemove', mmProcess, false);
+else document.onmousemove = mmProcess;
+
+window.onresize = new Function("UpdateBounds();");
+
+//-->
+</SCRIPT>
+
+<BODY onload="Init()">
+<TABLE border=0 id=flyer
+style="FILTER: Alpha(Opacity=50, FinishOpacity=100, Style=2, StartX=250, StartY=150, FinishX=0, FinishY=0); POSITION: absolute"
+width=500>
+
+  <TR>
+    <TD>Nickname:</TD>
+    <TD>kusaku</TD></TR>
+  <TR>
+    <TD>Пол:</TD>
+    <TD>мужской</TD></TR>
+  <TR>
+    <TD>Дата рождения:</TD>
+    <TD>7 апреля 1983г.</TD></TR>
+  <TR>
+    <TD>Место жительства:</TD>
+    <TD>Россия, Санкт-Петербург</TD></TR>
+  <TR>
+    <TD>Образование:</TD>
+    <TD>Санкт-Петербуржский Государственный Университет, <A
+      href="../physfac/index.html">Физический факультет </A>(поступил в
+      2000г.)</TD></TR>
+  <TR>
+    <TD>Навыки:</TD>
+    <TD>
+      <TABLE>
+
+        <TR>
+          <TD>Языки:</TD>
+          <TD>C/C++, Java, Perl, HTML, JavaScript, Visual Basic, Pascal
+            (Delfi), Fortran.</TD></TR>
+        <TR>
+          <TD>Программы:</TD>
+          <TD>Adobe Photoshop, Illustrator, Pagemaker, CorelDRAW, 3D MAX, MS
+            Word, Excel, Acces, Frontpage.</TD></TR></TABLE></TD></TR>
+  <TR>
+    <TD>Связь:</TD>
+    <TD><A href="mailto:me@kusaku.su">me@kusaku.su</A>,
+iCQ#57028577</TD></TR></TABLE></BODY></HTML>

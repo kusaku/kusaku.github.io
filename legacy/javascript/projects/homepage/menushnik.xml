@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf8" ?>
+<menuItem>
+	<content>&lt;A title="Карта сайта" href="sitemap.html"&gt;Меню&lt;/A&gt;</content>
+	<menuItem>
+		<content>&lt;A title="Главная страница" href="index.html"&gt;Домой&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>Я</content>
+		<menuItem>
+			<content>&lt;A title="Мои увлечения и интересы" href="about.html"&gt;О себе&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Чем я могу быть полезен" href="busyness.html"&gt;Работа&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Список завершенных проектов" href="portfolio.html"&gt;Портфолио&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Моя фотография и резюме" href="resume.html"&gt;Резюме&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Мое резюме в формате MS Word" href="resume.doc"&gt;Резюме для работодателя&lt;br&gt;&lt;/A&gt;</content>
+		</menuItem>
+	</menuItem>
+	<menuItem>
+		<content>Проекты</content>
+		<menuItem>
+			<content>&lt;A title="Одна из моих первых страничек" href="physfac/index.html"&gt;PhysFac&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Как правильно сжимать видео в формате MPEG4" href="mpeg4ever/"&gt;MPEG4EVER&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Посвящено Rei Ayanami" href="ayanami/rei_main.html"&gt;Rei Ayanami&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Cайт посёлка Токсово" href="toxovo/index.html"&gt;Токсово&lt;/A&gt;</content>
+		</menuItem>
+	</menuItem>
+	<menuItem>
+		<content>JS игры</content>
+		<menuItem>
+			<content>&lt;A title="Шахматы" href="chess.html"&gt;Chess&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Тетрис" href="tetris.html"&gt;Tetris&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Волейбол" href="scripts/physfac/chball.html"&gt;chasBall&lt;/A&gt;</content>
+		</menuItem>
+	</menuItem>
+	<menuItem>
+		<content>Разное</content>
+		<menuItem>
+			<content>Web-камера</content>
+			<menuItem>
+				<content>&lt;A title="Мое реалити-шоу" href="webcam.html"&gt;Прямой эфир&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A title="Последние новости" href="p_webcam.html"&gt;События&lt;/A&gt;</content>
+			</menuItem>
+		</menuItem>
+		<menuItem>
+			<content>Сочинения</content>
+			<menuItem>
+				<content>&lt;A href="b_newjan.html"&gt;Новый январь&lt;/A&gt;</content>
+				<password value="набоковщина"/>
+			</menuItem>
+		</menuItem>
+		<menuItem>
+			<content>Комиксы</content>
+			<menuItem>
+				<content>Про меня</content>
+				<password value="тараканище"/>
+				<menuItem>
+					<content>&lt;A href="c_family.html"&gt;Моя семья&lt;/A&gt;</content>
+				</menuItem>
+				<menuItem>
+					<content>&lt;A href="c_trouble.html"&gt;Мои проблемы&lt;/A&gt;</content>
+				</menuItem>
+				<menuItem>
+					<content>&lt;A href="c_closed.html"&gt;Мои мысли&lt;/A&gt;</content>
+				</menuItem>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A title="Немного грустная история" href="c_puh.html"&gt;Про Пуха&lt;/A&gt;</content>
+			</menuItem>
+		</menuItem>
+		<menuItem>
+			<content>Графика</content>
+			<menuItem>
+				<content>&lt;A title="Мои художества в Photoshop'е" href="p_gfx.html"&gt;Мои работы&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A title="Полиграфия для компакт-дисков" href="p_cdgfx.html"&gt;Компакт-диски&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A title="Скины для Winamp'а" href="skins.html"&gt;Скины&lt;/A&gt;</content>
+			</menuItem>
+		</menuItem>
+		<menuItem>
+			<content>Скрипты</content>
+			<menuItem>
+				<content>PhysFac@RU</content>
+				<menuItem>
+					<content>&lt;A title="Броуновское движение" href="scripts/physfac/brown.html"&gt;brown&lt;/A&gt;</content>
+				</menuItem>
+				<menuItem>
+					<content>&lt;A title="Распределение Максвелла-Больцмана" href="scripts/physfac/maxwell.html"&gt;maxwell&lt;/A&gt;</content>
+				</menuItem>
+			</menuItem>
+			<menuItem>
+				<content>Не мои</content>
+				<menuItem>
+					<content>&lt;A href="scripts/nomine/clock.htm"&gt;clock&lt;/A&gt;</content>
+				</menuItem>
+				<menuItem>
+					<content>&lt;A href="scripts/nomine/msAgent.htm"&gt;msAgent&lt;/A&gt;</content>
+				</menuItem>
+				<menuItem>
+					<content>&lt;A href="scripts/nomine/snow.htm"&gt;snow&lt;/A&gt;</content>
+				</menuItem>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/JSDebug.htm"&gt;JS Debug&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/quest2.htm"&gt;Опросник&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/scencdec.htm"&gt;Декодер&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/coder.htm"&gt;Шифратор&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/arranger.htm"&gt;Arranger&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/regionmaker.html"&gt;RegionMaker&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts/carrot.htm"&gt;Говорящий хрен&lt;/A&gt;</content>
+			</menuItem>
+			<menuItem>
+				<content>&lt;A href="scripts.html"&gt;Остальные&lt;/A&gt;</content>
+			</menuItem>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Мой взгляд на джентельменский набор софта" href="soft.html"&gt;Программы&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Отчеты по лабам" href="labreps.html"&gt;Лабораторные&lt;/A&gt;</content>
+		</menuItem>
+	</menuItem>
+	<menuItem>
+		<content>Ссылки</content>
+		<menuItem>
+			<content>&lt;A title="Коллекция ссылок" href="links.html"&gt;Cсылки&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Немного моих фотографий" href="https://aks1983.photosight.ru"&gt;photosight.ru&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Бываю здесь" href="https://damochka.ru/"&gt;Познакомимся?&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Модерирую здесь" href="https://skazhi.ru/"&gt;Форум skazhi.ru - &lt;BR&gt;здесь мои знакомые&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Мой блог" href="https://www.livejournal.com/users/aks1983/"&gt;Мой ЖЖ&lt;/A&gt;</content>
+		</menuItem>
+		<menuItem>
+			<content>&lt;A title="Мои мысли и чувства" href="https://www.diary.ru/~kusaku/"&gt;Мой дневник&lt;/A&gt;</content>
+			<password value="грехопадение"/>
+		</menuItem>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A title="Инода пишу здесь свои мысли" href="chat.html"&gt;Чат&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A title="Здесь всегда можно оставить мне сообщение" href="guestb.html"&gt;Гостевая&amp;nbsp;книга&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A title="Если со мной надо связаться лично - моя почта" href="mailto:me@kusaku.su?subj=hello&amp;amp;to=kusaku"&gt;Написать&amp;nbsp;письмо&lt;/A&gt;</content>
+	</menuItem>
+</menuItem>

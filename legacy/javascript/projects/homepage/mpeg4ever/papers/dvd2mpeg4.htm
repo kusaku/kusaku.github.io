@@ -1,0 +1,258 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0 bgcolor=#666666 background=../bg.jpg>
+
+<TABLE width=602 align=center border=0 cellspacing=0 cellpadding=0 height="100%">
+<TR>
+<TD bgcolor=black width=1></TD>
+<TD bgcolor=white>
+
+<TABLE width=600 border=0 cellspacing=0 cellpadding=0 bordercolor=black height="100%">
+	<TR>
+		<TD height=109 align=middle valign=top width=600><A href="../main.htm"><IMG border=0 height=107 src="../header.gif" vspace=2 width=550></A></TD>
+	</TR>
+	<TR>
+		<TD width=600 valign=top>		
+			<TABLE border=0 cellspacing=0 cellpadding=2>
+				<TR>
+					<TD width=600 bgcolor=black align=middle valign=center><FONT color=#ffffff face=Tahoma 
+                  size=2><STRONG>DVD 2 
+            MPEG4</STRONG></FONT> 
+					</TD>
+				</TR>
+			</TABLE>
+			<TABLE border=0 cellspacing=0 cellpadding=20>
+				<TR>
+					<TD width=600>
+                  <P><FONT 
+                  face=Tahoma size=2>    
+                   Здесь я хотел бы рассказать, как я первый раз сжимал DVD-видео. 
+                  Можно рассматривать как руководство к действию.</FONT></P>
+                  <P><FONT color=red><FONT face=Tahoma 
+                  size=2><STRONG>Внимание:</STRONG> делая рипы (копии) DVD дисков, распространяя их, 
+                  вы можете нарушить закон об авторском праве. Я 
+                  предупредил!</FONT></FONT></P>
+                  <P><FONT face=Tahoma 
+size=2><STRONG>Цель:</STRONG> получить   
+                           
+                       700 Мб avi-файл, 
+                  качеством ничем не уступающий пиратским рипам фильмов.</FONT></P>
+                  <P><FONT face=Tahoma size=2><STRONG>Приборы и 
+                  материалы:</STRONG></FONT></P>
+                  <UL>
+                    <LI><FONT face=Tahoma size=2>DVD фильм - 
+                    мюзикл "Chikago", 1 час 48 минут, звук 48Khz стерео, 2 
+                    потока: оригинал и дубляж.</FONT><FONT face=Tahoma 
+                    size=2>
+                    <LI><FONT face=Tahoma size=2>AtlonXP 1800+ с DVD-дисководом 
+                    и сетью 100Мбит, 256мб RAM, Win2k SP2.</FONT></FONT><FONT face=Tahoma size=2>
+                    <LI><FONT face=Tahoma size=2>AtlonXP 2000+ (40 Gb HDD), 
+                    256мб RAM, Win2k SP2.</FONT>
+                    <LI>VirtualDubMod 1.4.11</FONT> 
+                    <LI><FONT face=Tahoma size=2>Headac3e (ac3 -&gt; wav)</FONT>
+                    <LI><FONT face=Tahoma size=2>DivX 5.03 
+                    Professional</FONT>
+                    <LI><FONT face=Tahoma size=2>WinAMP 2.80 + out_lame.dll 
+                    + lame_enc.dll v3.93</FONT><FONT face=Tahoma size=2></FONT></LI></UL>
+                  <P><FONT face=Tahoma size=2><STRONG>Что 
+                  такое DVD?</STRONG></FONT></P>
+                  <P><FONT face=Tahoma size=2>  Получив 
+                  в свое распоряжение DVD-фильм, я первым делом принялся 
+                  исследовать его качество. Как не странно, в некоторых местах 
+                  я сумел разглядеть что-то, похожее на макроблоки! Но 
+                  естественно на экране телевизора об их видимости говорить нет 
+                  смысла. Второе, я покопался в файлах на диске. Очевидно файлы .bop 
+                  и .ifo являлись настройками для DVD-меню (так как 
+                  данный формат специально разработан для DVD-плееров к телевизору, 
+                  там нет почти никакой совместимости с компьютерными 
+                  форматами). Далее я выяснил, что все видео хранится в .vob файлах, 
+                  которые по сути и представляют MPEG2-поток. Их было 4 штуки, почти 
+                  1Гб каждый. При перетаскивании их на любой DirectSHow 
+                  плеер система формирует граф из установленных декодеров - 
+                  это сплиттер, который разделяет видео- и аудио-поток (demuxer), 
+                  и дальше два фильтра для декодированию видео и звука. Сплиттер 
+                  обычно находится в системе, а декодеры устанавливаются вместе 
+                  с DVD-плеером. При проигрывании не отдельного файла, а диска 
+                  (файл-&gt;открыть DVD) к этим фильтрам добавляется еще декодер 
+                  главного меню, который так же изначально присутствует в системе 
+                  (здесь и дальше это Win2k).</FONT></P>
+                  <P><FONT face=Tahoma size=2> 
+                  Расшарив DVD-дисковод в сети, фильм отлично смотрелся через сеть 
+                  на компьютере без DVD-дисковода. Поставив на другом 
+                  компьютере скачанные бесплатные DVD-декодеры и переписав .vob 
+                  файлы, я начал сжимать...</FONT></P>
+                  <P align=center><FONT face=Tahoma size=2><IMG 
+                  src="dvd2mpeg4/3.jpg"></FONT></P>
+                  <P><FONT face=Tahoma size=2><STRONG>Сжатие 
+                  видео</STRONG></FONT></P>
+                  <P><FONT face=Tahoma size=2> 
+                   Привычный инструмент - VirtualDub отказывался читать .vob 
+                  файлы, ссылаясь на ошибку синхронизации потоков. Однако и в 
+                  его справке сказано, что он не поддерживает .vob файлы. Выход 
+                  нашелся в интернете - умельцы сделали из исходников 
+                  VitualDub'а VitualDubMod, который не только их читал, но и 
+                  обладал другими приятными способностями. <BR>Еще нашлась 
+                  программка dvd2avi которая делает то, что сказано в ее 
+                  названии. В ней обнаружилась сложности: MPEG2 - формат, 
+                  поддерживающий интерлейс, поэтому неизвестно какая скорость 
+                  кадров должна быть у выходного видео. При декодировании .vob в 
+                  30 fps появлялся интерлейс на некоторых кадрах, а при 
+                  декодировании в 25 его не было, но могли появляться 
+                  пропущенные (dropped) кадры. Выбор: либо делать деинтерлейс с 
+                  30 fps, но это ухудшает качество других кадров, либо 25 fps 
+                  (другого dvd2avi не предлагает). Зато есть возможность 
+                  сохранения звука сразу из всех .vob файлов в один .ac3 (что он 
+                  из себя представляет изнутри я до сих пор не разобрался), 
+                  однако сложность с применением многопроходного сжатия 
+                  заставила от нее отказаться.<BR>VitualDubMod имеет встроенный 
+                  декодер MPEG2, который при необходимости на ходу может делать 
+                  ресайз, кроп и деинтерлейс. Но этими возможностями я 
+                  пользоваться не стал, кроп и ресайз делался с помощью фильтров 
+                  программы (а не декодера). Интерлейса после декодера видно не 
+                  было, наверно он сам делал деинтерлейс или частота кадров 
+                  была соответствующая (хотя это странно).<BR>После нескольких 
+                  экспериментов были выбраны следующие параметры:</FONT></P>
+                  <UL>
+                  <LI><FONT face=Tahoma size=2>видео: 
+                    640x368 (кроп черных бортов сверху и снизу, потом бикубик 
+                    ресайз), 24 fps (без изменений)</FONT>
+                  <LI><FONT face=Tahoma size=2>кодек DivX 
+                    5.03 Professional, со следующими настройками:</FONT>
+                    <UL>
+                  <LI><FONT face=Tahoma 
+                      size=2>900Kbps</FONT>
+                  <LI><FONT face=Tahoma 
+                      size=2>b-frames</FONT>
+                  <LI><FONT face=Tahoma 
+                      size=2>multipass один раз</FONT>
+                  <LI><FONT face=Tahoma size=2>все 
+                      остальные настройки выключены или по 
+                    умолчанию.</FONT></LI></UL></LI></UL>
+                  <P><FONT face=Tahoma size=2> Бикубик 
+                  ресайз увеличивает четкость, следовательно ухудшает 
+                  сжимаемость кадра, и если есть шум в видео, он также будет усилен, что 
+                  тоже плохо. Поэтому обычно рекомендуют использовать линейный 
+                  ресайз. Но меня не устраивала потеря четкости в видео без 
+                  шума, поэтому я не стал следовать этому правилу, тем более что 
+                  кодек прекрасно сжимал, и только в сценах с сильным движением 
+                  были заметны макроблоки. Я исходил из уже имеющегося фильма, 
+                  сжатым этим же кодеком. Однако несмотря на то, что площадь 
+                  кадра в пикселях у него была меньше, при почти равной 
+                  продолжительности (120 минут против 108), качество сжатия было 
+                  хуже. Этот пример показывает, что каждое исходное видео при 
+                  прочих равных параметрах должно сжиматься с разными размерами 
+                  кадра (битрейт в силу одинаковой продолжительности такой же). 
+                  Преимущество за большими площадями кадра, меньшими потерями 
+                  деталей. </FONT></P>
+                  <P align=center><FONT face=Tahoma size=2><FONT 
+                  face=Tahoma size=2><STRONG><FONT 
+                  face=Tahoma size=2><FONT face=Tahoma size=2><IMG 
+                  src="dvd2mpeg4/1.jpg"></FONT></FONT> 
+                  </STRONG></FONT></FONT></P>
+                  <P><FONT face=Tahoma size=2><FONT face=Tahoma 
+                  size=2><STRONG>Сжатие звука</STRONG></FONT></FONT></P>
+                  <P><FONT face=Tahoma size=2>В итоге каждый 
+                  .vob файл сжался в беззвучный .avi, и они потом склеились 
+                  вместе. Качество сжатия оказалось на высоте, 590 метров 
+                  почти кристально чистого видео. На звук осталось 110 метров, и 
+                  исходя из этого определился его битрейт. 48Khz вместо 44Khz - 
+                  потому что это мюзикл, хоть и с некачественным дубляжем. 
+                  Оригинальный трек сжимался потом отдельно с максимальным 
+                  качеством VBR, но записать его было уже некуда. 
+                  Итак:</FONT></P>
+                  <UL>
+                  <LI><FONT face=Tahoma size=2>звук: 48Khz 
+                    стерео, 120Kbps ABR MP3</FONT></LI></UL>
+                  <P><FONT face=Tahoma size=2>Но перед тем 
+                  как сжать звук, надо его сначала получить в виде .wav файла 
+                  (WinAMP .ac3 не понимает). Поэтому была раздобыта софтинка по 
+                  имени Headac3e, которая неизвестными мне двухпроходными (!!!) 
+                  манипуляциями сделала PCM .wav файл. Дальше WinAMP с плагином 
+                  out_lame (такой способ мне больше нравится, в отличии от 
+                  командной строки, так как я могу на лету подключять 
+                  эквалайзер и другие плагины).</FONT></P>
+                  <P><FONT face=Tahoma size=2>Видео и звук 
+                  слились опять воедино при помощи VitualDubMod, получилось 
+                  ровно 700 Мб.</FONT></P><FONT face=Tahoma size=2><FONT 
+                  face=Tahoma size=2><FONT face=Tahoma size=2><STRONG>
+                  <P align=center><FONT face=Tahoma size=2><IMG 
+                  src="dvd2mpeg4/2.jpg"></FONT></P>
+                  <P>Результат 
+                  и резюме</STRONG></FONT></FONT></FONT></P>
+                  <P><FONT face=Tahoma size=2>MPEG4-фильм объективно 
+                  неотличим от DVD, хотя и занимает почти в 6 раз меньше 
+                  места.</FONT><FONT face=Tahoma size=2> Возможно этот метод не 
+                  самый совершенный, но я использовал первый попавший под руку 
+                  софт и у меня не было никакого опыта по сжатию 
+                DVD.</FONT></P>
+                  <P><FONT face=Tahoma size=2><STRONG>P.S.</STRONG></FONT></P>
+                  <P><FONT face=Tahoma size=2>Со времени написания этой статьи 
+                  произошли небольшие измения:</FONT></P>
+                  <UL>
+                    <LI><FONT face=Tahoma size=2>Перед декодированием .vob файлы 
+                    переписываются на винчестер и склеиваются (copy file_a.vob + 
+                    file_b.vob [...] c:\temp\main.vob)</FONT></LI>
+                    <LI><FONT face=Tahoma size=2>Вся работа производится только 
+                    с помощью VirtulaDubMod 1.5.4.1 (появилась возможность 
+                    записывать несколько звуковых дорожек, работа с vbr 
+                    mp3).</FONT></LI>
+                    <LI><FONT face=Tahoma size=2>Кодирование звука прямо из .vob 
+                    в Lame mp3 с помощью утилиты BeSweet.</FONT></LI>
+                    <LI><FONT face=Tahoma size=2>Есть возможность подключить к 
+                    своему компьютеру "виртуальный" DVD дисковод, если машина 
+                    работает в локальной сети (быстрой). Для этого надо 
+                    примонтировать сетевой диск&nbsp;на сетвую папку, где 
+                    нахидится содержимое 
+            диска.</FONT></LI></UL>
+					</TD>
+				</TR>
+			</TABLE>
+			<TABLE border=0 cellspacing=0 cellpadding=2>
+				<TR>
+					<TD width=600 bgcolor=black align=middle valign=center>
+						<FONT color=white face=Tahoma size=2>
+							<STRONG>*****</STRONG>
+						</FONT>
+					</TD>
+				</TR>
+			</TABLE>			
+		</TD>
+	</TR>
+	<TR>
+		<TD valign=bottom height=30>
+			<TABLE border=0 cellspacing=0 cellpadding=0>
+				<TR>
+					<TD width=600 height=30 align=middle valign=center><FONT face=Tahoma size=2>(c) <a href="https://kusaku.su">kusaku</a> 2003</FONT></TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+</TABLE>
+
+</TD>
+<TD bgcolor=black width=1></TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

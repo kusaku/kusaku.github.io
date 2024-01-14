@@ -1,0 +1,246 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META NAME=VI60_defaultClientScript CONTENT=JavaScript>
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+<LINK REL="stylesheet" HREF="/legacy/javascript/experiments/progressbar/styles.css" TYPE="text/css"> 
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Progress bar and drag-and-drop demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, progressbar">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/experiments/progressbar/progressbar.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/experiments/progressbar/progressbar.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/experiments/progressbar/progressbar.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Progress Bar - Kirill Arkhipenko">
+<META PROPERTY="og:description" CONTENT="Progress bar and drag-and-drop demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/experiments/progressbar/progressbar.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Progress Bar - Kirill Arkhipenko">
+<META NAME="twitter:description" CONTENT="Progress bar and drag-and-drop demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY BGCOLOR=beige BOTTOMMARGIN=0 LEFTMARGIN=0 RIGHTMARGIN=0 TOPMARGIN=0>
+<DIV ALIGN=center ID=aaa 
+STYLE="BACKGROUND-COLOR: black; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 70px; LEFT: 84px; POSITION: absolute; TOP: 167px; WIDTH: 100px"><FONT 
+COLOR=red FACE=Tahoma SIZE=7 >yo! </FONT></DIV>
+<DIV ALIGN=center ID=aaa 
+STYLE="BACKGROUND-COLOR: royalblue; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 59px; LEFT: 28px; POSITION: absolute; TOP: 401px; WIDTH: 643px"><FONT 
+COLOR=turquoise FACE="Small Fonts" SIZE=7>it's a hi-tech java-script!</FONT></DIV>
+
+
+<DIV ID=aaa
+ STYLE        ="BACKGROUND-COLOR: peachpuff; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 45px; LEFT: 248px; POSITION: absolute; TOP: 324px; WIDTH: 205px" ALIGN=center><FONT STYLE="BACKGROUND-COLOR: #ffdab9"><FONT FACE=Tahoma SIZE=6 
+> <FONT FACE="Small Fonts">progressbar</FONT>&nbsp; </FONT></FONT>
+</DIV>
+
+
+<DIV ID=aaa
+ STYLE        ="BACKGROUND-COLOR: peachpuff; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 81px; LEFT: 28px; POSITION: absolute; TOP: 307px; WIDTH: 207px" ALIGN=center><FONT FACE="Small Fonts" 
+SIZE=6 STYLE="BACKGROUND-COLOR: #ffdab9">drag&amp;drop ability&nbsp; </FONT>
+</DIV>
+
+
+<DIV ID=aaa
+ STYLE        ="BACKGROUND-COLOR: peachpuff; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 81px; LEFT: 465px; POSITION: absolute; TOP: 306px; WIDTH: 207px" ALIGN=center><FONT FACE="Small Fonts" 
+SIZE=6 STYLE="BACKGROUND-COLOR: #ffdab9">windowshade mode&nbsp; </FONT>
+</DIV>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 ID=fly 
+STYLE="HEIGHT: 113px; LEFT: 537px; POSITION: absolute; TOP: 23px; WIDTH: 165px">
+  
+  <TR>
+    <TD BGCOLOR=orange ID=gadget STYLE="CURSOR: move; HEIGHT: 1px" 
+    WIDTH="100%" HEIGHT=1></TD>
+    <TD BGCOLOR=orange ID=shrinker STYLE="CURSOR: hand"><FONT 
+      FACE="Small Fonts" SIZE=2 
+     >^</FONT></TD></TR>
+  <TR>
+    <TD ALIGN=middle BGCOLOR=mediumblue COLSPAN=2 HEIGHT="100%" ID=flashmenu 
+    STYLE="FILTER: alpha(opacity =50); HEIGHT: 100%">
+      <P><FONT COLOR=white><FONT FACE=Arial><STRONG>drag&amp;drop me too!<BR>I'm transparent 
+      too!</STRONG></FONT> 
+  </FONT> </P>
+</TD></TR></TABLE>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 ID=fly2 
+STYLE="LEFT: 22px; POSITION: absolute; TOP: 17px; WIDTH: 315px">
+  
+  <TR>
+    <TD BGCOLOR=#d8bfd8 ID=gadget2 STYLE="CURSOR: move; HEIGHT: 1px" 
+    WIDTH="100%" HEIGHT=1></TD>
+    <TD BGCOLOR=#d8bfd8 ID=shrinker2 STYLE="CURSOR: hand"><FONT 
+      FACE="Small Fonts" SIZE=2 
+     >^</FONT></TD></TR>
+  <TR>
+    <TD ALIGN=middle BGCOLOR=darkseagreen COLSPAN=2 HEIGHT="100%" ID=flashmenu2 
+    STYLE="FILTER: alpha(opacity =50); HEIGHT: 100%">
+      <P><FONT FACE=Arial><STRONG>drag&amp;drop me!<BR>I'm 
+      transparent!</STRONG></FONT> </P></TD></TR></TABLE>
+<DIV ALIGN=center ID=aaa 
+STYLE="BACKGROUND-COLOR: black; BORDER-BOTTOM-COLOR: #ff8654; BORDER-LEFT-COLOR: #ff8654; BORDER-RIGHT-COLOR: #ff8654; BORDER-TOP-COLOR: #ff8654; HEIGHT: 71px; LEFT: 290px; POSITION: absolute; TOP: 166px; WIDTH: 348px"><FONT 
+COLOR=#ff0000 FACE=Tahoma SIZE=7>it's megadesign</FONT></DIV>
+</BODY>
+<SCRIPT LANGUAGE=javascript>
+<!--
+floater = 
+{
+	moveEnabled: false,
+	shrinkEnabled: false,
+	dleft: 0,
+	dtop: 0,
+	move: function()
+	{
+		if (event.clientX < 15 || event.clientY < 15) return;
+		fly.style.left = (event.clientX - floater.dleft - 2) + "px";
+		fly.style.top = (event.clientY - floater.dtop - 2) + "px";
+	},
+	hooker: function(action)
+	{
+		
+	},
+	init: function()
+	{
+		var SafeAttachEvt = function (my_event, handler)
+		{
+			if (eval(my_event))
+			{
+				var old_handler = eval(my_event);
+				eval(my_event + " = function(){old_handler();handler();}");
+			}
+			else
+				eval(my_event + " = function(){handler();}");
+		}
+		SafeAttachEvt("gadget.onmousedown", function() {floater.dleft=event.offsetX; floater.dtop=event.offsetY;  floater.moveEnabled = true;});
+		SafeAttachEvt("document.onmouseup", function() {floater.moveEnabled = false;});
+		SafeAttachEvt("shrinker.onclick", function() {floater.shrinkEnabled = !floater.shrinkEnabled; flashmenu.style.display = (floater.shrinkEnabled) ? "none" : "block";});
+		SafeAttachEvt("document.onmousemove", function() {if (floater.moveEnabled) floater.move();});
+	}
+}
+floater.init();
+floater2 = 
+{
+	moveEnabled: false,
+	shrinkEnabled: false,
+	dleft: 0,
+	dtop: 0,
+	move: function()
+	{
+		if (event.clientX < 15 || event.clientY < 15) return;
+		fly2.style.left = (event.clientX - floater2.dleft - 2) + "px";
+		fly2.style.top = (event.clientY - floater2.dtop - 2) + "px";
+		flashmenu2.innerText = "coords: x:" + (event.clientX - floater2.dleft - 2) + "px, y:" + (event.clientY - floater2.dtop - 2) + "px";
+	},
+	hooker: function(action)
+	{
+		
+	},
+	init: function()
+	{
+		var SafeAttachEvt = function (my_event, handler)
+		{
+			if (eval(my_event))
+			{
+				var old_handler = eval(my_event);
+				eval(my_event + " = function(){old_handler();handler();}");
+			}
+			else
+				eval(my_event + " = function(){handler();}");
+		}
+		SafeAttachEvt("gadget2.onmousedown", function() {floater2.dleft=event.offsetX; floater2.dtop=event.offsetY;  floater2.moveEnabled = true;});
+		SafeAttachEvt("document.onmouseup", function() {floater2.moveEnabled = false;});
+		SafeAttachEvt("shrinker2.onclick", function() {floater2.shrinkEnabled = !floater2.shrinkEnabled; flashmenu2.style.display = (floater2.shrinkEnabled) ? "none" : "block";});
+		SafeAttachEvt("document.onmousemove", function() {if (floater2.moveEnabled) floater2.move();});
+	}
+}
+floater2.init();
+//-->
+</SCRIPT>
+
+<SCRIPT LANGUAGE=javascript>
+<!--
+progressBar =
+{
+	timer: null,
+	div: document.createElement("DIV"),
+	div2: document.createElement("DIV"),
+	div3: document.createElement("DIV"),
+	div4: document.createElement("DIV"),
+	make: function()
+	{
+		progressBar.div.id = "id_border"
+		progressBar.div.style.display = "block";
+		progressBar.div.style.position = "absolute";
+		progressBar.div.style.top = "10px";
+		progressBar.div.style.left = "10px";
+		progressBar.div.style.width = "200px";
+		progressBar.div.style.height = "20px";
+		progressBar.div.style.background = "white"
+		progressBar.div.style.border = "1px solid black";
+		progressBar.div2.style.background = "yellow"
+		progressBar.div2.style.width = "0%";
+		progressBar.div2.style.height = "100%";
+		progressBar.div3.style.position = "absolute";
+		progressBar.div3.style.background = "#FFFFFF"
+		progressBar.div3.style.width = "100%";
+		progressBar.div3.style.height = "100%";
+		progressBar.div4.style.position = "absolute";
+		progressBar.div4.style.top = "40px";
+		progressBar.div4.style.left = "10px";
+		progressBar.div4.style.left = "10px";
+		progressBar.div4.style.fontFamily = "Small Fonts";
+		progressBar.div4.style.fontSize = "14px";
+		progressBar.div3.appendChild(progressBar.div)	
+		progressBar.div3.appendChild(progressBar.div4)
+		progressBar.div.appendChild(progressBar.div2)
+		document.body.appendChild(progressBar.div3)
+		var SafeAttachEvt = function (my_event, handler)
+		{
+			if (eval(my_event))
+			{
+				var old_handler = eval(my_event);
+				eval(my_event + " = function(){old_handler();handler();}");
+			}
+			else
+				eval(my_event + " = function(){handler();}");
+		}
+		SafeAttachEvt("window.onload", function() {progressBar.done();});
+		progressBar.update(0);
+	},
+	update: function(percent)
+	{
+		progressBar.div2.style.width = percent + "%"
+		progressBar.div4.innerText = "Page is loading  " + percent + "%...";
+		//progressBar.div2.innerHTML = percent + "%"
+		//alert(progressBar.div.outerHTML);
+		if (percent < 100)
+			timer = setTimeout("progressBar.update(" + (percent+5) + ")", 150)
+		else
+			progressBar.div3.style.display = "none";	
+	},
+	done: function()
+	{
+	}
+}
+progressBar.make();
+//-->
+</SCRIPT>
+</HTML>

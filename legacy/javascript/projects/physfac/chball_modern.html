@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>chasBall v1.1 - Modern</title>
+<style>
+/* ===== Base Styles ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    background: #696 url('bgnd.gif');
+    color: #363;
+    font-family: arial;
+    font-size: 10pt;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Form Elements ===== */
+INPUT, SELECT, OPTION {
+    background: #9c9;
+    color: #363;
+    border: 1px solid #363;
+    margin: 2px;
+    cursor: pointer;
+    font-family: arial;
+    font-size: 12pt;
+}
+
+A {
+    color: #9c9;
+    text-decoration: none;
+}
+
+A:hover, A:active {
+    color: #fc6;
+    text-decoration: none;
+}
+
+A:visited {
+    color: #9c9;
+    text-decoration: none;
+}
+
+HR {
+    margin: 10px 0;
+    height: 1px;
+    width: 100%;
+    color: #9c9;
+    text-align: center;
+    border: none;
+}
+
+/* ===== Canvas Area ===== */
+#mainTable {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    border-collapse: collapse;
+    display: table;
+    min-height: 0;
+    table-layout: fixed;
+}
+
+#mainTable tr:first-child {
+    height: auto;
+}
+
+#mainTable tr:first-child td {
+    height: auto;
+    width: 100%;
+    padding: 4px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#mainTable tr:last-child {
+    height: 100%;
+    flex: 1;
+}
+
+#mainTable tr:last-child td {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#canvasContainer {
+    flex: 1;
+    position: relative;
+    border: 1px solid #9c9;
+    background: #696 url('bgnd.gif');
+    box-sizing: border-box;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#scoreboard {
+    text-align: center;
+    font-weight: 900;
+    padding: 10px;
+    background: #9c9;
+    flex-shrink: 0;
+    font-family: arial;
+    font-size: 48pt;
+}
+
+#canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* ===== Game Menu ===== */
+#menuBackdrop {
+    position: fixed;
+    z-index: 1999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#menuBackdrop.hidden,
+#gameMenu.hidden {
+    display: none;
+}
+
+#gameMenu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    background: #696;
+    border: 1px solid #9c9;
+    border-top-width: 10px;
+    padding: 15px;
+    width: auto;
+    min-width: 480px;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.menu_passive, .menu_active, .menu_hover {
+    margin: 5px;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    font-family: arial;
+    font-size: 12pt;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.menu_passive {
+    border-color: #696;
+    color: #363;
+}
+
+.menu_active {
+    padding: 6px 4px 4px 6px;
+    border-top-color: #363;
+    border-right-color: #9c9;
+    border-bottom-color: #9c9;
+    border-left-color: #363;
+    color: #fc6;
+}
+
+.menu_hover {
+    border-top-color: #9c9;
+    border-right-color: #363;
+    border-bottom-color: #363;
+    border-left-color: #9c9;
+    color: #9c9;
+}
+
+TABLE.simple {
+    border: 1px solid #9c9;
+    border-top-width: 10px;
+    border-collapse: collapse;
+    background: transparent;
+    width: 100%;
+    margin: 0 auto;
+    table-layout: fixed;
+}
+
+TABLE.simple TH {
+    padding: 5px;
+    border: 1px solid #9c9;
+    color: #363;
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+TABLE.simple TD {
+    padding: 5px;
+    border: 1px solid #9c9;
+    color: #363;
+    font-size: 12pt;
+    vertical-align: middle;
+    overflow: visible;
+}
+
+TABLE.simple TD:first-child {
+    font-weight: bold;
+    white-space: nowrap;
+    padding-right: 10px;
+    width: 38%;
+}
+
+TABLE.simple TD:nth-child(2),
+TABLE.simple TD:nth-child(3) {
+    width: 31%;
+    text-align: left;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+TABLE.simple TD input[type="text"] {
+    width: calc(100% - 50px);
+    max-width: 120px;
+    box-sizing: border-box;
+}
+
+TABLE.simple TD input[type="number"] {
+    width: 50px;
+    box-sizing: border-box;
+}
+
+TABLE.simple TD select {
+    width: calc(100% - 50px);
+    max-width: 120px;
+    box-sizing: border-box;
+}
+
+/* ===== Inline Style Classes ===== */
+.controls-cell {
+    padding: 4px;
+    text-align: center;
+}
+
+.canvas-cell {
+    padding: 0;
+    position: relative;
+}
+
+.menu-title {
+    text-align: center;
+    color: #363;
+    font-size: 14pt;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.score-center {
+    text-align: center;
+}
+
+.menu-start {
+    text-align: center;
+}
+
+.menu-footer {
+    color: #363;
+    font-size: 7pt;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.menu-footer a {
+    color: #9c9;
+}
+
+.help-footer a {
+    color: #363;
+}
+
+.help-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #363;
+    font-size: 7pt;
+    color: #666;
+}
+
+/* ===== Help Modal ===== */
+.help-modal {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.help-content {
+    background-color: #9c9;
+    margin: 5% auto;
+    padding: 20px;
+    border: 2px solid #363;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+    color: #363;
+}
+
+.close {
+    color: #363;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Chaotic bouncing ball simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/projects/physfac/chball_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects/physfac/chball_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects/physfac/chball_modern.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="chasBall v1.1 - Modern">
+<meta property="og:description" content="Chaotic bouncing ball simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/projects/physfac/chball_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chasBall v1.1 - Modern">
+<meta name="twitter:description" content="Chaotic bouncing ball simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+<body>
+
+<table id="mainTable">
+    <tr>
+        <td class="controls-cell">
+            <input type="button" value="⚙️ Menu" onclick="showMenu()" title="Open game menu (pauses game)">
+            <input type="button" value="❓ Help" onclick="showHelp()" title="Show help">
+        </td>
+    </tr>
+    <tr>
+        <td class="canvas-cell">
+            <div id="scoreboard"><span style="color: RoyalBlue;">Blue</span> <strong>0</strong> - <strong>0</strong> <span style="color: orangered;">Red</span></div>
+            <div id="canvasContainer">
+                <canvas id="canvas"></canvas>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="menuBackdrop" class="hidden" onclick="hideMenu()"></div>
+<div id="gameMenu" class="hidden">
+    <div class="menu-title">chasBall modern</div>
+    <form id="optform">
+        <table class="simple">
+            <tr>
+                <td>Player Names:</td>
+                <td>Blue: <input type="text" id="blueName" value="Blue Player" maxlength="12"></td>
+                <td>Red: <input type="text" id="redName" value="Red Player" maxlength="12"></td>
+            </tr>
+            <tr>
+                <td>Computer Plays:</td>
+                <td><input type="checkbox" id="playBlue" checked> Blue</td>
+                <td><input type="checkbox" id="playRed" checked> Red</td>
+            </tr>
+            <tr>
+                <td>Difficulty Level:</td>
+                <td>
+                    <select id="blueSkill">
+                        <option value="1">Expert</option>
+                        <option value="5">Advanced</option>
+                        <option value="10" selected>Medium</option>
+                        <option value="30">Beginner</option>
+                        <option value="50">Easy</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="redSkill">
+                        <option value="1">Expert</option>
+                        <option value="5">Advanced</option>
+                        <option value="10" selected>Medium</option>
+                        <option value="30">Beginner</option>
+                        <option value="50">Easy</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Starts:</td>
+                <td>
+                    <input type="radio" name="begins" value="blue" id="beginsBlue" checked>
+                    <label for="beginsBlue">Blue</label>
+                </td>
+                <td>
+                    <input type="radio" name="begins" value="red" id="beginsRed">
+                    <label for="beginsRed">Red</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="score-center">Play to <input type="number" id="scoreLimit" value="50" min="1" max="999"> points.</td>
+            </tr>
+        </table>
+    </form>
+    <hr>
+    <div class="menu_passive menu-start" onmouseover="this.className='menu_hover menu-start'" onmouseout="this.className='menu_passive menu-start'" onmousedown="this.className='menu_active menu-start'" onmouseup="this.className='menu_hover menu-start'" onclick="startGame()">START</div>
+    <hr>
+    <div class="menu-footer">
+        (c) <a href="mailto:me@kusaku.su?subject=chball">kusaku</a> 2001<br>
+        No rights reserved. Freeware: use this software on your own risk.<br>
+        Author of this script is not responsible for any damages you can get.
+    </div>
+</div>
+
+<div id="helpModal" class="help-modal">
+    <div class="help-content">
+        <span class="close" onclick="closeHelp()">&times;</span>
+        <h2>chasBall v1.1 - Volleyball Game</h2>
+        <p><strong>What is chasBall?</strong></p>
+        <p>chasBall is a 2D volleyball game where two players compete to keep the ball in the air and score points by making the ball hit the ground on the opponent's side. The game features:</p>
+        <ul>
+            <li><strong>Physics-based gameplay:</strong> Realistic ball physics with gravity and collisions</li>
+            <li><strong>Player movement:</strong> Move left/right and jump to hit the ball</li>
+            <li><strong>AI opponents:</strong> Computer-controlled players with adjustable difficulty</li>
+            <li><strong>Multiple game modes:</strong> Player vs Player, Player vs AI, or AI vs AI</li>
+        </ul>
+        
+        <p><strong>Controls:</strong></p>
+        <ul>
+            <li><strong>🎮 Game Controls:</strong>
+                <ul>
+                    <li><strong>⚙️ Menu:</strong> Open game settings menu (pauses game, or press ESC)</li>
+                    <li><strong>❓ Help:</strong> Show this help dialog (pauses game)</li>
+                    <li><strong>ESC:</strong> Close open modal (menu or help), or open menu if nothing is open</li>
+                </ul>
+            </li>
+            <li><strong>Red Player Controls (if human-controlled):</strong>
+                <ul>
+                    <li><strong>← Left Arrow:</strong> Move left</li>
+                    <li><strong>→ Right Arrow:</strong> Move right</li>
+                    <li><strong>↑ Up Arrow:</strong> Jump</li>
+                </ul>
+            </li>
+            <li><strong>Blue Player Controls (if human-controlled):</strong>
+                <ul>
+                    <li><strong>Z:</strong> Move left</li>
+                    <li><strong>C:</strong> Move right</li>
+                    <li><strong>X:</strong> Jump</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <p><strong>Game Rules:</strong></p>
+        <ul>
+            <li>The ball must stay in the air - if it hits the ground, the opponent scores</li>
+            <li>Players can only move on their side of the net</li>
+            <li>The ball bounces off players, walls, ceiling, and the net</li>
+            <li>First player to reach the score limit wins</li>
+            <li>After scoring, the game pauses briefly and resets positions</li>
+        </ul>
+        
+        <p><strong>Game Settings:</strong></p>
+        <ul>
+            <li><strong>Player Names:</strong> Set custom names for each player</li>
+            <li><strong>Difficulty Level:</strong> Adjust AI skill (Expert, Advanced, Medium, Beginner, Easy)</li>
+            <li><strong>Computer Plays:</strong> Choose which players are controlled by AI</li>
+            <li><strong>Starts:</strong> Choose which player serves first</li>
+            <li><strong>Score Limit:</strong> Set the winning score (default: 50)</li>
+        </ul>
+        
+        <p><strong>Tips:</strong></p>
+        <ul>
+            <li>Time your jumps to hit the ball at the right moment</li>
+            <li>Position yourself under the ball's trajectory</li>
+            <li>Use the walls and ceiling to your advantage</li>
+            <li>Try different difficulty levels to find your match</li>
+            <li>Watch the AI's behavior to learn strategies</li>
+        </ul>
+        
+        <p class="help-footer">
+            (c) <a href="mailto:me@kusaku.su?subject=chball">kusaku</a> 2001 - chasBall Volleyball Game<br>
+            No rights reserved - Modernized for modern browsers
+        </p>
+    </div>
+</div>
+
+<script>
+/*(c) kusaku 2001 - Refactored and optimized */
+
+// ===== CONSTANTS =====
+const GRAVITY = 1200;
+const PLAYER_ACCEL = 3500;
+const PLAYER_MAX_SPEED = 600;
+const PLAYER_FRICTION = 0.85;
+const AIR_FRICTION = 0.95;
+const JUMP_POWER = -1200;
+const BALL_BOUNCE = 0.85;
+const BALL_AIR_RESISTANCE = 0.99;
+const COLLISION_RADIUS = 100;
+const COLLISION_FORCE = 1200;
+const MOMENTUM_TRANSFER = 0.7;
+const FREEZE_TIME = 1000;
+const DEFAULT_SCORE_LIMIT = 50;
+const GAME_SPEED_MULTIPLIER = 1.5;
+const CEILING_Y = 50;
+const SPRITE_SIZE = 120;
+const SPRITE_OFFSET = 60;
+const NET_WIDTH = 10;
+const NET_OFFSET = 5;
+const BALL_START_Y = 150;
+const PLAYER_GROUND_OFFSET = 91;
+const AI_HIT_OFFSET = 50;
+const AI_POSITION_THRESHOLD = 20;
+const AI_CENTER_THRESHOLD = 30;
+
+// Game state constants
+const IDLE = 0;
+const LEFT = 1;
+const RIGHT = 2;
+
+// ===== GAME STATE =====
+const gameState = {
+    active: false,
+    paused: false,
+    scoring: false,
+    redScore: 0,
+    blueScore: 0,
+    scoreLimit: DEFAULT_SCORE_LIMIT,
+    blueBegins: true
+};
+
+let players = { blue: null, red: null };
+let ball = null;
+let netX = 0;
+let netHeight = 0;
+let groundY = 0;
+let playBlue = true;
+let playRed = true;
+
+// Canvas setup
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('canvasContainer');
+
+// DOM element cache (initialized after DOM loads)
+let domElements = {};
+
+// Images
+const images = {
+    blue: new Image(),
+    red: new Image(),
+    ball: new Image()
+};
+images.blue.src = "bluepl.gif";
+images.red.src = "redpl.gif";
+images.ball.src = "ball.gif";
+
+let imagesLoaded = false;
+let imagesLoadedCount = 0;
+images.blue.onload = images.red.onload = images.ball.onload = () => {
+    imagesLoadedCount++;
+    if (imagesLoadedCount === 3) imagesLoaded = true;
+};
+
+// ===== PLAYER CLASS =====
+class Player {
+    constructor(name, x, y, minX, maxX, isBlue) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.minX = minX;
+        this.maxX = maxX;
+        this.groundY = y;
+        this.isBlue = isBlue;
+        this.moveDir = IDLE;
+        this.wantsJump = false;
+        this.rotation = 0;
+    }
+
+    update(dt) {
+        const adjustedDt = dt * GAME_SPEED_MULTIPLIER;
+        const isOnGround = this.y >= this.groundY - 1;
+        
+        // Horizontal movement
+        if (this.moveDir === LEFT) {
+            this.vx = Math.max(this.vx - PLAYER_ACCEL * adjustedDt, -PLAYER_MAX_SPEED);
+        } else if (this.moveDir === RIGHT) {
+            this.vx = Math.min(this.vx + PLAYER_ACCEL * adjustedDt, PLAYER_MAX_SPEED);
+        } else {
+            this.vx *= isOnGround ? PLAYER_FRICTION : AIR_FRICTION;
+        }
+
+        // Jump
+        if (this.wantsJump && isOnGround) {
+            this.vy = JUMP_POWER;
+            this.wantsJump = false;
+        }
+
+        // Gravity
+        this.vy += GRAVITY * adjustedDt;
+
+        // Update position
+        this.x += this.vx * adjustedDt;
+        this.y += this.vy * adjustedDt;
+
+        // Boundaries
+        if (this.x < this.minX) {
+            this.x = this.minX;
+            this.vx = 0;
+        } else if (this.x > this.maxX) {
+            this.x = this.maxX;
+            this.vx = 0;
+        }
+        if (this.y > this.groundY) {
+            this.y = this.groundY;
+            this.vy = 0;
+        } else if (this.y < CEILING_Y) {
+            this.y = CEILING_Y;
+            this.vy *= -0.5;
+        }
+
+        // Rotation
+        this.rotation += this.vx * adjustedDt * 0.001;
+    }
+
+    collideWithBall() {
+        const dx = ball.x - this.x;
+        const dy = ball.y - this.y;
+        const distSq = dx * dx + dy * dy;
+        
+        if (distSq < COLLISION_RADIUS * COLLISION_RADIUS && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const overlap = COLLISION_RADIUS - dist;
+            
+            // Separate objects
+            ball.x += nx * overlap;
+            ball.y += ny * overlap;
+            
+            // Collision response
+            const relativeSpeed = (ball.vx - this.vx) * nx + (ball.vy - this.vy) * ny;
+            if (relativeSpeed < 0) {
+                const impulse = relativeSpeed * COLLISION_FORCE / 1000;
+                ball.vx -= impulse * nx;
+                ball.vy -= impulse * ny;
+                ball.vx += this.vx * MOMENTUM_TRANSFER;
+                ball.vy += this.vy * MOMENTUM_TRANSFER;
+            }
+        }
+    }
+
+    reset() {
+        this.x = this.minX + (this.maxX - this.minX) / 2;
+        this.y = this.groundY;
+        this.vx = 0;
+        this.vy = 0;
+        this.moveDir = IDLE;
+        this.rotation = 0;
+    }
+}
+
+// ===== BALL CLASS =====
+class Ball {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.rotation = 0;
+    }
+
+    update(dt) {
+        const adjustedDt = dt * GAME_SPEED_MULTIPLIER;
+        
+        // Gravity
+        this.vy += GRAVITY * adjustedDt;
+        
+        // Air resistance
+        this.vx *= BALL_AIR_RESISTANCE;
+        this.vy *= BALL_AIR_RESISTANCE;
+
+        // Update position
+        this.x += this.vx * adjustedDt;
+        this.y += this.vy * adjustedDt;
+
+        // Boundaries
+        if (this.x < CEILING_Y) {
+            this.x = CEILING_Y;
+            this.vx *= -BALL_BOUNCE;
+        } else if (this.x > canvas.width - CEILING_Y) {
+            this.x = canvas.width - CEILING_Y;
+            this.vx *= -BALL_BOUNCE;
+        }
+        if (this.y < CEILING_Y) {
+            this.y = CEILING_Y;
+            this.vy *= -BALL_BOUNCE;
+        }
+
+        // Net collision
+        const netDist = Math.abs(this.x - netX);
+        if (netDist < NET_WIDTH && this.y > canvas.height - netHeight) {
+            this.x = netX + (this.x > netX ? NET_WIDTH : -NET_WIDTH);
+            this.vx *= -BALL_BOUNCE;
+        }
+
+        // Rotation
+        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.rotation += speed * adjustedDt * 0.01;
+    }
+
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.rotation = 0;
+    }
+}
+
+// ===== AI =====
+function updateAI(player) {
+    if (!ball || !gameState.active) return;
+
+    const dx = ball.x - player.x;
+    const dist = Math.sqrt(dx * dx + (ball.y - player.y) * (ball.y - player.y));
+    const onMySide = player.isBlue ? ball.x < netX : ball.x > netX;
+    const ballFalling = ball.vy > 0;
+
+    // Priority 1: Ball falling on my side - intercept
+    if (onMySide && ballFalling) {
+        const timeToGround = Math.max(0.1, (groundY - ball.y) / Math.max(ball.vy, 100));
+        const predictedX = Math.max(player.minX, Math.min(player.maxX, ball.x + ball.vx * timeToGround));
+        const targetX = player.isBlue ? predictedX - AI_HIT_OFFSET : predictedX + AI_HIT_OFFSET;
+        const moveX = targetX - player.x;
+        
+        if (Math.abs(moveX) > AI_POSITION_THRESHOLD) {
+            player.moveDir = moveX < 0 ? LEFT : RIGHT;
+        } else {
+            player.moveDir = player.isBlue ? RIGHT : LEFT;
+        }
+        
+        if (player.y >= player.groundY - 1 && dist < COLLISION_RADIUS * 2) {
+            player.wantsJump = true;
+        }
+        return;
+    }
+    
+    // Priority 2: Ball rising on my side - position for next hit
+    if (onMySide && !ballFalling) {
+        const timeToApex = -ball.vy / GRAVITY;
+        const predictedX = Math.max(player.minX, Math.min(player.maxX, ball.x + ball.vx * timeToApex));
+        const moveX = predictedX - player.x;
+        
+        if (Math.abs(moveX) > AI_CENTER_THRESHOLD) {
+            player.moveDir = moveX < 0 ? LEFT : RIGHT;
+        } else {
+            player.moveDir = IDLE;
+        }
+        return;
+    }
+    
+    // Priority 3: Ball on opponent side - return to center
+    const centerX = (player.minX + player.maxX) / 2;
+    const moveX = centerX - player.x;
+    if (Math.abs(moveX) > AI_POSITION_THRESHOLD) {
+        player.moveDir = moveX < 0 ? LEFT : RIGHT;
+    } else {
+        player.moveDir = IDLE;
+    }
+}
+
+// ===== GAME LOGIC =====
+function checkScoring() {
+    if (!ball || gameState.scoring || ball.y < groundY) return;
+
+    gameState.scoring = true;
+    const scorer = ball.x < netX ? 'red' : 'blue';
+    
+    if (scorer === 'blue') {
+        gameState.blueScore++;
+    } else {
+        gameState.redScore++;
+    }
+
+    updateScoreboard();
+
+    if (gameState.blueScore >= gameState.scoreLimit || gameState.redScore >= gameState.scoreLimit) {
+        endGame(scorer);
+    } else {
+        resetAfterScore(scorer);
+    }
+}
+
+function resetAfterScore(scorer) {
+    gameState.active = false;
+    gameState.scoring = false;
+    gameState.blueBegins = (scorer === 'blue');
+
+    // Reset ball
+    const server = players[scorer];
+    let ballX = server.minX + (server.maxX - server.minX) / 2;
+    ballX = scorer === 'blue' ? Math.min(ballX, netX - AI_HIT_OFFSET) : Math.max(ballX, netX + AI_HIT_OFFSET);
+    ball.reset(ballX, BALL_START_Y);
+
+    // Reset players
+    players.blue.reset();
+    players.red.reset();
+
+    setTimeout(() => {
+        gameState.active = true;
+        gameState.scoring = false;
+    }, FREEZE_TIME);
+}
+
+function endGame(winner) {
+    gameState.active = false;
+    gameState.scoring = false;
+    
+    const winnerPlayer = players[winner];
+    let ballX = winnerPlayer.minX + (winnerPlayer.maxX - winnerPlayer.minX) / 2;
+    ballX = winner === 'blue' ? Math.min(ballX, netX - AI_HIT_OFFSET) : Math.max(ballX, netX + AI_HIT_OFFSET);
+    ball.reset(ballX, BALL_START_Y);
+
+    const winnerName = (winner === 'blue' ? domElements.blueName : domElements.redName).value;
+    const color = winner === 'blue' ? 'RoyalBlue' : 'orangered';
+    domElements.scoreboard.innerHTML = 
+        `<font color="${color}">${winnerName} WINS!!!</font>`;
+}
+
+function updateScoreboard() {
+    const blueName = domElements.blueName.value || 'Blue';
+    const redName = domElements.redName.value || 'Red';
+    domElements.scoreboard.innerHTML = 
+        `<span style="color: RoyalBlue;">${blueName}</span> <strong>${gameState.blueScore}</strong> - <strong>${gameState.redScore}</strong> <span style="color: orangered;">${redName}</span>`;
+}
+
+// ===== DRAWING =====
+function drawSprite(img, x, y, rotation) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.drawImage(img, -SPRITE_OFFSET, -SPRITE_OFFSET, SPRITE_SIZE, SPRITE_SIZE);
+    ctx.restore();
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (!imagesLoaded) return;
+
+    // Draw net
+    ctx.fillStyle = '#9c9';
+    ctx.fillRect(netX - NET_OFFSET, canvas.height - netHeight, NET_WIDTH, netHeight);
+
+    // Draw ball
+    if (ball && images.ball.complete) {
+        drawSprite(images.ball, ball.x, ball.y, ball.rotation);
+    }
+
+    // Draw players
+    if (players.blue && images.blue.complete) {
+        drawSprite(images.blue, players.blue.x, players.blue.y, players.blue.rotation);
+    }
+    if (players.red && images.red.complete) {
+        drawSprite(images.red, players.red.x, players.red.y, players.red.rotation);
+    }
+}
+
+// ===== GAME LOOP =====
+let lastTime = 0;
+function animate(currentTime) {
+    const dt = Math.min((currentTime - lastTime) / 1000, 0.02);
+    lastTime = currentTime;
+    
+    if (gameState.active && !gameState.paused && imagesLoaded) {
+        players.blue.update(dt);
+        players.red.update(dt);
+        players.blue.collideWithBall();
+        players.red.collideWithBall();
+        ball.update(dt);
+        checkScoring();
+    }
+    
+    draw();
+    requestAnimationFrame(animate);
+}
+
+// ===== INITIALIZATION =====
+function resetCanvas() {
+    const rect = container.getBoundingClientRect();
+    canvas.width = rect.width || container.clientWidth || window.innerWidth;
+    canvas.height = rect.height || container.clientHeight || window.innerHeight;
+    
+    netX = canvas.width / 2;
+    netHeight = canvas.height / 3;
+    groundY = canvas.height - PLAYER_GROUND_OFFSET;
+}
+
+function startGame() {
+    // Get settings
+    const blueName = domElements.blueName.value || 'Blue Player';
+    const redName = domElements.redName.value || 'Red Player';
+    const blueSkill = parseInt(domElements.blueSkill.value) || 50;
+    const redSkill = parseInt(domElements.redSkill.value) || 50;
+    playBlue = domElements.playBlue.checked;
+    playRed = domElements.playRed.checked;
+    const beginsRadio = document.querySelector('input[name="begins"]:checked');
+    gameState.blueBegins = beginsRadio ? beginsRadio.value === 'blue' : true;
+    gameState.scoreLimit = parseInt(domElements.scoreLimit.value) || DEFAULT_SCORE_LIMIT;
+
+    // Reset
+    resetCanvas();
+    gameState.blueScore = 0;
+    gameState.redScore = 0;
+    gameState.active = true;
+    gameState.paused = false;
+    gameState.scoring = false;
+
+    // Create players
+    const blueX = canvas.width / 4;
+    const redX = canvas.width * 3 / 4;
+    players.blue = new Player(blueName, blueX, groundY, CEILING_Y, netX - CEILING_Y, true);
+    players.red = new Player(redName, redX, groundY, netX + CEILING_Y, canvas.width - CEILING_Y, false);
+
+    // Create ball
+    const ballX = gameState.blueBegins ? players.blue.x : players.red.x;
+    ball = new Ball(ballX, BALL_START_Y);
+
+    updateScoreboard();
+    hideMenu();
+
+    // Start AI
+    clearInterval(window.aiBlueInterval);
+    clearInterval(window.aiRedInterval);
+    if (playBlue) {
+        window.aiBlueInterval = setInterval(() => updateAI(players.blue), blueSkill);
+    }
+    if (playRed) {
+        window.aiRedInterval = setInterval(() => updateAI(players.red), redSkill);
+    }
+}
+
+// ===== MENU FUNCTIONS =====
+function showMenu() {
+    if (domElements.helpModal.style.display === 'block') {
+        closeHelp();
+    }
+    domElements.menuBackdrop.classList.remove('hidden');
+    domElements.gameMenu.classList.remove('hidden');
+    gameState.paused = true;
+}
+
+function hideMenu() {
+    domElements.menuBackdrop.classList.add('hidden');
+    domElements.gameMenu.classList.add('hidden');
+    if (gameState.active) {
+        gameState.paused = false;
+    }
+}
+
+function showHelp() {
+    if (!domElements.gameMenu.classList.contains('hidden')) {
+        hideMenu();
+    }
+    domElements.helpModal.style.display = 'block';
+    gameState.paused = true;
+}
+
+function closeHelp() {
+    domElements.helpModal.style.display = 'none';
+    if (gameState.active) {
+        gameState.paused = false;
+    }
+}
+
+// ===== KEYBOARD CONTROLS =====
+function handleKeyDown(e) {
+    if ([37, 38, 39, 90, 88, 67, 27].includes(e.keyCode)) {
+        e.preventDefault();
+    }
+
+    if (!playRed && players.red) {
+        if (e.keyCode === 37) players.red.moveDir = LEFT;
+        if (e.keyCode === 39) players.red.moveDir = RIGHT;
+        if (e.keyCode === 38) players.red.wantsJump = true;
+    }
+
+    if (!playBlue && players.blue) {
+        if (e.keyCode === 90) players.blue.moveDir = LEFT;
+        if (e.keyCode === 67) players.blue.moveDir = RIGHT;
+        if (e.keyCode === 88) players.blue.wantsJump = true;
+    }
+
+    if (e.keyCode === 27) {
+        if (domElements.helpModal.style.display === 'block') {
+            closeHelp();
+        } else if (!domElements.gameMenu.classList.contains('hidden')) {
+            hideMenu();
+        } else {
+            showMenu();
+        }
+    }
+}
+
+function handleKeyUp(e) {
+    if (!playRed && players.red && (e.keyCode === 37 || e.keyCode === 39)) {
+        players.red.moveDir = IDLE;
+    }
+    if (!playBlue && players.blue && (e.keyCode === 90 || e.keyCode === 67)) {
+        players.blue.moveDir = IDLE;
+    }
+}
+
+// ===== INITIALIZATION =====
+window.addEventListener('load', () => {
+    // Initialize DOM element cache
+    domElements = {
+        scoreboard: document.getElementById('scoreboard'),
+        menuBackdrop: document.getElementById('menuBackdrop'),
+        gameMenu: document.getElementById('gameMenu'),
+        helpModal: document.getElementById('helpModal'),
+        blueName: document.getElementById('blueName'),
+        redName: document.getElementById('redName'),
+        blueSkill: document.getElementById('blueSkill'),
+        redSkill: document.getElementById('redSkill'),
+        playBlue: document.getElementById('playBlue'),
+        playRed: document.getElementById('playRed'),
+        scoreLimit: document.getElementById('scoreLimit')
+    };
+    
+    resetCanvas();
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    
+    window.addEventListener('resize', () => {
+        resetCanvas();
+        if (players.blue) {
+            players.blue.maxX = netX - CEILING_Y;
+            players.blue.groundY = groundY;
+        }
+        if (players.red) {
+            players.red.minX = netX + CEILING_Y;
+            players.red.maxX = canvas.width - CEILING_Y;
+            players.red.groundY = groundY;
+        }
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (domElements.helpModal.style.display === 'block' && e.target === domElements.helpModal) {
+            closeHelp();
+        }
+    });
+    
+    showMenu();
+    requestAnimationFrame(animate);
+});
+</script>
+</body>
+</html>

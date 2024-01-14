@@ -1,0 +1,578 @@
+<!doctype html public "-//w3c//dtd html 3.2 final//ru">
+<html>
+<head>
+<meta name="generator" content="microsoft visual studio 6.0">
+<title>chasBall v1.1</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<style>
+BODY
+{
+ margin:0px;
+ padding:0px;
+ background:#696 url('bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt; 
+ text-align:center;
+ overflow:hidden;
+}
+
+A
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+A:hover
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:active
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:visited
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+HR
+{
+ margin:0;
+ height:1px;
+ width:100%;
+ color:#9c9;
+ text-align:center;
+}
+
+TABLE.simple
+{
+ border:1px solid #9c9;
+ border-top-width:10px;
+ border-collapse:collapse;
+}
+
+TABLE.simple TH 
+{
+ padding:5px;
+ border:1px solid #9c9; 
+ color:#363;
+ font-size:12pt;
+ font-weight:bold;
+ text-align:center;
+}
+
+TABLE.simple TD
+{ 
+ padding:3px;
+ border:1px solid #9c9;
+ color:#363;
+ font-size:10pt; 
+ vertical-align:middle;
+}
+
+INPUT, SELECT, OPTION
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+}
+
+.menu_passive,.menu_active,.menu_hover
+{
+ margin:5px;
+ padding:5px;
+ border-width:1px;
+ border-style:solid;
+ text-align:center; 
+ font-family:arial;
+ font-size:12pt;
+ font-weight:900;
+ cursor:hand;
+}
+
+.menu_hover
+{
+ border-top-color:#9c9;
+ border-right-color:#363;
+ border-bottom-color:#363;
+ border-left-color:#9c9;
+ color:#9c9;
+}
+
+.menu_active
+{
+ padding:6px 4px 4px 6px;
+ border-top-color:#363;
+ border-right-color:#9c9;
+ border-bottom-color:#9c9;
+ border-left-color:#363;
+ color:#fc6;
+}
+
+.menu_passive
+{
+ border-color:#696;
+ color:#363;
+}
+
+
+</style>
+</HEAD>
+<SCRIPT LANGUAGE=javascript>
+<!--
+/*(c) kusaku 2001 */
+
+var IDLE = 0;
+var MOVINGLEFT = 1;
+var MOVINGRIGHT = 2;
+var JUMPING = 3;
+var grav = 100;
+var dvel = 250;
+var jumpvel = -2000;
+var force = 100;
+var maxplayerspeed = 5000;
+var maxballspeed = 2000;
+var redscore;
+var bluescore;
+var mode = 1;
+var redSkill = blueSkill = 5;
+var TTime,TDrawer,TJudge,TBlue,TRed;
+var freeze = 1000;
+var prec = .01;
+var maxscore = 50;
+var fallheight;
+
+function Humanoid(name, x, y, minx, miny, maxx, maxy, mass, radius)
+{
+	this.name = name;
+	this.status = IDLE;
+	this.x = x;
+	this.y = y;
+	this.vx = 0;
+	this.vy = 0;
+	this.minx = minx;
+	this.miny = miny;
+	this.maxx = maxx;
+	this.maxy = maxy;
+	this.mass = mass;
+	this.radius = radius;
+	this.integrate = HumanIntegrator;
+	this.set = HumanSetter;
+}
+
+function Flyer(name, x, y, minx, miny, maxx, maxy, wallx, wallh, mass, radius)
+{
+	this.name = name;
+	this.status = IDLE;
+	this.x = x;
+	this.y = y;
+	this.vx = 0;
+	this.vy = 0;
+	this.minx = minx;
+	this.miny = miny;
+	this.maxx = maxx;
+	this.maxy = maxy;
+	this.wallx = wallx;
+	this.wallh = wallh;	
+	this.mass = mass;
+	this.radius = radius;	
+	this.integrate = FlyIntegrator;
+	this.set = FlySetter;
+}
+	
+function HumanIntegrator()
+{
+	var dV;
+	if (this.status == IDLE && this.y > this.maxy - 2) this.vx /= 2;
+	if (this.status == MOVINGLEFT && this.vx > 0) this.vx /= 2;
+	if (this.status == MOVINGRIGHT && this.vx < 0) this.vx /= 2;
+	if (this.status == MOVINGLEFT && this.vx > -maxplayerspeed ) this.vx -= dvel
+	if (this.status == MOVINGRIGHT && this.vx < maxplayerspeed ) this.vx += dvel;
+	if (this.status == JUMPING && this.y > this.maxy - 2) this.vy += jumpvel;
+		
+	distance = Math.sqrt((this.x - ball.x)*(this.x - ball.x) + (this.y - ball.y)*(this.y - ball.y));
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (ball.x - this.x)/distance; //Cosinus
+	this.vy += dV * (ball.y - this.y)/distance; //Sinus	
+	this.vy += grav;
+}
+
+function FlyIntegrator()
+{
+
+	distance = Math.sqrt((this.x - red.x)*(this.x - red.x) + (this.y - red.y)*(this.y - red.y));
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (red.x - this.x)/distance;
+	this.vy += dV * (red.y - this.y)/distance;
+	
+	distance = Math.sqrt((this.x - blue.x)*(this.x - blue.x) + (this.y - blue.y)*(this.y - blue.y));
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (blue.x - this.x)/distance;
+	this.vy += dV * (blue.y - this.y)/distance;
+
+	distance = Math.abs(this.x - this.minx);
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (this.minx - this.x)/distance;
+	
+	distance = Math.abs(this.x - this.maxx);
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (this.maxx - this.x)/distance;
+	
+	distance = Math.abs(this.y - this.miny);
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vy += dV * (this.miny - this.y) / distance;
+	
+	distance = Math.abs(this.y - this.maxy);
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vy += dV * (this.maxy - this.y)/distance;
+	
+	newy = (this.y < this.maxy - this.wallh) ? this.maxy - this.wallh : this.y;
+	
+	distance = Math.sqrt((this.x - this.wallx)*(this.x - this.wallx) + (this.y - newy)*(this.y - newy));
+	distance = (distance==0) ? 1 : distance;
+	dV = (distance < this.radius) ? force * (distance - this.radius) / this.mass : 0;
+	this.vx += dV * (this.wallx - this.x)/distance;
+	this.vy += dV * (newy - this.y)/distance;
+	
+	this.vy += grav;
+	if (Math.abs(this.vx) > maxballspeed) this.vx /= 1.2;
+	if (Math.abs(this.vy) > maxballspeed) this.vy /= 1.2;	
+}
+
+function HumanSetter(dt)
+{
+	this.x += this.vx * dt;
+	this.y += this.vy * dt;
+	
+	
+	if (this.x < this.minx)
+		{
+		this.x = this.minx;
+		this.vx = 0;
+		}
+	if (this.x > this.maxx)
+		{
+		this.x = this.maxx;
+		this.vx = 0;
+		}
+	if (this.y < this.miny)
+		{
+		this.y = this.miny;
+		this.vy = -this.vy;
+		}	
+	if (this.y > this.maxy)
+		{
+		this.y = this.maxy;
+		this.vy = 0;
+		}
+}
+
+function FlySetter(dt)
+{
+	this.x += this.vx * dt;
+	this.y += this.vy * dt;
+		
+	if (this.x < this.minx)
+		{
+		this.x = this.minx + 1;
+		this.vx = 0;
+		}
+		
+	if (this.x > this.maxx)
+		{
+		this.x = this.maxx - 1;
+		this.vx = 0;
+		}
+		
+	if (this.y < this.miny)
+		{
+		this.y = this.miny + 1;
+		this.vy = 0;
+		}
+			
+	if (this.y > this.maxy)
+		{
+		this.y = this.maxy - 1;
+		this.vy = 0;
+		}		
+}
+
+
+function Time()
+{
+	ball.integrate();
+	red.integrate();
+	blue.integrate();
+	ball.set(prec);
+	red.set(prec);	
+	blue.set(prec);
+}
+
+
+function Computer(target)
+{	
+	if ((ball.x > target.maxx || ball.x < target.minx) && ball.vy < 0)
+	{
+		if (target.x > target.minx + (target.maxx - target.minx) / 2) target.status = MOVINGLEFT;
+		if (target.x < target.minx + (target.maxx - target.minx) / 2) target.status = MOVINGRIGHT;
+	}
+	else
+	{
+		if (ball.x < target.x) target.status = MOVINGLEFT;
+		if (ball.x > target.x) target.status = MOVINGRIGHT;
+	}
+	if (target.status != IDLE && Math.abs(ball.x - target.x) < 50 && ball.x > target.x && ball.vx < -1000) target.status = IDLE;
+	if (target.status != IDLE && Math.abs(ball.x - target.x) < 50 && ball.x < target.x && ball.vx > 1000) target.status = IDLE;
+	if (target.status != JUMPING && Math.abs(ball.x - target.x) < 25 && target.y == target.maxy && ball.vy > 0 && Math.random() > .5) target.status = JUMPING;
+	/*
+	if (Math.random() > .9) target.status = MOVINGLEFT;
+	if (Math.random() > .9) target.status = MOVINGRIGHT;
+	*/
+	
+}
+
+function Judge()
+{
+	if (ball.y > fallheight)
+	{
+		if (ball.x > red.minx && ball.x < red.maxx)
+		{
+			bluescore++;
+			scoreboard.innerHTML = blue.name + ":" + bluescore + "::" + redscore + ":" + red.name;
+			clearInterval(TTime);
+			ball.vx = 0;
+			ball.vy = 0;
+			ball.x = red.minx + (red.maxx - red.minx)/2;
+			ball.y = (ball.maxy - ball.miny)/3 + ball.miny;
+			red.x = red.minx + (red.maxx - red.minx)/2 - 5;
+			red.y = red.maxy;
+			red.vx = 0;
+			red.vy = 0;
+			setTimeout("red.status = IDLE; TTime = setInterval(\"Time();\",5);", freeze);
+			if (bluescore == maxscore) 
+				{
+				KeyHooker(27, true);
+				scoreboard.innerHTML = "<FONT color=RoyalBlue>" + blue.name + " is WINNER!!!</FONT>";
+				}
+		}
+		if (ball.x > blue.minx && ball.x < blue.maxx)
+		{
+			redscore++;
+			scoreboard.innerHTML = blue.name + ":" + bluescore + "::" + redscore + ":" + red.name;
+			clearInterval(TTime);
+			ball.vx = 0;
+			ball.vy = 0;
+			ball.x = blue.minx + (blue.maxx - blue.minx)/2;
+			ball.y = (ball.maxy - ball.miny)/3 + ball.miny;
+			blue.x = blue.minx + (blue.maxx - blue.minx)/2 + 5;
+			blue.y = blue.maxy;
+			blue.vx = 0;
+			blue.vy = 0;
+			setTimeout("blue.status = IDLE; TTime = setInterval(\"Time();\",5);", freeze);
+			if (redscore == maxscore) 
+				{
+				KeyHooker(27, true);
+				scoreboard.innerHTML = "<FONT color=orangered>" + red.name + " is WINNER!!!</FONT>";
+				}
+		}
+	}	
+}
+
+
+function Drawer()
+{
+	//status = ball.x + ":" + ball.y;
+	ballimage.style.left = Math.round(ball.x) - 25;
+	ballimage.style.top = Math.round(ball.y) - 25;	
+	redimage.style.left = Math.round(red.x) - 30;
+	redimage.style.top = Math.round(red.y) - 30;
+	blueimage.style.left = Math.round(blue.x) - 30;
+	blueimage.style.top = Math.round(blue.y) - 30;	
+}
+
+function KeyHooker(code, press)
+{
+	switch (code)
+	{
+		case 27 : optboard.style.visibility = "visible";
+					container.style.visibility = "hidden";
+					clearInterval(TBlue);
+					clearInterval(TRed);
+					clearInterval(TTime);
+					clearInterval(TDrawer);
+					clearInterval(TJudge);
+		break;
+		case 37 : if (press) red.status = MOVINGLEFT; else red.status = IDLE;
+		break;
+		case 38 : if (press) red.status = JUMPING; else red.status = IDLE;
+		break;
+		case 39 : if (press) red.status = MOVINGRIGHT; else red.status = IDLE;
+		break;
+		case 90 : if (press) blue.status = MOVINGLEFT; else blue.status = IDLE;
+		break;
+		case 88 : if (press) blue.status = JUMPING; else blue.status = IDLE;
+		break;
+		case 67 : if (press) blue.status = MOVINGRIGHT; else blue.status = IDLE;
+		break;
+	}
+}
+
+function Init()
+{
+	
+	optboard.style.visibility = "hidden";
+	container.style.visibility = "visible";
+	scrwidth = document.body.offsetWidth;
+	scrheight = document.body.offsetHeight;
+	scrleft = document.body.offsetLeft;
+	scrtop = document.body.offsetTop;	
+	fallheight = scrtop + scrheight - 111;
+	maxscore = optform.scorelimit.value;
+	
+	if (optform.redBegins.checked) beg = 1;
+	if (optform.blueBegins.checked) beg = 0;
+	
+	blue = new Humanoid(optform.blueName.value, scrwidth/4, scrtop + scrheight - 91, scrleft + 35, scrtop + 35, scrleft + scrwidth/2 - 35, scrtop + scrheight - 91, 10, 75);
+	red = new Humanoid(optform.redName.value, scrwidth/4*3, scrtop + scrheight - 91, scrleft + scrwidth/2 + 35, scrtop + 35, scrleft + scrwidth - 35, scrtop + scrheight - 91, 10, 75);	
+	ball = new Flyer("kusaku", scrwidth/4 + 15 + (scrwidth/2 - 30) * beg, scrtop + 50, scrleft + 35, scrtop, scrleft + scrwidth - 35, scrtop + scrheight - 35, scrleft + scrwidth/2, scrheight/3, 1, 75);
+	
+	redscore = 0;
+	bluescore = 0;
+	scoreboard.innerHTML = blue.name + ":" + bluescore + "::" + redscore + ":" + red.name;
+	
+	TTime = setInterval("Time();",5);
+		
+	if (optform.playBlue.checked) TBlue = setInterval("Computer(blue);",optform.blueSkill[optform.blueSkill.selectedIndex].value);
+	if (optform.playRed.checked) TRed = setInterval("Computer(red);",optform.redSkill[optform.redSkill.selectedIndex].value);
+	
+	TDrawer = setInterval("Drawer();",50);
+	TJudge = setInterval("Judge();",5);
+}
+//-->
+</SCRIPT>
+<BODY>
+<div style="BORDER-BOTTOM: #9c9 10px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 1px solid; HEIGHT: 100%; LEFT: 0px; POSITION: absolute; TOP: 0px; WIDTH: 100%; Z-INDEX: -100"></div>
+<div style="BACKGROUND: #9c9; BORDER-BOTTOM: #9c9 1px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 1px solid; HEIGHT: 33%; LEFT: 50%; POSITION: absolute; TOP: 66%; WIDTH: 10px; Z-INDEX: -100"></div>
+
+
+<div id=container style="visibility: hidden">
+<img height=111 id=blueimage src="blue.gif" style ="position: absolute; z-index: -100" width=60 >
+<img height=111 id=redimage src="red.gif" style ="position: absolute; z-index: -100" width=60 >
+<img height=70 id=ballimage src="ball.gif" style ="position: absolute; z-index: -100" width=70 >
+</div>
+
+<div id=scoreboard style="BACKGROUND: #696; BORDER-BOTTOM: #9c9 1px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 10px solid; FONT-FAMILY: arial; FONT-SIZE: 22pt; FONT-WEIGHT: 900; TEXT-ALIGN: center; WIDTH: 550px">Welcome to chasBall!!!</div>
+<div id=optboard style="BACKGROUND: #696; BORDER-BOTTOM: #9c9 1px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 1px solid; TEXT-ALIGN: center; WIDTH: 550px">
+<form id=optform name=optform>
+<TABLE class=simple>
+	<TR>
+		<TD>Имена игроков:</TD>
+		<TD>
+			Синий: <input size=12 maxLength=12 value="Blue Butthead" name=blueName>
+			Красный: <input size=12 maxLength=12 value="Red Butthead" name=redName>
+		</TD>
+	</TR>
+	<TR>
+		<TD>Уровень сложности:</TD>
+		<TD>
+		Синий:
+		<select name=blueSkill>
+ <option value="5">профи</option>
+ <option value="20" selected>продвинутый</option> 
+ <option value="50">средний</option>
+ <option value="100">начинающий</option>
+ <option value="150">тупой</option>
+ </select>
+ Красный:
+ <select name=redSkill>
+ <option value="5">профи</option>
+ <option value="20">продвинутый</option> 
+ <option value="50" selected>средний</option>
+ <option value="100">начинающий</option>
+ <option value="150">тупой</option>
+ </select>
+ </TD>
+	</TR>
+	<TR>
+		<TD>Компьютер играет за:</TD>
+		<TD>		
+		<input type="checkbox" name=playBlue checked> Синего
+		<input type="checkbox" name=playRed checked> Красного.		
+		</TD>
+	</TR>
+	<TR>
+		<TD>Начинает:</TD>
+		<TD>		
+		<input type="radio" id=blueBegins name="begins" value="male" checked> Синий
+		<input type="radio" id=redBegins name="begins" value="female"> Красный
+		</TD>
+	</TR>
+	<TR>
+		<TD colSpan=2><center>Играть до <input size=3 maxLength=3 name=scorelimit value="50"> очков.</center></TD>
+	</TR>
+</table>
+chasBall v1.1
+</form>	
+<hr>
+<div class="menu_passive"
+		 
+		onmouseover="this.className='menu_hover'" 
+		onmouseout="this.className='menu_passive'" 
+		onmouseup="this.className='menu_hover'" 
+		onclick="if (ie) Init();" onmousedown="this.className='menu_active'"> 
+		НАЧАТЬ
+</div>
+<hr>
+<div style="COLOR: #363; FONT-SIZE: 7pt; MARGIN: 0px; PADDING-BOTTOM: 5px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; PADDING-TOP: 5px">
+(c) <A href="mailto:me@kusaku.su?subject=webmaster">kusaku</a> 2001
+<br> 
+No rights reserved. Freeware: use this software on your own risk. This game is a part of <a href="physfac/index.html/">Physfac@RU</a> site.
+<br> 
+Author of this script is not responsible for any damages you can get.
+<br> 
+Press F11 to turn on/off fulscreen. Recommended screen resolution: 1024x768 16bpp and more.
+</div></div>
+<script language=javascript>
+<!--
+	var ie = (document.all) ? true : false;
+	if (ie)
+	{
+		document.onkeydown = new Function("KeyHooker(event.keyCode, true)");
+		document.onkeyup = new Function("KeyHooker(event.keyCode, false)");
+	}
+//-->
+</script>
+</body>
+</html>

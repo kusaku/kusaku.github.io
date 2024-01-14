@@ -1,0 +1,230 @@
+BODY
+{
+	margin: 0px;
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+}
+
+TABLE
+{
+	border: none;
+	border-collapse: collapse;
+}
+
+TD
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+}
+
+IMG
+{
+	border: 0px;
+}
+
+IMG.photo
+{
+	background: #CCCCCC;
+	border: 1px solid #999999;
+	border-left-width: 10px;
+	cursor: hand;
+}
+
+IMG.gray
+{
+	background: #CCCCCC;
+	border: 1px solid #999999;
+	border-left-width: 10px;
+	cursor: hand;
+	filter: gray alpha(opacity=50);
+}
+
+A
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+
+A: hover
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+
+A: active
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+
+A: visited
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+
+P
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+	padding: 0px;
+	margin: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-align: justify;
+}
+
+UL
+{
+	padding: 0px;
+	padding-left: 3em;
+	margin: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	list-style: square;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA
+{
+	background: #CCCCCC;
+	color: #000000;
+	border: 1px solid #999999;
+	margin: 2px;
+	cursor: hand;
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+	overflow: hidden;
+}
+
+INPUT.forum_form_name, INPUT.forum_form_email, INPUT.forum_form_subj
+{
+	width:90%;
+}
+
+TEXTAREA.forum_form_message
+{
+	width:95%;
+}
+
+
+HR
+{
+	width: 100%;
+	border: none;
+	border-top: 1px solid #000000;
+	background-color: #000000;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+}
+
+TABLE.menu_p, TABLE.menu_a, TABLE.menu_h
+{
+	border: 1px solid #000000;
+}
+
+TABLE.menu_p TD, TABLE.menu_a TD, TABLE.menu_h TD
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+	padding: 3px;
+	cursor: hand;
+}
+
+TABLE.menu_p
+{
+	color: #000000;
+	background: #FFFFFF;
+}
+
+TABLE.menu_a
+{
+	color: #FFFFFF;
+	background: #CCCCCC;
+}
+
+TABLE.menu_h
+{
+ color: #FFFFFF;
+ background: #000000;
+}
+
+.banner
+{
+	font-family: Small Fonts;
+	font-size: 20pt;
+	color: #FFFFFF;
+}
+
+.header
+{
+	font-family: Small Fonts;
+	font-size: 20pt;
+	padding: 5px;
+}
+
+.maintext
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+}
+
+.copyrght
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+	color: #999999;
+	padding: 5px;
+}
+
+TABLE.flyer
+{
+	border-collapse: collapse;
+	margin: 5px;
+}
+
+TABLE.flyer TD
+{
+	font-family: Tahoma,Arial;
+	font-size: x-small;
+	border: 1px solid #CCCCCC;
+	padding: 3px;
+} 
+
+.date
+{
+	color: #999999;
+	font-style: italic;
+	font-weight: bold;
+}
+
+.time
+{
+	color: #999999;
+	font-style: italic;
+}
+
+.nick
+{
+	font-weight: bold;
+}
+
+.msg
+{
+}
+
+#tooltip
+{
+	position: absolute;
+	z-index: 100;
+	font-family: Tahoma,Arial;
+	border: 1px solid #000000;
+	background: #FFFFFF;
+	color: #0066CC;
+	padding: 3px;
+}
+.selected {
+	font-size: medium;
+	background-color: #FFCC00;
+}
+.floater {color: #FFFFFF; font-weight: bold; }

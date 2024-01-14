@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legacy Projects - Kirill Arkhipenko (Кирилл Архипенко)</title>
+<meta name="description" content="Legacy projects and experiments by Kirill Arkhipenko (Кирилл Архипенко). JavaScript, QuickBasic, Turbo Pascal, Fortran, Perl from early programming days. Author: kusaku, retrewert, aks1983.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy projects, JavaScript, QuickBasic, Turbo Pascal, Fortran, Perl, developer, programmer">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:title" content="Legacy Projects - Kirill Arkhipenko (Кирилл Архипенко) | kusaku.su">
+<meta property="og:description" content="Collection of old projects and experiments by Kirill Arkhipenko. JavaScript, QuickBasic, Turbo Pascal, Fortran, Perl. Author: kusaku, retrewert, aks1983.">
+<meta property="og:url" content="https://kusaku.su/legacy/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Legacy Projects - Kirill Arkhipenko (Кирилл Архипенко) | kusaku.su">
+<meta name="twitter:description" content="Legacy projects by Kirill Arkhipenko. JavaScript, QuickBasic, Turbo Pascal, Fortran, Perl. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"CollectionPage","name":"Legacy Projects - Kirill Arkhipenko","description":"Collection of old projects and experiments by Kirill Arkhipenko (Кирилл Архипенко). Author: kusaku, retrewert, aks1983.","url":"https://kusaku.su/legacy/","author":{"@type":"Person","name":"Kirill Arkhipenko","alternateName":["Кирилл Архипенко","kusaku","retrewert","aks1983"]}}
+    </script>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        
+        .project-card {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .group:hover .project-card {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        html.dark .group:hover .project-card {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .magnify-container {
+            position: relative;
+            display: inline-block;
+            cursor: none;
+            touch-action: none;
+        }
+        .magnify-lens {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            overflow: hidden;
+            z-index: 1000;
+            border: 3px solid;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        html.dark .magnify-lens {
+            background: #0d1117;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .magnify-lens-img {
+            position: absolute;
+            max-width: none;
+            max-height: none;
+            display: block;
+            border-radius: calc(var(--img-border-radius, 8px) * 2);
+        }
+    </style>
+<script>
+        const init = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? window.matchMedia('(prefers-color-scheme: dark)').matches : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+            
+            const img = document.getElementById('magnifyImage');
+            const lens = document.getElementById('magnifyLens');
+            const container = document.getElementById('magnifyContainer');
+            if (!img || !lens || !container) return;
+            
+            const setup = () => {
+                const { naturalWidth: nw, naturalHeight: nh, offsetWidth: dw, offsetHeight: dh } = img;
+                if (!nw || !dw) return setTimeout(setup, 50);
+                
+                const zoomImg = img.cloneNode(true);
+                zoomImg.className = 'magnify-lens-img';
+                zoomImg.style.setProperty('--img-border-radius', `${parseFloat(getComputedStyle(img).borderTopLeftRadius) || 8}px`);
+                Object.assign(zoomImg.style, { width: `${nw}px`, height: `${nh}px` });
+                lens.appendChild(zoomImg);
+                
+                const updateLens = (x, y) => {
+                    const { left, top } = container.getBoundingClientRect();
+                    const half = 200;
+                    lens.style.cssText = `display:block;left:${x - half}px;top:${y - half}px`;
+                    zoomImg.style.left = `${half - (x - left) * nw / dw}px`;
+                    zoomImg.style.top = `${half - (y - top) * nh / dh}px`;
+                };
+                const hideLens = () => lens.style.display = 'none';
+                
+                container.addEventListener('mousemove', ({ clientX, clientY }) => updateLens(clientX, clientY));
+                container.addEventListener('mouseleave', hideLens);
+                container.addEventListener('touchstart', (e) => { e.preventDefault(); updateLens(e.touches[0].clientX, e.touches[0].clientY); });
+                container.addEventListener('touchmove', (e) => { e.preventDefault(); updateLens(e.touches[0].clientX, e.touches[0].clientY); });
+                container.addEventListener('touchend', hideLens);
+            };
+            
+            img.complete ? setup() : img.addEventListener('load', setup);
+        };
+        
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8">
+            <nav class="mb-4">
+                <a href="/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Back to main page
+                </a>
+            </nav>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-3">
+                <div class="magnify-container flex-shrink-0" id="magnifyContainer">
+                    <img src="/legacy/2001.webp" alt="2001" class="w-40 h-40 object-cover rounded-lg shadow-lg" id="magnifyImage">
+                    <div class="magnify-lens" id="magnifyLens"></div>
+                </div>
+                <div class="flex-1 text-center md:text-right">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Legacy Projects</h1>
+                    <p class="text-base text-gray-600">A collection of old projects and experiments from my early programming days</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">JavaScript & HTML</h2>
+            
+            <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="/legacy/javascript/projects.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                            Projects
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Physics Faculty (2000/2001)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Questionnaire (2001)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Tetris (2001)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Carrot (TTS) (2002)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Menushnik (2003)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">Homepage (2004)</li>
+                            <li class="text-gray-900 group-hover:text-blue-600 transition-colors">CRM Charts (2013)</li>
+                        </ul>
+                    </div>
+                </a>
+
+                <a href="/legacy/javascript/tools.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-green-600 transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Tools
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-green-600 transition-colors">Region Maker (2000)</li>
+                            <li class="text-gray-900 group-hover:text-green-600 transition-colors">JS Debugger (2000)</li>
+                            <li class="text-gray-900 group-hover:text-green-600 transition-colors">Coder (2001/2002)</li>
+                            <li class="text-gray-900 group-hover:text-green-600 transition-colors">Arranger (2003)</li>
+                        </ul>
+                    </div>
+                </a>
+
+                <a href="/legacy/javascript/experiments.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                            </svg>
+                            Experiments
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Clock (1999)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Pythagorean Table (2000)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Auto Rollover Menu (2001)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">PD Menu (2001)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Chess (2002)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Neural Network (2002)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Image Popup (2002)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Link Tooltip (2003)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Animation Test (2006)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Floaters (2006)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Progress Bar (2006)</li>
+                            <li class="text-gray-900 group-hover:text-purple-600 transition-colors">Yandex Homework (2011)</li>
+                        </ul>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Other Projects</h2>
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="/legacy/quickbasic/quickbasic.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-yellow-600 transition-colors flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            QuickBasic
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Change Calculator (1996)</li>
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Array Element Swapping (1997)</li>
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Array Reduction (1997)</li>
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Array Reduction Variant (1997)</li>
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Cylinder Optimization (1997)</li>
+                            <li class="text-gray-900 group-hover:text-yellow-600 transition-colors">Array Sorting (1998)</li>
+                        </ul>
+                    </div>
+                </a>
+
+                <a href="/legacy/turbopascal/turbopascal.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Turbo Pascal
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-orange-600 transition-colors">Other Programs (1996-1999)</li>
+                            <li class="text-gray-900 group-hover:text-orange-600 transition-colors">BBS Scripts (1999)</li>
+                            <li class="text-gray-900 group-hover:text-orange-600 transition-colors">MP3 Tager (2002)</li>
+                            <li class="text-gray-900 group-hover:text-orange-600 transition-colors">Gas Simulation (2003)</li>
+                        </ul>
+                    </div>
+                </a>
+
+                <a href="/legacy/fortran/fortran.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-cyan-600 transition-colors flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Fortran
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-cyan-600 transition-colors">Monte Carlo Method (2002)</li>
+                            <li class="text-gray-900 group-hover:text-cyan-600 transition-colors">Read and Sort (2002)</li>
+                        </ul>
+                    </div>
+                </a>
+
+                <a href="/legacy/perl/perl.html" class="group flex flex-col">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 project-card h-full">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-red-600 transition-colors flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"></path>
+                            </svg>
+                            Perl
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li class="text-gray-900 group-hover:text-red-600 transition-colors">Perl CGI Scripts (2003/2004)</li>
+                            <li class="text-gray-900 group-hover:text-red-600 transition-colors">Perl Utilities (2001-2007)</li>
+                        </ul>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

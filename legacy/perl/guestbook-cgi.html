@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guestbook CGI - Perl CGI Scripts</title>
+<meta name="description" content="Guestbook CGI - Perl CGI script by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Perl, CGI">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/perl/guestbook-cgi.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/perl/guestbook-cgi.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/perl/guestbook-cgi.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Guestbook CGI - Perl - Kirill Arkhipenko">
+<meta property="og:description" content="Perl CGI script by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/perl/guestbook-cgi.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Guestbook CGI - Perl - Kirill Arkhipenko">
+<meta name="twitter:description" content="Perl CGI script by Kirill Arkhipenko. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/perl/perl.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Perl Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Guestbook CGI (Otzov) <span class="text-xl font-normal text-gray-600">(2003)</span></h1>
+        <p class="text-gray-600 mb-6">A full-featured CGI guestbook script with moderation capabilities, developed in 2003. Features include: adding guestbook entries with name and message, profanity filtering, duplicate request prevention, pagination (9 entries per page), admin moderation interface with enable/disable entries, IP address and browser tracking, and template-based HTML output.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">File-Based Storage (No Database):</h2>
+            <p class="text-gray-600 mb-4">This script does not use a database. Instead, it reads and writes data directly to plain text files:</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li><strong>otzov.txt</strong> - Stores all guestbook entries in a custom XML-like format with entries wrapped in <code>&lt;gbrec&gt;</code> tags</li>
+                <li><strong>otzov.dat</strong> - Stores the total count of entries</li>
+                <li><strong>lastreq.dat</strong> - Stores the last request to prevent duplicate submissions</li>
+                <li><strong>passwd.dat</strong> - Stores admin password for moderation access</li>
+            </ul>
+            <p class="text-gray-600">This file-based approach was common in 2003 when database setup was more complex and many shared hosting providers didn't include database access. The script parses the text files line by line, extracts entry data using pattern matching, and writes new entries by appending to the file. While simpler than database-driven solutions, this approach works well for small to medium-sized guestbooks.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Features:</h2>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li>Add guestbook entries with name and message</li>
+                <li>Profanity filtering (Russian and English)</li>
+                <li>Duplicate request prevention</li>
+                <li>Pagination (9 entries per page)</li>
+                <li>Admin moderation interface</li>
+                <li>IP address and browser tracking</li>
+                <li>Template-based HTML output (otzov.dot)</li>
+                <li>File-based storage - no database required (otzov.txt, otzov.dat)</li>
+            </ul>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Perl Source Code (otzov.cgi):</h2>
+            <pre><code class="language-perl">
+#!/usr/bin/perl
+
+sub ReqDecoder
+{
+	my($str, @qstr, $t1, $t2);
+	$str = $_[0];
+	$str =~ s/\+/ /g;
+	@qstr = split(/&amp;/,$str);
+	foreach $i (@qstr)
+	{
+		if ($i =~ /=/)
+		{
+			$t1 = $`;
+			$t2 = $';
+			$t1 =~ s/%([0-9A-H]{2})/pack('C',hex($1))/egi;
+			$t2 =~ s/%([0-9A-H]{2})/pack('C',hex($1))/egi;
+			$t1 =~ tr/a-z/A-Z/;
+			$hash{$t1} = $t2;
+		}
+	}
+
+	return %hash;
+}
+
+################################################################################################
+
+sub WriteBook
+{
+   	my($ans, $ok, $test, @time);
+    $ans = &quot;РЕЗУЛЬТАТ:&lt;br&gt;\n&quot;;
+    $ok = 0;
+
+	open (lastreq, &quot;&lt;lastreq.dat&quot;) || sub {$ans .= &quot;Файла данных запроса нет - не могу прочитать!&lt;br&gt;\n&quot;;};
+	$test = &lt;lastreq&gt;;
+	close (lastreq);
+
+	if ($q eq $test)
+	{
+	    return $ans.&quot;Повторный запрос - отклонен...&lt;br&gt;\n&quot;;
+	}
+	else
+	{
+	   	open (lastreq, &quot;&gt;lastreq.dat&quot;) || sub {$ans .= &quot;Не могу записать в файл данных запроса!&lt;br&gt;\n&quot;;};
+		print lastreq $q;
+		close (lastreq);
+	}
+
+    if ($req{'NICK'} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Имя не должено быть пустым!&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{'MSG'} =~ /\S/)
+    {
+       	$req{'MSG'} =~ s/&amp;/&amp;amp;/g;
+    	$req{'MSG'} =~ s/&lt;/&amp;lt;/g;
+    	$req{'MSG'} =~ s/&gt;/&amp;gt;/g;
+    	$req{'MSG'} =~ s/\r\n/&lt;br&gt;/g;
+        if ($req{'MSG'} =~ /ху[йеяе]/i || $req{'MSG'} =~ /пизд/i || $req{'MSG'} =~ /бля/i || $req{'MSG'} =~ /fuck/i)
+	    {
+			$ans .= &quot;У нас не матерятся: &amp;quot;..$&amp;..&amp;quot;...&lt;br&gt;\n&quot;;
+		}
+		else
+		{
+			$ok++;
+		}
+    }
+    else
+    {
+    	$ans .= &quot;Пустое cообщение!&lt;br&gt;\n&quot;;
+	}
+
+    if ($ok == 2)
+    {
+	    open(gb, &quot;&gt;&gt;otzov.txt&quot;) || sub {$ans .= &quot;Не могу открыть файл записей!&lt;br&gt;\n&quot;;};
+		print gb &quot;&lt;gbrec&gt;\n&quot;;
+		print gb &quot;Enabled &gt; no\n&quot;;
+		print gb &quot;From &gt; $ENV{'REMOTE_ADDR'}\n&quot;;
+		print gb &quot;Browser &gt; $ENV{'HTTP_USER_AGENT'}\n&quot;;
+		print gb &quot;Referer &gt; $ENV{'HTTP_REFERER'}\n&quot;;
+		print gb &quot;NICK &gt; $req{'NICK'}\n&quot;;
+		print gb &quot;MSG &gt; $req{'MSG'}\n&quot;;
+		@time = localtime(time);
+		@time[0] = (@time[0] &lt; 10) ? &quot;0&quot;.@time[0] : @time[0];
+		@time[1] = (@time[1] &lt; 10) ? &quot;0&quot;.@time[1] : @time[1];
+		@time[2] = (@time[2] &lt; 10) ? &quot;0&quot;.@time[2] : @time[2];
+		@time[3] = (@time[3] &lt; 10) ? &quot;0&quot;.@time[3] : @time[3];
+   		@time[4]++;
+		@time[4] = (@time[4] &lt; 10) ? &quot;0&quot;.@time[4] : @time[4];
+        @time[5] = @time[5] + 1900;
+		print gb &quot;TIME &gt; @time[3].@time[4].@time[5]&amp;nbsp;@time[2]:@time[1]:@time[0]\n&quot;;
+		print gb &quot;&lt;/gbrec&gt;\n\n&quot;;
+        close(gb);
+		$count++;
+        open(st, &quot;&gt;otzov.dat&quot;) || return $ans.&quot;Не могу записать в файл данных!&lt;br.\n&quot;;
+			print st $count.&quot;\n&quot;;
+		close(st);
+		$ans .= &quot;Запись успешно добавлена!&lt;br&gt;\n&quot;;
+        $succAdd = &quot;true&quot;;
+	}
+	else
+	{
+		$ans .= &quot;Запись не может быть добавлена!&lt;br&gt;\n&quot;;
+        $succAdd = &quot;false&quot;;
+	}
+    return $ans;
+}
+
+################################################################################################
+
+sub GuestBook
+{
+   	my($ans, $i, $str, %current);
+	$ans = &quot;\n\n&lt;!-- here otzov begins --&gt;\n\n&quot;;
+	open(gb, &quot;otzov.txt&quot;) || sub {$ans .= &quot;Файла записей нет - добавьте хотя бы одну запись!&lt;br&gt;\n&quot;;};
+	$i = 0;
+	do
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи (или файла)
+	    {
+		    chomp($str);
+		    $current{$`} = $' if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш %current
+		}
+		if (%current)
+		{
+			$i++;
+			if ($i &gt;= $req{'READFROM'} &amp;&amp; $i &lt;= $req{'READTO'})
+			{
+				if (($current{'Enabled'} =~ /yes/i) &amp;&amp; !$imboss)
+				{
+				$ans .= &quot;&lt;br&gt;\n&quot;;
+				$ans .= &quot;&lt;TABLE border=1 borderColor=darkgoldenrod cellPadding=1 cellSpacing=1&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=5%&gt;#$i&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=10%&gt;$current{'TIME'}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD&gt;&lt;B&gt;$current{'NICK'}&lt;/B&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=3&gt;$current{'MSG'}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;/TABLE&gt;\n&quot;;
+				}
+				elsif ($imboss)
+				{
+				$ans .= &quot;&lt;br&gt;\n&quot;;
+				$ans .= &quot;&lt;TABLE border=1 cellPadding=1 cellSpacing=1&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=5%&gt;#$i&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=10%&gt;$current{'TIME'}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD&gt;&lt;B&gt;$current{'NICK'}&lt;/B&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=3&gt;$current{'MSG'}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=1&gt;&lt;center&gt;&lt;a href=http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi?readfrom=$req{'READFROM'}&amp;readto=$req{'READTO'}&amp;authority=$req{'AUTHORITY'}&amp;action=sanitarize&amp;what=$i&gt;&quot; . (($current{'Enabled'} =~ /no/i) ? &quot;разрешить&quot; : &quot;запретить&quot;) . &quot;&lt;/a&gt;&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=1&gt;&lt;center&gt;$current{'From'}&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=1&gt;&lt;center&gt;$current{'Browser'}&lt;br&gt;Клиент пришел &lt;a href=\&quot;$current{'Referer'}\&quot;&gt;отсюда...&lt;/a&gt;&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;/TABLE&gt;\n&quot;;
+				}
+		    }
+		}
+		%current = %a; #убили хеш
+	}
+	until (eof || $i &gt; $req{'READTO'});
+	$ans .= &quot;Гостевая книга пуста - добавьте хотя бы одну запись!&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+	$ans .= &quot;\n\n&lt;!-- here otzov ends --&gt;\n\n&quot;;
+
+	return $ans;
+}
+
+################################################################################################
+
+sub SanitarizeGuestBook
+{
+   	my($ans, $i, $str);
+    $ans = &quot;Обработка гостевой книги:&lt;br&gt;\n&quot;;
+    open(newgb,&quot;&gt;&gt;otzov.tmp&quot;) || return $ans.&quot;Не могу создать новый файл записей!&lt;br&gt;\n&quot;;
+	open(gb, &quot;otzov.txt&quot;) || return $ans.&quot;Не могу открыть старый файл записей!&lt;br&gt;\n&quot;;
+	$i = 0;
+	$count = 0;
+	do
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи или файла
+	    {
+		    chomp($str);
+		    $current{$`} = $' if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш
+		}
+		if (%current)
+		{
+			$i++;
+			if ($i == $_[0])
+			{
+				$current{'Enabled'} = ($current{'Enabled'} =~ /no/) ? &quot;yes&quot; : &quot;no&quot;;
+			}
+
+			if ($_[0] || $current{'Enabled'} =~ /yes/)
+			{
+				$count++;
+				print newgb &quot;\n&lt;gbrec&gt;\n&quot;;
+				foreach $key (sort(keys %current))
+				{
+					print newgb &quot;$key &gt; $current{$key}\n&quot;;
+				}
+				print newgb &quot;&lt;\/gbrec&gt;\n&quot;;
+			}
+		}
+		%current = %a; #убили хеш
+	}
+	until (eof gb);
+	$ans .= &quot;Гостевая книга оказалась пуста - нечего было обрабатывать!&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+   	close(newgb);
+
+    unlink &quot;otzov.txt&quot;;
+    rename &quot;otzov.tmp&quot;, &quot;otzov.txt&quot;;
+
+	open(st, &quot;&gt;otzov.dat&quot;) || return $ans.&quot;Не могу записать в файл данных!&lt;br.\n&quot;;
+		print st $count.&quot;\n&quot;;
+	close(st);
+
+	return $ans.&quot;Обработано $count записей (всего было $i).\n&quot;;
+}
+
+################################################################################################
+
+sub Numbers
+{
+   	my($ans, $i, $k);
+  	$ans = &quot;\n&lt;!-- here numbers begin --&gt;\n&quot;;
+	for ($i = 1; $i &lt; $count; $i+=$_[0])
+	{
+		$k = $i + $_[0];
+		$k = $count if $k &gt; $count;
+		if ($i &gt;= $req{'READFROM'} &amp;&amp; $k &lt;= $req{'READTO'})
+		{
+			$ans .= &quot;[$i..$k]\n&quot;;
+		}
+		else
+		{
+	        $ans .= &quot;&lt;a href=http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi?readfrom=$i&amp;readto=$k&quot; . (($imboss) ? &quot;&amp;authority=$req{'AUTHORITY'}&quot; : &quot;&quot;) . &quot;&gt;[$i..$k]&lt;/a&gt;\n&quot;;
+	    }
+	}
+   	$ans .= &quot;&lt;br&gt;\n&lt;!-- here numbers end --&gt;\n&quot;;
+   	return $ans;
+}
+
+################################################################################################
+
+sub CheckBoss
+{
+	my($pw,$ans);
+	if (open(pwf, &quot;passwd.dat&quot;))
+	{
+		$pw = &lt;pwf&gt;;
+		$ans = ($_[0] eq $pw);
+      	close(pwf);
+	}
+	else
+	{
+		open(pwf, &quot;&gt;passwd.dat&quot;);
+		print pwf $_[0];
+		$ans = true;
+      	close(pwf);
+	}
+	return $ans;
+}
+
+################################################################################################
+
+sub Error
+{
+	print $_[0];
+}
+
+################################################################################################
+
+if ($ENV{'REQUEST_METHOD'} =~ /get/i)
+{
+	$q = ($ENV{'QUERY_STRING'});
+}
+if ($ENV{'REQUEST_METHOD'} =~ /post/i)
+{
+	sysread STDIN, $q = ($ENV{'QUERY_STRING'}), $ENV{'CONTENT_LENGTH'};
+}
+
+%req = ReqDecoder($q);
+
+################################################################################################
+
+print &quot;Content-Type: text/html\n\n&quot;;
+open SHABLON, &quot;otzov.dot&quot; || Error(&quot;Отсутствует шаблон страницы!&lt;br&gt;\n&quot;);
+while (($str = &lt;SHABLON&gt;) !~ /&lt;!--%otzov%--&gt;/i)
+{
+print $str;
+}
+
+################################################################################################
+
+$imboss = CheckBoss($req{'AUTHORITY'}) if ($req{'AUTHORITY'});
+
+open(st, &quot;otzov.dat&quot;) || Error(&quot;Файла данных нет - необходимо инициализировать счетчик!&lt;br&gt;\n&quot;);
+	$count = &lt;st&gt;;
+   	$count = $&amp; if ($count =~ /\d+/g);
+close(st);
+
+$succAdd = &quot;true&quot;;
+
+$a = WriteBook if ($req{'ACTION'} =~ /add/i);
+
+$b = SanitarizeGuestBook($req{'WHAT'}) if ($req{'ACTION'} =~ /sanitarize/i &amp;&amp; $imboss);
+
+if (!$req{'READFROM'} || !$req{'READTO'} || $req{'READFROM'} &gt; $count || $req{'READFROM'} &gt; $req{'READTO'})
+{
+	$req{'READFROM'} = $count - 9;
+	$req{'READTO'} = $count;
+}
+
+print Numbers(9);
+
+print $a.$b if ($a || $b);
+
+print GuestBook;
+
+print Numbers(9);
+
+print &quot;&lt;a href=http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi?action=sanitarize&amp;authority=$req{'AUTHORITY'}&gt;|Почистить книгу|&lt;/a&gt; &lt;a href=http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi&gt;|Выйти из режима хозяина|&lt;/a&gt;&lt;br&gt;&quot; if ($imboss);
+
+
+################################################################################################
+
+if ($succAdd eq &quot;true&quot;)
+{
+print &lt;&lt;EOF;
+
+&lt;form action=&quot;http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi&quot; method=post&gt;
+&lt;TABLE border=1 borderColor=darkgoldenrod cellPadding=1 cellSpacing=1 width=&quot;100%&quot;&gt;
+
+  &lt;TR&gt;
+    &lt;TD align=middle colSpan=2&gt;Добавьте новую запись:&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      ваше имя:&lt;br&gt;&lt;INPUT name=nick&gt;&lt;/TD&gt;
+    &lt;TD rowSpan=2&gt;&lt;TEXTAREA cols=45 name=msg rows=5&gt;&lt;/TEXTAREA&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&lt;INPUT name=action type=hidden value=add&gt;&lt;INPUT type=submit value=&quot;добавить запись&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;
+&lt;/form&gt;
+EOF
+}
+else
+{
+$req{'MSG'} =~ s/&lt;br&gt;/\n/g;
+print &lt;&lt;EOF;
+&lt;form action=&quot;http://$ENV{'HTTP_HOST'}/cgi-bin/otzov.cgi&quot; method=post&gt;
+&lt;TABLE border=1 cellPadding=1 cellSpacing=1 width=&quot;100%&quot;&gt;
+  &lt;TR&gt;
+    &lt;TD align=middle colSpan=2&gt;Исправьте свою запись:&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      ваше имя:&lt;br&gt;&lt;INPUT name=nick value=&quot;$req{'NICK'}&quot;&gt;&lt;/TD&gt;
+    &lt;TD rowSpan=2&gt;&lt;TEXTAREA cols=45 name=msg rows=5&gt;$req{'MSG'}&lt;/TEXTAREA&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&lt;INPUT name=action type=hidden value=add&gt;&lt;INPUT type=submit value=&quot;добавить запись&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;
+&lt;/form&gt;
+EOF
+}
+
+################################################################################################
+do
+{
+	$str = &lt;SHABLON&gt;;
+	print $str;
+}
+until (eof);
+close(SHABLON);
+			</code></pre>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">HTML Template (otzov.dot):</h2>
+            <pre><code class="language-html">
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;TITLE&gt;Сталактитовая пещера - сауна VIP (812)322-54-03&lt;/TITLE&gt;
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=windows-1251&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Сталактитовая пещера, сауна-vip, 2-ух этажная сауна с русской, турецкой парной, все виды массажа, бассейн с гейзером, квалифицированный парильщик, караоке, бильярд, домашний кинотеатр, шоу программа, шашлыки, охраняемая стоянка.&quot;&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;Сталактитовая пещера, сауна-vip, 2-ух этажная сауна с русской, турецкой парной, все виды массажа, бассейн с гейзером, квалифицированный парильщик, караоке, бильярд, домашний кинотеатр, шоу программа, шашлыки, охраняемая стоянка.&quot;&gt;
+&lt;link href=&quot;main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;base href=&quot;www.stalaktit.ru&quot;&gt;
+&lt;body bgcolor=&quot;DAC17E&quot;&gt;
+&lt;table width=&quot;0&quot; height=&quot;0&quot; border=&quot;0&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;
+      &lt;br&gt;&lt;SCRIPT TYPE=&quot;text/javascript&quot;&gt;
+&lt;!--
+
+function newImage(arg) {
+	if (document.images) {
+		rslt = new Image();
+		rslt.src = arg;
+		return rslt;
+	}
+}
+
+function changeImages() {
+	if (document.images &amp;&amp; (preloadFlag == true)) {
+		for (var i=0; i&lt;changeImages.arguments.length; i+=2) {
+			document[changeImages.arguments[i]].src = changeImages.arguments[i+1];
+		}
+	}
+}
+
+var preloadFlag = false;
+function preloadImages() {
+	if (document.images) {
+		foto_over = newImage(&quot;images/foto-over.jpg&quot;);
+		otzivi_over = newImage(&quot;images/otzivi-over.jpg&quot;);
+		stoimost_over = newImage(&quot;images/stoimost-over.jpg&quot;);
+		adres_over = newImage(&quot;images/adres-over.jpg&quot;);
+		preloadFlag = true;
+	}
+}
+
+// --&gt;
+&lt;/SCRIPT&gt;
+&lt;!-- End Preload Script --&gt;
+&lt;script language=&quot;JavaScript&quot; type=&quot;text/JavaScript&quot;&gt;
+&lt;!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName==&quot;Netscape&quot;)&amp;&amp;(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+//--&gt;
+&lt;/script&gt;
+&lt;link href=&quot;main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;/HEAD&gt;
+&lt;BODY BGCOLOR=#FFFFFF LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 ONLOAD=&quot;preloadImages();&quot;&gt;
+      &lt;!-- ImageReady Slices (Sait_stile2.psd) --&gt;
+      &lt;div align=&quot;center&quot;&gt;
+        &lt;TABLE WIDTH=640 BORDER=0 CELLPADDING=0 CELLSPACING=0&gt;
+          &lt;!--DWLayoutTable--&gt;
+          &lt;TR&gt;
+            &lt;TD COLSPAN=2 BGCOLOR=#FFCC66&gt; &lt;A HREF=&quot;foto.html&quot; TARGET=&quot;_self&quot;
+				ONMOUSEOVER=&quot;window.status='Фотографии салона'; changeImages('foto', 'images/foto-over.jpg'); return true;&quot;
+				ONMOUSEOUT=&quot;window.status=''; changeImages('foto', 'images/foto.jpg'); return true;&quot;&gt;
+              &lt;IMG NAME=&quot;foto&quot; SRC=&quot;images/foto.jpg&quot; WIDTH=145 HEIGHT=53 BORDER=0 ALT=&quot;Фотографии&quot;&gt;&lt;/A&gt;&lt;/TD&gt;
+            &lt;TD COLSPAN=3 BGCOLOR=#FFCC66&gt; &lt;A HREF=&quot;/cgi-bin/otzov.cgi&quot; TARGET=&quot;_self&quot;
+				ONMOUSEOVER=&quot;window.status='Отзовы наших посетителей'; changeImages('otzivi', 'images/otzivi-over.jpg'); return true;&quot;
+				ONMOUSEOUT=&quot;window.status=''; changeImages('otzivi', 'images/otzivi.jpg'); return true;&quot;&gt;
+              &lt;IMG NAME=&quot;otzivi&quot; SRC=&quot;images/otzivi.jpg&quot; WIDTH=176 HEIGHT=53 BORDER=0 ALT=&quot;Отзовы&quot;&gt;&lt;/A&gt;&lt;/TD&gt;
+            &lt;TD COLSPAN=3 BGCOLOR=#FFCC66&gt; &lt;A HREF=&quot;stoimost.html&quot; TARGET=&quot;_self&quot;
+				ONMOUSEOVER=&quot;window.status='Наши цены'; changeImages('stoimost', 'images/stoimost-over.jpg'); return true;&quot;
+				ONMOUSEOUT=&quot;window.status=''; changeImages('stoimost', 'images/stoimost.jpg'); return true;&quot;&gt;
+              &lt;IMG NAME=&quot;stoimost&quot; SRC=&quot;images/stoimost.jpg&quot; WIDTH=156 HEIGHT=53 BORDER=0 ALT=&quot;Цены&quot;&gt;&lt;/A&gt;&lt;/TD&gt;
+            &lt;TD COLSPAN=2 BGCOLOR=#FFCC66&gt; &lt;A HREF=&quot;adres.html&quot; target=&quot;_self&quot;
+				ONMOUSEOVER=&quot;window.status='Наши координаты'; changeImages('adres', 'images/adres-over.jpg'); return true;&quot;
+				ONMOUSEOUT=&quot;window.status=''; changeImages('adres', 'images/adres.jpg'); return true;&quot;&gt;
+              &lt;IMG NAME=&quot;adres&quot; SRC=&quot;images/adres.jpg&quot; WIDTH=163 HEIGHT=53 BORDER=0 ALT=&quot;Координаты&quot;&gt;&lt;/A&gt;&lt;/TD&gt;
+          &lt;/TR&gt;
+          &lt;TR&gt;
+            &lt;TD width=&quot;70&quot; BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back.jpg&quot; WIDTH=70 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_02.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_03.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_04.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD COLSPAN=2 BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_05.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_06.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD COLSPAN=2 BGCOLOR=#FFCC33&gt; &lt;IMG SRC=&quot;images/back_07.jpg&quot; WIDTH=75 HEIGHT=255 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD BGCOLOR=#FFCC33&gt; &lt;img src=&quot;images/back_08.jpg&quot; width=120 height=255 alt=&quot;&quot;&gt;&lt;/TD&gt;
+          &lt;/TR&gt;
+          &lt;TR &gt;
+            &lt;TD background=&quot;images/News_2.jpg&quot; height=&quot;172&quot; COLSPAN=10 BGCOLOR=#FFCC00 style=&quot;padding: 5px; padding-bottom: 15px &quot; &gt;
+              &lt;div  style=&quot;width:630px; height:143px; overflow: auto; padding: 10px&quot;&gt;
+                &lt;table width=&quot;100%&quot;&gt;
+                  &lt;!--DWLayoutTable--&gt;
+                  &lt;tr&gt;
+                    &lt;td width=&quot;640&quot; height=&quot;271&quot; valign=&quot;top&quot; class=&quot;main&quot;&gt;
+                    &lt;!--%otzov%--&gt;
+					&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;!--DWLayoutTable--&gt;
+                &lt;/table&gt;
+                &lt;p&gt;&amp;nbsp;&lt;/p&gt;
+                &lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;&lt;/TD&gt;
+          &lt;/TR&gt;
+          &lt;TR&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=70 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=75 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=75 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=75 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=26 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=49 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=75 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=32 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=43 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+            &lt;TD&gt; &lt;IMG SRC=&quot;images/spacer.gif&quot; WIDTH=120 HEIGHT=1 ALT=&quot;&quot;&gt;&lt;/TD&gt;
+          &lt;/TR&gt;
+        &lt;/TABLE&gt;
+        &lt;!-- End ImageReady Slices --&gt;
+        &amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;p align=&quot;center&quot;&gt;&lt;a
+target=_top href=&quot;http://top.mail.ru/jump?from=661959&quot;&gt;&lt;img
+src=&quot;http://top.list.ru/counter?js=na;id=661959;t=55&quot;
+border=0 height=31 width=88
+alt=&quot;Рейтинг@Mail.ru&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://u5403.08.spylog.com/cnt?cid=540308&amp;f=3&amp;p=0&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://u5403.08.spylog.com/cnt?cid=540308&amp;p=0&quot; alt='SpyLOG' border='0' width=88 height=31 &gt;
+        &lt;/a&gt;
+        &lt;!-- SpyLOG --&gt;
+      &lt;/p&gt;
+      &lt;p align=&quot;center&quot;&gt;&lt;font size=&quot;2&quot;&gt;&lt;a href=&quot;http://www.ozarenie.spb.ru&quot;&gt;Copyright
+        &copy; 2004 Ozarenie Design Stidio.&lt;/a&gt;&lt;/font&gt;&lt;/p&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+			</code></pre>
+        </div>
+		<div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+			<h2 class="font-semibold text-gray-900 mb-4">Perl Source Code (SCR.cgi):</h2>
+			<pre><code class="language-perl">
+#!bin/perl
+
+	######################
+	# Guest Book for CGI #
+	#     (c) kusaku     #
+	# No rights reserved #
+	######################
+
+################################################################################################
+
+sub ReqDecoder
+{
+	my($str, @qstr, $t1, $t2);
+	$str = $_[0];
+	$str =~ s/\+/ /g;
+	@qstr = split(/&amp;/,$str);
+	foreach $i (@qstr)
+	{
+		if ($i =~ /=/)
+		{
+			$t1 = $`;
+			$t2 = $&#x27;;
+			$t1 =~ s/%([0-9A-H]{2})/pack(&#x27;C&#x27;,hex($1))/egi;
+			$t2 =~ s/%([0-9A-H]{2})/pack(&#x27;C&#x27;,hex($1))/egi;
+			$t1 =~ tr/a-z/A-Z/;
+			$hash{$t1} = $t2;
+		}
+	}
+
+	return %hash;
+}
+
+################################################################################################
+
+sub WriteBook
+{
+   	my($ans, $ok, $test, @time);
+    $ans = &quot;&lt;font color=red&gt;РЕЗУЛЬТАТ:&lt;/font&gt;&lt;br&gt;\n&quot;;
+    $ok = 0;
+
+	open (lastreq, &quot;&lt;lastreq.dat&quot;) || sub {$ans .= &quot;&lt;font color=red&gt;Файла данных запроса нет - не могу прочитать!&lt;/font&gt;&lt;br&gt;\n&quot;;};
+	$test = &lt;lastreq&gt;;
+	close (lastreq);
+
+	if ($q eq $test)
+	{
+	    return $ans.&quot;&lt;font color=orange&gt;Повторный запрос - отклонен...&lt;/font&gt;&lt;br&gt;\n&quot;;
+	}
+	else
+	{
+	   	open (lastreq, &quot;&gt;lastreq.dat&quot;) || sub {$ans .= &quot;&lt;font color=red&gt;Файла данных запроса нет - не могу записать!&lt;/font&gt;&lt;br&gt;\n&quot;;};
+		print lastreq $q;
+		close (lastreq);
+	}
+
+    if ($req{&#x27;NICK&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;&lt;font color=orange&gt;Имя не должено быть пустым!&lt;/font&gt;&lt;br&gt;\n&quot;;
+	}
+
+	if ($req{&#x27;MAIL&#x27;} =~ /[0-9A-Z\.\-\_]+@([0-9A-Z\-]+\.){1,3}([A-Z]){2,4}/i)
+	{
+		$req{&#x27;MAIL&#x27;} = $&amp;;
+		$ok++;
+	}
+	elsif ($req{&#x27;MAIL&#x27;} !~ /\S/)
+	{
+		$ans .= &quot;&lt;font color=lightblue&gt;Почтовый адрес отсутствует...&lt;/font&gt;&lt;br&gt;\n&quot;;
+		$ok++;
+	}
+   	else
+	{
+		$ans .= &quot;&lt;font color=orange&gt;Странный адрес: &amp;quot;$req{&#x27;MAIL&#x27;}&amp;quot;...&lt;/font&gt;&lt;br&gt;\n&quot;;
+	}
+
+	if ($req{&#x27;PAGE&#x27;} =~ /(\d)+\.(\d)+\.(\d)+\.(\d)+.*/i || $req{&#x27;PAGE&#x27;} =~ /((\w)+\.){1,4}(\w){2,4}.*/)
+    {
+        $req{&#x27;PAGE&#x27;} = &quot;http://&quot; . $&amp;;
+		$ok++;
+    }
+    elsif ($req{&#x27;PAGE&#x27;} !~ /\S/)
+    {
+    	$ans .= &quot;&lt;font color=lightblue&gt;Адрес страницы отсутствует...&lt;/font&gt;&lt;br&gt;\n&quot;;
+   		$ok++;
+	}
+    else
+    {
+    	$ans .= &quot;&lt;font color=orange&gt;Плохой адрес у страницы...&lt;font&gt;&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{&#x27;MSG&#x27;} =~ /\S/)
+    {
+       	$req{&#x27;MSG&#x27;} =~ s/&amp;/&amp;amp;/g;
+    	$req{&#x27;MSG&#x27;} =~ s/&lt;/&amp;lt;/g;
+    	$req{&#x27;MSG&#x27;} =~ s/&gt;/&amp;gt;/g;
+    	$req{&#x27;MSG&#x27;} =~ s/\r\n/&lt;br&gt;/g;
+        if ($req{&#x27;MSG&#x27;} =~ /ху[йеяе]/i || $req{&#x27;MSG&#x27;} =~ /пизд/i || $req{&#x27;MSG&#x27;} =~ /бля/i || $req{&#x27;MSG&#x27;} =~ /fuck/i)
+	    {
+			$ans .= &quot;&lt;font color=orange&gt;У нас не матерятся: &amp;quot;..$&amp;..&amp;quot;...&lt;/font&gt;&lt;br&gt;\n&quot;;
+		}
+		else
+		{
+			$ok++;
+		}
+    }
+    else
+    {
+    	$ans .= &quot;&lt;font color=orange&gt;Пустое cообщение!&lt;/font&gt;&lt;br&gt;\n&quot;;
+	}
+
+    if ($ok == 4)
+    {
+	    open(gb, &quot;&gt;&gt;guestbook.txt&quot;) || sub {$ans .= &quot;&lt;font color=red&gt;Не могу открыть файл записей!&lt;/font&gt;&lt;br&gt;\n&quot;;};
+		print gb &quot;&lt;gbrec&gt;\n&quot;;
+		print gb &quot;From &gt; $ENV{&#x27;REMOTE_ADDR&#x27;}\n&quot;;
+		print gb &quot;Browser &gt; $ENV{&#x27;HTTP_USER_AGENT&#x27;}\n&quot;;
+		print gb &quot;Referer &gt; $ENV{&#x27;HTTP_REFERER&#x27;}\n&quot;;
+		print gb &quot;MAIL &gt; $req{&#x27;MAIL&#x27;}\n&quot;;
+		print gb &quot;NICK &gt; $req{&#x27;NICK&#x27;}\n&quot;;
+		print gb &quot;PAGE &gt; $req{&#x27;PAGE&#x27;}\n&quot;;
+		print gb &quot;MSG &gt; $req{&#x27;MSG&#x27;}\n&quot;;
+		@time = localtime(time);
+		@time[0] = (@time[0] &lt; 10) ? &quot;0&quot;.@time[0] : @time[0];
+		@time[1] = (@time[1] &lt; 10) ? &quot;0&quot;.@time[1] : @time[1];
+		@time[2] = (@time[2] &lt; 10) ? &quot;0&quot;.@time[2] : @time[2];
+		@time[3] = (@time[3] &lt; 10) ? &quot;0&quot;.@time[3] : @time[3];
+   		@time[4]++;
+		@time[4] = (@time[4] &lt; 10) ? &quot;0&quot;.@time[4] : @time[4];
+        @time[5] = @time[5] + 1900;
+		print gb &quot;TIME &gt; @time[3].@time[4].@time[5]&amp;nbsp;@time[2]:@time[1]:@time[0]\n&quot;;
+		print gb &quot;&lt;/gbrec&gt;\n\n&quot;;
+        close(gb);
+		$count++;
+        open(st, &quot;&gt;stat.dat&quot;) || return $ans.&quot;&lt;font color=red&gt;Не могу записать в файл данных!&lt;/font&gt;&lt;br.\n&quot;;
+			print st $count.&quot;\n&quot;;
+		close(st);
+		$ans .= &quot;Запись успешно добавлена!&lt;br&gt;\n&quot;;
+        $succAdd = &quot;true&quot;;
+	}
+	else
+	{
+		$ans .= &quot;&lt;font color=red&gt;Запись не может быть добавлена!&lt;/font&gt;&lt;br&gt;\n&quot;;
+        $succAdd = &quot;false&quot;;
+	}
+
+    return $ans;
+}
+
+################################################################################################
+
+sub GuestBook
+{
+   	my($ans, $i, $str, %current);
+	$ans = &quot;\n\n&lt;!-- here guestbook begins --&gt;\n\n&quot;;
+	open(gb, &quot;guestbook.txt&quot;) || sub {$ans .= &quot;&lt;font color=red&gt;Файла записей нет - добавьте хотя бы одну запись!&lt;/font&gt;&lt;br&gt;\n&quot;;};
+	$i = 0;
+	do
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи или файла
+	    {
+		    chomp($str);
+		    $current{$`} = $&#x27; if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш
+		}
+		if (%current)
+		{
+			$i++;
+			if ($i &gt;= $_[0] &amp;&amp; $i &lt;= $_[1])
+			{
+				$ans .= &quot;&lt;br&gt;\n&quot;;
+				$ans .= &quot;&lt;TABLE class=&#x27;simple&#x27; width=90%&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=5%&gt;#$i&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=10%&gt;$current{&#x27;TIME&#x27;}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=55%&gt;Господин &quot; . (($current{&#x27;MAIL&#x27;}) ? &quot;&lt;A href=&#x27;mailto:&quot;.$current{&#x27;MAIL&#x27;}.&quot;&#x27;&gt;$current{&#x27;NICK&#x27;}&lt;/A&gt;&quot; : $current{&#x27;NICK&#x27;}) . &quot; пишет:&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD width=30%&gt;&quot; . (($current{&#x27;PAGE&#x27;}) ? &quot;&lt;A href=&#x27;&quot;.$current{&#x27;PAGE&#x27;}.&quot;&#x27;&gt;страница&lt;/A&gt;&quot; : &quot;(нет страницы)&quot;) . &quot;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=4&gt;$current{&#x27;MSG&#x27;}&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				if ($imboss)
+				{
+				$ans .= &quot;&lt;TR&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=1&gt;&lt;center&gt;&lt;a href=?readfrom=$req{&#x27;READFROM&#x27;}&amp;readto=$req{&#x27;READTO&#x27;}&amp;authority=$req{&#x27;AUTHORITY&#x27;}&amp;action=sanitarize&amp;what=$i&gt;удалить&lt;/a&gt;&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=2&gt;&lt;center&gt;$current{&#x27;Browser&#x27;}&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot; &lt;TD colSpan=1&gt;&lt;center&gt;$current{&#x27;From&#x27;}&lt;/center&gt;&lt;/TD&gt;\n&quot;;
+				$ans .= &quot;&lt;/TR&gt;\n&quot;;
+				}
+				$ans .= &quot;&lt;/TABLE&gt;\n&quot;;
+		    }
+		}
+		%current = &#x27;&#x27;; #убили хеш
+	}
+	until (eof);
+	$ans .= &quot;&lt;font color=red&gt;Гостевая книга пуста - добавьте хотя бы одну запись!&lt;/font&gt;&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+	$ans .= &quot;\n\n&lt;!-- here guestbook ends --&gt;\n\n&quot;;
+
+	return $ans;
+}
+
+################################################################################################
+
+sub SanitarizeGuestBook
+{
+   	my($ans, $i, $str);
+    $ans = &quot;&lt;font color=red&gt;Обработка гостевой книги:&lt;/font&gt;&lt;br&gt;\n&quot;;
+    open(newgb,&quot;&gt;&gt;guestbook.tmp&quot;) || return $ans.&quot;&lt;font color=red&gt;Не могу создать новый файл записей!&lt;/font&gt;&lt;br&gt;\n&quot;;
+	open(gb, &quot;guestbook.txt&quot;) || return $ans.&quot;&lt;font color=red&gt;Не могу открыть старый файл записей!&lt;/font&gt;&lt;br&gt;\n&quot;;
+	$i = 0;
+	$count = 0;
+	do
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи или файла
+	    {
+		    chomp($str);
+		    $current{$`} = $&#x27; if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш
+		}
+		if (%current)
+		{
+			$i++;
+			if ($i != $_[0])
+			{
+				$count++;
+				print newgb &quot;\n&lt;gbrec&gt;\n&quot;;
+				foreach $key (sort(keys %current))
+				{
+					print newgb &quot;$key &gt; $current{$key}\n&quot;;
+				}
+				print newgb &quot;&lt;\/gbrec&gt;\n&quot;;
+		    }
+		}
+		%current = &#x27;&#x27;; #убили хеш
+	}
+	until (eof gb);
+	$ans .= &quot;&lt;font color=red&gt;Гостевая книга пуста - нечего обрабатывать!&lt;/font&gt;&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+   	close(newgb);
+
+    unlink &quot;guestbook.txt&quot;;
+    rename &quot;guestbook.tmp&quot;, &quot;guestbook.txt&quot;;
+
+	open(st, &quot;&gt;stat.dat&quot;) || return $ans.&quot;&lt;font color=red&gt;Не могу записать в файл данных!&lt;/font&gt;&lt;br.\n&quot;;
+		print st $count.&quot;\n&quot;;
+	close(st);
+
+	return $ans.&quot;Обработано $count записей (было $i).\n&quot;;
+}
+
+################################################################################################
+
+sub Numbers
+{
+   	my($ans, $i, $k);
+  	$ans = &quot;\n\n&lt;!-- here numbers begin --&gt;\n\n&quot;;
+	$ans .= &quot;&lt;div style=&#x27;width=90%;&#x27;&gt;\n&quot;;
+	for ($i = 1; $i &lt; $count; $i+=$_[0])
+	{
+		$k = $i + $_[0];
+		$k = $count if $k &gt; $count;
+		if ($i &gt;= $req{&#x27;READFROM&#x27;} &amp;&amp; $k &lt;= $req{&#x27;READTO&#x27;})
+		{
+			$ans .= &quot;[$i..$k]\n&quot;;
+		}
+		else
+		{
+	        $ans .= &quot;&lt;a href=?readfrom=$i&amp;readto=$k&quot; . (($imboss) ? &quot;&amp;authority=$req{&#x27;AUTHORITY&#x27;}&quot; : &quot;&quot;) . &quot;&gt;[$i..$k]&lt;/a&gt;\n&quot;;
+	    }
+	}
+   	$ans .= &quot;&lt;/div&gt;\n&quot;;
+   	$ans .= &quot;\n\n&lt;!-- here numbers end --&gt;\n\n&quot;;
+   	return $ans;
+}
+
+################################################################################################
+
+sub CheckBoss
+{
+	my($pw,$ans);
+	if (open(pwf, &quot;passwd.dat&quot;))
+	{
+		$pw = &lt;pwf&gt;;
+		$ans = ($_[0] eq $pw);
+      	close(pwf);
+	}
+	else
+	{
+		open(pwf, &quot;&gt;passwd.dat&quot;);
+		print pwf $_[0];
+		$ans = true;
+      	close(pwf);
+	}
+	return $ans;
+}
+
+################################################################################################
+
+sub Error
+{
+	print $_[0];
+}
+
+################################################################################################
+
+if ($ENV{&#x27;REQUEST_METHOD&#x27;} =~ /get/i)
+{
+	$q = ($ENV{&#x27;QUERY_STRING&#x27;});
+}
+if ($ENV{&#x27;REQUEST_METHOD&#x27;} =~ /post/i)
+{
+	sysread STDIN, $q = ($ENV{&#x27;QUERY_STRING&#x27;}), $ENV{&#x27;CONTENT_LENGTH&#x27;};
+}
+
+%req = ReqDecoder($q);
+
+################################################################################################
+
+print &quot;Content-Type: text/html\n\n&quot;;
+print &lt;&lt;EOF;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Гостевая книга&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;http://127.0.0.1/physfac/html/style.css&quot; type=&quot;text/css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Гостевая книга&lt;/h1&gt;
+&lt;h3&gt;Не ругайтесь громко!&lt;/h3&gt;
+EOF
+
+################################################################################################
+
+$imboss = CheckBoss($req{&#x27;AUTHORITY&#x27;}) if ($req{&#x27;AUTHORITY&#x27;});
+
+open(st, &quot;stat.dat&quot;) || Error(&quot;&lt;font color=red&gt;Файла данных нет - необходимо инициализировать счетчик!&lt;/font&gt;&lt;br&gt;\n&quot;);
+	$count = &lt;st&gt;;
+   	$count = $&amp; if ($count =~ /\d+/g);
+close(st);
+
+$succAdd = &quot;true&quot;;
+
+$a = WriteBook if ($req{&#x27;ACTION&#x27;} =~ /add/i);
+
+$b = SanitarizeGuestBook($req{&#x27;WHAT&#x27;}) if ($req{&#x27;ACTION&#x27;} =~ /sanitarize/i &amp;&amp; $imboss);
+
+if (!$req{&#x27;READFROM&#x27;} || !$req{&#x27;READTO&#x27;} || $req{&#x27;READFROM&#x27;} &gt; $count || $req{&#x27;READFROM&#x27;} &gt; $req{&#x27;READTO&#x27;})
+{
+	$req{&#x27;READFROM&#x27;} = $count - int($count/20) - 10;
+	$req{&#x27;READTO&#x27;} = $count;
+}
+
+print &quot;&lt;hr&gt;&quot;;
+print Numbers(int($count/20) + 10);
+print &quot;&lt;hr&gt;&quot;;
+
+print &quot;$b&lt;hr&gt;&quot; if ($b);
+print GuestBook($req{&#x27;READFROM&#x27;}, $req{&#x27;READTO&#x27;});
+
+print &quot;&lt;hr&gt;&quot;;
+print Numbers(int($count/20) + 10);
+print &quot;&lt;hr&gt;&quot;;
+print &quot;&lt;a href=?action=sanitarize&amp;authority=boss&gt;|Почистить книгу|&lt;/a&gt;&lt;a href=?&gt;|Выйти из режима хозяина|&lt;/a&gt;&lt;hr&gt;&quot; if ($imboss);
+print &quot;$a&lt;hr&gt;&quot; if ($a);
+
+################################################################################################
+
+if ($succAdd eq &quot;true&quot;)
+{
+print &lt;&lt;EOF;
+
+Добавьте новую запись:
+&lt;form action=http://127.0.0.1/cgi-bin/scr.cgi method=post&gt;
+&lt;table class=&#x27;simple&#x27;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;ваше имя:&lt;input name=nick&gt;&lt;font color=#f09900&gt;*&lt;/font&gt;&lt;/center&gt;&lt;/td&gt;
+    &lt;td rowspan=4&gt;&lt;textarea cols=50 name=msg rows=7 width=&quot;100%&quot;&gt;&lt;/textarea&gt;&lt;font color=#f09900&gt;*&lt;/font&gt;&lt;/td&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;ваш mail:&lt;input name=mail&gt;&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;страница:&lt;input name=page&gt;&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;&lt;font color=#f09900&gt;*&lt;/font&gt; - обязательные
+      поля&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=2&gt;
+    &lt;center&gt;
+    &lt;input name=action type=hidden value=add&gt;
+    &lt;input type=submit value=&quot;добавить запись&quot;&gt;
+    &lt;/center&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+
+EOF
+}
+else
+{
+$req{&#x27;MSG&#x27;} =~ s/&lt;br&gt;/\n/g;
+print &lt;&lt;EOF;
+
+Исправьте свою запись:
+&lt;form action=http://127.0.0.1/cgi-bin/scr.cgi method=post&gt;
+&lt;table class=&#x27;simple&#x27;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;ваше имя:&lt;input name=nick value=&quot;$req{&#x27;NICK&#x27;}&quot;&gt;&lt;font color=#f09900&gt;*&lt;/font&gt;&lt;/center&gt;&lt;/td&gt;
+    &lt;td rowspan=4&gt;&lt;textarea cols=50 name=msg rows=7 width=&quot;100%&quot;&gt;$req{&#x27;MSG&#x27;}&lt;/textarea&gt;&lt;font color=#f09900&gt;*&lt;/font&gt;&lt;/td&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;ваш mail:&lt;input name=mail value=&quot;$req{&#x27;MAIL&#x27;}&quot;&gt;&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;страница:&lt;input name=page value=&quot;$req{&#x27;PAGE&#x27;}&quot;&gt;&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;center&gt;&lt;font color=#f09900&gt;*&lt;/font&gt; - обязательные
+      поля&lt;/center&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td colspan=2&gt;
+    &lt;center&gt;
+    &lt;input name=action type=hidden value=add&gt;
+    &lt;input type=submit value=&quot;добавить запись&quot;&gt;
+    &lt;/center&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+
+EOF
+}
+
+################################################################################################
+
+print &lt;&lt;EOF;
+&lt;hr&gt;
+&lt;p&gt;О всех ошибках просьба сообщать на e-mail: &lt;A href=&quot;mailto:aks\@nm.ru?subject=webmaster&quot;&gt;aks\@nm.ru&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+EOF
+
+################################################################################################
+			</code></pre>
+		</div>
+    </div>
+</body>
+</html>

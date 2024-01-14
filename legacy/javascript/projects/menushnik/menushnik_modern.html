@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Menushnik Modern</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <meta name="description" content="Menushnik Modern — A hierarchical navigation menu system with unlimited nesting levels, SVG icons, and automatic dark mode support.">
+  <style>
+    /* Reset */
+    *,::before,::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* CSS Variables */
+    :root {
+      --bg: #f0f9ff;
+      --bg-elevated: #ffffff;
+      --text: #0c4a6e;
+      --text-muted: #075985;
+      --accent: #ec4899;
+      --accent-hover: #db2777;
+      --border: #bae6fd;
+      --menu-hover: #e0e7ff;
+      --shadow-drop: 4px 4px 16px rgba(236, 72, 153, 0.15);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --bg-elevated: #1e293b;
+        --text: #cbd5e1;
+        --text-muted: #94a3b8;
+        --accent: #f472b6;
+        --accent-hover: #ec4899;
+        --border: #334155;
+        --menu-hover: #334155;
+        --shadow-drop: 4px 4px 24px rgba(244, 114, 182, 0.3);
+      }
+    }
+
+    /* Base Styles */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:active {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+
+    hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* Menu Container */
+    .pdmenu {
+      padding: 1.5rem 2rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pdmenu ul {
+      display: inline-block;
+      list-style: none;
+    }
+
+    /* Menu Items */
+    .pdmenu li {
+      position: relative;
+      background: var(--bg-elevated);
+      color: var(--text);
+      border-radius: 21px;
+      transition: background .15s ease-out, color .15s ease-out, border-radius .15s ease-out, filter .2s ease-out;
+    }
+
+    .pdmenu li:hover {
+      background: var(--menu-hover);
+      color: var(--accent-hover);
+    }
+
+    .pdmenu > ul > li.has-children:hover {
+      border-radius: 21px 0 0 21px;
+      filter: drop-shadow(var(--shadow-drop));
+    }
+
+    .pdmenu li li:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+
+    .pdmenu li li:first-child {
+      border-radius: 0 21px 0 0;
+    }
+
+    .pdmenu li li:last-child {
+      border-radius: 0 0 21px 21px;
+    }
+
+    .pdmenu li li:last-child:first-child {
+      border-radius: 0 21px 21px 0;
+    }    
+
+    .pdmenu li li.has-children:first-child:hover {
+      border-radius: 0 0 0 0;
+    }
+
+    .pdmenu li li.has-children:last-child:hover {
+      border-radius: 0 0 0 21px;
+    }
+
+    .pdmenu li li.has-children:last-child:first-child:hover {
+      border-radius: 0 0 0 0;
+    }    
+
+    /* Menu Links */
+    .pdmenu li a {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      padding: 8px 14px;
+      white-space: nowrap;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Menu Icons */
+    .pdmenu li a svg {
+      width: 1em;
+      height: 1em;
+      margin-right: .5em;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    /* Menu Arrow Indicator */
+    .pdmenu li:has(> ul) > a::after {
+      content: ' ›';
+      margin-left: auto;
+      padding-left: .5em;
+      color: var(--text-muted);
+    }
+
+    /* Submenu Visibility */
+    .pdmenu li > ul {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      min-width: 12rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease-in-out, visibility .15s ease-in-out;
+    }
+
+    .pdmenu li:hover > ul {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Content Styles */
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 3rem;
+    }
+
+    .content h1,
+    .content h2 {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .content h1 {
+      font-size: 1.75rem;
+      margin-bottom: .5rem;
+    }
+
+    .content h2 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: .75rem;
+    }
+
+    .content p,
+    .content ul,
+    .footer {
+      color: var(--text-muted);
+    }
+
+    .content p,
+    .footer {
+      margin-bottom: .75rem;
+    }
+
+    .content ul {
+      list-style-position: inside;
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .content li {
+      margin-bottom: .4rem;
+      line-height: 1.6;
+    }
+
+    .content code {
+      color: var(--accent);
+      background: var(--menu-hover);
+      padding: .2em .4em;
+      border-radius: 6px;
+      font-size: .9em;
+    }
+
+    .footer {
+      font-size: .9rem;
+      margin-top: 1rem;
+    }
+
+    .footer a {
+      color: var(--accent);
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+  </script>
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+  </script>
+</head>
+<body>
+  <div class="pdmenu">
+    <ul id="menu-root">
+        <li class="has-children">
+          <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>Menu</a>
+          <ul>
+            <li>
+              <a title="Home page" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</a>
+            </li>
+            <li class="has-children">
+              <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Me</a>
+              <ul>
+                <li>
+                  <a title="My thoughts and feelings" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>My Diary</a>
+                </li>
+                <li>
+                  <a title="My hobbies and interests" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>About Me</a>
+                </li>
+                <li>
+                  <a title="My photo and skills" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Resume</a>
+                </li>
+                <li>
+                  <a title="My resume in MS Word format" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Resume for Employer</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Photos</a>
+              <ul>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Friends and Toksovo</a>
+                  <ul>
+                    <li>
+                      <a title="Photos not categorized" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Miscellaneous</a>
+                    </li>
+                    <li>
+                      <a title="Toksovo, my dacha" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Toksovo, Summer 2002</a>
+                    </li>
+                    <li>
+                      <a title="Once we met in winter" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>St. Petersburg, Winter 2003</a>
+                    </li>
+                    <li>
+                      <a title="Toksovo, my dacha" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Toksovo, Summer 2003</a>
+                    </li>
+                    <li>
+                      <a title="New Year and drunken debauchery at my home" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>At My Home</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a title="Not what you think, school photos" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>School Group Photo</a>
+                </li>
+                <li>
+                  <a title="Photos from Netherlands" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Netherlands, Summer 2003</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>My Sites</a>
+              <ul>
+                <li>
+                  <a title="Pages with Rei drawings" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Rei Ayanami</a>
+                </li>
+                <li>
+                  <a title="Currently not working" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>PhysFac@RU</a>
+                </li>
+                <li>
+                  <a title="How to properly compress video in MPEG4 format" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.11-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7z"/></svg>MPEG4EVER</a>
+                </li>
+                <li>
+                  <a title="Site about Toksovo village" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Toksovo</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>Scripts</a>
+              <ul>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>PhysFac@RU</a>
+                  <ul>
+                    <li>
+                      <a title="Tetris" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>tetris</a>
+                    </li>
+                    <li>
+                      <a title="Volleyball" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>chasBall</a>
+                    </li>
+                    <li>
+                      <a title="Brownian motion" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>brown</a>
+                    </li>
+                    <li>
+                      <a title="Maxwell-Boltzmann distribution" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>maxwell</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.42.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg>JS Debug</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Questionnaire</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Decoder</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Encoder</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>Arranger</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>RegionMaker</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>Talking Horseradish</a>
+                </li>
+                <li>
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Others</a>
+                </li>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.11-.9-2-2-2h-8l-2-2z"/></svg>Not Mine</a>
+                  <ul>
+                    <li>
+                      <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>clock</a>
+                    </li>
+                    <li>
+                      <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>msAgent</a>
+                    </li>
+                    <li>
+                      <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>snow</a>
+                    </li>
+                  </ul>
+                </li>
+
+              </ul>
+            </li>
+            <li class="has-children">
+              <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.11-.9-2-2-2h-8l-2-2z"/></svg>Miscellaneous</a>
+              <ul>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM8 18H4v-2h4v2zm0-4H4v-2h4v2zm0-4H4V8h4v2zm6 12h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V8h4v2zm6 12h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V8h4v2z"/></svg>Comics</a>
+                  <ul>
+                    <li class="has-children">
+                      <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>About Me</a>
+                      <ul>
+                        <li>
+                          <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16.5c-.8 0-1.54.5-1.85 1.26L12.5 14H10v6h10zM5.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm2 16v-7H3.5c-.8 0-1.5.5-1.8 1.2L0 18v6h7.5z"/></svg>My Family</a>
+                        </li>
+                        <li>
+                          <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>My Problems</a>
+                        </li>
+                        <li>
+                          <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>My Thoughts</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a title="A somewhat sad story" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>About Pooh</a>
+                    </li>
+                    <li>
+                      <a title="Like, smart thoughts" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Metaphysics</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Essays</a>
+                  <ul>
+                    <li>
+                      <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>New January</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="has-children">
+                  <a href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Graphics</a>
+                  <ul>
+                    <li>
+                      <a title="My artwork in Photoshop" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>My Works</a>
+                    </li>
+                    <li>
+                      <a title="Print design for compact discs" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>Compact Discs</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a title="Tetris on EcmaScript!" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 4h8v4h-8v-4z"/></svg>Tetris</a>
+                </li>
+                <li>
+                  <a title="My view on the gentleman's software set" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>Software</a>
+                </li>
+                <li>
+                  <a title="Skins for Winamp" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Skins</a>
+                </li>
+                <li>
+                  <a title="Currently not working" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>Lab Reports</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a title="Link collection" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>Links</a>
+            </li>
+            <li>
+              <a title="Sometimes I write my thoughts here" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>Chat</a>
+            </li>
+            <li>
+              <a title="You can always leave me a message here" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>Guestbook</a>
+            </li>
+            <li>
+              <a title="If you need to contact me personally - my email" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Send&nbsp;Email</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <hr>
+    <h1>Menushnik Modern</h1>
+    <p>A modernized hierarchical navigation menu system with unlimited nesting levels. Hover over menu items to reveal submenus.</p>
+
+    <h2>Features</h2>
+    <ul>
+      <li>Unlimited nesting levels</li>
+      <li>SVG icons for all menu items</li>
+      <li>Automatic light/dark mode support</li>
+      <li>Pure CSS hover effects (no JavaScript required)</li>
+      <li>Accessible markup with semantic HTML</li>
+      <li>Smooth transitions and animations</li>
+    </ul>
+
+    <h2>Technical Details</h2>
+    <p>This menu system uses modern CSS features including:</p>
+    <ul>
+      <li>CSS custom properties (variables) for theming</li>
+      <li><code>:has()</code> pseudo-class for parent selectors</li>
+      <li>CSS transitions for smooth animations</li>
+      <li>SVG icons with <code>currentColor</code> for automatic color inheritance</li>
+      <li>Media queries for dark mode detection</li>
+    </ul>
+
+    <hr>
+    <p class="footer">Original concept by <strong>Kirill Arkhipenko</strong>. Modernized implementation &copy; <a href="https://kusaku.su">kusaku</a> — Open source and free to use.</p>
+  </div>
+</body>
+</html>

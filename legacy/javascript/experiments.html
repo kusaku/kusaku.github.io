@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiments - Legacy Projects</title>
+<meta name="description" content="JavaScript experiments and widgets from early web development days">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, JavaScript, experiments">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/experiments.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Experiments - Legacy Projects - Kirill Arkhipenko">
+<meta property="og:description" content="JavaScript experiments and widgets from early web development days. Author: Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/experiments.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Experiments - Legacy Projects - Kirill Arkhipenko">
+<meta name="twitter:description" content="JavaScript experiments and widgets from early web development days. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Modern card styling */
+        .project-card {
+            transition: all 0.2s ease-in-out;
+        }
+        html.light .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+        }
+        html.light .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-6">
+                <a href="/legacy/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to legacy projects
+                </a>
+            </nav>
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Experiments</h1>
+            <p class="text-lg text-gray-600 max-w-3xl">A collection of JavaScript experiments and widgets from early web development days</p>
+        </header>
+
+        <!-- Clock -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Clock <span class="text-lg font-normal text-gray-600">(1999)</span></h2>
+            <p class="text-gray-600 mb-2">An animated analog clock widget that displays the current time with hour, minute, and second hands. The clock follows your mouse movement, creating a dynamic interactive experience.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Historical context: This was created during the early days of JavaScript when dynamic web pages were a novelty. It was a time when JavaScript "magic" was beginning to emerge, and many people were amazed by the new possibilities of creating interactive, animated content directly in the browser. Simple effects like clocks that followed the mouse cursor were impressive demonstrations of what web pages could do beyond static text and images.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/experiments/clock/clock.html" class="text-blue-600 hover:underline">Original Version →</a> - Requires old browsers (Netscape/IE)</li>
+                    <li><a href="/legacy/javascript/experiments/clock/clock_modern.html" class="text-blue-600 hover:underline">Clock Modern →</a> - Works in modern browsers</li>
+                </ul>
+                <p class="text-sm text-gray-600"><strong>Note:</strong> The original version uses Netscape layers and Internet Explorer-specific code, which no longer work in modern browsers. The modernized version recreates the same functionality using modern web APIs.</p>
+            </div>
+        </div>
+
+        <!-- Pythagorean Table -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Pythagorean Table <span class="text-lg font-normal text-gray-600">(2000)</span></h2>
+            <p class="text-gray-600 mb-2">A multiplication table generator that displays tables in custom number bases (up to base 36). Converts decimal numbers to any base and generates a complete multiplication table, demonstrating number system conversions and arithmetic in different bases.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">An educational tool exploring number base conversions and arithmetic operations in different numeral systems. Uses digits 0-9 and letters a-z to represent values up to base 36, showing how multiplication tables work across different number systems.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/pyphagoer.html" class="text-blue-600 hover:underline font-medium">Open Pythagorean Table →</a>
+            </div>
+        </div>
+
+        <!-- Auto Rollover Menu -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Auto Rollover Menu <span class="text-lg font-normal text-gray-600">(2001)</span></h2>
+            <p class="text-gray-600 mb-2">An image rollover menu system that automatically handles mouse hover effects. Images change on hover (off → on → active states) and revert on mouseout. Supports multiple image states per menu item and automatic image preloading for smooth transitions.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Created before CSS :hover pseudo-classes were widely supported. Uses JavaScript to swap image sources on mouse events, with automatic detection of image state sequences from element attributes.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/autorollover/menu2.html" class="text-blue-600 hover:underline font-medium">Open Auto Rollover Menu Demo →</a>
+            </div>
+        </div>
+
+        <!-- Chess -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Chess <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <p class="text-gray-600 mb-2">A chess game implementation in JavaScript with move validation, piece movement rules, and AI opponent. Features object-oriented design with extensible piece classes, move cost matrix evaluation, and recursive game tree search for computer moves.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">An experimental chess implementation exploring object-oriented JavaScript patterns, move validation algorithms, and basic AI using minimax-like evaluation. The code demonstrates piece movement patterns (rook, bishop, queen, knight, pawn, king), move validation, and a simple computer opponent that evaluates move costs.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/chess.html" class="text-blue-600 hover:underline font-medium">Open Chess →</a>
+            </div>
+        </div>
+
+        <!-- Neural Network -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Neural Network <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <p class="text-gray-600 mb-2">Interactive neural network demonstrator with backpropagation learning. Train networks to solve boolean logic problems (XOR, AND, OR) with real-time visualization. Features configurable architecture, dynamic weight visualization, and live training metrics. Watch the network learn through backpropagation as weights and activations update in real-time.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">A modern neural network implementation using HTML5 Canvas, ES6+ JavaScript, and CSS3. Demonstrates forward propagation, backpropagation learning, and network visualization. Supports custom boolean expressions with automatic truth table generation. Built with modern web technologies for educational purposes.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/experiments/neuron/neuron.html" class="text-blue-600 hover:underline">Legacy Version (Peedy) →</a> - Original 2002 implementation with Microsoft Agent</li>
+                    <li><a href="/legacy/javascript/experiments/neuron/neuron_modern.html" class="text-blue-600 hover:underline">Modern Version →</a> - Interactive backpropagation demonstrator with boolean logic training</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Image Popup -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Image Popup <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <p class="text-gray-600 mb-2">A lightweight image popup/lightbox utility that opens images in new browser windows. Supports fixed or auto-sized windows, optional close button, and automatic window closing after a specified delay. A simple alternative to modern lightbox libraries.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Created before modern lightbox libraries existed. Provides basic image popup functionality using window.open(), with options for window sizing, close buttons, and auto-close timers.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/imgopen/imgopen.html" class="text-blue-600 hover:underline font-medium">Open Image Popup Demo →</a>
+            </div>
+        </div>
+
+        <!-- Animation Test -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Animation Test <span class="text-lg font-normal text-gray-600">(2006)</span></h2>
+            <p class="text-gray-600 mb-2">A frame-by-frame animation test demonstrating sequential image loading and display. Loads a series of numbered PNG images (d00.png through d21.png) sequentially, displays them with timing, and includes an activity log showing frame loading progress. Tests animation loop functionality and image preloading. This is a part of video compression experiment.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">An experiment with frame-based animations before modern animation libraries existed. Tests image loading, timing, visibility management, and animation loop control.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/anim/testanim.html" class="text-blue-600 hover:underline font-medium">Open Animation Test →</a>
+            </div>
+        </div>
+
+        <!-- Floaters -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Floaters <span class="text-lg font-normal text-gray-600">(2006)</span></h2>
+            <p class="text-gray-600 mb-2">A drag-and-drop floating window system for creating movable, resizable, and collapsible UI elements. Windows can be dragged around the page, collapsed/expanded with a shrink button, and support transparent backgrounds. Includes automatic initialization for elements with the "floater" name attribute.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">An early experiment with dynamic HTML positioning and drag-and-drop interactions before modern CSS and JavaScript APIs. Demonstrates absolute positioning, mouse event handling, and creating desktop-like window widgets in the browser.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/experiments/floater/floaters.html" class="text-blue-600 hover:underline">Floaters Demo →</a> - Main demo with multiple floating windows</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Progress Bar <span class="text-lg font-normal text-gray-600">(2006)</span></h2>
+            <p class="text-gray-600 mb-2">A draggable progress bar widget with windowshade (collapse/expand) functionality. Features drag-and-drop positioning, transparent backgrounds, and integration with menu systems. Demonstrates reusable UI component patterns.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">A UI component experiment combining progress bar functionality with drag-and-drop window management. Shows how to create reusable, draggable widgets before modern component frameworks existed.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/experiments/progressbar/progressbar.html" class="text-blue-600 hover:underline font-medium">Open Progress Bar Demo →</a>
+            </div>
+        </div>
+
+        <!-- Yandex Homework -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Yandex Homework <span class="text-lg font-normal text-gray-600">(2011)</span></h2>
+            <p class="text-gray-600 mb-2">This was a Yandex homework task from 2011 to check HTML5, CSS, and JavaScript skills for web development. The tasks demonstrate proficiency in CSS2/CSS3 layouts and JavaScript programming.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">CSS Layout Tasks:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/experiments/yandex/yandex-css2-layout.html" class="text-blue-600 hover:underline">CSS2 Layout →</a> - Layout using CSS2 techniques</li>
+                    <li><a href="/legacy/javascript/experiments/yandex/yandex-css3-layout.html" class="text-blue-600 hover:underline">CSS3 Layout →</a> - Layout using CSS3 techniques</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

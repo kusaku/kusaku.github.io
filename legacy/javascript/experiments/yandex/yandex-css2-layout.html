@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<title></title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<style>
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+  color: #000000;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 100;
+}
+
+p {
+  line-height: 1.5em;
+  text-indent: 1.2em;
+}
+
+p > * {
+  line-height: normal;
+  text-indent: 0;;
+}
+
+.column {
+  width: 80%;
+  margin: 30px auto;
+  overflow: auto;
+}
+
+.col1, .col2 {
+  width: 50%;
+}
+
+.col1 {
+  float: left;
+  clear: left;
+}
+
+.col2 {
+  float: right;
+  clear: right;
+}
+
+.col1 > p, .col2 > p {
+  padding-right: 80px;
+}
+
+table {
+  margin: 0 auto;
+}
+
+.mdash {
+  padding: 0;
+  margin-left: -13px;
+}
+
+.mdash li {
+  line-height: 1.5;
+  list-style: none;
+}
+
+.mdash li:before {
+  content: '';
+  width: 9px;
+  height: 1px;
+  background-color: #858585;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+a[rel] {
+  color: #353434;
+  border-bottom: 1px dashed #353434;
+}
+
+a[href] {
+  color: #0070ed;
+  border: none;
+}
+
+
+/* Controls */
+
+.control * {
+  font-size: 0;
+}
+
+.rating-stars {
+  display: inline-block;
+  zoom: 1;
+  vertical-align: middle;
+  width: 90px;
+  height: 18px;
+  margin: 3px 5px;
+}
+
+.rating-stars .rating-star {
+  display: inline-block;
+  zoom: 1;
+}
+
+.rating-stars .rating-star > a {
+  cursor: pointer;
+  display: inline-block;
+  zoom: 1;
+  width: 16px;
+  height: 16px;
+  margin: 1px;
+  background: url("gfx.png") no-repeat 0 0;
+}
+
+.rating-stars .rating-star:hover > a,
+.rating-stars .rating-star-hover > a,
+.rating-stars .rating-star-on > a {
+  background-position: 0 -16px;
+}
+
+.rating-stars .rating-star:hover .rating-star-on > a {
+  background-position: 0 0;
+}
+
+.rating-stars .rating-star-on:hover > a {
+  background-position: 0 -16px !important;
+}
+
+.progress-bar {
+  height: 13px;
+  width: 210px;
+  display: inline-block;
+  zoom: 1;
+  vertical-align: middle;
+  position: relative;
+  margin: 3px 5px;
+}
+
+.progress-bar .progress-bar-place {
+  display: block;
+  height: 13px;
+  background: url("gfx.png") repeat-x 0 -32px;
+}
+
+.progress-bar .progress-bar-place-left {
+  display: block;
+  background: url("gfx.png") no-repeat 0% -45px;
+  padding-left: 16px;
+}
+
+.progress-bar .progress-bar-place-right {
+  display: block;
+  background: url("gfx.png") no-repeat 100% -58px;
+  padding-right: 16px;
+}
+
+.progress-bar-meter {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress-bar .progress-bar-bar {
+  display: block;
+  height: 13px;
+  background: url("gfx.png") repeat-x 0 -71px;
+  margin: 0 16px;
+}
+
+.progress-bar .progress-bar-bar-left {
+  display: block;
+  height: 13px;
+  background: url("gfx.png") no-repeat 0% -84px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  right: 50%;
+}
+
+.progress-bar .progress-bar-bar-right {
+  display: block;
+  height: 13px;
+  background: url("gfx.png") no-repeat 100% -97px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  right: 0;
+}
+
+.progress-bar .progress-bar-text {
+  text-align: center;
+  line-height: 13px;
+  font-size: 9px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.button {
+  display: inline-block;
+  zoom: 1;
+  vertical-align: middle;
+  position: relative;
+  margin: 0 2px;
+}
+
+.button-button {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  width: 0;
+  border: 0 none;
+  height: 100%;
+  opacity: 0;
+  outline: 0 none;
+  padding: 0;
+  width: 100%;
+}
+
+.button .button-knob {
+  display: inline-block;
+  zoom: 1;
+  line-height: 24px;
+  height: 24px;
+  padding: 0 7px;
+  background: url("gfx.png") repeat-x 0% -110px;
+  font-size: 11px;
+  text-shadow: 1px 1px 0 #FFFFFF;
+  white-space: nowrap;
+}
+
+.button .button-knob-left {
+  display: inline-block;
+  zoom: 1;
+  background: url("gfx.png") no-repeat 0% -134px;
+  padding-left: 16px;
+}
+
+.button .button-knob-right {
+  display: inline-block;
+  zoom: 1;
+  background: url("gfx.png") no-repeat 100% -158px;
+  padding-right: 16px;
+}
+
+.button .button-button:focus + * .button-knob {
+  background-position: 0 -326px;
+}
+
+.button .button-button:focus + .button-knob-left {
+  background-position: 0 -350px;
+}
+
+.button .button-button:focus + * .button-knob-right {
+  background-position: 100% -374px;
+}
+
+.button .button-button:hover + * .button-knob {
+  background-position: 0 -254px;
+}
+
+.button .button-button:hover + .button-knob-left {
+  background-position: 0 -278px;
+}
+
+.button .button-button:hover + * .button-knob-right {
+  background-position: 100% -302px;
+}
+
+.button .button-button:active + * .button-knob {
+  background-position: 0 -182px;
+  text-shadow: none;
+}
+
+.button .button-button:active + .button-knob-left {
+  background-position: 0 -206px;
+}
+
+.button .button-button:active + * .button-knob-right {
+  background-position: 100% -230px;
+}
+
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Yandex CSS2 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css2-layout.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css2-layout.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css2-layout.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Legacy - Kirill Arkhipenko">
+<meta property="og:description" content="Yandex CSS2 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css2-layout.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Legacy - Kirill Arkhipenko">
+<meta name="twitter:description" content="Yandex CSS2 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+<body>
+<div class="column">
+  <p>Рейтинг -
+  <span class="control rating-stars">
+    <span class="rating-star rating-star-on"><a title="1"></a>
+      <span class="rating-star rating-star-on"><a title="2"></a>
+        <span class="rating-star"><a title="3"></a>
+          <span class="rating-star"><a title="4"></a>
+            <span class="rating-star"><a title="5"></a></span>
+          </span>
+        </span>
+      </span>
+    </span>
+  </span>, прогресс-бар -
+  <span class="control progress-bar">
+    <span class="progress-bar-place-left">
+      <span class="progress-bar-place-right">
+        <span class="progress-bar-place"></span>
+      </span>
+    </span>
+    <span class="progress-bar-meter" style="width: 20%">
+      <span class="progress-bar-bar"></span>
+      <span class="progress-bar-bar-left"></span>
+      <span class="progress-bar-bar-right"></span>
+    </span>
+    <span class="progress-bar-text">20%</span>
+  </span>
+  и кнопка -
+  <span class="control button">
+  <button class="button-button"></button>
+  <span class="button-knob-left">
+    <span class="button-knob-right">
+      <span class="button-knob">Кнопка</span>
+    </span>
+  </span>
+  </span>
+  </p>
+
+  <table>
+    <tr>
+      <td>
+      <span class="control button">
+        <button class="button-button"></button>
+        <span class="button-knob-left">
+          <span class="button-knob-right">
+            <span class="button-knob">Кнопка 1</span>
+          </span>
+        </span>
+      </span>
+      </td>
+      <td>
+      <span class="control button">
+        <button class="button-button"></button>
+        <span class="button-knob-left">
+          <span class="button-knob-right">
+            <span class="button-knob">Кнопка 2</span>
+          </span>
+        </span>
+      </span>
+      </td>
+      <td>
+      <span class="control button">
+        <button class="button-button"></button>
+        <span class="button-knob-left">
+          <span class="button-knob-right">
+            <span class="button-knob">Кнопка 3</span>
+          </span>
+        </span>
+      </span>
+      </td>
+    </tr>
+  </table>
+
+  <ul>
+    <li>
+    <span class="control button">
+      <button class="button-button"></button>
+      <span class="button-knob-left">
+        <span class="button-knob-right">
+          <span class="button-knob">Кнопка с очень длинным текстом, которая никуда не помещается, но тем не менее существует.</span>
+        </span>
+      </span>
+    </span>
+    </li>
+    <li>
+    <span class="control button">
+      <button class="button-button"></button>
+      <span class="button-knob-left">
+        <span class="button-knob-right">
+          <span class="button-knob">Кнопка</span>
+        </span>
+      </span>
+    </span>
+    </li>
+    <li>
+    <span class="control button">
+      <button class="button-button"></button>
+      <span class="button-knob-left">
+        <span class="button-knob-right">
+          <span class="button-knob"></span>
+        </span>
+      </span>
+    </span>
+    </li>
+  </ul>
+
+  <h1 class="col1">Тема: &laquo;Сюжетный анапест: основные моменты&raquo;</h1>
+
+  <div class="col1">
+    <p>
+      Нельзя восстановить истинной хронологической последовательности событий, потому что мелькание мыслей параллельно. Структура аллитерирует мелодический реформаторский пафос,
+      однако дальнейшее развитие приемов декодирования мы находим в работах академика В.Виноградова. Аллюзия наблюдаема. Аллитерация, как бы это ни казалось парадоксальным,
+      параллельна. Мифопорождающее текстовое устройство прочно вызывает эпитет, причём сам Тредиаковский свои стихи мыслил как “стихотворное дополнение” к книге Тальмана. </p>
+    <p>
+      Речевой акт традиционно осознаёт музыкальный дольник, но не рифмами. Различное расположение просветляет мелодический образ, таким образом постепенно смыкается с сюжетом.
+      Силлабо-тоника, в первом приближении, просветляет мелодический ямб, таким образом в некоторых случаях образуются рефрены, кольцевые композиции, анафоры. </p>
+  </div>
+  <div class="col2">
+    <p>
+      Представленный лексико-семантический анализ является психолингвистическим в своей основе, но мифопорождающее текстовое устройство аллитерирует мифологический генезис
+      свободного стиха, об этом свидетельствуют краткость и завершенность формы, бессюжетность, своеобразие тематического развертывания. </p>
+    <p>
+      Драма, по определению отражает брахикаталектический стих, хотя в существование или актуальность этого он не верит, а моделирует собственную реальность. Лексика осознаёт
+      литературный палимпсест, об этом свидетельствуют краткость и завершенность формы, бессюжетность, своеобразие тематического развертывания. </p>
+    <ul class="mdash">
+      <li>Курит ли трупка мой</li>
+      <li><a href="#">из трупка тфой пихтишь</a></li>
+      <li><a rel="tipbox" title="Или мой кафе пил">Или мой кафе пил</a></li>
+      <li>тфой в щашешка сидишь</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

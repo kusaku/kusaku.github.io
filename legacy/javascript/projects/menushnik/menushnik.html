@@ -1,0 +1,400 @@
+<HTML>
+<HEAD>
+  <LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+  <LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+  <META HTTP-EQUIV="Content-Language" CONTENT="ru">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+  <META NAME="title" CONTENT="Menushnik - Legacy Menu System">
+  <META NAME="description" CONTENT="Menushnik - Legacy hierarchical navigation menu system by Kirill Arkhipenko.">
+  <META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Menushnik">
+  <META NAME="author" CONTENT="Kirill Arkhipenko">
+  <META NAME="robots" CONTENT="index,all">
+  <META NAME="revisit-after" CONTENT="15 days">
+  <TITLE>..::Menushnik::..</TITLE>
+  <LINK REL="stylesheet" HREF="styles.css" TYPE="text/css">
+  <SCRIPT LANGUAGE=javascript>
+  <!--
+  var script_loaded = false;
+  var desiredItem = document.location.search ? document.location.search.substr(1) : '';
+  -->
+  </SCRIPT>
+  <SCRIPT LANGUAGE=javascript SRC=menushnik_2003.js></SCRIPT>
+  <SCRIPT LANGUAGE=javascript>
+  <!--
+  // ===== MODERN BROWSERS (Chrome, Firefox, Safari, Edge) =====
+  if (!document.all && typeof fetch !== 'undefined' && typeof DOMParser !== 'undefined')
+  {
+    var enm = 0;
+    var menuHash = {};
+    var menu = null;
+    
+    function getCookie(name)
+    {
+      var i = document.cookie.indexOf(name + '=');
+      if (i === -1) return null;
+      var end = document.cookie.indexOf(';', i + name.length + 1);
+      return end === -1 ? document.cookie.slice(i + name.length + 1) : document.cookie.slice(i + name.length + 1, end);
+    }
+    
+    function setCookie(name, value, days)
+    {
+      var expires = '';
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+      }
+      document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+    }
+    
+    function parseXMLmenu(xml_node)
+    {
+      var childs = [];
+      var text = '', password = null;
+      if (!xml_node) return {id: 'itm' + enm++, text: 'XML error', subs: childs, locked: false, parent: null};
+      for (var i = 0; i < xml_node.childNodes.length; i++)
+      {
+        var node = xml_node.childNodes[i];
+        if (node.nodeType !== 1) continue;
+        switch (node.nodeName)
+        {
+          case 'menuItem': childs.push(parseXMLmenu(node)); break;
+          case 'text': text = node.textContent || ''; break;
+          case 'password': password = node.getAttribute('value'); break;
+        }
+      }
+      var id = 'itm' + enm++;
+      var item = {id: id, text: text, subs: childs, locked: !!(password && getCookie(id) !== password), parent: null, password: password};
+      menuHash[id] = item;
+      for (var j = 0; j < childs.length; j++) childs[j].parent = item;
+      return item;
+    }
+    
+    function MakeMenuModern(template)
+    {
+      fetch(template).then(function(response) {return response.text()}).then(function(xmlText) {
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        if (xmlDoc.querySelector('parsererror')) return;
+        menu = parseXMLmenu(xmlDoc.documentElement);
+        menu.isRoot = true;
+        var container = document.getElementById('__container');
+        if (!container)
+        {
+          container = document.createElement('span');
+          container.id = '__container';
+          var menuCell = document.querySelector('TD[BGCOLOR="#000000"][WIDTH="250"] TD');
+          if (menuCell) menuCell.appendChild(container);
+        }
+        if (menu.getCode) container.innerHTML = menu.getCode();
+        script_loaded = true;
+        if (typeof DoMap === 'function') setTimeout(DoMap, 100);
+        if (menu && menu.Initialize) menu.Initialize();
+        if (menu && menu.Allocate) menu.Allocate();
+        if (menu && menu.Hide) menu.Hide();
+        if (desiredItem && typeof showUnlockForm === 'function') showUnlockForm();
+      }).catch(function(e) {console.error('Menu load error:', e)});
+    }
+    
+    window.setCookie = setCookie;
+    window.getCookie = getCookie;
+    window.menuHash = menuHash;
+    MakeMenuModern('menushnik.xml');
+  }
+
+  // ===== LEGACY BROWSERS (IE5+) =====
+  // Uses menushnik.js with ActiveX for XML parsing
+  // Code continues below...
+  //-->
+  </SCRIPT>
+  <SCRIPT LANGUAGE=javascript>
+  <!--
+  // Shared functions for both modern and legacy
+  function Explore(menu, prefix)
+  {
+    if (!menu || !menu.subs) return;
+    if (menu.subs.length > 0 && !menu.locked)
+      for (var i=0; i<menu.subs.length; i++)
+        Explore(menu.subs[i], prefix + menu.text + " &gt; ");
+    else if (menu.subs.length > 0 && menu.locked)
+      s += "<LI>" + prefix + "<A href=menushnik.html?" + menu.id + ">" + menu.text + "</A> (заблокировано)</LI>\n";
+    else if (menu.locked)
+      s += "<LI>" + prefix + "<A href=menushnik.html?" + menu.id + ">(заблокировано)</A></LI>\n";
+    else
+      s += "<LI>" + prefix + menu.text + "</LI>\n";
+  }
+
+  function DoMap()
+  {
+    if (!menu) return;
+    s = "<UL>";
+    Explore(menu, "");
+    s = s.replace(/<IMG/ig, "<NOIMG");
+    s = s.replace(/<BR>/ig, " ");
+    var sitemapEl = document.getElementById('sitemap');
+    if (sitemapEl) sitemapEl.innerHTML = s + "</UL>";
+  }
+
+  function mp(o)
+  {
+    if (!o) return "";
+    var s = o.text || "";
+    while (o = o.parent)
+      s = (o.text || "") + " &gt; " + s;
+    return s;
+  }
+
+  function wt()
+  {
+    if (!desiredItem) return;
+    var itm1 = document.getElementById('itm1text');
+    var itm2 = document.getElementById('itm2text');
+    if (!itm1 || !itm2) return;
+    var text;
+    try
+    {
+      if (window.menuHash && window.menuHash[desiredItem])
+        text = mp(window.menuHash[desiredItem]);
+      else
+        text = "Загрузка...";
+    }
+    catch (Exception)
+    {
+      text = "Неверный пароль!";
+    }
+    itm1.innerHTML = "(" + text + ")";
+    itm2.innerHTML = '"' + text + '"';
+    itm1.innerHTML = itm1.innerText || itm1.textContent;
+    itm2.innerHTML = itm2.innerText || itm2.textContent;
+  }
+
+  function showUnlockForm()
+  {
+    if (!desiredItem) return;
+    var unlockForm = document.getElementById('unlockform');
+    var normalContent = document.getElementById('normalcontent');
+    if (unlockForm && normalContent)
+    {
+      unlockForm.style.display = 'block';
+      normalContent.style.display = 'none';
+    }
+  }
+
+  // Initialize
+  {
+    var SafeAttachEvt = function(my_event, handler)
+    {
+      if (eval(my_event))
+      {
+        var old_handler = eval(my_event);
+        eval(my_event + " = function(){old_handler();handler();}");
+      }
+      else
+        eval(my_event + " = function(){handler();}");
+    }
+    
+    if (document.all)
+    {
+      // Legacy IE5+
+      SafeAttachEvt("window.onload", function() {
+        setTimeout("DoMap()", 100);
+        if (desiredItem) setTimeout(showUnlockForm, 200);
+      });
+    }
+    else
+    {
+      // Modern browsers
+      window.addEventListener('load', function() {
+        setTimeout(DoMap, 100);
+        if (desiredItem) setTimeout(showUnlockForm, 200);
+      });
+    }
+  }
+
+  if (desiredItem)
+  {
+    setInterval("wt()", 1000);
+    document.onkeyup = new Function('if (event.keyCode == 106 && window.menuHash && window.menuHash[desiredItem]) text1.value = window.menuHash[desiredItem].pwd');
+    window.showUnlockForm = showUnlockForm;
+    // Try to show immediately
+    setTimeout(showUnlockForm, 50);
+    setTimeout(showUnlockForm, 200);
+    setTimeout(showUnlockForm, 500);
+  }
+  //-->
+  </SCRIPT>
+  <SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+  <SCRIPT>
+  <!--
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+  //-->
+  </SCRIPT>
+  <SCRIPT TYPE="text/javascript">
+  <!--
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+  //-->
+  </SCRIPT>
+  <LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/menushnik/menushnik.html">
+  <LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/menushnik/menushnik.html">
+  <LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/menushnik/menushnik.html">
+  <META NAME="robots" CONTENT="index, follow">
+  <META PROPERTY="og:title" CONTENT="Menushnik - Legacy Menu System">
+  <META PROPERTY="og:description" CONTENT="Menushnik - Legacy hierarchical navigation menu system by Kirill Arkhipenko.">
+  <META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/menushnik/menushnik.html">
+  <META PROPERTY="og:type" CONTENT="website">
+  <META PROPERTY="og:site_name" CONTENT="kusaku.su">
+  <META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+  <META NAME="twitter:card" CONTENT="summary">
+  <META NAME="twitter:title" CONTENT="Menushnik - Legacy Menu System">
+  <META NAME="twitter:description" CONTENT="Menushnik - Legacy hierarchical navigation menu system by Kirill Arkhipenko.">
+  <META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY BOTTOMMARGIN=0 LEFTMARGIN=0 RIGHTMARGIN=0 TOPMARGIN=0>
+  <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 HEIGHT="100%" STYLE="HEIGHT: 100%" WIDTH="100%">
+    <TR>
+      <TD HEIGHT="100%" STYLE="HEIGHT: 100%">
+        <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 HEIGHT="100%" WIDTH="100%">
+          <TR>
+            <TD BGCOLOR=#000000 WIDTH=250 VALIGN=top>
+              <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 HEIGHT="100%" STYLE="HEIGHT: 100%" WIDTH="100%">
+                <TR>
+                  <TD ALIGN=middle HEIGHT="100%" VALIGN=top STYLE="PADDING: 20px 10px">
+                    <SCRIPT LANGUAGE=javascript>
+                    <!--
+                    if (script_loaded && typeof MakeMenu !== 'undefined') MakeMenu('menushnik.xml');
+                    -->
+                    </SCRIPT>
+                    <SPAN ID=__container></SPAN>
+                  </TD>
+                </TR>
+              </TABLE>
+            </TD>
+            <TD BGCOLOR=#000000 WIDTH=1></TD>
+            <TD HEIGHT="100%" VALIGN=top>
+              <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 HEIGHT="100%" WIDTH="100%">
+                <TR>
+                  <TD BGCOLOR=#000000 CLASS=banner NOWRAP STYLE="PADDING: 10px 20px">здесь живет<BR>kusaku</TD>
+                </TR>
+                <TR>
+                  <TD HEIGHT="100%" VALIGN=top STYLE="PADDING: 20px 40px">
+                    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+                      <TR>
+                        <TD CLASS=header>Menushnik</TD>
+                      </TR>
+                      <TR>
+                        <TD CLASS=maintext HEIGHT="100%" VALIGN=top>
+                          <H3>О системе Menushnik</H3>
+                          <P><STRONG>Menushnik</STRONG> — иерархическая система навигационного меню с неограниченной вложенностью уровней, разработанная в 2003-2004 годах. Система позволяет создавать многоуровневые выпадающие меню с поддержкой защиты паролем отдельных пунктов, плавной анимацией появления/скрытия подменю и гибкой настройкой через XML-конфигурацию.</P>
+                          <P>Меню полностью работает на клиентской стороне, используя JavaScript и XML для описания структуры. Поддерживается сохранение состояния разблокированных пунктов в cookies браузера.</P>
+                          <HR>
+                          <H3>Версии меню</H3>
+                          <P>Доступны две оригинальные версии меню, каждая из которых представляет собой самостоятельную реализацию с различной архитектурой:</P>
+                          <UL>
+                            <LI><STRONG><A HREF="menushnik_2003.js">menushnik_2003.js</A></STRONG> — оригинальная версия от <STRONG>октября 2003 года</STRONG>. Первая реализация системы меню. Использует класс <CODE>PDMenu</CODE> для представления пунктов меню и вспомогательный класс <CODE>LDRect</CODE> для управления позиционированием и размерами элементов. Состояния меню: <CODE>DOWN</CODE> (раскрывается), <CODE>UP</CODE> (скрывается), <CODE>VISIBLE</CODE> (видимо), <CODE>HIDDEN</CODE> (скрыто). Требует внешние файлы <CODE>heart.js</CODE> и <CODE>tooltip.js</CODE> для полной функциональности. Подходит для использования в Internet Explorer 5+.</LI>
+                            <LI><STRONG><A HREF="menushnik_2004.js">menushnik_2004.js</A></STRONG> — обновлённая версия от <STRONG>июня 2004 года</STRONG>. Переработанная архитектура с улучшенной структурой кода. Использует класс <CODE>aksmenu</CODE> и функцию <CODE>rectify</CODE> для инициализации свойств элементов. Состояния меню: <CODE>SHOWING</CODE> (показывается), <CODE>HIDING</CODE> (скрывается), <CODE>VISIBLE</CODE> (видимо), <CODE>HIDDEN</CODE> (скрыто) — более описательные названия, отражающие процесс анимации. Добавлена поддержка двойного клика (<CODE>DBLCLICK</CODE>) для отладки (показывает информацию о состоянии пункта меню) и метод <CODE>copy()</CODE> для клонирования структуры меню. Более гибкая и расширяемая архитектура. Самодостаточна, не требует внешних зависимостей.</LI>
+                          </UL>
+                          <HR>
+                          <H3>Основные различия между версиями</H3>
+                          <UL>
+                            <LI><STRONG>Архитектура:</STRONG> Версия 2003 использует объектно-ориентированный подход с классами <CODE>PDMenu</CODE> и <CODE>LDRect</CODE>, где <CODE>LDRect</CODE> инкапсулирует работу с позиционированием. Версия 2004 использует класс <CODE>aksmenu</CODE> с функцией <CODE>rectify</CODE>, которая динамически добавляет методы позиционирования к DOM-элементам, что делает код более компактным.</LI>
+                            <LI><STRONG>Состояния меню:</STRONG> Версия 2003 использует пары <CODE>DOWN/UP</CODE> для описания процесса анимации, версия 2004 — <CODE>SHOWING/HIDING</CODE>, что более точно отражает текущее состояние анимации и улучшает читаемость кода.</LI>
+                            <LI><STRONG>Дополнительные возможности:</STRONG> Версия 2004 добавляет поддержку двойного клика для отладки (выводит информацию о состоянии пункта меню в alert) и метод <CODE>copy()</CODE> для создания копий структуры меню, что полезно для динамического создания меню на основе шаблонов.</LI>
+                            <LI><STRONG>Зависимости:</STRONG> Версия 2003 требует внешние файлы <CODE>heart.js</CODE> и <CODE>tooltip.js</CODE> для работы некоторых функций. Версия 2004 является самодостаточной и не требует дополнительных файлов (хотя в оригинальной версии также включала встроенные функции tooltip и floater, которые были вынесены в отдельные файлы для чистоты кода).</LI>
+                            <LI><STRONG>Совместимость:</STRONG> Обе версии разработаны для Internet Explorer 5+ с использованием ActiveX для парсинга XML. Для современных браузеров рекомендуется использовать <A HREF="menushnik_modern.html">современную версию</A> с поддержкой стандартных веб-технологий.</LI>
+                          </UL>
+                          <HR>
+                          <H3>Использование</H3>
+                          <P>Для использования меню на вашем сайте:</P>
+                          <OL>
+                            <LI>Скачайте одну из версий JavaScript-файла (<A HREF="menushnik_2003.js">2003</A> или <A HREF="menushnik_2004.js">2004</A>).</LI>
+                            <LI>Подключите файл к вашей HTML-странице через тег <CODE>&lt;SCRIPT&gt;</CODE>.</LI>
+                            <LI>Создайте XML-файл с описанием структуры меню (см. пример <A HREF="menushnik.xml">menushnik.xml</A>).</LI>
+                            <LI>Вызовите функцию <CODE>MakeMenu('путь/к/menushnik.xml')</CODE> для инициализации меню.</LI>
+                            <LI>Добавьте контейнер <CODE>&lt;SPAN id="__container"&gt;&lt;/SPAN&gt;</CODE> в место, где должно отображаться меню.</LI>
+                            <LI>Подключите соответствующий CSS-файл для стилизации меню.</LI>
+                          </OL>
+                          <P><STRONG>Примечание:</STRONG> Для работы в современных браузерах (Chrome, Firefox, Safari, Edge) рекомендуется использовать <A HREF="menushnik_modern.html">современную версию меню</A> с поддержкой стандартных веб-технологий, CSS-анимациями и автоматической поддержкой светлой/тёмной темы.</P>
+                          <HR>
+                          <DIV ID=unlockform STYLE="display:none">
+                            <H3>Разблокировка защищённого пункта меню</H3>
+                            <P>Вы перешли по ссылке для разблокировки защищённого пункта меню. Для доступа к содержимому выполните следующие шаги:</P>
+                            <OL>
+                              <LI><STRONG>Проверьте путь пункта меню:</STRONG> Убедитесь, что навигационный путь <SPAN ID=itm1text STYLE="font-weight: bold; color: #0066cc;"></SPAN> соответствует тому пункту меню, к которому вы хотите получить доступ. Если путь неверен, возможно, ссылка была изменена или повреждена.</LI>
+                              <LI><STRONG>Введите пароль:</STRONG> В поле ниже введите пароль, который был предоставлен для доступа к пункту меню <SPAN ID=itm2text STYLE="font-weight: bold; color: #0066cc;"></SPAN>:
+                              <BR><BR>
+                              <INPUT ID=text1 NAME=text1 ONMOUSEOVER="if (this.value=='пароль') this.value=''" SIZE=20 VALUE=пароль STYLE="padding: 5px; font-size: 14px;">
+                              </LI>
+                              <LI><STRONG>Сохраните пароль:</STRONG> Нажмите кнопку ниже для сохранения пароля. После сохранения страница автоматически перезагрузится, и пункт меню станет доступен.
+                              <BR><BR>
+                              <INPUT ID=button1 NAME=button1 ONCLICK="setCookie(desiredItem,text1.value,365);alert('Пароль успешно сохранён. Страница будет перезагружена.');window.location.reload();" TYPE=button VALUE="Сохранить пароль" STYLE="padding: 8px 16px; font-size: 14px; cursor: pointer; background-color: #0066cc; color: white; border: none; border-radius: 4px;">
+                              </LI>
+                            </OL>
+                            <HR>
+                            <P><STRONG>Важная информация:</STRONG></P>
+                            <UL>
+                              <LI>Пароль сохраняется в cookies вашего браузера на срок <STRONG>365 дней</STRONG>.</LI>
+                              <LI>Пароль будет автоматически применяться при всех последующих посещениях сайта с этого браузера.</LI>
+                              <LI>Если вы используете другой браузер или очистите cookies, потребуется повторная разблокировка.</LI>
+                              <LI>Для безопасности не передавайте ссылку для разблокировки третьим лицам.</LI>
+                            </UL>
+                          </DIV>
+                          <DIV ID=normalcontent>
+                            <H3>Демонстрация меню</H3>
+                            <P>Используйте меню слева для навигации. Наведите курсор на пункты меню, чтобы открыть подменю. Меню поддерживает неограниченную вложенность уровней.</P>
+                            <P STYLE="color: #666; font-size: 0.9em;"><STRONG>Важно:</STRONG> Интерактивное меню слева работает только в старых браузерах (Internet Explorer 5+) из-за использования ActiveX для парсинга XML. В современных браузерах (Chrome, Firefox, Safari, Edge) автоматически отображается карта сайта ниже. Для полной функциональности в современных браузерах используйте <A HREF="menushnik_modern.html">современную версию меню</A>.</P>
+                            <HR>
+                            <H3>Карта сайта</H3>
+                            <P>Ниже отображается полная структура меню в виде иерархического списка. Карта сайта автоматически генерируется на основе XML-конфигурации меню.</P>
+                            <SPAN ID=sitemap>
+                              <P STYLE="color: #999; font-style: italic;">Загрузка карты сайта... Если этот текст не исчез, значит ваш браузер не поддерживает JavaScript или произошла ошибка при загрузке меню.</P>
+                            </SPAN>
+                            <HR>
+                            <H3>Защита пунктов меню паролем</H3>
+                            <P>Система Menushnik поддерживает защиту отдельных пунктов меню паролем. Заблокированные пункты отображаются в меню, но их содержимое недоступно до ввода правильного пароля.</P>
+                            <P>Для разблокировки защищённого пункта меню:</P>
+                            <UL>
+                              <LI>Перейдите по специальной ссылке, которая была предоставлена при регистрации или создании защищённого раздела.</LI>
+                              <LI>Или кликните на заблокированный пункт в карте сайта выше — откроется форма для ввода пароля.</LI>
+                              <LI>Введите правильный пароль в появившуюся форму.</LI>
+                              <LI>После успешной разблокировки пароль сохраняется в cookies браузера и будет автоматически применяться при следующих посещениях.</LI>
+                            </UL>
+                            <P>Заблокированные пункты отмечены как <STRONG>"(заблокировано)"</STRONG> в карте сайта выше.</P>
+                          </DIV>
+                        </TD>
+                      </TR>
+                    </TABLE>
+                  </TD>
+                </TR>
+              </TABLE>
+            </TD>
+          </TR>
+        </TABLE>
+      </TD>
+    </TR>
+    <TR>
+      <TD COLSPAN=3 ALIGN=middle BGCOLOR=#cccccc CLASS=copyrght>(c) <A HREF="http://kusaku.su" TITLE="made by kusaku">kusaku</A> 2004</TD>
+    </TR>
+  </TABLE>
+  <SCRIPT LANGUAGE=javascript>
+  <!--
+  // Show unlock form if query parameter exists
+  if (desiredItem)
+  {
+    var uf = document.getElementById('unlockform');
+    var nc = document.getElementById('normalcontent');
+    if (uf) uf.style.display = 'block';
+    if (nc) nc.style.display = 'none';
+  }
+  -->
+  </SCRIPT>
+</BODY>
+</HTML>

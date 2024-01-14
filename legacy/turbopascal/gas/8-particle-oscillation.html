@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8-Particle Oscillation - Turbo Pascal Programs</title>
+<meta name="description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="8-Particle Oscillation - Turbo Pascal Programs">
+<meta property="og:description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="8-Particle Oscillation - Turbo Pascal Programs">
+<meta name="twitter:description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-number { color: #79c0ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+        html.dark .hljs-function { color: #d2a8ff; }
+        html.dark .hljs-variable { color: #ffa657; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+    </script>
+<script>
+        // Register Pascal language for highlight.js
+        hljs.registerLanguage('pascal', function(hljs) {
+            return {
+                keywords: {
+                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
+                    built_in: 'boolean char integer real text string',
+                    literal: 'true false'
+                },
+                contains: [
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_NUMBER_MODE
+                ]
+            };
+        });
+        hljs.highlightAll();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Turbo Pascal Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">8-Particle Oscillation</h1>
+        <p class="text-gray-600 mb-6">An oscillation simulation with 8 particles.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-pascal">﻿      {$N+}
+program Oscill;
+uses
+  Crt, Graph;
+const
+   Windows=4;
+type
+  ResolutionPreference=(Lower,Higher);
+  ColorList=array [1..Windows] of integer;
+
+var
+  FlagRE:boolean; {False-English, True-Russian}
+  GraphDriver:integer;
+  GraphMode:integer;
+  Errorcode:integer;
+
+  Xmax,Ymax,ViewXmax,ViewYmax: integer;
+  Color: ColorList;
+  Ch: char;
+  BackColor: integer;
+  MaxColors: word;
+  AccX, VelX, CurX: array[1..4] of Double;
+  AccY, VelY, CurY: array[1..4] of Double;
+  Strength: array[1..8] of Double;
+  InLen: array[1..8] of Double;
+  LenX, LenY: Double;
+  i: Integer;
+  CurPage: Integer;
+  BoxXmax, BoxYmax, BoxXmin, BoxYmin: Double;
+
+  S,S1:string;
+  fp:text;
+  VelX1,VelY1:array[1..4] of Double;
+  X,Y:array[1..4] of integer;
+  K,L0:array[1..8] of Double;
+  m:array[1..4] of Double;
+  a,b:integer;
+  g,h:array[1..4] of Double;
+  key:boolean;
+
+
+ function DoubleToStr(I: double): String;
+{ Convert any double type to a string }
+var
+  S: string[16];
+begin
+  Str(I:4:2, S);
+  doubleToStr := S;
+ end;
+
+ function IntegerToStr(I: Integer): String;
+{ Convert any integer type to a string }
+var
+  S: string[16];
+begin
+  Str(I, S);
+  IntegerToStr := S;
+ end;
+
+
+   {1.-----------Ввод параметров из файла Coord.dat!-------------}
+procedure Parametres;
+var N,i:integer;
+
+begin
+  assign(fp,&#x27;koord.dat&#x27;{Input path!});
+  reset(fp);
+       N:=1;
+      for i:=1 to N do
+       if not EOF(fp) then
+      readln(fp,a,b);
+
+       N:=2;
+      for i:=2 to N do
+       if not EOF(fp) then
+      readln(fp,X[1],Y[1],X[2],Y[2],X[3],Y[3],X[4],Y[4]);
+
+       N:=3;
+      for i:=3 to N do
+       if not EOF(fp) then
+      readln(fp,VelX1[1],VelY1[1],VelX1[2],VelY1[2],VelX1[3],VelY1[3],VelX1[4],VelY1[4]);
+
+       N:=4;
+      for i:=4 to N do
+       if not EOF(fp) then
+      readln(fp,m[1],m[2],m[3],m[4]);
+
+       N:=5;
+      for i:=5 to N do
+       if not EOF(fp) then
+      readln(fp,K[1],K[2],K[3],K[4],K[5],K[6],K[7],K[8]);
+
+       N:=6;
+      for i:=6 to N do
+       if not EOF(fp) then
+      readln(fp,L0[1],L0[2],L0[3],L0[4],L0[5],L0[6],L0[7],L0[8]);
+
+   Close(fp)  ;
+end;
+
+        {2.1-----------------Русская версия--------------------}
+Procedure SxemaRus;
+var S,S1:string;
+begin
+
+    SetBkColor(3);
+    SetColor(1);
+    SetLineStyle(0,1,3);
+    Rectangle(50,50,290,290);
+
+
+    SetColor(8);
+    Line(50,50,103,103);    Line(237,103,290,50);
+    Line(50,290,103,237);   Line(237,237,290,290);
+    Line(120,110,220,110);  Line(110,120,110,220);
+    Line(230,120,230,220);  Line(220,230,120,230);
+
+    SetColor(4);
+    SetFillStyle(1,4);
+    FillEllipse(110,110,10,10);    FillEllipse(230,110,10,10);
+    FillEllipse(110,230,10,10);    FillEllipse(230,230,10,10);
+
+    SetColor(5);
+    Line(50,30,50,330);
+    Line(30,50,330,50);
+    Line(50,330,45,315);    Line(50,330,55,315);
+    Line(330,50,315,45);    Line(330,50,315,55);
+
+    SetColor(15);
+    OutTextXY(275,40,&#x27;(a,0)&#x27;);    OutTextXY(280,295,&#x27;(a,b)&#x27;);
+    OutTextXY(55,295,&#x27;(0,b)&#x27;);    OutTextXY(40,40,&#x27;O&#x27;);
+    OutTextXY(100,90,&#x27;(x1,y1)&#x27;);  OutTextXY(103,108,&#x27;m1&#x27;);
+    OutTextXY(180,90,&#x27;(x2,y2)&#x27;);  OutTextXY(223,108,&#x27;m2&#x27;);
+    OutTextXY(100,240,&#x27;(x4,y4)&#x27;); OutTextXY(103,227,&#x27;m4&#x27;);
+    OutTextXY(180,240,&#x27;(x3,y3)&#x27;); OutTextXY(223,227,&#x27;m3&#x27;);
+
+    OutTextXY(75,75,&#x27;1&#x27;);   OutTextXY(170,110,&#x27;2&#x27;); OutTextXY(255,75,&#x27;3&#x27;);
+    OutTextXY(230,170,&#x27;4&#x27;); OutTextXY(255,255,&#x27;5&#x27;); OutTextXY(170,230,&#x27;6&#x27;);
+    OutTextXY(75,255,&#x27;7&#x27;);  OutTextXY(110,170,&#x27;8&#x27;);
+    OutTextXY(480,10,&#x27;Русская версия.&#x27;);
+    OutTextXY(150,20,&#x27;Рисунок для демонстрации системы!&#x27;);
+    OutTextXY(150,22,&#x27;_________________________________&#x27;);
+    OutTextXY(345,65,&#x27;Далее необходимо задать начальные&#x27;);
+    OutTextXY(340,80,&#x27;условия и параметры системы.&#x27;);
+    OutTextXY(345,100,&#x27;Надо задать:&#x27;);
+    OutTextXY(345,101,&#x27;____________&#x27;);
+    OutTextXY(340,115,&#x27;1.Параметры - a,b&#x27;);
+    OutTextXY(340,130,&#x27;2.Начальные координаты - (Xi,Yi)&#x27;);
+    OuttextXY(340,145,&#x27;3.Начальные скорости-(VelXi,VelYi)&#x27;);
+    OutTextXY(340,160,&#x27;4.Массы шариков - mi, где i=1,..,4&#x27;);
+    OutTextXY(340,175,&#x27;5.Жесткость пружины - Kj&#x27;);
+    OutTextXY(340,190,&#x27;6.Длину нерастянутых пружин - L0j&#x27;);
+    OutTextXY(340,205,&#x27;        где j=1,..,8&#x27;);
+    OutTextXY(360,230,&#x27;Замечания:&#x27;);
+    OutTextXY(360,232,&#x27;__________&#x27;);
+    OutTextXY(345,245,&#x27;Значения вводятся в соответствии&#x27;);
+    OutTextXY(340,260,&#x27;с приведенным рисунком из тексто-&#x27;);
+    OutTexTXY(340,275,&#x27;вого файла &#x27;&#x27;Koord.dat&#x27;&#x27;.&#x27;);
+    OutTextXY(80,320,&#x27;Проверьте пвавильнось введенных данных:&#x27;);
+    OutTExtXY(80,322,&#x27;_______________________________________&#x27;);
+    OutTextXY(330,40,&#x27;X&#x27;); OutTextXY(35,320,&#x27;Y&#x27;);
+
+    OutTextXY(50,360,&#x27;a=&#x27;);  S:= IntegerToStr(a); OutTextXY(65,360,&#x27;&#x27;+S);
+    OutTextXY(50,375,&#x27;b=&#x27;);  S:= IntegerToStr(b); OutTextXY(65,375,&#x27;&#x27;+S);
+
+    OutTextXY(110,340,&#x27;(Xi , Yi)&#x27;);
+    i:=0;
+    repeat i:=i+1;
+       S:=IntegerToStr(X[i]); S1:= IntegerToStr(Y[i]);
+       OutTextXY(110,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
+    until i&gt;3;
+
+    OutTextXY(200,340,&#x27;(VelXi,VelYi)&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(VelX1[i]); S1:= DoubleToStr(VelY1[i]);
+    OutTextXY(200,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
+    until i&gt;3;
+
+    OutTextXY(340,340,&#x27; mi &#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(m[i]);
+    OutTextXY(340,345+i*10,&#x27;&#x27;+S);
+    until i&gt;3;
+
+    OutTextXY(420,340,&#x27; Kj&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,&#x27;&#x27;+S);
+    until i&gt;7;
+
+    OutTextXY(500,340,&#x27; L0j&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,&#x27;&#x27;+S);
+    until i&gt;7;
+
+    SetColor(1);
+    OutTextXY(200,450,&#x27;Press any key to continue!&#x27;);
+    Rectangle(195,445,415,463);
+
+    ReadKey;
+    CloseGraph;
+  end;
+
+      {2.2-----------English vertion------------------}
+Procedure SxemaEng;
+var S,S1:string;
+begin
+
+    SetBkColor(3);
+    SetColor(1);
+    SetLineStyle(0,1,3);
+    Rectangle(50,50,290,290);
+
+    SetLineStyle(0,1,3);
+
+    SetColor(8);
+    Line(50,50,103,103);    Line(237,103,290,50);
+    Line(50,290,103,237);   Line(237,237,290,290);
+    Line(120,110,220,110);  Line(110,120,110,220);
+    Line(230,120,230,220);  Line(220,230,120,230);
+
+    SetColor(4);
+    SetFillStyle(1,4);
+    FillEllipse(110,110,10,10);    FillEllipse(230,110,10,10);
+    FillEllipse(110,230,10,10);    FillEllipse(230,230,10,10);
+
+    SetColor(5);
+    Line(50,30,50,330);
+    Line(30,50,330,50);
+    Line(50,330,45,315);    Line(50,330,55,315);
+    Line(330,50,315,45);    Line(330,50,315,55);
+
+    SetColor(15);
+    OutTextXY(275,40,&#x27;(a,0)&#x27;);    OutTextXY(280,295,&#x27;(a,b)&#x27;);
+    OutTextXY(55,295,&#x27;(0,b)&#x27;);    OutTextXY(40,40,&#x27;O&#x27;);
+    OutTextXY(100,90,&#x27;(x1,y1)&#x27;);  OutTextXY(103,108,&#x27;m1&#x27;);
+    OutTextXY(180,90,&#x27;(x2,y2)&#x27;);  OutTextXY(223,108,&#x27;m2&#x27;);
+    OutTextXY(100,240,&#x27;(x4,y4)&#x27;); OutTextXY(103,227,&#x27;m4&#x27;);
+    OutTextXY(180,240,&#x27;(x3,y3)&#x27;); OutTextXY(223,227,&#x27;m3&#x27;);
+
+    OutTextXY(75,75,&#x27;1&#x27;);   OutTextXY(170,110,&#x27;2&#x27;); OutTextXY(255,75,&#x27;3&#x27;);
+    OutTextXY(230,170,&#x27;4&#x27;); OutTextXY(255,255,&#x27;5&#x27;); OutTextXY(170,230,&#x27;6&#x27;);
+    OutTextXY(75,255,&#x27;7&#x27;);  OutTextXY(110,170,&#x27;8&#x27;);
+   {   SetColor(4);   }
+    OutTextXY(480,10,&#x27;English vertion.&#x27;);
+    OutTextXY(130,20,&#x27;Picture for demonstration physical sistem!&#x27;);
+    OutTextXY(130,22,&#x27;__________________________________________&#x27;);
+    OutTextXY(345,65,&#x27;Late is necesary set initial condi-&#x27;);
+    OutTextXY(340,80,&#x27;tions and parametres of our system.&#x27;);
+    OutTextXY(345,100,&#x27;Need input:&#x27;);
+    OutTextXY(345,101,&#x27;___________&#x27;);
+    OutTextXY(340,115,&#x27;1.Parametres - a,b&#x27;);
+    OutTextXY(340,130,&#x27;2.Initial koordinates - (Xi,Yi)&#x27;);
+    OuttextXY(340,145,&#x27;3.Initial velocities-(VelXi,VelYi)&#x27;);
+    OutTextXY(340,160,&#x27;4.Balls mass - mi, where i=1,..,4&#x27;);
+    OutTextXY(340,175,&#x27;5.Springs force - Kj&#x27;);
+    OutTextXY(340,190,&#x27;6.Lenght unextending spring - L0j&#x27;);
+    OutTextXY(340,205,&#x27;      where j=1,..,8&#x27;);
+    OutTextXY(360,230,&#x27;Remarks:&#x27;);
+    OutTextXY(360,232,&#x27;________&#x27;);
+    OutTextXY(345,245,&#x27;Value input in compliance with&#x27;);
+    OutTextXY(340,260,&#x27;demonstrate pictures from text&#x27;);
+    OutTexTXY(340,275,&#x27;file &#x27;&#x27;Koord.dat&#x27;&#x27;.&#x27;);
+    OutTextXY(80,320,&#x27;Control accuracy input values:&#x27;);
+    OutTExtXY(80,322,&#x27;______________________________&#x27;);
+    OutTextXY(330,40,&#x27;X&#x27;); OutTextXY(35,320,&#x27;Y&#x27;);
+
+    OutTextXY(50,360,&#x27;a=&#x27;);  S:= IntegerToStr(a); OutTextXY(65,360,&#x27;&#x27;+S);
+    OutTextXY(50,375,&#x27;b=&#x27;);  S:= IntegerToStr(b); OutTextXY(65,375,&#x27;&#x27;+S);
+
+    OutTextXY(110,340,&#x27;(Xi , Yi)&#x27;);
+    i:=0;
+    repeat i:=i+1;
+       S:=IntegerToStr(X[i]); S1:= IntegerToStr(Y[i]);
+       OutTextXY(110,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
+    until i&gt;3;
+
+    OutTextXY(200,340,&#x27;(VelXi,VelYi)&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(VelX1[i]); S1:= DoubleToStr(VelY1[i]);
+    OutTextXY(200,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
+    until i&gt;3;
+
+    OutTextXY(340,340,&#x27; mi &#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(m[i]);
+    OutTextXY(340,345+i*10,&#x27;&#x27;+S);
+    until i&gt;3;
+
+    OutTextXY(420,340,&#x27; Kj&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,&#x27;&#x27;+S);
+    until i&gt;7;
+
+    OutTextXY(500,340,&#x27; L0j&#x27;);
+    i:=0;
+    repeat i:=i+1;
+    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,&#x27;&#x27;+S);
+    until i&gt;7;
+
+    SetColor(1);
+    OutTextXY(200,450,&#x27;Press any key to continue!&#x27;);
+    Rectangle(195,445,415,463);
+    ReadKey;
+    CloseGraph;
+  end;
+
+       {3.-----------Титульный лист-------------}
+Procedure Demo;
+var  Chr : char;
+     proba: boolean;
+begin
+  GraphDriver:=Detect;
+  Graphmode:=vgahi;
+  InitGraph(GraphDriver,GraphMode,&#x27;E:\pascal\bin&#x27;);
+  SetBKColor(3);
+  SetTextStyle(0,0,1);
+
+  OutTextXY(110,70,&#x27;Term paper on programming a student 211 group&#x27;);
+  OutTextXY(400,85,&#x27;Modin Artem.&#x27;);
+  OutTextXY(100,150,&#x27;Building physical model by numerical methods.&#x27;);
+  OutTextXY(100,152,&#x27;_____________________________________________&#x27;);
+  OutTextXY(115,185,&#x27;Oscilling Balls.&#x27;);
+  OutTextXY(550,10,&#x27;Ver.1.0&#x27;);
+  SetColor(1);
+  Rectangle(100,200,300,360);
+  SetColor(4);
+  Line(100,200,150,240); Line(300,360,250,320);
+  Line(100,360,150,320); Line(300,200,250,240);
+  Line(150,240,150,320); Line(150,240,250,240);
+  Line(250,240,250,320); Line(250,320,150,320);
+  SetColor(14);
+  FillEllipse(150,240,4,4); FillEllipse(250,240,4,4);
+  FillEllipse(150,320,4,4); FillEllipse(250,320,4,4);
+
+  OutTextXY(80,400,&#x27;Choose language:&#x27; );
+  OutTextXY(80,415,&#x27;1. Press &#x27;&#x27;E&#x27;&#x27;-English.&#x27;);
+  OutTextXY(80,430,&#x27;2. Press &#x27;&#x27;R&#x27;&#x27;-Russian.&#x27;);
+
+   repeat
+      proba:=false;
+      Chr:=ReadKey;
+      if (Chr=#101) or (Chr=#69) or (Chr=#147) or (Chr=#227) then begin
+        proba:=true;
+        FlagRE:=false;
+        SetFillStyle(1,3);
+        FillEllipse(320,240,500,500);
+      end ;
+
+     if (Chr=#114) or (Chr=#82) or (Chr=#138) or (Chr=#170) then begin
+        proba:=true;
+        FlagRE:=true;
+        SetFillStyle(1,3);
+        FillEllipse(320,240,500,500);
+      end;
+
+     if (not  proba) then begin
+       SetColor(4);
+       Rectangle(175,445,440,462);
+       OutTextXY(180,450,&#x27;Once again press key &#x27;&#x27;E&#x27;&#x27; or &#x27;&#x27;R&#x27;&#x27;!&#x27;);
+     end;
+   until proba=true;
+ end;
+
+
+   {4.-----------------Смена страниц!---------------------}
+procedure ChangePage;
+begin
+  if CurPage = 0 then
+    begin
+        CurPage := 1;
+        SetActivePage(1);
+        SetVisualPage(0);
+    end
+  else
+    begin
+        CurPage := 0;
+        SetActivePage(0);
+        SetVisualPage(1);
+    end;
+end;
+
+
+   {5.---------Движение шариков и пружин!----------------------}
+procedure DrawPoints(color:word);
+var
+   i: Integer;
+   xx,yy:array[1..4] of Double;
+   spring,spring1:boolean;
+
+begin
+
+  ChangePage;
+
+  ClearViewPort;
+  SetBKColor(3);
+  SetFillStyle(1,4);
+  SetLineStyle(0,1,3);
+
+  SetColor(8);
+   Line(Round(BoxXmin), Round(BoxYmin), Round(CurX[1]), Round(CurY[1]));
+   Line(Round(BoxXmax), Round(BoxYmin), Round(CurX[2]), Round(CurY[2]));
+   Line(Round(BoxXmax), Round(BoxYmax), Round(CurX[3]), Round(CurY[3]));
+   Line(Round(BoxXmin), Round(BoxYmax), Round(CurX[4]), Round(CurY[4]));
+   Line(Round(CurX[1]), Round(CurY[1]), Round(CurX[2]), Round(CurY[2]));
+   Line(Round(CurX[2]), Round(CurY[2]), Round(CurX[3]), Round(CurY[3]));
+   Line(Round(CurX[3]), Round(CurY[3]), Round(CurX[4]), Round(CurY[4]));
+   Line(Round(CurX[4]), Round(CurY[4]), Round(CurX[1]), Round(CurY[1]));
+
+   SetColor(4);
+    for i:=1 to 4 do  FillEllipse(Round(CurX[i]),Round(CurY[i]),6,6);
+   SetColor(15);
+    for i:=1 to 4 do OutTextXY(Round(g[i]),Round(h[i])-3,&#x27;+&#x27;);
+   SetColor(1);
+   Rectangle(Round(BoxXmin), Round(BoxYmin), Round(BoxXmax), Round(BoxYmax));
+   SetLineStyle(UserBitLn, $FFFF, $FF);
+
+  for i:=1 to 4 do xx[i]:=CurX[i];
+  for i:=1 to 4 do yy[i]:=CurY[i];
+
+  if (xx[1]&gt;xx[2]) or (yy[1]&gt;yy[4]) or (xx[3]&lt;xx[4]) or (yy[2]&gt;yy[3])
+  then spring:=false   else spring:=true;
+  if (yy[1]&lt;25) or (yy[2]&lt;25) or (yy[3]&gt;b+25) or (yy[4]&gt;b+25)
+     or (xx[1]&lt;25) or (xx[2]&gt;a+25) or (xx[3]&gt;a+25) or (xx[4]&lt;25)
+  then spring1:=false  else spring1:=true;
+
+   key:=true;
+  if (spring=false) or (spring1=false) then key:=false;
+end;
+
+   {-----------------------------------------------------------------}
+function DistFromTo(xf,yf,xt,yt:Double): Double;
+var res: Double;
+begin
+     res := Sqrt((xf-xt)*(xf-xt)+(yf-yt)*(yf-yt));
+     if res = 0 then DistFromTo := 1
+     else DistFromTo := res;
+end;
+
+    {6.1 --------------------------------------------------------------}
+procedure SetIniLength;
+begin
+  InLen[1] := DistFromTo (BoxXmin, BoxYmin, CurX[1], CurY[1]);
+  InLen[2] := DistFromTo (CurX[1], CurY[1], CurX[2], CurY[2]);
+  InLen[3] := DistFromTo (BoxXmax, BoxYmin, CurX[2], CurY[2]);
+  InLen[4] := DistFromTo (CurX[2], CurY[2], CurX[3], CurY[3]);
+  InLen[5] := DistFromTo (BoxXmax, BoxYmax, CurX[3], CurY[3]);
+  InLen[6] := DistFromTo (CurX[3], CurY[3], CurX[4], CurY[4]);
+  InLen[7] := DistFromTo (BoxXmin, BoxYmax, CurX[4], CurY[4]);
+  InLen[8] := DistFromTo (CurX[4], CurY[4], CurX[1], CurY[1]);
+end;
+
+     {----------------------------------------------------------------}
+{вычисление действующей силы,на шарики:общей силы и сил по данным ортам}
+function GetForce(xf,yf,xt,yt:Double;n:Integer):Double;
+begin
+   GetForce:=(InLen[n]-DistFromTo(xf,yf,xt,yt))*Strength[n];
+end;
+     {-----------------------------------------------------------------}
+function GetForceX(xf,yf,xt,yt:Double;n:Integer):Double;
+begin
+   GetForceX:=GetForce(xf,yf,xt,yt,n)*(xf-xt)/DistFromTo(xf,yf,xt,yt);
+end;
+    {---------------------------------------------------------------}
+function GetForceY(xf,yf,xt,yt:Double;n:Integer):Double;
+begin
+   GetForceY:=GetForce(xf,yf,xt,yt,n)*(yf-yt)/DistFromTo(xf,yf,xt,yt);
+end;
+
+       {6.--------Главный цикл. Рассчеты.--------------------------}
+procedure MainCycle(dt: Double);
+begin
+     for i:=1 to 4 do
+     begin
+          AccX[i] := 0;
+          AccY[i] := 0;
+     end;
+
+     AccX[1] := AccX[1] + (1/m[1])*GetForceX(CurX[1], CurY[1], BoxXmin, BoxYmin, 1);
+     AccX[1] := AccX[1] + (1/m[1])*GetForceX(CurX[1], CurY[1], CurX[2], CurY[2], 2);
+     AccX[1] := AccX[1] + (1/m[1])*GetForceX(CurX[1], CurY[1], CurX[4], CurY[4], 8);
+     AccY[1] := AccY[1] + (1/m[1])*GetForceY(CurX[1], CurY[1], BoxXmin, BoxYmin, 1);
+     AccY[1] := AccY[1] + (1/m[1])*GetForceY(CurX[1], CurY[1], CurX[2], CurY[2], 2);
+     AccY[1] := AccY[1] + (1/m[1])*GetForceY(CurX[1], CurY[1], CurX[4], CurY[4], 8);
+
+     AccX[2] := AccX[2] + (1/m[2])*GetForceX(CurX[2], CurY[2], BoxXmax, BoxYmin, 3);
+     AccX[2] := AccX[2] + (1/m[2])*GetForceX(CurX[2], CurY[2], CurX[1], CurY[1], 2);
+     AccX[2] := AccX[2] + (1/m[2])*GetForceX(CurX[2], CurY[2], CurX[3], CurY[3], 4);
+     AccY[2] := AccY[2] + (1/m[2])*GetForceY(CurX[2], CurY[2], BoxXmax, BoxYmin, 3);
+     AccY[2] := AccY[2] + (1/m[2])*GetForceY(CurX[2], CurY[2], CurX[1], CurY[1], 2);
+     AccY[2] := AccY[2] + (1/m[2])*GetForceY(CurX[2], CurY[2], CurX[3], CurY[3], 4);
+
+     AccX[3] := AccX[3] + (1/m[3])*GetForceX(CurX[3], CurY[3], BoxXmax, BoxYmax, 5);
+     AccX[3] := AccX[3] + (1/m[3])*GetForceX(CurX[3], CurY[3], CurX[2], CurY[2], 4);
+     AccX[3] := AccX[3] + (1/m[3])*GetForceX(CurX[3], CurY[3], CurX[4], CurY[4], 6);
+     AccY[3] := AccY[3] + (1/m[3])*GetForceY(CurX[3], CurY[3], BoxXmax, BoxYmax, 5);
+     AccY[3] := AccY[3] + (1/m[3])*GetForceY(CurX[3], CurY[3], CurX[2], CurY[2], 4);
+     AccY[3] := AccY[3] + (1/m[3])*GetForceY(CurX[3], CurY[3], CurX[4], CurY[4], 6);
+
+     AccX[4] := AccX[4] + (1/m[4])*GetForceX(CurX[4], CurY[4], BoxXmin, BoxYmax, 7);
+     AccX[4] := AccX[4] + (1/m[4])*GetForceX(CurX[4], CurY[4], CurX[3], CurY[3], 6);
+     AccX[4] := AccX[4] + (1/m[4])*GetForceX(CurX[4], CurY[4], CurX[1], CurY[1], 8);
+     AccY[4] := AccY[4] + (1/m[4])*GetForceY(CurX[4], CurY[4], BoxXmin, BoxYmax, 7);
+     AccY[4] := AccY[4] + (1/m[4])*GetForceY(CurX[4], CurY[4], CurX[3], CurY[3], 6);
+     AccY[4] := AccY[4] + (1/m[4])*GetForceY(CurX[4], CurY[4], CurX[1], CurY[1], 8);
+
+     for i:=1 to 4 do         {вычисление скорстей и координат}
+     begin                    {используется метод Эйлера}
+          VelX[i]:=VelX[i]+AccX[i]*dt;
+          VelY[i]:=VelY[i]+AccY[i]*dt;
+          CurX[i]:=CurX[i]+VelX[i]*dt;
+          CurY[i]:=CurY[i]+VelY[i]*dt;
+     end;
+     DrawPoints(13);
+end;
+
+     {8.-----------Внешняя рамка (на последнем рис)--------------}
+procedure Frame;
+begin
+  SetViewPort(0, 0, Xmax, Ymax-(TextHeight(&#x27;M&#x27;)+4)-2,ClipOn);
+  SetColor(MaxColors);
+  Rectangle(0, 0, Xmax-1, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-2)-1);
+  SetViewPort(1, 1, Xmax-2, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-2)-2,ClipOn);
+end;
+
+     {9.------------------------------------------------------------}
+procedure FullPort;
+{ Set the view port to the entire screen }
+begin
+  SetViewPort(0, 0, Xmax, Ymax, ClipOn);
+end; { FullPort }
+
+    {10.-----------Внутренняя рамка (на последнем рис)--------------}
+procedure MessageFrame(Msg:string);
+begin
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2),Msg);
+  { Go back to the main window }
+  Frame;
+
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  { Go back to the main window }
+  Frame;
+end;  { MessageFrame }
+
+     {11.---------------------------------------------------------}
+procedure WaitToGo;   {процедура производящая остановку программы}
+var
+  Ch : char;
+begin
+ if key=false  then MessageFrame(&#x27;Invalid system, press Esc to quit&#x27;)
+ else  messageFrame(&#x27;Press any key to continue... Esc aborts&#x27;);
+  repeat until KeyPressed;
+  Ch:=ReadKey;
+  if Ch=#27 then begin
+      CloseGraph;
+      Writeln(&#x27;All done.&#x27;);
+      Halt(1);
+    end
+  else
+    ClearViewPort;
+  MessageFrame(&#x27;Press any key to stop motion, Esc quits.&#x27;);
+end; { WaitToGo }
+
+    {12. -------------------------------------------------------}
+procedure TestGraphError(GraphErr: integer);
+begin
+  if GraphErr &lt;&gt; grOk then begin
+    Writeln(&#x27;Graphics error: &#x27;, GraphErrorMsg(GraphErr));
+    repeat until keypressed;
+    ch:=readkey;
+    Halt(1);
+  end;
+end;
+
+    {13.-----------------------------------------------------------}
+procedure Init;
+var
+  Err, I: integer;
+  StartX, StartY: integer;
+  Resolution: ResolutionPreference;
+  s: string;
+begin
+  Resolution:=Lower;
+  if paramcount&gt;0 then begin
+    s:=paramstr(1);
+    if s[1]=&#x27;/&#x27; then
+      if upcase(s[2])=&#x27;H&#x27; then
+        Resolution:=Higher;
+    end;
+
+
+  InitGraph(GraphDriver, GraphMode, &#x27;&#x27;);
+  TestGraphError(GraphResult);
+  SetGraphMode(1);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+
+  MaxColors:=GetMaxColor;
+  BackColor:=0;
+  Xmax:=GetMaxX;
+  Ymax:=GetMaxY;
+  ViewXmax:=a+25;
+  ViewYmax:=b+25;
+end; {init}
+
+   {14. -------------------------------------------------------------}
+procedure CheckForUserInput;
+begin
+  if KeyPressed then begin
+    Ch := ReadKey;
+    if (Ch &lt;&gt; #27)  then WaitToGo;
+  end;
+    if key=false then WaitToGo;
+end;
+
+      {----------------НЕ понял зачем!----------------}
+function IntToStr(I: Longint): String;
+var
+  S: string[16];
+begin
+  Str(I, S);
+  IntToStr:=S;
+end;
+
+      {15.------Присваевание начальнах значений уже в пр-ме ----}
+procedure DoMagic;
+var i : Integer;
+begin
+     BoxXmin:=25;
+     BoxXmax:=a+25;
+     BoxYmin:=25;
+     BoxYmax:=b+25;
+
+     CurX[1]:=(ViewXmax+25)/3*1;
+     CurY[1]:=(ViewYmax+25)/3*1;
+     CurX[2]:=(ViewXmax+25)/3*2;
+     CurY[2]:=(ViewYmax+25)/3*1;
+     CurX[3]:=(ViewXmax+25)/3*2;
+     CurY[3]:=(ViewYmax+25)/3*2;
+     CurX[4]:=(ViewXmax+25)/3*1;
+     CurY[4]:=(ViewYmax+25)/3*2;
+
+    SetIniLength;
+     for i:=1 to 4 do g[i]:=CurX[i];
+     for i:=1 to 4 do h[i]:=CurY[i];
+
+     for i:=1 to 8 do
+     Strength[i]:=K[i];
+
+      for i:=1 to 4 do
+      CurX[i]:=CurX[i]+X[i];
+      for i:=1 to 4 do
+      CurY[i]:=CurY[i]+Y[i];
+      for i:=1 to 4 do
+      VelX[i]:= VelX1[i];
+      for i:=1 to 4 do
+      VelY[i]:= VelY1[i];
+
+   repeat
+    MainCycle(0.1);
+    CheckForUserInput;
+  until Ch=#27;
+end;
+
+         {-----------------------------------------------------}
+   {Тело основной программы!}
+begin
+   Parametres;
+   Demo;
+
+   if FlagRE then SxemaRus else SxemaEng;
+   Init;
+   Frame;
+   MessageFrame(&#x27;Press any key to stop motion, Esc quits.&#x27;);
+   DoMagic;
+   CloseGraph;
+   RestoreCrtMode;
+   writeln(&#x27;The end.&#x27;);
+end.
+</code></pre>
+        </div>
+    </div>
+</body>
+</html>

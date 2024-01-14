@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools - Legacy Projects</title>
+<meta name="description" content="Utility tools and helpers from early web development days">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, JavaScript, tools">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/tools.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/tools.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/tools.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Tools - Legacy Projects - Kirill Arkhipenko">
+<meta property="og:description" content="Utility tools and helpers from early web development days. Author: Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/tools.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tools - Legacy Projects - Kirill Arkhipenko">
+<meta name="twitter:description" content="Utility tools and helpers from early web development days. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Modern card styling */
+        .project-card {
+            transition: all 0.2s ease-in-out;
+        }
+        html.light .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+        }
+        html.light .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-6">
+                <a href="/legacy/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to legacy projects
+                </a>
+            </nav>
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Tools</h1>
+            <p class="text-lg text-gray-600 max-w-3xl">A collection of utility tools and helpers from early web development days</p>
+        </header>
+
+        <!-- Region Maker -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Region Maker <span class="text-lg font-normal text-gray-600">(2000)</span></h2>
+            <p class="text-gray-600 mb-2">Visual HTML image map editor for creating clickable regions on images. Load an image, click to define regions (polygon, circle, or rectangle), set properties (name, URL, target frame, alt text), and generate HTML <code>&lt;area&gt;</code> code for use in <code>&lt;map&gt;</code> elements. Features zoom controls for easier editing and region management.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Historical context: At the time, HTML image maps using <code>&lt;area&gt;</code> tags were widely used to create links from image regions, but there were no tools available to create those regions. I created this tool to fill that gap.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/tools/regionmaker.html" class="text-blue-600 hover:underline font-medium">Open Region Maker →</a>
+            </div>
+        </div>
+
+        <!-- JS Debugger -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">JS Debugger <span class="text-lg font-normal text-gray-600">(2000)</span></h2>
+            <p class="text-gray-600 mb-2">A JavaScript object explorer and debugger tool for inspecting object properties, methods, and nested structures. Recursively explores JavaScript objects, displays their properties with type information, handles circular references, and provides a visual tree view of object hierarchies.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Created as a debugging utility before modern browser developer tools were widely available. Allows exploring JavaScript objects interactively, with support for skipping specific property names, handling circular references, and displaying nested object structures in a readable format.</p>
+            <div class="mt-4">
+                <a href="/legacy/javascript/tools/jsdebug.html" class="text-blue-600 hover:underline font-medium">Open JS Debugger →</a>
+            </div>
+        </div>
+
+        <!-- Coder -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Coder (EnCriptor/DeCriptor) <span class="text-lg font-normal text-gray-600">(2001/2002)</span></h2>
+            <p class="text-gray-600 mb-2">Encryption and decryption tools using substitution cipher algorithms. Includes both key-based encryption (with multiple dictionaries) and fixed-pattern script obfuscation.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">This was my attempt to create symmetrical coding (encryption) without knowing anything about existing encryption methods. I used it on my personal website to hide some pages and links from casual browsing.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/tools/coder/coder.html" class="text-blue-600 hover:underline">Coder Original →</a> - Key-based encryption requiring a password/key, supports multiple dictionaries (international, English, Russian), includes "morph" option for stronger encryption</li>
+                    <li><a href="/legacy/javascript/tools/coder/scencdec.html" class="text-blue-600 hover:underline">Script Encoder/Decoder →</a> - Fixed-pattern encoder (no key needed), uses rotating URL-encoded substitution patterns, simpler interface designed specifically for script obfuscation</li>
+                    <li><a href="/legacy/javascript/tools/coder/coder_modern.html" class="text-blue-600 hover:underline">Coder Modern →</a> - Modernized version</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Arranger -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Arranger <span class="text-lg font-normal text-gray-600">(2003)</span></h2>
+            <p class="text-gray-600 mb-2">A tool that distributes files on CD-R and CD-RW discs in an optimal way. This was created when we used CD-R and CD-RW discs to transfer files between computers. The tool helps optimize file distribution across multiple discs to maximize disc space usage and minimize the number of discs needed.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Historical context: Before USB drives and cloud storage became common, CD-R (write-once) and CD-RW (rewritable) discs were a primary method for transferring large amounts of data. This tool solved the problem of efficiently organizing files across multiple 700MB discs to avoid wasting space.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Versions:</h3>
+                <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                    <li><a href="/legacy/javascript/tools/arranger/arranger_original.html" class="text-blue-600 hover:underline">Arranger Original →</a> - May not work in modern browsers</li>
+                    <li><a href="/legacy/javascript/tools/arranger/arranger_modern.html" class="text-blue-600 hover:underline">Arranger Modern →</a> - Works in modern browsers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

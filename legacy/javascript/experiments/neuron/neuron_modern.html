@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Neural Network Demonstrator - Modern</title>
+    <meta name="description" content="Interactive neural network demonstrator with backpropagation visualization. Learn boolean logic (XOR, AND, OR) through real-time training. Modern JavaScript by Kirill Arkhipenko.">
+    <meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, neural network, backpropagation, machine learning, XOR, boolean logic">
+    <meta name="author" content="Kirill Arkhipenko">
+    <link rel="canonical" href="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_modern.html">
+    <link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_modern.html">
+    <link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_modern.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Neural Network Demonstrator - Modern - Kirill Arkhipenko">
+    <meta property="og:description" content="Interactive neural network demonstrator with backpropagation visualization. Learn boolean logic through real-time training. Modern JavaScript by Kirill Arkhipenko.">
+    <meta property="og:url" content="https://kusaku.su/legacy/javascript/experiments/neuron/neuron_modern.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kusaku.su">
+    <meta property="og:image" content="https://kusaku.su/avatar.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Neural Network Demonstrator - Modern - Kirill Arkhipenko">
+    <meta name="twitter:description" content="Interactive neural network demonstrator with backpropagation visualization. Learn boolean logic through real-time training.">
+    <meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #010409;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --success: #238636;
+            --danger: #da3633;
+            --warning: #d29922;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+        }
+        
+        .app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+        }
+        
+        @media (max-width: 768px) {
+            .app {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .sidebar {
+                max-height: 50vh;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .test-grid {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            }
+            
+            .modal-content, .edit-modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sidebar {
+                max-height: 40vh;
+            }
+            
+            .stat-value {
+                font-size: 14px;
+            }
+            
+            .stat-label {
+                font-size: 8px;
+            }
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .sidebar-section {
+            padding: 12px;
+            border-bottom: 1px solid #21262d;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group { margin-bottom: 10px; }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            input[type="text"], select {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+        
+        .slider-group { margin-bottom: 10px; }
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .slider-value {
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: #21262d;
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            touch-action: none;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            touch-action: none;
+        }
+        
+        @media (max-width: 768px) {
+            input[type="range"]::-webkit-slider-thumb {
+                width: 18px;
+                height: 18px;
+            }
+            
+            input[type="range"]::-moz-range-thumb {
+                width: 18px;
+                height: 18px;
+            }
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 10px 8px;
+            margin-bottom: 6px;
+            background: #21262d;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .btn:hover { background: #30363d; border-color: var(--accent); }
+        
+        @media (max-width: 768px) {
+            .btn {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+        }
+        .btn-primary { background: var(--success); border-color: #2ea043; color: #fff; }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-danger { background: var(--danger); border-color: #f85149; color: #fff; }
+        .btn-danger:hover { background: #f85149; }
+        .btn-help { background: #8957e5; border-color: #a371f7; color: #fff; }
+        .btn-help:hover { background: #a371f7; }
+        .btn-truth-table { 
+            width: auto !important;
+            background: #0969da; 
+            border-color: #218bff; 
+            color: #fff; 
+            padding: 4px 10px; 
+            font-size: 11px; 
+            margin: 0; 
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-truth-table:hover { background: #218bff; }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .test-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .test-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .test-toggle {
+            width: 50px;
+            height: 26px;
+            background: #21262d;
+            border: 2px solid var(--border);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        @media (max-width: 768px) {
+            .test-toggle {
+                width: 56px;
+                height: 30px;
+            }
+        }
+        
+        .test-toggle.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .test-toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.2s;
+        }
+        
+        .test-toggle.active::after {
+            left: 26px;
+        }
+        
+        @media (max-width: 768px) {
+            .test-toggle.active::after {
+                left: 24px;
+            }
+        }
+        
+        .test-toggle-label {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .test-result {
+            padding: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 11px;
+            text-align: center;
+            font-family: monospace;
+        }
+        
+        .status {
+            padding: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .status.danger { border-color: var(--danger); color: var(--danger); }
+        .status.training { border-color: var(--warning); color: var(--warning); }
+        .status.complete { border-color: var(--success); color: var(--success); }
+        
+        .main {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+        }
+        
+        .canvas-wrapper {
+            flex: 1;
+            position: relative;
+            background: var(--bg-tertiary);
+        }
+        
+        #networkCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: default;
+            touch-action: none;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: #21262d;
+            padding: 1px;
+        }
+        
+        .stat {
+            background: var(--bg-secondary);
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            font-family: monospace;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 20px;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .modal-close:hover { color: var(--text-primary); }
+        
+        @media (max-width: 768px) {
+            .modal-close {
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
+            }
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .edit-modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            margin: 20px;
+        }
+        
+        .edit-form-group {
+            margin-bottom: 15px;
+        }
+        
+        .edit-form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .edit-form-group input {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: monospace;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .edit-form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .edit-form-group input {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+        
+        .edit-form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .help-section {
+            margin-bottom: 30px;
+        }
+        
+        .help-section h3 {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .help-section p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .help-section code {
+            background: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #79c0ff;
+        }
+        
+        .help-section pre {
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .help-section pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+        
+        .help-example {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+        
+        .help-example-title {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .truth-table th,
+        .truth-table td {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .truth-table th {
+            background: var(--bg-secondary);
+        }
+        .truth-table td.true {
+            background: rgba(88, 166, 255, 0.2);
+        }
+        .truth-table tbody td:last-child {
+            font-weight: bold;
+        }
+        
+        .help-list li {
+            margin-left: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>Expression</h3>
+                <div class="form-group">
+                    <label>Examples</label>
+                    <select id="expressionExamples">
+                        <option value="">Select...</option>
+                        <option value="A">A (identity)</option>
+                        <option value="!A">!A (NOT A)</option>
+                        <option value="A && B">A && B (AND)</option>
+                        <option value="A || B">A || B (OR)</option>
+                        <option value="A ^ B">A ^ B (XOR)</option>
+                        <option value="!(A && B)">!(A && B) (NAND)</option>
+                        <option value="!(A || B)">!(A || B) (NOR)</option>
+                        <option value="A && !B">A && !B (A AND NOT B)</option>
+                        <option value="(A && B) || (!A && !B)">(A && B) || (!A && !B) (XNOR)</option>
+                        <option value="A && B && C">A && B && C (all three)</option>
+                        <option value="A || B || C">A || B || C (any one)</option>
+                        <option value="(A && B) || (A && C) || (B && C)">(A && B) || (A && C) || (B && C) (majority - at least 2)</option>
+                        <option value="A ^ B ^ C">A ^ B ^ C (parity - odd count)</option>
+                        <option value="A && (B || C)">A && (B || C) (A requires B or C)</option>
+                        <option value="(A && B) ^ C">(A && B) ^ C (A AND B XOR C)</option>
+                        <option value="(A || B) && (C || D)">(A || B) && (C || D)</option>
+                        <option value="A && B && C && D">A && B && C && D</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Formula</label>
+                    <input type="text" id="booleanExpression" placeholder="A ^ B" value="A ^ B">
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Architecture</h3>
+                <div class="slider-group">
+                    <label>
+                        Hidden Layers
+                        <span class="slider-value" id="hiddenLayersValue">1</span>
+                    </label>
+                    <input type="range" id="hiddenLayers" min="0" max="3" value="1">
+                </div>
+                <div id="hiddenLayersConfig"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Training</h3>
+                <div class="slider-group">
+                    <label>
+                        Learning Rate
+                        <span class="slider-value" id="lrValue">0.8</span>
+                    </label>
+                    <input type="range" id="learningRate" min="0.01" max="2" step="0.01" value="0.8">
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Actions</h3>
+                <button class="btn btn-primary" id="startTraining">Train</button>
+                <button class="btn btn-danger" id="stopTraining">Stop</button>
+                <button class="btn" id="resetNetwork">Reset</button>
+                <button class="btn btn-help" id="helpBtn">Help</button>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Test</span>
+                    <button class="btn btn-truth-table" id="showTruthTable">Show Truth Table</button>
+                </h3>
+                <div class="test-grid" id="testInputsContainer"></div>
+                <div class="test-result" id="testResult">Output: -</div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="status" id="trainingStatus">Ready</div>
+            </div>
+        </div>
+        
+        <div class="main">
+            <div class="canvas-wrapper">
+                <canvas id="networkCanvas"></canvas>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Epoch</div>
+                    <div class="stat-value" id="epoch">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Loss</div>
+                    <div class="stat-value" id="loss">-</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Accuracy</div>
+                    <div class="stat-value" id="accuracy">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Neural Network Help & Theory</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3>Overview</h3>
+                    <p>This is an interactive neural network demonstrator that learns boolean logic functions. Enter a boolean expression, configure the network, and watch it learn through backpropagation in real-time.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Quick Start</h3>
+                    <ol class="help-list" style="list-style: decimal; padding-left: 20px;">
+                        <li>Enter a boolean expression (e.g., <code>A ^ B</code> for XOR)</li>
+                        <li>Adjust network settings if needed (hidden layers, neurons, learning rate)</li>
+                        <li>Click <strong>Train</strong> to start learning</li>
+                        <li>Watch the network learn - training stops automatically at 95% accuracy</li>
+                        <li>Use the test toggles to verify the network's predictions</li>
+                    </ol>
+                </div>
+
+                <div class="help-section">
+                    <h3>Boolean Expressions</h3>
+                    <p>Use JavaScript syntax with variables A through H (up to 8 inputs):</p>
+                    <div class="help-example">
+                        <div class="help-example-title">Operators:</div>
+                        <code>&&</code> (AND) | <code>||</code> (OR) | <code>^</code> (XOR) | <code>!</code> (NOT)
+                    </div>
+                    <div class="help-example">
+                        <div class="help-example-title">Examples:</div>
+                        <pre><code>A && B        → Both must be true
+A || B        → At least one true
+A ^ B         → Exactly one true (XOR)
+!(A && B)     → NAND (not both)
+A && B && C   → All three must be true</code></pre>
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>Network Settings</h3>
+                    <ul class="help-list">
+                        <li><strong>Hidden Layers:</strong> Number of layers between input and output (0-3). 0 = direct connection (linear only), 1+ = non-linear patterns</li>
+                        <li><strong>Neurons per Layer:</strong> Each hidden layer can have 2-12 neurons. More neurons = more capacity but slower training</li>
+                        <li><strong>Learning Rate:</strong> How fast the network learns (0.01-2.0). Higher = faster but may be unstable, lower = slower but more stable. Default: 0.8</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">
+                        <strong>Tip:</strong> Simple functions (AND, OR) work with 0 hidden layers. Complex functions (XOR) need at least 1 hidden layer with 2+ neurons.
+                    </p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Visualization Guide</h3>
+                    <ul class="help-list">
+                        <li><strong>Neurons (circles):</strong> Brightness shows activation level. Dark = low (near 0), Bright = high (near 1)</li>
+                        <li><strong>Numbers:</strong> Exact activation value displayed (0.00 to 1.00)</li>
+                        <li><strong>Connections (lines):</strong> Green = positive weight, Red = negative weight. Thicker lines = stronger weights</li>
+                        <li><strong>Small dots:</strong> Bias indicators - Green = positive bias, Red = negative bias</li>
+                        <li><strong>Input labels:</strong> A, B, C... H shown on the left side of input neurons</li>
+                        <li><strong>Hover:</strong> Move your mouse over neurons or connections to see weight/bias values in a tooltip</li>
+                        <li><strong>Click to Edit:</strong> Click on any neuron to edit its bias (or activation for input neurons). Click on connections to edit weights</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">
+                        The visualization updates in real-time during training, showing how weights and activations change as the network learns. You can manually adjust weights and biases by clicking on them - the network will recalculate activations automatically.
+                    </p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Neural Network Architecture</h3>
+                    <p>A neural network consists of layers of interconnected neurons:</p>
+                    <ul class="help-list">
+                        <li><strong>Input Layer:</strong> Receives the input data (e.g., boolean values A, B, C...)</li>
+                        <li><strong>Hidden Layers:</strong> Process the information through weighted connections. Each hidden layer can have multiple neurons that learn different features</li>
+                        <li><strong>Output Layer:</strong> Produces the final prediction (0 or 1 for boolean logic)</li>
+                    </ul>
+                    <p>Each connection between neurons has a <strong>weight</strong> that determines how much influence one neuron has on another. Each neuron (except inputs) also has a <strong>bias</strong> that shifts its activation threshold.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Activation Function: Sigmoid</h3>
+                    <p>This network uses the <strong>sigmoid activation function</strong>, which maps any real number to a value between 0 and 1:</p>
+                    <div class="help-example">
+                        <div class="help-example-title">Sigmoid Formula:</div>
+                        <pre><code>σ(x) = 1 / (1 + e^(-x))</code></pre>
+                    </div>
+                    <p><strong>Properties:</strong></p>
+                    <ul class="help-list">
+                        <li>Smooth, differentiable curve (essential for backpropagation)</li>
+                        <li>Output range: (0, 1) - perfect for binary classification</li>
+                        <li>Large negative values → output near 0 (inactive neuron)</li>
+                        <li>Large positive values → output near 1 (active neuron)</li>
+                        <li>Value of 0 → output of 0.5 (neutral, middle of curve)</li>
+                        <li>Steepest gradient at x = 0, flattens at extremes</li>
+                    </ul>
+                    <p>The sigmoid function introduces <strong>non-linearity</strong>, allowing the network to learn complex patterns. Without it, multiple layers would be equivalent to a single layer (linear transformation).</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Forward Pass</h3>
+                    <p>During the forward pass, data flows from input to output:</p>
+                    <div class="help-example">
+                        <div class="help-example-title">For each neuron:</div>
+                        <pre><code>1. Calculate weighted sum: z = Σ(weight_i × input_i) + bias
+2. Apply activation: output = σ(z) = 1 / (1 + e^(-z))</code></pre>
+                    </div>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ol class="help-list" style="list-style: decimal; padding-left: 20px;">
+                        <li>Input values are fed to the first layer</li>
+                        <li>Each neuron in the next layer receives inputs from all neurons in the previous layer</li>
+                        <li>Each neuron multiplies inputs by their weights, sums them, adds bias</li>
+                        <li>The sum is passed through the sigmoid function</li>
+                        <li>This output becomes input for the next layer</li>
+                        <li>Process repeats until reaching the output layer</li>
+                    </ol>
+                    <p>The forward pass produces a prediction, but initially the weights are random, so predictions are poor.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Backpropagation Learning Algorithm</h3>
+                    <p>Backpropagation is how neural networks learn. It uses <strong>gradient descent</strong> to minimize error:</p>
+                    
+                    <p><strong>1. Loss Calculation:</strong></p>
+                    <p>We use <strong>Mean Squared Error (MSE)</strong> to measure how wrong the prediction is:</p>
+                    <div class="help-example">
+                        <div class="help-example-title">Loss Formula:</div>
+                        <pre><code>Loss = (target - output)²</code></pre>
+                    </div>
+                    
+                    <p><strong>2. Error Propagation:</strong></p>
+                    <p>The algorithm calculates how much each weight contributed to the error:</p>
+                    <ul class="help-list">
+                        <li><strong>Output Layer:</strong> Error = (target - output) × σ'(output)</li>
+                        <li><strong>Hidden Layers:</strong> Error propagates backward, weighted by connection strengths</li>
+                        <li>The derivative of sigmoid, σ'(x) = x × (1 - x), determines how sensitive the output is to changes</li>
+                    </ul>
+                    
+                    <p><strong>3. Weight Updates:</strong></p>
+                    <p>Weights are adjusted to reduce error:</p>
+                    <div class="help-example">
+                        <div class="help-example-title">Update Rule:</div>
+                        <pre><code>new_weight = old_weight + learning_rate × error × input</code></pre>
+                    </div>
+                    <ul class="help-list">
+                        <li><strong>Learning Rate:</strong> Controls step size. Too high → overshoots, too low → slow learning</li>
+                        <li>Weights connected to larger errors get bigger adjustments</li>
+                        <li>Biases are updated similarly: new_bias = old_bias + learning_rate × error</li>
+                    </ul>
+                    
+                    <p><strong>4. Iteration:</strong></p>
+                    <p>This process repeats for all training examples, gradually reducing error. Each complete pass through all examples is called an <strong>epoch</strong>.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Weight Initialization</h3>
+                    <p>This network uses <strong>Xavier/Glorot initialization</strong>:</p>
+                    <div class="help-example">
+                        <div class="help-example-title">Initialization Formula:</div>
+                        <pre><code>weight = random(-1, 1) × √(2 / (inputs + outputs))
+bias = random(-0.1, 0.1)</code></pre>
+                    </div>
+                    <p><strong>Why this matters:</strong></p>
+                    <ul class="help-list">
+                        <li>Prevents weights from being too large (causes saturation) or too small (causes slow learning)</li>
+                        <li>Scales weights based on layer size to maintain signal variance</li>
+                        <li>Helps the network learn faster and more reliably</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>Why Neural Networks Work</h3>
+                    <p>Neural networks can approximate any continuous function (Universal Approximation Theorem):</p>
+                    <ul class="help-list">
+                        <li><strong>Hidden layers</strong> create non-linear combinations of inputs</li>
+                        <li><strong>Multiple neurons</strong> allow learning different features simultaneously</li>
+                        <li><strong>Backpropagation</strong> finds the right combination of weights through optimization</li>
+                        <li>For boolean logic, the network learns decision boundaries that separate true from false</li>
+                    </ul>
+                    <p><strong>Example (XOR):</strong> XOR cannot be learned by a single layer (it's not linearly separable). A hidden layer with 2+ neurons creates curved decision boundaries that can separate the XOR pattern.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>Interactive Features</h3>
+                    <ul class="help-list">
+                        <li><strong>Edit Weights:</strong> Click on any connection line to edit its weight value</li>
+                        <li><strong>Edit Biases:</strong> Click on any hidden or output neuron to edit its bias</li>
+                        <li><strong>Edit Input Activations:</strong> Click on input neurons to manually set activation (will be overwritten when test inputs change)</li>
+                        <li><strong>Hover Tooltips:</strong> Hover over neurons or connections to see their current values</li>
+                        <li><strong>Test Toggles:</strong> Use the toggle switches in the Test section to manually test different input combinations</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>Tips</h3>
+                    <ul class="help-list">
+                        <li>If training doesn't improve, click <strong>Reset</strong> to get new random weights</li>
+                        <li>Complex expressions may require more hidden layers or neurons</li>
+                        <li>If training is unstable (loss jumps around), try lowering the learning rate</li>
+                        <li>Use the test toggles to verify the network works with all input combinations</li>
+                        <li>The network initializes with random weights each time you reset or change architecture</li>
+                        <li>Training automatically stops when loss < 0.01 and accuracy ≥ 95%</li>
+                        <li>You can manually edit weights/biases during or after training to experiment with the network</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="truthTableModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Truth Table</h2>
+                <button class="modal-close" id="closeTruthTableModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="truthTableContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const INPUT_NAMES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const SIGMOID_CLAMP = 500;
+        const CONVERGENCE_LOSS = 0.01;
+        const CONVERGENCE_ACCURACY = 0.95;
+        const HOVER_THRESHOLD = 8;
+        const NODE_RADIUS = 25;
+        const LAYER_SPACING = 200;
+        const NODE_SPACING = 60;
+
+        const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+        const ExpressionParser = {
+            extractVariables: (expression) => {
+                const found = [];
+                const seen = new Set();
+                const regex = new RegExp(`\\b(${INPUT_NAMES.join('|')})\\b`, 'g');
+                let match;
+                while ((match = regex.exec(expression)) !== null) {
+                    const varName = match[1];
+                    if (!seen.has(varName)) {
+                        seen.add(varName);
+                        found.push(varName);
+                    }
+                }
+                return found;
+            },
+
+            evaluate: (expr, vars) => {
+                let code = expr;
+                const varNames = Object.keys(vars).sort((a, b) => b.length - a.length);
+                for (const varName of varNames) {
+                    code = code.replace(new RegExp(`\\b${varName}\\b`, 'g'), `(${vars[varName]})`);
+                }
+                return Boolean(new Function('return ' + code)());
+            },
+
+            generateTruthTable: (expression, numInputs) => {
+                const usedVars = ExpressionParser.extractVariables(expression);
+                if (!usedVars.length) return null;
+                
+                const actualNumInputs = Math.max(numInputs, usedVars.length);
+                const numCombinations = 2 ** actualNumInputs;
+                const inputs = [];
+                const targets = [];
+                
+                for (let i = 0; i < numCombinations; i++) {
+                    const input = [];
+                    const vars = {};
+                    for (let j = 0; j < actualNumInputs; j++) {
+                        const bit = (i >> (actualNumInputs - 1 - j)) & 1;
+                        input.push(bit);
+                        vars[usedVars[j]] = bit;
+                    }
+                    inputs.push(input);
+                    try {
+                        const result = ExpressionParser.evaluate(expression, vars);
+                        targets.push([result ? 1 : 0]);
+                    } catch (e) {
+                        return null;
+                    }
+                }
+                return { inputs, targets };
+            }
+        };
+
+        class NeuralNetwork {
+            constructor(layers, learningRate = 0.5) {
+                this.layers = layers;
+                this.learningRate = learningRate;
+                this.weights = [];
+                this.biases = [];
+                this.activations = [];
+                this.deltas = [];
+                
+                for (let i = 0; i < layers.length - 1; i++) {
+                    const rows = layers[i + 1];
+                    const cols = layers[i];
+                    const scale = Math.sqrt(2 / (cols + rows));
+                    this.weights[i] = Array.from({ length: rows }, () =>
+                        Array.from({ length: cols }, () => (Math.random() * 2 - 1) * scale)
+                    );
+                    this.biases[i] = Array.from({ length: rows }, () => (Math.random() * 2 - 1) * 0.1);
+                }
+            }
+
+            sigmoid = (x) => {
+                const clamped = clamp(x, -SIGMOID_CLAMP, SIGMOID_CLAMP);
+                return 1 / (1 + Math.exp(-clamped));
+            };
+
+            sigmoidDerivative = (x) => x * (1 - x);
+
+            forward(input) {
+                this.activations = [[...input]];
+                let current = this.activations[0];
+
+                for (let i = 0; i < this.weights.length; i++) {
+                    const weightLayer = this.weights[i];
+                    const biasLayer = this.biases[i];
+                    const next = new Array(weightLayer.length);
+                    
+                    for (let j = 0; j < weightLayer.length; j++) {
+                        let sum = biasLayer[j];
+                        for (let k = 0; k < current.length; k++) {
+                            sum += weightLayer[j][k] * current[k];
+                        }
+                        next[j] = this.sigmoid(clamp(sum, -SIGMOID_CLAMP, SIGMOID_CLAMP));
+                    }
+                    
+                    this.activations.push(next);
+                    current = next;
+                }
+
+                return current;
+            }
+
+            backward(input, target) {
+                const output = this.activations[this.activations.length - 1];
+                const numLayers = this.activations.length;
+                this.deltas = new Array(numLayers);
+                
+                this.deltas[numLayers - 1] = output.map((val, i) => {
+                    const error = target[i] - val;
+                    return error * this.sigmoidDerivative(val);
+                });
+                
+                for (let layerIdx = numLayers - 2; layerIdx >= 1; layerIdx--) {
+                    const nextDelta = this.deltas[layerIdx + 1];
+                    const currentActivation = this.activations[layerIdx];
+                    const weights = this.weights[layerIdx];
+                    
+                    this.deltas[layerIdx] = currentActivation.map((_, k) => {
+                        const error = nextDelta.reduce((acc, delta, j) => acc + delta * weights[j][k], 0);
+                        return error * this.sigmoidDerivative(currentActivation[k]);
+                    });
+                }
+                
+                const lr = this.learningRate;
+                for (let i = 0; i < this.weights.length; i++) {
+                    const inputActivation = this.activations[i];
+                    const outputDelta = this.deltas[i + 1];
+                    const weightLayer = this.weights[i];
+                    const biasLayer = this.biases[i];
+                    
+                    for (let j = 0; j < weightLayer.length; j++) {
+                        const delta = outputDelta[j];
+                        const lrDelta = lr * delta;
+                        
+                        for (let k = 0; k < weightLayer[j].length; k++) {
+                            weightLayer[j][k] += lrDelta * inputActivation[k];
+                        }
+                        
+                        biasLayer[j] += lrDelta;
+                    }
+                }
+            }
+
+            predict = (input) => this.forward(input);
+        }
+
+        class NetworkVisualizer {
+            constructor(canvas, network) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.network = network;
+                this.nodeRadius = NODE_RADIUS;
+                this.layerSpacing = LAYER_SPACING;
+                this.nodeSpacing = NODE_SPACING;
+                this.animationFrame = null;
+                this.nodePositions = [];
+                this.connections = [];
+                this.nodes = [];
+                this.hoveredConnection = null;
+                this.hoveredNode = null;
+                this.tooltip = null;
+                this.eventListeners = {};
+                this.clickHandled = false;
+                this.resizeTimeout = null;
+                
+                this.resize();
+                this.setupEventListeners();
+                this.createTooltip();
+            }
+            
+            createTooltip() {
+                this.tooltip = document.createElement('div');
+                this.tooltip.style.cssText = `
+                    position: absolute;
+                    background: rgba(0, 0, 0, 0.9);
+                    color: #fff;
+                    padding: 6px 10px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    font-family: monospace;
+                    pointer-events: none;
+                    z-index: 1000;
+                    display: none;
+                    border: 1px solid #58a6ff;
+                    line-height: 1.4;
+                    white-space: nowrap;
+                `;
+                document.body.appendChild(this.tooltip);
+            }
+            
+            setupEventListeners() {
+                const getCoords = (clientX, clientY) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    return { x: clientX - rect.left, y: clientY - rect.top };
+                };
+                
+                const handleMove = (clientX, clientY) => {
+                    const coords = getCoords(clientX, clientY);
+                    this.handleMouseMove(coords.x, coords.y, clientX, clientY);
+                };
+                
+                const handleClick = (clientX, clientY) => {
+                    if (this.clickHandled) return;
+                    this.clickHandled = true;
+                    const coords = getCoords(clientX, clientY);
+                    this.handleClick(coords.x, coords.y);
+                    setTimeout(() => { this.clickHandled = false; }, 100);
+                };
+                
+                this.eventListeners.resize = () => {
+                    clearTimeout(this.resizeTimeout);
+                    this.resizeTimeout = setTimeout(() => this.resize(), 100);
+                };
+                
+                this.eventListeners.mousemove = (e) => handleMove(e.clientX, e.clientY);
+                this.eventListeners.click = (e) => {
+                    e.preventDefault();
+                    handleClick(e.clientX, e.clientY);
+                };
+                this.eventListeners.mouseleave = () => {
+                    this.hoveredConnection = null;
+                    this.hoveredNode = null;
+                    this.canvas.style.cursor = 'default';
+                    if (this.tooltip) this.tooltip.style.display = 'none';
+                };
+                this.eventListeners.touchstart = (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    handleMove(touch.clientX, touch.clientY);
+                };
+                this.eventListeners.touchmove = (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    handleMove(touch.clientX, touch.clientY);
+                };
+                this.eventListeners.touchend = (e) => {
+                    e.preventDefault();
+                    const touch = e.changedTouches[0];
+                    handleClick(touch.clientX, touch.clientY);
+                    setTimeout(() => {
+                        this.hoveredConnection = null;
+                        this.hoveredNode = null;
+                        if (this.tooltip) this.tooltip.style.display = 'none';
+                    }, 300);
+                };
+                
+                window.addEventListener('resize', this.eventListeners.resize, { passive: true });
+                window.addEventListener('orientationchange', this.eventListeners.resize, { passive: true });
+                this.canvas.addEventListener('mousemove', this.eventListeners.mousemove);
+                this.canvas.addEventListener('click', this.eventListeners.click);
+                this.canvas.addEventListener('mouseleave', this.eventListeners.mouseleave);
+                this.canvas.addEventListener('touchstart', this.eventListeners.touchstart, { passive: false });
+                this.canvas.addEventListener('touchmove', this.eventListeners.touchmove, { passive: false });
+                this.canvas.addEventListener('touchend', this.eventListeners.touchend, { passive: false });
+            }
+            
+            handleClick(canvasX, canvasY) {
+                if (!this.network) return;
+                
+                let closestNode = null;
+                let minNodeDist = Infinity;
+                
+                for (const node of this.nodes) {
+                    const dx = canvasX - node.x;
+                    const dy = canvasY - node.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist <= this.nodeRadius && dist < minNodeDist) {
+                        minNodeDist = dist;
+                        closestNode = node;
+                    }
+                }
+                
+                if (closestNode && minNodeDist < this.nodeRadius) {
+                    this.showEditNodeDialog(closestNode);
+                    return;
+                }
+                
+                let closestConn = null;
+                let minConnDist = Infinity;
+                
+                for (const conn of this.connections) {
+                    const dist = this.distanceToLineSegment(canvasX, canvasY, conn.x1, conn.y1, conn.x2, conn.y2);
+                    if (dist < HOVER_THRESHOLD && dist < minConnDist) {
+                        minConnDist = dist;
+                        closestConn = conn;
+                    }
+                }
+                
+                if (closestConn && minConnDist < HOVER_THRESHOLD) {
+                    this.showEditWeightDialog(closestConn);
+                }
+            }
+            
+            getNeuronLabel(node) {
+                const { layers } = this.network;
+                if (node.layerIdx === 0) {
+                    const varName = App.state.variableNames[node.nodeIdx] || INPUT_NAMES[node.nodeIdx] || node.nodeIdx;
+                    return `Input ${varName}`;
+                }
+                if (node.layerIdx === layers.length - 1) return 'Output';
+                return `Hidden ${node.layerIdx}, N${node.nodeIdx}`;
+            }
+            
+            getWeightLabel(conn) {
+                const { layers } = this.network;
+                const toLayer = conn.toLayer !== undefined ? conn.toLayer : conn.fromLayer + 1;
+                const fromLabel = conn.fromLayer === 0 
+                    ? (App.state.variableNames[conn.fromIdx] || INPUT_NAMES[conn.fromIdx] || `Input ${conn.fromIdx}`)
+                    : (conn.fromLayer === layers.length - 1 ? 'Output' : `Hidden ${conn.fromLayer}, N${conn.fromIdx}`);
+                const toLabel = toLayer === layers.length - 1 ? 'Output' : `Hidden ${toLayer}, N${conn.toIdx}`;
+                return `${fromLabel} → ${toLabel}`;
+            }
+            
+            createEditModal(title, content, onSave) {
+                document.querySelectorAll('.modal.active').forEach(modal => modal.remove());
+                
+                const modal = document.createElement('div');
+                modal.className = 'modal active';
+                modal.innerHTML = `
+                    <div class="edit-modal-content">
+                        <div class="modal-header">
+                            <h2>${title}</h2>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            ${content}
+                            <div class="edit-form-actions">
+                                <button class="btn" onclick="this.closest('.modal').remove()">Cancel</button>
+                                <button class="btn btn-primary" id="saveBtn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                const closeBtn = modal.querySelector('.modal-close');
+                const saveBtn = modal.querySelector('#saveBtn');
+                const firstInput = modal.querySelector('input');
+                
+                closeBtn.addEventListener('click', () => modal.remove());
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
+                
+                saveBtn.addEventListener('click', () => {
+                    onSave(modal);
+                    this.draw();
+                    modal.remove();
+                    App.saveState();
+                });
+                
+                if (firstInput) {
+                    firstInput.focus();
+                    firstInput.select();
+                    firstInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') saveBtn.click();
+                        else if (e.key === 'Escape') modal.remove();
+                    });
+                }
+            }
+            
+            showEditNodeDialog(node) {
+                if (!this.network) return;
+                
+                const isInputLayer = node.layerIdx === 0;
+                const neuronLabel = this.getNeuronLabel(node);
+                
+                const content = isInputLayer ? `
+                    <div class="edit-form-group">
+                        <label>Activation (0.0 - 1.0):</label>
+                        <input type="number" id="editValue" step="0.01" min="0" max="1" value="${node.activation.toFixed(4)}">
+                        <small style="color: var(--text-secondary); display: block; margin-top: 4px;">
+                            Input neuron activation. This will be overwritten when test inputs change.
+                        </small>
+                    </div>
+                ` : `
+                    <div class="edit-form-group">
+                        <label>Bias:</label>
+                        <input type="number" id="editValue" step="0.01" value="${node.bias.toFixed(4)}">
+                        <small style="color: var(--text-secondary); display: block; margin-top: 4px;">
+                            Bias is a permanent parameter. Activation is computed from inputs, weights, and bias.
+                        </small>
+                    </div>
+                `;
+                
+                this.createEditModal(`Edit ${neuronLabel}`, content, (modal) => {
+                    const value = parseFloat(modal.querySelector('#editValue').value);
+                    if (isNaN(value)) return;
+                    
+                    if (isInputLayer) {
+                        if (this.network.activations[node.layerIdx]) {
+                            this.network.activations[node.layerIdx][node.nodeIdx] = value;
+                        }
+                    } else {
+                        const biasLayerIdx = node.layerIdx - 1;
+                        if (this.network.biases[biasLayerIdx]) {
+                            this.network.biases[biasLayerIdx][node.nodeIdx] = value;
+                        }
+                    }
+                    this.network.forward([...this.network.activations[0]]);
+                });
+            }
+            
+            showEditWeightDialog(conn) {
+                if (!this.network) return;
+                
+                const weightLabel = this.getWeightLabel(conn);
+                
+                const content = `
+                    <div class="edit-form-group">
+                        <label>Weight:</label>
+                        <input type="number" id="editValue" step="0.01" value="${conn.weight.toFixed(4)}">
+                    </div>
+                `;
+                
+                this.createEditModal(`Edit Weight: ${weightLabel}`, content, (modal) => {
+                    const value = parseFloat(modal.querySelector('#editValue').value);
+                    if (isNaN(value)) return;
+                    
+                    if (this.network.weights[conn.fromLayer]?.[conn.toIdx]) {
+                        this.network.weights[conn.fromLayer][conn.toIdx][conn.fromIdx] = value;
+                    }
+                    this.network.forward([...this.network.activations[0]]);
+                });
+            }
+            
+            distanceToLineSegment(px, py, x1, y1, x2, y2) {
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const lengthSq = dx * dx + dy * dy;
+                if (lengthSq === 0) {
+                    const dx2 = px - x1;
+                    const dy2 = py - y1;
+                    return Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                }
+                const t = clamp(((px - x1) * dx + (py - y1) * dy) / lengthSq, 0, 1);
+                const projX = x1 + t * dx;
+                const projY = y1 + t * dy;
+                const dx2 = px - projX;
+                const dy2 = py - projY;
+                return Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            }
+            
+            handleMouseMove(canvasX, canvasY, clientX, clientY) {
+                let closestConnection = null;
+                let closestNode = null;
+                let minConnDistance = Infinity;
+                let minNodeDistance = Infinity;
+                
+                for (const conn of this.connections) {
+                    const dist = this.distanceToLineSegment(canvasX, canvasY, conn.x1, conn.y1, conn.x2, conn.y2);
+                    if (dist < HOVER_THRESHOLD && dist < minConnDistance) {
+                        minConnDistance = dist;
+                        closestConnection = conn;
+                    }
+                }
+                
+                for (const node of this.nodes) {
+                    const dx = canvasX - node.x;
+                    const dy = canvasY - node.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < this.nodeRadius + 5 && dist < minNodeDistance) {
+                        minNodeDistance = dist;
+                        closestNode = node;
+                    }
+                }
+                
+                const isHoveredNode = closestNode !== null;
+                const isHoveredConn = closestConnection !== null && !isHoveredNode;
+                
+                if (this.hoveredNode !== closestNode || this.hoveredConnection !== (isHoveredConn ? closestConnection : null)) {
+                    this.hoveredNode = closestNode;
+                    this.hoveredConnection = isHoveredConn ? closestConnection : null;
+                    this.canvas.style.cursor = (closestNode || closestConnection) ? 'pointer' : 'default';
+                }
+                
+                if (this.tooltip) {
+                    if (closestNode) {
+                        const value = closestNode.bias !== undefined ? closestNode.bias : closestNode.activation;
+                        const label = closestNode.bias !== undefined ? 'Bias' : 'Activation';
+                        this.tooltip.innerHTML = `${label}: ${value.toFixed(4)}<br><small style="color: #888;">Click to edit</small>`;
+                        this.tooltip.style.display = 'block';
+                        this.tooltip.style.left = (clientX + 10) + 'px';
+                        this.tooltip.style.top = (clientY - 30) + 'px';
+                    } else if (closestConnection) {
+                        this.tooltip.innerHTML = `Weight: ${closestConnection.weight.toFixed(4)}<br><small style="color: #888;">Click to edit</small>`;
+                        this.tooltip.style.display = 'block';
+                        this.tooltip.style.left = (clientX + 10) + 'px';
+                        this.tooltip.style.top = (clientY - 30) + 'px';
+                    } else {
+                        this.tooltip.style.display = 'none';
+                    }
+                }
+            }
+
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                if (this.canvas.width !== rect.width || this.canvas.height !== rect.height) {
+                    this.canvas.width = rect.width;
+                    this.canvas.height = rect.height;
+                    this.draw();
+                }
+            }
+
+            calculateNodePositions() {
+                const { layers } = this.network;
+                const totalWidth = (layers.length - 1) * this.layerSpacing;
+                const startX = (this.canvas.width - totalWidth) / 2;
+                this.nodePositions = [];
+
+                for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
+                    const layerSize = layers[layerIdx];
+                    const totalHeight = (layerSize - 1) * this.nodeSpacing;
+                    const startY = (this.canvas.height - totalHeight) / 2;
+                    const x = startX + layerIdx * this.layerSpacing;
+                    
+                    this.nodePositions.push(
+                        Array.from({ length: layerSize }, (_, nodeIdx) => ({
+                            x,
+                            y: startY + nodeIdx * this.nodeSpacing
+                        }))
+                    );
+                }
+            }
+
+            drawConnections() {
+                const { ctx } = this;
+                this.connections = [];
+                let hoveredConn = null;
+                
+                for (let layerIdx = 0; layerIdx < this.nodePositions.length - 1; layerIdx++) {
+                    const fromLayer = this.nodePositions[layerIdx];
+                    const toLayer = this.nodePositions[layerIdx + 1];
+                    const weights = this.network.weights[layerIdx];
+
+                    for (let fromIdx = 0; fromIdx < fromLayer.length; fromIdx++) {
+                        for (let toIdx = 0; toIdx < toLayer.length; toIdx++) {
+                            const weight = weights[toIdx][fromIdx];
+                            const x1 = fromLayer[fromIdx].x;
+                            const y1 = fromLayer[fromIdx].y;
+                            const x2 = toLayer[toIdx].x;
+                            const y2 = toLayer[toIdx].y;
+                            
+                            const conn = {
+                                x1, y1, x2, y2, weight,
+                                fromLayer: layerIdx,
+                                toLayer: layerIdx + 1,
+                                fromIdx, toIdx
+                            };
+                            this.connections.push(conn);
+                            
+                            const isHovered = this.hoveredConnection && 
+                                this.hoveredConnection.x1 === x1 && 
+                                this.hoveredConnection.y1 === y1 &&
+                                this.hoveredConnection.x2 === x2 &&
+                                this.hoveredConnection.y2 === y2;
+                            
+                            if (isHovered) {
+                                hoveredConn = conn;
+                                continue;
+                            }
+                            
+                            const weightAbs = Math.abs(weight);
+                            const intensity = Math.min(1, weightAbs * 2);
+                            const hue = weight > 0 ? 120 : 0;
+                            
+                            ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${0.4 + intensity * 0.4})`;
+                            ctx.lineWidth = Math.max(1, weightAbs * 3);
+                            ctx.beginPath();
+                            ctx.moveTo(x1, y1);
+                            ctx.lineTo(x2, y2);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                if (hoveredConn) {
+                    const weightAbs = Math.abs(hoveredConn.weight);
+                    const hue = hoveredConn.weight > 0 ? 120 : 0;
+                    ctx.strokeStyle = `hsla(${hue}, 100%, 70%, 0.9)`;
+                    ctx.lineWidth = Math.max(3, weightAbs * 4);
+                    ctx.beginPath();
+                    ctx.moveTo(hoveredConn.x1, hoveredConn.y1);
+                    ctx.lineTo(hoveredConn.x2, hoveredConn.y2);
+                    ctx.stroke();
+                }
+            }
+
+            drawNodes() {
+                const { ctx } = this;
+                const { layers } = this.network;
+                this.nodes = [];
+
+                if (this.nodePositions.length !== layers.length) {
+                    this.calculateNodePositions();
+                    this.hoveredNode = null;
+                    this.hoveredConnection = null;
+                }
+
+                for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
+                    if (layerIdx >= this.nodePositions.length) break;
+                    
+                    const layer = this.nodePositions[layerIdx];
+                    const layerSize = layers[layerIdx];
+                    const activations = this.network.activations[layerIdx] || [];
+                    const biases = layerIdx > 0 ? this.network.biases[layerIdx - 1] : [];
+
+                    for (let nodeIdx = 0; nodeIdx < layerSize && nodeIdx < layer.length; nodeIdx++) {
+                        const pos = layer[nodeIdx];
+                        const activation = activations[nodeIdx] || 0;
+                        const bias = layerIdx > 0 ? (biases[nodeIdx] || 0) : undefined;
+                        
+                        this.nodes.push({
+                            x: pos.x,
+                            y: pos.y,
+                            layerIdx,
+                            nodeIdx,
+                            activation,
+                            bias
+                        });
+
+                        const brightness = 40 + activation * 80;
+                        ctx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness})`;
+                        ctx.beginPath();
+                        ctx.arc(pos.x, pos.y, this.nodeRadius, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.strokeStyle = '#4a5568';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+
+                        ctx.font = 'bold 12px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        const text = activation.toFixed(2);
+                        
+                        ctx.strokeStyle = '#000';
+                        ctx.lineWidth = 3;
+                        ctx.strokeText(text, pos.x, pos.y);
+                        
+                        ctx.fillStyle = '#e0e0e0';
+                        ctx.fillText(text, pos.x, pos.y);
+
+                        if (layerIdx > 0) {
+                            const biasX = pos.x + this.nodeRadius * 0.7;
+                            const biasY = pos.y - this.nodeRadius * 0.7;
+                            ctx.fillStyle = bias > 0 ? '#28a745' : '#dc3545';
+                            ctx.beginPath();
+                            ctx.arc(biasX, biasY, 5, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+                
+                if (this.hoveredNode) {
+                    const node = this.hoveredNode;
+                    ctx.strokeStyle = '#58a6ff';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, this.nodeRadius + 2, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    if (node.bias !== undefined) {
+                        const biasX = node.x + this.nodeRadius * 0.7;
+                        const biasY = node.y - this.nodeRadius * 0.7;
+                        ctx.fillStyle = node.bias > 0 ? '#28a745' : '#dc3545';
+                        ctx.beginPath();
+                        ctx.arc(biasX, biasY, 7, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#fff';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            drawLabels() {
+                const { ctx } = this;
+                const { layers } = this.network;
+                
+                ctx.fillStyle = '#888';
+                ctx.font = '12px sans-serif';
+                ctx.textAlign = 'center';
+                
+                const labels = ['Input', ...Array.from({ length: layers.length - 2 }, (_, i) => `Hidden ${i + 1}`), 'Output'];
+                
+                for (let i = 0; i < this.nodePositions.length; i++) {
+                    const x = this.nodePositions[i][0].x;
+                    const y = this.nodePositions[i][0].y - this.nodeRadius - 20;
+                    ctx.fillText(labels[i] || `Layer ${i + 1}`, x, y);
+                }
+                
+                if (this.nodePositions[0]?.length <= 6) {
+                    ctx.fillStyle = '#58a6ff';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.textAlign = 'right';
+                    for (let i = 0; i < this.nodePositions[0].length; i++) {
+                        const pos = this.nodePositions[0][i];
+                        const varName = App.state.variableNames[i] || INPUT_NAMES[i] || `I${i}`;
+                        ctx.fillText(varName, pos.x - this.nodeRadius - 10, pos.y);
+                    }
+                    ctx.textAlign = 'center';
+                }
+            }
+
+            draw() {
+                const { ctx } = this;
+                ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                if (!this.network) return;
+
+                this.calculateNodePositions();
+                this.drawConnections();
+                this.drawNodes();
+                this.drawLabels();
+            }
+
+            animate() {
+                this.draw();
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+
+            stop() {
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                    this.animationFrame = null;
+                }
+                
+                if (this.resizeTimeout) {
+                    clearTimeout(this.resizeTimeout);
+                    this.resizeTimeout = null;
+                }
+                
+                Object.entries(this.eventListeners).forEach(([event, handler]) => {
+                    if (handler) {
+                        if (event === 'resize' || event === 'orientationchange') {
+                            window.removeEventListener(event, handler);
+                        } else {
+                            this.canvas.removeEventListener(event, handler);
+                        }
+                        this.eventListeners[event] = null;
+                    }
+                });
+                
+                this.hoveredConnection = null;
+                this.hoveredNode = null;
+                this.nodes = [];
+                this.connections = [];
+                this.nodePositions = [];
+                
+                if (this.tooltip) {
+                    this.tooltip.style.display = 'none';
+                }
+            }
+        }
+
+        const App = {
+            state: {
+                problem: null,
+                network: null,
+                visualizer: null,
+                isTraining: false,
+                epochCount: 0,
+                numInputs: 0,
+                variableNames: []
+            },
+
+            elements: {
+                canvas: document.getElementById('networkCanvas'),
+                hiddenLayers: document.getElementById('hiddenLayers'),
+                hiddenLayersConfig: document.getElementById('hiddenLayersConfig'),
+                learningRate: document.getElementById('learningRate'),
+                booleanExpression: document.getElementById('booleanExpression'),
+                expressionExamples: document.getElementById('expressionExamples'),
+                testInputsContainer: document.getElementById('testInputsContainer'),
+                testResult: document.getElementById('testResult'),
+                helpModal: document.getElementById('helpModal'),
+                truthTableModal: document.getElementById('truthTableModal'),
+                truthTableContent: document.getElementById('truthTableContent'),
+                trainingStatus: document.getElementById('trainingStatus'),
+                epoch: document.getElementById('epoch'),
+                loss: document.getElementById('loss'),
+                accuracy: document.getElementById('accuracy'),
+                hiddenLayersValue: document.getElementById('hiddenLayersValue'),
+                lrValue: document.getElementById('lrValue')
+            },
+
+            saveState: () => {
+                const state = {
+                    booleanExpression: App.elements.booleanExpression.value,
+                    hiddenLayers: parseInt(App.elements.hiddenLayers.value),
+                    hiddenLayerSizes: [],
+                    learningRate: parseFloat(App.elements.learningRate.value),
+                    testInputs: [],
+                    epochCount: App.state.epochCount,
+                    currentVariableNames: App.state.variableNames
+                };
+
+                for (let i = 0; i < state.hiddenLayers; i++) {
+                    const slider = document.getElementById(`hiddenLayer${i}`);
+                    if (slider) state.hiddenLayerSizes.push(parseInt(slider.value));
+                }
+
+                for (let i = 0; i < App.state.numInputs; i++) {
+                    const toggle = document.getElementById(`testInput${i}`);
+                    if (toggle) state.testInputs.push(toggle.dataset.value === '1' ? 1 : 0);
+                }
+
+                if (App.state.network) {
+                    state.networkWeights = App.state.network.weights;
+                    state.networkBiases = App.state.network.biases;
+                }
+
+                localStorage.setItem('neuronState', JSON.stringify(state));
+            },
+
+            loadState: () => {
+                const saved = localStorage.getItem('neuronState');
+                return saved ? JSON.parse(saved) : null;
+            },
+
+            restoreState: (state) => {
+                if (!state) return false;
+                
+                App.elements.booleanExpression.value = state.booleanExpression;
+                App.elements.hiddenLayers.value = state.hiddenLayers;
+                App.elements.learningRate.value = state.learningRate;
+                App.elements.hiddenLayersValue.textContent = state.hiddenLayers;
+                App.elements.lrValue.textContent = state.learningRate.toFixed(2);
+                
+                App.updateHiddenLayersConfig(state.hiddenLayerSizes);
+                
+                const usedVars = ExpressionParser.extractVariables(App.elements.booleanExpression.value);
+                if (!usedVars.length) return false;
+                
+                App.state.variableNames = usedVars;
+                App.state.numInputs = usedVars.length;
+                
+                const layers = [App.state.numInputs];
+                for (let i = 0; i < state.hiddenLayers; i++) {
+                    layers.push(state.hiddenLayerSizes[i] || 4);
+                }
+                layers.push(1);
+
+                App.state.network = new NeuralNetwork(layers, state.learningRate);
+                if (state.networkWeights) App.state.network.weights = state.networkWeights;
+                if (state.networkBiases) App.state.network.biases = state.networkBiases;
+
+                if (App.state.visualizer) {
+                    App.state.visualizer.stop();
+                    if (App.state.visualizer.tooltip?.parentNode) {
+                        App.state.visualizer.tooltip.parentNode.removeChild(App.state.visualizer.tooltip);
+                    }
+                }
+
+                App.state.visualizer = new NetworkVisualizer(App.elements.canvas, App.state.network);
+                App.state.visualizer.animate();
+
+                App.state.epochCount = state.epochCount || 0;
+                App.state.problem = ExpressionParser.generateTruthTable(App.elements.booleanExpression.value, App.state.numInputs);
+                App.updateTestInputs();
+
+                for (let i = 0; i < state.testInputs.length && i < App.state.numInputs; i++) {
+                    const toggle = document.getElementById(`testInput${i}`);
+                    if (!toggle) continue;
+                    toggle.dataset.value = state.testInputs[i];
+                    if (state.testInputs[i] === 1) {
+                        toggle.classList.add('active');
+                        const labelEl = toggle.nextElementSibling;
+                        if (labelEl) labelEl.textContent = 'true';
+                    }
+                }
+
+                App.updateStats();
+                App.updateStatus('ready', 'Ready');
+                App.testNetwork();
+                return true;
+            },
+
+            updateHiddenLayersConfig: (presetValues = []) => {
+                const numLayers = parseInt(App.elements.hiddenLayers.value);
+                const values = [];
+                
+                for (let i = 0; i < numLayers; i++) {
+                    if (presetValues[i] !== undefined) {
+                        values[i] = String(presetValues[i]);
+                    } else {
+                        const slider = document.getElementById(`hiddenLayer${i}`);
+                        values[i] = slider ? slider.value : (values[i - 1] || '4');
+                    }
+                }
+                
+                App.elements.hiddenLayersConfig.innerHTML = '';
+                
+                for (let i = 0; i < numLayers; i++) {
+                    const sliderGroup = document.createElement('div');
+                    sliderGroup.className = 'slider-group';
+                    
+                    const label = document.createElement('label');
+                    const span = document.createElement('span');
+                    span.className = 'slider-value';
+                    span.id = `hiddenLayer${i}Value`;
+                    span.textContent = values[i];
+                    
+                    label.appendChild(document.createTextNode(`Hidden ${i + 1} Neurons `));
+                    label.appendChild(span);
+                    
+                    const slider = document.createElement('input');
+                    slider.type = 'range';
+                    slider.id = `hiddenLayer${i}`;
+                    slider.min = '2';
+                    slider.max = '12';
+                    slider.value = values[i];
+                    slider.addEventListener('input', () => {
+                        document.getElementById(`hiddenLayer${i}Value`).textContent = slider.value;
+                        App.initNetwork();
+                        App.saveState();
+                    });
+                    
+                    sliderGroup.appendChild(label);
+                    sliderGroup.appendChild(slider);
+                    App.elements.hiddenLayersConfig.appendChild(sliderGroup);
+                }
+            },
+
+            updateValueDisplays: () => {
+                App.elements.hiddenLayersValue.textContent = App.elements.hiddenLayers.value;
+                App.elements.lrValue.textContent = parseFloat(App.elements.learningRate.value).toFixed(2);
+                App.saveState();
+            },
+
+            updateTestInputs: () => {
+                App.elements.testInputsContainer.innerHTML = '';
+                for (let i = 0; i < App.state.numInputs; i++) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'test-input';
+                    
+                    const label = document.createElement('div');
+                    label.className = 'test-label';
+                    label.textContent = App.state.variableNames[i] || INPUT_NAMES[i];
+                    
+                    const toggle = document.createElement('div');
+                    toggle.className = 'test-toggle';
+                    toggle.id = `testInput${i}`;
+                    toggle.dataset.value = '0';
+                    toggle.addEventListener('click', () => {
+                        const isActive = toggle.classList.contains('active');
+                        toggle.classList.toggle('active');
+                        toggle.dataset.value = isActive ? '0' : '1';
+                        const labelEl = toggle.nextElementSibling;
+                        if (labelEl) labelEl.textContent = isActive ? 'false' : 'true';
+                        App.testNetwork();
+                        App.saveState();
+                    });
+                    
+                    const toggleLabel = document.createElement('div');
+                    toggleLabel.className = 'test-toggle-label';
+                    toggleLabel.textContent = 'false';
+                    
+                    wrapper.append(label, toggle, toggleLabel);
+                    App.elements.testInputsContainer.appendChild(wrapper);
+                }
+            },
+
+            updateProblemFromExpression: () => {
+                const expr = App.elements.booleanExpression.value.trim();            
+                const usedVars = ExpressionParser.extractVariables(expr);
+
+                if (!usedVars.length) {
+                    App.updateStatus('danger', 'No variables found');
+                    return;
+                }
+                
+                App.state.variableNames = usedVars;
+                
+                if (App.state.numInputs !== usedVars.length) {
+                    App.state.numInputs = usedVars.length;
+                    App.initNetwork();
+                    App.updateTestInputs();
+                } else {
+                    App.updateTestInputs();
+                    if (App.state.visualizer) App.state.visualizer.draw();
+                }
+                
+                App.state.problem = ExpressionParser.generateTruthTable(expr, App.state.numInputs);
+                if (App.state.problem) {
+                    App.testNetwork();
+                } else {
+                    App.updateStatus('danger', 'Invalid expression');
+                }
+                App.saveState();
+            },
+
+            initNetwork: () => {
+                const inputSize = App.state.numInputs;
+                const hiddenLayerCount = parseInt(App.elements.hiddenLayers.value);
+                const lr = parseFloat(App.elements.learningRate.value);
+
+                const layers = [inputSize];
+                for (let i = 0; i < hiddenLayerCount; i++) {
+                    const layerSlider = document.getElementById(`hiddenLayer${i}`);
+                    const layerSize = layerSlider ? parseInt(layerSlider.value) : 4;
+                    layers.push(layerSize);
+                }
+                layers.push(1);
+
+                App.state.network = new NeuralNetwork(layers, lr);
+                
+                if (App.state.visualizer) {
+                    App.state.visualizer.stop();
+                    if (App.state.visualizer.tooltip?.parentNode) {
+                        App.state.visualizer.tooltip.parentNode.removeChild(App.state.visualizer.tooltip);
+                    }
+                }
+                
+                App.state.visualizer = new NetworkVisualizer(App.elements.canvas, App.state.network);
+                App.state.visualizer.animate();
+
+                App.state.epochCount = 0;
+                App.updateStats();
+                App.updateStatus('ready', 'Ready');
+                App.testNetwork();
+                App.saveState();
+            },
+
+            calculateMetrics: () => {
+                if (!App.state.network || !App.state.problem) return { loss: 0, accuracy: 0 };
+
+                const { inputs, targets } = App.state.problem;
+                let totalLoss = 0;
+                let correct = 0;
+
+                for (let i = 0; i < inputs.length; i++) {
+                    const output = App.state.network.predict(inputs[i])[0];
+                    const target = targets[i][0];
+                    totalLoss += (target - output) ** 2;
+                    if ((output > 0.5 ? 1 : 0) === target) correct++;
+                }
+
+                return {
+                    loss: totalLoss / inputs.length,
+                    accuracy: correct / inputs.length
+                };
+            },
+
+            updateStats: () => {
+                const metrics = App.calculateMetrics();
+                App.elements.epoch.textContent = App.state.epochCount;
+                App.elements.loss.textContent = metrics.loss.toFixed(4);
+                App.elements.accuracy.textContent = `${(metrics.accuracy * 100).toFixed(1)}%`;
+            },
+
+            updateStatus: (type, message) => {
+                App.elements.trainingStatus.className = `status ${type}`;
+                App.elements.trainingStatus.textContent = message;
+            },
+
+            startTraining: () => {
+                if (!App.state.network) App.initNetwork();
+                if (App.state.isTraining) return;
+
+                App.state.isTraining = true;
+                App.updateStatus('training', 'Training...');
+
+                const trainEpoch = () => {
+                    if (!App.state.isTraining) return;
+                    
+                    App.state.network.learningRate = parseFloat(App.elements.learningRate.value);
+                    
+                    const { inputs, targets } = App.state.problem;
+                    for (let i = 0; i < inputs.length; i++) {
+                        App.state.network.forward(inputs[i]);
+                        App.state.network.backward(inputs[i], targets[i]);
+                    }
+
+                    App.state.epochCount++;
+                    
+                    if (App.state.epochCount % 10 === 0) {
+                        App.updateStats();
+                        App.saveState();
+                        const metrics = App.calculateMetrics();
+                        if (metrics.loss < CONVERGENCE_LOSS && metrics.accuracy >= CONVERGENCE_ACCURACY) {
+                            App.stopTraining();
+                            App.updateStatus('complete', 'Complete!');
+                            App.updateStats();
+                            App.saveState();
+                            return;
+                        }
+                    }
+                    
+                    requestAnimationFrame(trainEpoch);
+                };
+                
+                trainEpoch();
+            },
+
+            stopTraining: () => {
+                App.state.isTraining = false;
+                if (App.state.network) {
+                    App.updateStats();
+                    App.updateStatus('ready', 'Stopped');
+                    App.testNetwork();
+                }
+            },
+
+            resetNetwork: () => {
+                App.stopTraining();
+                App.initNetwork();
+            },
+
+            testNetwork: () => {
+                if (!App.state.network) {
+                    App.elements.testResult.textContent = 'Output: Initialize first';
+                    return;
+                }
+
+                const testInputs = [];
+                for (let i = 0; i < App.state.numInputs; i++) {
+                    const toggleEl = document.getElementById(`testInput${i}`);
+                    if (!toggleEl) continue;
+                    testInputs.push(toggleEl.dataset.value === '1' ? 1 : 0);
+                }
+
+                if (testInputs.length !== App.state.numInputs) return;
+
+                App.state.network.forward(testInputs);
+                if (App.state.visualizer) App.state.visualizer.draw();
+
+                const outputVal = App.state.network.predict(testInputs)[0];
+                const binaryOutput = outputVal > 0.5;
+                App.elements.testResult.textContent = `Output: ${binaryOutput ? 'true' : 'false'} (${outputVal.toFixed(4)})`;
+            },
+
+            showTruthTable: () => {
+                if (!App.state.problem) {
+                    App.elements.truthTableContent.innerHTML = '<p>No truth table available. Please enter a valid boolean expression.</p>';
+                    App.elements.truthTableModal.classList.add('active');
+                    return;
+                }
+
+                const { inputs, targets } = App.state.problem;
+                const headers = [...App.state.variableNames, 'Output'];
+                const rows = inputs.map((input, i) => [...input, targets[i][0]]);
+                
+                const headerRow = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+                const dataRows = rows.map(row => 
+                    `<tr>${row.map(val => `<td class="${val ? 'true' : ''}">${val}</td>`).join('')}</tr>`
+                ).join('');
+                
+                App.elements.truthTableContent.innerHTML = `
+                    <table class="truth-table">
+                        <thead>${headerRow}</thead>
+                        <tbody>${dataRows}</tbody>
+                    </table>
+                `;
+                App.elements.truthTableModal.classList.add('active');
+            }
+        };
+
+        App.elements.hiddenLayers.addEventListener('input', () => {
+            App.updateHiddenLayersConfig();
+            App.updateValueDisplays();
+            App.initNetwork();
+        });
+        App.elements.learningRate.addEventListener('input', App.updateValueDisplays);
+        App.elements.booleanExpression.addEventListener('input', App.updateProblemFromExpression);
+        App.elements.expressionExamples.addEventListener('change', (e) => {
+            if (e.target.value) {
+                App.elements.booleanExpression.value = e.target.value;
+                App.updateProblemFromExpression();
+            }
+        });
+
+        document.getElementById('startTraining').addEventListener('click', App.startTraining);
+        document.getElementById('stopTraining').addEventListener('click', () => {
+            App.stopTraining();
+            App.saveState();
+        });
+        document.getElementById('resetNetwork').addEventListener('click', () => {
+            App.resetNetwork();
+            App.saveState();
+        });
+        document.getElementById('helpBtn').addEventListener('click', () => {
+            App.elements.helpModal.classList.add('active');
+        });
+        document.getElementById('closeModal').addEventListener('click', () => {
+            App.elements.helpModal.classList.remove('active');
+        });
+        App.elements.helpModal.addEventListener('click', (e) => {
+            if (e.target === App.elements.helpModal) {
+                App.elements.helpModal.classList.remove('active');
+            }
+        });
+        document.getElementById('showTruthTable').addEventListener('click', App.showTruthTable);
+        document.getElementById('closeTruthTableModal').addEventListener('click', () => {
+            App.elements.truthTableModal.classList.remove('active');
+        });
+        App.elements.truthTableModal.addEventListener('click', (e) => {
+            if (e.target === App.elements.truthTableModal) {
+                App.elements.truthTableModal.classList.remove('active');
+            }
+        });
+
+        const savedState = App.loadState();
+        if (!App.restoreState(savedState)) {
+            App.updateHiddenLayersConfig();
+            App.updateValueDisplays();
+            App.state.variableNames = ExpressionParser.extractVariables(App.elements.booleanExpression.value.trim());
+            App.updateProblemFromExpression();
+        }
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</body>
+</html>

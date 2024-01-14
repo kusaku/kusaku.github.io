@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrot Modern (TTS) - Text-to-Speech Reader</title>
+<meta name="description" content="Carrot TTS - Text-to-Speech reader by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/projects/carrot/carrot_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects/carrot/carrot_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects/carrot/carrot_modern.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Carrot Modern (TTS) - Text-to-Speech Reader">
+<meta property="og:description" content="Carrot TTS - Text-to-Speech reader by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/projects/carrot/carrot_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Carrot Modern (TTS) - Text-to-Speech Reader">
+<meta name="twitter:description" content="Carrot TTS - Text-to-Speech reader by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 8px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        #urlInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        #urlInput:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        button, input[type="button"] {
+            padding: 6px 10px;
+            border: 1px solid #2563eb;
+            border-radius: 4px;
+            background: #2563eb;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        button:hover:not(:disabled), input[type="button"]:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        button:disabled, input[type="button"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        select {
+            padding: 6px 24px 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 160px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23666' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .voice-info {
+            font-size: 11px;
+            color: #666;
+            padding: 4px 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .position-display {
+            font-size: 12px;
+            color: #666;
+            padding: 4px 8px;
+            margin-left: auto;
+        }
+
+        #contentFrame {
+            flex: 1;
+            border: none;
+            background: white;
+        }
+
+        #helpModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #helpModal.show { display: flex; }
+
+        #helpModalContent {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        #helpModalContent h2 {
+            margin: 0 0 16px 0;
+            font-size: 20px;
+        }
+
+        #helpModalContent h3 {
+            margin: 16px 0 8px 0;
+            font-size: 16px;
+        }
+
+        #helpModalContent ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        #helpModalContent li {
+            margin: 4px 0;
+        }
+
+        .close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 24px;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .close:hover {
+            background: #f5f5f5;
+        }
+    </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <input type="file" id="fileInput" accept="text/html,text/plain,.html,.htm,.txt" style="display: none;">
+            <input type="button" value="📁" id="loadFileBtn" title="Load file">
+            <input type="text" id="urlInput" placeholder="URL or 📁 for file">
+            <input type="button" value="Load" id="loadBtn" title="Load URL">
+            <input type="button" value="▶" id="startStopBtn" disabled title="Start/Stop">
+            <input type="button" value="⏮" id="navStartBtn" disabled title="Start">
+            <input type="button" value="◀" id="navPrevBtn" disabled title="Previous">
+            <input type="button" value="▶" id="navNextBtn" disabled title="Next">
+            <input type="button" value="⏭" id="navEndBtn" disabled title="End">
+            <span class="position-display"><span id="positionDisplay">0</span>/<span id="totalSentences">0</span></span>
+            <select id="voiceSelect" title="Voice">
+                <option value="auto">Auto</option>
+            </select>
+            <span class="voice-info" id="voiceInfo"></span>
+            <input type="button" value="?" id="helpBtn" title="Help">
+        </div>
+        <iframe id="contentFrame" src="about:blank"></iframe>
+    </div>
+
+    <div id="helpModal">
+        <div id="helpModalContent">
+            <span class="close" id="closeHelp" aria-label="Close">&times;</span>
+            <h2>Carrot Modern - Help</h2>
+            
+            <h3>Loading Content</h3>
+            <ul>
+                <li><strong>Load URL:</strong> Enter a URL and click "Load" or press Enter</li>
+                <li><strong>Load File:</strong> Click 📁 to select a local HTML or text file</li>
+                <li><strong>Supported:</strong> HTML (.html, .htm) and text (.txt) files</li>
+            </ul>
+
+            <h3>Reading Controls</h3>
+            <ul>
+                <li><strong>▶ Start/Stop:</strong> Begin or pause reading</li>
+                <li><strong>⏮ Start:</strong> Jump to beginning</li>
+                <li><strong>◀ Previous:</strong> Go to previous sentence</li>
+                <li><strong>▶ Next:</strong> Go to next sentence</li>
+                <li><strong>⏭ End:</strong> Jump to end</li>
+                <li><strong>Click sentence:</strong> Jump to that position</li>
+            </ul>
+
+            <h3>Voice Selection</h3>
+            <ul>
+                <li><strong>Auto:</strong> Automatically selects best voice based on content language</li>
+                <li><strong>Manual:</strong> Choose specific voice from dropdown</li>
+                <li><strong>Voice info:</strong> Shows selected voice name next to dropdown</li>
+            </ul>
+
+            <h3>Visual Indicators</h3>
+            <ul>
+                <li><strong>Red text:</strong> Already read sentences</li>
+                <li><strong>Blue highlight:</strong> Current sentence being read</li>
+                <li><strong>Position:</strong> Shows current sentence number / total sentences</li>
+            </ul>
+
+            <h3>Tips</h3>
+            <ul>
+                <li>Reading position is saved automatically</li>
+                <li>Last loaded URL is remembered</li>
+                <li>Voice preference is saved</li>
+                <li>For web URLs, CORS proxies are used automatically when needed</li>
+            </ul>
+        </div>
+    </div>
+
+<script>
+        'use strict';
+
+        const state = {
+            sentences: [],
+            currentPosition: 0,
+            isReading: false,
+            currentUtterance: null,
+            russianVoice: null,
+            englishVoice: null,
+            germanVoice: null,
+            loadingViaProxy: false
+        };
+
+        const STORAGE_KEY = 'carrot_modern_position';
+        const STORAGE_URL_KEY = 'carrot_modern_url';
+        const STORAGE_CONTENT_KEY = 'carrot_modern_content';
+        const STORAGE_VOICE_KEY = 'carrot_modern_voice';
+        const PROCESS_DELAY = 100;
+        const READ_DELAY = 100;
+        
+        const CORS_PROXIES = [
+            { name: 'CodeTabs', url: (target) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}` },
+            { name: 'AllOrigins', url: (target) => `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}` },
+            { name: 'CorsProxy', url: (target) => `https://corsproxy.io/?${encodeURIComponent(target)}` },
+            { name: 'CorsProxyNet', url: (target) => `https://corsproxy.net/?${encodeURIComponent(target)}` },
+            { name: 'ThingProxy', url: (target) => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(target)}` },
+            { name: 'ProxyCORS', url: (target) => `https://proxycors.com/?${encodeURIComponent(target)}` }
+        ];
+
+        const elements = {
+            urlInput: document.getElementById('urlInput'),
+            loadBtn: document.getElementById('loadBtn'),
+            loadFileBtn: document.getElementById('loadFileBtn'),
+            fileInput: document.getElementById('fileInput'),
+            startStopBtn: document.getElementById('startStopBtn'),
+            helpBtn: document.getElementById('helpBtn'),
+            voiceSelect: document.getElementById('voiceSelect'),
+            voiceInfo: document.getElementById('voiceInfo'),
+            contentFrame: document.getElementById('contentFrame'),
+            positionDisplay: document.getElementById('positionDisplay'),
+            totalSentencesDisplay: document.getElementById('totalSentences'),
+            helpModal: document.getElementById('helpModal'),
+            closeHelp: document.getElementById('closeHelp'),
+            navStartBtn: document.getElementById('navStartBtn'),
+            navPrevBtn: document.getElementById('navPrevBtn'),
+            navNextBtn: document.getElementById('navNextBtn'),
+            navEndBtn: document.getElementById('navEndBtn')
+        };
+
+        const escapeHtml = (text) => {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        };
+        
+        const wrapTextInHtml = (text) => {
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>pre { white-space: pre-wrap; word-wrap: break-word; }</style></head><body><pre>${escapeHtml(text)}</pre></body></html>`;
+        };
+        
+        const detectEncoding = (bytes) => {
+            const encodings = [
+                { name: 'utf-8', decoder: new TextDecoder('utf-8') },
+                { name: 'koi8-r', decoder: new TextDecoder('koi8-r') },
+                { name: 'windows-1251', decoder: new TextDecoder('windows-1251') },
+                { name: 'iso-8859-5', decoder: new TextDecoder('iso-8859-5') }
+            ];
+            
+            let bestText = null;
+            let bestCyrillicCount = -1;
+            
+            for (const enc of encodings) {
+                try {
+                    const decoded = enc.decoder.decode(bytes);
+                    if (decoded.includes('\uFFFD')) continue;
+                    const cyrillicCount = (decoded.match(/[А-Яа-яЁё]/g) || []).length;
+                    if (cyrillicCount > bestCyrillicCount || (cyrillicCount === bestCyrillicCount && enc.name === 'utf-8')) {
+                        bestCyrillicCount = cyrillicCount;
+                        bestText = decoded;
+                    }
+                } catch (e) {}
+            }
+            
+            return bestText || new TextDecoder('utf-8').decode(bytes);
+        };
+        
+        const isUrl = (str) => {
+            return str.includes('://');
+        };
+        
+        const getDoc = () => {
+            try {
+                return elements.contentFrame.contentDocument ?? elements.contentFrame.contentWindow.document;
+            } catch (e) {
+                return null;
+            }
+        };
+
+        const findBestVoice = (voices, langPrefix) => {
+            const langVoices = voices.filter(v => v.lang.startsWith(langPrefix));
+            if (langVoices.length === 0) return null;
+            
+            const roboticKeywords = ['albert', 'zira', 'david', 'helen', 'hazel', 'mark', 'susan'];
+            const naturalVoices = langVoices.filter(v => {
+                const nameLower = v.name.toLowerCase();
+                return !roboticKeywords.some(keyword => nameLower.includes(keyword));
+            });
+            
+            const candidates = naturalVoices.length > 0 ? naturalVoices : langVoices;
+            
+            const neural = candidates.find(v => 
+                v.name.toLowerCase().includes('neural') || 
+                (v.localService === false && v.name.toLowerCase().includes('premium'))
+            );
+            if (neural) return neural;
+            
+            const premium = candidates.find(v => !v.localService);
+            if (premium) return premium;
+            
+            const qualityNames = ['enhanced', 'premium', 'natural', 'high', 'aria', 'jenny', 'guy'];
+            for (const quality of qualityNames) {
+                const qualityVoice = candidates.find(v => 
+                    v.name.toLowerCase().includes(quality)
+                );
+                if (qualityVoice) return qualityVoice;
+            }
+            
+            return candidates[0];
+        };
+
+        const initVoices = () => {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = initVoices;
+                return;
+            }
+            
+            const getVoiceForLang = (lang) => 
+                findBestVoice(voices, lang) || voices.find(v => v.lang.startsWith(lang)) || voices[0];
+            
+            state.russianVoice = getVoiceForLang('ru');
+            state.englishVoice = getVoiceForLang('en');
+            state.germanVoice = getVoiceForLang('de');
+            populateVoiceSelector(voices);
+        };
+        
+        const populateVoiceSelector = (voices) => {
+            const select = elements.voiceSelect;
+            select.innerHTML = '<option value="auto">Auto (Best Available)</option>';
+            
+            const langGroups = new Map([['en', []], ['ru', []], ['de', []], ['other', []]]);
+            
+            voices.forEach(voice => {
+                const lang = voice.lang.substring(0, 2).toLowerCase();
+                const group = langGroups.get(lang) ?? langGroups.get('other');
+                group.push(voice);
+            });
+            
+            const createOptgroup = (label, voices) => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = label;
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    const isCloud = voice.localService === false;
+                    const isNeural = voice.name.toLowerCase().includes('neural');
+                    option.textContent = `${voice.name}${isCloud ? ' (Cloud)' : ''}${isNeural ? ' ⭐ Neural' : ''}`;
+                    optgroup.appendChild(option);
+                });
+                return optgroup;
+            };
+            
+            const langOrder = [
+                { key: 'ru', label: 'Russian' },
+                { key: 'de', label: 'German' },
+                { key: 'en', label: 'English' }
+            ];
+            
+            langOrder.forEach(({ key, label }) => {
+                const voices = langGroups.get(key);
+                if (voices?.length > 0) {
+                    select.appendChild(createOptgroup(label, voices));
+                }
+            });
+            
+            const savedVoice = localStorage.getItem(STORAGE_VOICE_KEY);
+            if (savedVoice) {
+                select.value = savedVoice;
+            }
+            
+            updateVoiceInfo();
+        };
+
+        const getVoice = (text) => {
+            const selectedVoice = elements.voiceSelect.value;
+            if (selectedVoice !== 'auto') {
+                const voice = speechSynthesis.getVoices().find(v => v.name === selectedVoice);
+                if (voice) return voice;
+            }
+            
+            const cyrillic = (text.match(/[\u0400-\u04FF]/g) || []).length;
+            const german = (text.match(/[äöüÄÖÜß]/g) || []).length;
+            const latin = (text.match(/[a-zA-Z]/g) || []).length;
+            if (cyrillic > latin) return state.russianVoice;
+            if (german > 0) return state.germanVoice;
+            return state.englishVoice;
+        };
+        
+        const updateVoiceInfo = () => {
+            const selectedVoice = elements.voiceSelect.value;
+            if (selectedVoice === 'auto') {
+                const voice = state.sentences.length > 0 ? getVoice(state.sentences[0]) : state.englishVoice;
+                elements.voiceInfo.textContent = voice ? `(${voice.name.substring(0, 20)}...)` : '(Auto)';
+                elements.voiceInfo.title = voice ? `Auto-selected: ${voice.name}` : 'Auto (Best Available)';
+            } else {
+                const voice = speechSynthesis.getVoices().find(v => v.name === selectedVoice);
+                elements.voiceInfo.textContent = voice ? `(${voice.name.substring(0, 20)}...)` : '';
+                elements.voiceInfo.title = voice ? `Selected: ${voice.name}` : '';
+            }
+        };
+
+        const splitSentences = (text) => {
+            const normalized = text.replace(/\s+/g, ' ').trim();
+            const parts = normalized.split(/([.!?…]+|\.{2,})(?:\s+|$)/);
+            const result = [];
+            let current = '';
+
+            for (const part of parts) {
+                if (!part) continue;
+
+                const trimmed = part.trim();
+                if (/^[.!?…]+$|^\.{2,}$/.test(trimmed)) {
+                    current += trimmed;
+                    if (current.trim()) {
+                        result.push(current.trim());
+                        current = '';
+                    }
+                } else if (trimmed) {
+                    current += (current ? ' ' : '') + trimmed;
+                }
+            }
+
+            if (current.trim()) result.push(current.trim());
+            return result.filter(s => s.length > 0);
+        };
+
+        const wrapSentences = (doc, sentences) => {
+            if (!doc.body) return;
+
+            if (!doc.querySelector('#carrot-styles')) {
+                const style = doc.createElement('style');
+                style.id = 'carrot-styles';
+                style.textContent = `
+                    .carrot-sentence { cursor: pointer; transition: all 0.3s; }
+                    .carrot-sentence:hover { background-color: rgba(59, 130, 246, 0.15); }
+                    .carrot-sentence-read { color: #dc2626 !important; }
+                    .carrot-sentence-current { background-color: rgba(59, 130, 246, 0.3); border-radius: 3px; }
+                `;
+                doc.head.appendChild(style);
+            }
+
+            let html = doc.body.innerHTML;
+
+            const isInsideSpan = (pos) => {
+                const before = html.substring(0, pos);
+                const openSpans = (before.match(/<span[^>]*class="[^"]*carrot-sentence[^"]*"[^>]*>/g) || []).length;
+                const closeSpans = (before.match(/<\/span>/g) || []).length;
+                return openSpans > closeSpans;
+            };
+
+            for (let i = 0; i < sentences.length; i++) {
+                const sentence = sentences[i].trim();
+                if (!sentence || !/[а-яА-Яa-zA-Z]/.test(sentence)) continue;
+
+                let pattern = sentence
+                    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+                    .replace(/\.\.\./g, '(\\.\\.\\.|…)')
+                    .replace(/\s+/g, '\\s+')
+                    .replace(/\\s\+$/, '\\s*');
+
+                const regex = new RegExp(pattern, 'gi');
+                regex.lastIndex = 0;
+                const match = regex.exec(html);
+                if (match && !/<[^>]+>/.test(match[0]) && !isInsideSpan(match.index)) {
+                    const matchText = match[0];
+                    const offset = match.index;
+                    html = html.substring(0, offset) +
+                        `<span class="carrot-sentence" data-sentence-index="${i + 1}">${matchText}</span>` +
+                        html.substring(offset + matchText.length);
+                }
+            }
+
+            doc.body.innerHTML = html;
+
+            doc.querySelectorAll('.carrot-sentence').forEach(span => {
+                span.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idx = parseInt(span.dataset.sentenceIndex);
+                    if (!isNaN(idx)) jumpToSentence(idx - 1);
+                });
+            });
+        };
+        
+        const resetState = () => {
+            state.sentences = [];
+            state.currentPosition = 0;
+            state.isReading = false;
+            updateUI();
+        };
+        
+        const savePosition = () => {
+            localStorage.setItem(STORAGE_KEY, state.currentPosition.toString());
+        };
+
+        const fetchViaProxy = async (targetUrl, proxyIndex = 0) => {
+            if (proxyIndex >= CORS_PROXIES.length) {
+                throw new Error('All proxy services failed');
+            }
+            
+            const proxy = CORS_PROXIES[proxyIndex];
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            
+            try {
+                const response = await fetch(proxy.url(targetUrl), {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html,text/plain,*/*'
+                    },
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`Proxy ${proxy.name} returned ${response.status}`);
+                }
+                
+                return { response, proxyName: proxy.name };
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (proxyIndex === CORS_PROXIES.length - 1) {
+                    console.warn(`All proxies failed. Last error from ${proxy.name}:`, error.message);
+                }
+                return fetchViaProxy(targetUrl, proxyIndex + 1);
+            }
+        };
+        
+        const loadUrl = async () => {
+            let url = elements.urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a full URL (e.g., https://example.com/page.html) or use "Load File" to load a local file.');
+                return;
+            }
+            
+            if (!isUrl(url)) {
+                alert('Please enter a full URL starting with http://, https://, or file://');
+                return;
+            }
+            
+            resetState();
+            
+            const setButtonLoading = (loading) => {
+                elements.loadBtn.value = loading ? 'Loading...' : 'Load';
+                elements.loadBtn.disabled = loading;
+            };
+            setButtonLoading(true);
+            
+            const isSameOrigin = url.startsWith(window.location.origin) || url.startsWith('file://');
+            if (isSameOrigin) {
+                state.loadingViaProxy = false;
+                if (!url.startsWith('file://')) {
+                    localStorage.setItem(STORAGE_URL_KEY, url);
+                }
+                elements.contentFrame.src = url;
+                setButtonLoading(false);
+                return;
+            }
+            
+            try {
+                const { response } = await fetchViaProxy(url);
+                
+                const contentType = response.headers.get('content-type') || '';
+                const charsetMatch = contentType.match(/charset=([^;]+)/i);
+                const declaredCharset = charsetMatch ? charsetMatch[1].trim().toLowerCase() : null;
+                
+                let text;
+                if (declaredCharset && ['utf-8', 'utf8'].includes(declaredCharset)) {
+                    text = await response.text();
+                } else {
+                    const bytes = new Uint8Array(await response.arrayBuffer());
+                    text = detectEncoding(bytes);
+                    
+                    if (text.trim().startsWith('<')) {
+                        const htmlCharsetMatch = text.match(/<meta[^>]+charset\s*=\s*["']?([^"'\s>]+)/i);
+                        if (htmlCharsetMatch && ['utf-8', 'utf8'].includes(htmlCharsetMatch[1].toLowerCase())) {
+                            text = new TextDecoder('utf-8').decode(bytes);
+                        }
+                    }
+                }
+                
+                const isHtml = text.trim().startsWith('<');
+                
+                const htmlContent = isHtml ? text : wrapTextInHtml(text);
+                
+                localStorage.setItem(STORAGE_URL_KEY, url);
+                processContentFromHTML(htmlContent);
+            } catch (e) {
+                alert(`Cannot fetch content. All proxy services failed.\n\nTry using "Load File" for local files.`);
+            } finally {
+                setButtonLoading(false);
+            }
+        };
+        
+        const handleFileSelect = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const isHtml = content.trim().startsWith('<') && (file.type === 'text/html' || file.name.match(/\.(html|htm)$/i));
+                elements.urlInput.value = '';
+                localStorage.setItem(STORAGE_URL_KEY, '');
+                resetState();
+                processContentFromHTML(isHtml ? content : wrapTextInHtml(content));
+            };
+            
+            reader.onerror = () => {
+                alert('Error reading file. Please try again.');
+            };
+            
+            reader.readAsText(file, 'UTF-8');
+        };
+
+        const processContentFromHTML = (htmlContent) => {
+            localStorage.setItem(STORAGE_CONTENT_KEY, htmlContent);
+            state.loadingViaProxy = true;
+            elements.contentFrame.src = 'about:blank';
+            
+            const writeToDoc = (doc) => {
+                doc.open();
+                doc.write(htmlContent);
+                doc.close();
+                setTimeout(() => {
+                    state.loadingViaProxy = false;
+                    processContent();
+                }, PROCESS_DELAY);
+            };
+            
+            setTimeout(() => {
+                const doc = getDoc();
+                if (!doc) {
+                    const checkReady = setInterval(() => {
+                        const newDoc = getDoc();
+                        if (newDoc) {
+                            clearInterval(checkReady);
+                            writeToDoc(newDoc);
+                        }
+                    }, 30);
+                    setTimeout(() => clearInterval(checkReady), 1500);
+                    return;
+                }
+                writeToDoc(doc);
+            }, 50);
+        };
+
+        const processContent = () => {
+            const doc = getDoc();
+            const text = (doc?.body?.innerText ?? doc?.body?.textContent ?? '').trim();
+            
+            if (!doc?.body || !text) {
+                setTimeout(processContent, 150);
+                return;
+            }
+            
+            state.sentences = splitSentences(text);
+            wrapSentences(doc, state.sentences);
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                state.currentPosition = Math.min(parseInt(saved, 10), state.sentences.length - 1);
+            }
+
+            updateUI();
+        };
+
+        const markRead = (index) => {
+            if (index < 0) return;
+            const doc = getDoc();
+            if (!doc) return;
+            doc.querySelectorAll(`[data-sentence-index="${index + 1}"]`).forEach(span => {
+                span.classList.add('carrot-sentence-read');
+                span.classList.remove('carrot-sentence-current');
+            });
+        };
+
+        const highlightCurrent = (index) => {
+            if (index < 0 || index >= state.sentences.length) return;
+            const doc = getDoc();
+            if (!doc) return;
+            doc.querySelectorAll('.carrot-sentence-current').forEach(s => s.classList.remove('carrot-sentence-current'));
+            doc.querySelectorAll(`[data-sentence-index="${index + 1}"]`).forEach(span => {
+                span.classList.add('carrot-sentence-current');
+                span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        };
+        
+        const updateUI = () => {
+            elements.positionDisplay.textContent = state.currentPosition + 1;
+            elements.totalSentencesDisplay.textContent = state.sentences.length;
+            elements.startStopBtn.value = state.isReading ? '⏸' : '▶';
+            elements.startStopBtn.title = state.isReading ? 'Stop' : 'Start';
+            
+            const hasContent = state.sentences.length > 0;
+            const isAtStart = state.currentPosition === 0;
+            const isAtEnd = state.currentPosition >= state.sentences.length - 1;
+            
+            elements.startStopBtn.disabled = !hasContent;
+            elements.navStartBtn.disabled = !hasContent || isAtStart;
+            elements.navPrevBtn.disabled = !hasContent || isAtStart;
+            elements.navNextBtn.disabled = !hasContent || isAtEnd;
+            elements.navEndBtn.disabled = !hasContent || isAtEnd;
+            
+            updateVoiceInfo();
+        };
+
+        const jumpToSentence = (index) => {
+            if (index < 0 || index >= state.sentences.length) return;
+            const wasReading = state.isReading;
+            if (state.isReading && state.currentUtterance) {
+                state.currentUtterance.onend = null;
+                state.currentUtterance.onerror = null;
+                speechSynthesis.cancel();
+                state.currentUtterance = null;
+            }
+            state.currentPosition = index;
+            savePosition();
+            updateUI();
+            highlightCurrent(index);
+            if (wasReading) {
+                setTimeout(readNext, READ_DELAY);
+            }
+        };
+
+        const readNext = () => {
+            if (!state.isReading || state.currentPosition >= state.sentences.length) {
+                state.isReading = false;
+                updateUI();
+                return;
+            }
+
+            const sentence = state.sentences[state.currentPosition];
+            highlightCurrent(state.currentPosition);
+
+            state.currentUtterance = new SpeechSynthesisUtterance(sentence);
+            const voice = getVoice(sentence);
+            state.currentUtterance.voice = voice;
+            const langMap = new Map([
+                [state.russianVoice, 'ru-RU'],
+                [state.germanVoice, 'de-DE']
+            ]);
+            state.currentUtterance.lang = langMap.get(voice) ?? 'en-US';
+
+            const advance = () => {
+                markRead(state.currentPosition);
+                state.currentPosition++;
+                savePosition();
+                updateUI();
+                if (state.isReading) setTimeout(readNext, READ_DELAY);
+            };
+
+            state.currentUtterance.onend = advance;
+            state.currentUtterance.onerror = advance;
+            speechSynthesis.speak(state.currentUtterance);
+        };
+
+        const toggleReading = () => {
+            if (state.isReading) {
+                state.isReading = false;
+                speechSynthesis.cancel();
+                state.currentUtterance = null;
+                highlightCurrent(-1);
+                updateUI();
+            } else {
+                if (!state.sentences.length) {
+                    alert('No content loaded. Please load a URL or file first.');
+                    return;
+                }
+                if (state.currentPosition >= state.sentences.length) state.currentPosition = 0;
+                state.isReading = true;
+                updateUI();
+                readNext();
+            }
+        };
+        
+        const restartReading = () => {
+            if (state.isReading) {
+                speechSynthesis.cancel();
+                state.currentUtterance = null;
+                setTimeout(() => readNext(), 100);
+            }
+        };
+        
+        const navigateToStart = () => {
+            if (state.sentences.length === 0) return;
+            state.currentPosition = 0;
+            savePosition();
+            updateUI();
+            highlightCurrent(state.currentPosition);
+            restartReading();
+        };
+        
+        const navigateToEnd = () => {
+            if (state.sentences.length === 0) return;
+            state.currentPosition = state.sentences.length - 1;
+            savePosition();
+            updateUI();
+            highlightCurrent(state.currentPosition);
+            restartReading();
+        };
+        
+        const navigatePrevious = () => {
+            if (state.currentPosition > 0) {
+                state.currentPosition--;
+                savePosition();
+                updateUI();
+                highlightCurrent(state.currentPosition);
+                restartReading();
+            }
+        };
+
+        const navigateNext = () => {
+            if (state.currentPosition < state.sentences.length - 1) {
+                state.currentPosition++;
+                savePosition();
+                updateUI();
+                highlightCurrent(state.currentPosition);
+                restartReading();
+            }
+        };
+
+        const closeHelpModal = () => {
+            elements.helpModal.classList.remove('show');
+        };
+
+        const init = () => {
+            initVoices();
+            const savedPos = localStorage.getItem(STORAGE_KEY);
+            if (savedPos) state.currentPosition = parseInt(savedPos, 10);
+            
+            elements.urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loadUrl();
+            });
+            elements.loadBtn.addEventListener('click', loadUrl);
+            elements.loadFileBtn.addEventListener('click', () => elements.fileInput.click());
+            elements.fileInput.addEventListener('change', handleFileSelect);
+            elements.startStopBtn.addEventListener('click', toggleReading);
+            elements.helpBtn.addEventListener('click', () => elements.helpModal.classList.add('show'));
+            elements.closeHelp.addEventListener('click', closeHelpModal);
+            elements.navStartBtn.addEventListener('click', navigateToStart);
+            elements.navPrevBtn.addEventListener('click', navigatePrevious);
+            elements.navNextBtn.addEventListener('click', navigateNext);
+            elements.navEndBtn.addEventListener('click', navigateToEnd);
+            elements.helpModal.addEventListener('click', (e) => {
+                if (e.target === elements.helpModal) closeHelpModal();
+            });
+            elements.voiceSelect.addEventListener('change', (e) => {
+                localStorage.setItem(STORAGE_VOICE_KEY, e.target.value);
+                updateVoiceInfo();
+                if (state.isReading) {
+                    restartReading();
+                }
+            });
+            
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    initVoices();
+                    updateVoiceInfo();
+                };
+            } else {
+                updateVoiceInfo();
+            }
+
+            elements.contentFrame.addEventListener('load', () => {
+                if (!state.loadingViaProxy) {
+                    setTimeout(processContent, PROCESS_DELAY * 2);
+                }
+            });
+
+            const savedContent = localStorage.getItem(STORAGE_CONTENT_KEY);
+            const savedUrl = localStorage.getItem(STORAGE_URL_KEY);
+            const defaultUrl = new URL('/legacy/javascript/projects/carrot/nabokov-mary.txt', window.location.origin).href;
+            
+            if (savedContent) {
+                elements.urlInput.value = savedUrl ?? '';
+                setTimeout(() => processContentFromHTML(savedContent), 100);
+            } else {
+                const urlToLoad = savedUrl ?? defaultUrl;
+                elements.urlInput.value = urlToLoad;
+                if (urlToLoad && !urlToLoad.startsWith('file://')) {
+                    setTimeout(() => loadUrl(), 100);
+                }
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock Modern - Animated Analog Clock</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; overflow-x: hidden; min-height: 100vh; background: #fff; }
+        .element { position: absolute; font-weight: bold; }
+        .face-number, .date-char { font-size: 20px; color: #000; text-align: center; width: 20px; height: 20px; line-height: 20px; }
+        .hand-dot { width: 32px; height: 32px; font-size: 32px; text-align: center; line-height: 32px; color: #000; }
+        .hand-dot.tip { color: #f00 !important; }
+    </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Modern animated analog clock with date. Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, clock">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/experiments/clock/clock_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments/clock/clock_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments/clock/clock_modern.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Clock Modern - Animated Analog Clock">
+<meta property="og:description" content="Modern animated analog clock with date. Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/experiments/clock/clock_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Clock Modern - Animated Analog Clock">
+<meta name="twitter:description" content="Modern animated analog clock with date. Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+<body>
+    <div id="container"></div>
+<script>
+        const SIZE = 80, SPEED = 0.6, ROTATE_STEP = 0.006, HAND_LEN = SIZE / 1.2 * 1.3 / 3, HAND_OFFSET_Y = -7, HAND_OFFSET_X = -2.5, CHAR_OFFSET = 10, HAND_OFFSET = 16;
+        const NUMBERS = ['1','2','3','4','5','6','7','8','9','10','11','12'], RED_NUMS = ['12','3','6','9'];
+        const DAYS = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+        const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+        const PI = Math.PI, PI6 = PI / 6, PI30 = PI / 30, PI180 = PI / 180, PI360 = PI / 360;
+        const d = new Date();
+        const dateChars = ` ${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`.split('');
+        const dateCharsLen = dateChars.length, dateAngleStep = 360 / dateCharsLen * PI180;
+        let mouseY = window.innerHeight / 2, mouseX = window.innerWidth / 2, scrollY = 0, dateStep = 0;
+        const container = document.getElementById('container');
+        const faceEls = [], hourEls = [], minEls = [], secEls = [], dateEls = [];
+        const createArrays = len => ({ y: Array(len).fill(0), x: Array(len).fill(0), ty: Array(len).fill(0), tx: Array(len).fill(0) });
+        const nums = createArrays(12), dates = createArrays(dateCharsLen);
+        
+        const createEl = (type, text, color = '#000') => {
+            const el = document.createElement('div');
+            el.className = `element ${type}`;
+            el.textContent = text;
+            el.style.color = color;
+            container.appendChild(el);
+            return el;
+        };
+        
+        const createHands = (count, arr, allRed = false) => {
+            for (let i = 0; i < count; i++) {
+                const isTip = allRed || i === count - 1;
+                const el = createEl('hand-dot', '.', isTip ? '#f00' : '#000');
+                if (isTip) el.classList.add('tip');
+                arr.push(el);
+            }
+        };
+        
+        dateChars.forEach(c => dateEls.push(createEl('date-char', c)));
+        NUMBERS.forEach(n => faceEls.push(createEl('face-number', n, RED_NUMS.includes(n) ? '#f00' : '#000')));
+        createHands(9, hourEls);
+        createHands(12, minEls);
+        createHands(15, secEls, true);
+        
+        const updateTrail = (arr, len) => {
+            let ty0 = arr.ty[0], tx0 = arr.tx[0];
+            ty0 += (mouseY - ty0) * SPEED;
+            tx0 += (mouseX - tx0) * SPEED;
+            arr.ty[0] = ty0;
+            arr.tx[0] = tx0;
+            arr.y[0] = Math.round(ty0);
+            arr.x[0] = Math.round(tx0);
+            for (let i = 1; i < len; i++) {
+                const prevY = arr.y[i-1], prevX = arr.x[i-1];
+                ty0 = arr.ty[i];
+                tx0 = arr.tx[i];
+                ty0 += (prevY - ty0) * SPEED;
+                tx0 += (prevX - tx0) * SPEED;
+                arr.ty[i] = ty0;
+                arr.tx[i] = tx0;
+                arr.y[i] = Math.round(ty0);
+                arr.x[i] = Math.round(tx0);
+            }
+        };
+        
+        const positionHand = (els, angle, originalCount, allRed = false) => {
+            const spacing = (originalCount - 1) * HAND_LEN / (els.length - 1);
+            const baseY = nums.y[0] || 0, baseX = nums.x[0] || 0;
+            const sinA = Math.sin(angle), cosA = Math.cos(angle);
+            const baseTop = baseY + HAND_OFFSET_Y - HAND_OFFSET + scrollY, baseLeft = baseX + HAND_OFFSET_X - HAND_OFFSET;
+            els.forEach((el, i) => {
+                const offset = i * spacing;
+                el.style.top = (baseTop + offset * sinA) + 'px';
+                el.style.left = (baseLeft + offset * cosA) + 'px';
+                (allRed || el.classList.contains('tip')) ? el.classList.add('tip') : el.classList.remove('tip');
+            });
+        };
+        
+        const updateClock = () => {
+            const now = new Date();
+            const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+            faceEls.forEach((el, i) => {
+                const a = -1.0471 + i * PI6;
+                const sinA = Math.sin(a), cosA = Math.cos(a);
+                el.style.top = (nums.y[i] + SIZE * sinA - CHAR_OFFSET + scrollY) + 'px';
+                el.style.left = (nums.x[i] + SIZE * cosA - CHAR_OFFSET) + 'px';
+            });
+            positionHand(hourEls, -1.575 + h * PI6 + m * PI360, 3, false);
+            positionHand(minEls, -1.57 + m * PI30, 4, false);
+            positionHand(secEls, -1.57 + s * PI30, 5, true);
+            dateEls.forEach((el, i) => {
+                const a = dateStep + i * dateAngleStep;
+                const sinA = Math.sin(a), cosA = Math.cos(a);
+                el.style.top = (dates.y[i] + SIZE * 1.5 * sinA - CHAR_OFFSET + scrollY) + 'px';
+                el.style.left = (dates.x[i] + SIZE * 1.5 * cosA - CHAR_OFFSET) + 'px';
+            });
+            dateStep -= ROTATE_STEP;
+        };
+        
+        const animate = () => {
+            scrollY = window.pageYOffset || 0;
+            updateTrail(dates, dateCharsLen);
+            updateTrail(nums, 12);
+            updateClock();
+            requestAnimationFrame(animate);
+        };
+        
+        document.addEventListener('mousemove', e => {
+            mouseY = e.pageY - (window.pageYOffset || 0);
+            mouseX = e.pageX;
+        });
+        
+        (document.readyState === 'loading' ? window.addEventListener('load', animate) : animate());
+    </script>
+</body>
+</html>

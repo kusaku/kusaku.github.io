@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP3 Tag Editor - Turbo Pascal Programs</title>
+<meta name="description" content="MP3 Tag Editor - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/mp3tager/mp3-tag-editor.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/mp3tager/mp3-tag-editor.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/mp3tager/mp3-tag-editor.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="MP3 Tag Editor - Turbo Pascal Programs">
+<meta property="og:description" content="MP3 Tag Editor - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/mp3tager/mp3-tag-editor.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MP3 Tag Editor - Turbo Pascal Programs">
+<meta name="twitter:description" content="MP3 Tag Editor - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-number { color: #79c0ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+        html.dark .hljs-function { color: #d2a8ff; }
+        html.dark .hljs-variable { color: #ffa657; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>    <script>
+        // Register Pascal language for highlight.js
+        hljs.registerLanguage('pascal', function(hljs) {
+            return {
+                keywords: {
+                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
+                    built_in: 'boolean char integer real text string',
+                    literal: 'true false'
+                },
+                contains: [
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_NUMBER_MODE
+                ]
+            };
+        });
+    </script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Turbo Pascal Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">MP3 Tag Editor</h1>
+        <p class="text-gray-600 mb-6">A command-line MP3 tag editor that reads and writes ID3v1 tags. Supports editing title, artist, album, year, comment, and genre fields. Includes text normalization features like capitalization, case conversion, and character replacement.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-pascal">program mp3taged;
+uses crt,dos;
+
+const TagLen = 128;
+      NormRecLen = 30;
+      YearRecLen = 4;
+      GenreRecLen = 1;
+      TagHdr = #84#65#71;
+      TagHdrLen = 3;
+      Blank30 = &#x27;			       &#x27;;
+      Blank = #32;
+      US = #95;
+
+type TKeys = (Title,Artist,Album,Year,Comment,Genre,ReWrTag,Capit,
+     UnCapit,UpCase,LowCase,ReplUS,Normize);
+     TKeySet = array[TKeys] of string;
+     TStat = (Ok,IOEr,FEr,TEr,Brk,PEr,IEr);
+     TStatMsgs = array[TStat] of string;
+     TOptions = record
+          ReWrTag:       boolean;
+          Capit:         boolean;
+          UnCapit:       boolean;
+          UpCase:        boolean;
+          LowCase:       boolean;
+          ReplUS:        boolean;
+          Normize:       boolean;
+     end;
+     TTag = record
+	  Title, Artist, Album, Comment: array [1..NormRecLen] of char;
+	  Year: array [1..YearRecLen] of char;
+	  Genre: char;
+     end;
+     BigLet = set of &#x27;A&#x27;..&#x27;Z&#x27;;
+     SmaLet = set of &#x27;a&#x27;..&#x27;z&#x27;;
+
+const KeySet:    TKeySet = (&#x27;/t:&#x27;,&#x27;/a:&#x27;,&#x27;/b:&#x27;,&#x27;/y:&#x27;,&#x27;/c:&#x27;,&#x27;/g:&#x27;,&#x27;/r&#x27;,&#x27;/cp&#x27;,
+      &#x27;/up&#x27;,&#x27;/u&#x27;,&#x27;/l&#x27;,&#x27;/r&#x27;,&#x27;/n&#x27;);
+      StatMsg:  TStatMsgs = (
+      &#x27;Tag successfully readed/created/modified.&#x27;,
+      &#x27;Can&#x27;&#x27;t threat tag: I/O error.&#x27;,
+      &#x27;Warning! File is too small to be Mp3&#x27;&#x27;s!&#x27;,
+      &#x27;Can&#x27;&#x27;t read tag: bad header.&#x27;,
+      &#x27;User break.&#x27;,
+      &#x27;Command line error&#x27;,
+      &#x27;Internal error&#x27;);
+
+var Tag:           TTag;
+    Options:       TOptions;
+    F:	           file of char;
+
+
+
+{$I MY\STRI.PAS}
+{$I MY\FIO.PAS}
+procedure Init
+begin
+     Tag.Title:=Blank30
+     Tag.Artist:=Blank30
+     Tag.Album:=Blank30
+     Tag.Year:=&#x27;    &#x27;
+     Tag.Genre:#255
+     Tag.Comment:Blank30
+     Options.ReWrTag:=False;
+     Options.Capit:=False;
+     Options.UnCapit:=False;
+     Options.UpCase:=False;
+     Options.LowCase:=False;
+     Options.ReplUS:=False;
+     Options.Normize:=False;
+end;
+
+begin
+clrscr;
+{case ReadTag(ParamStr(1)) of
+     IOEr:     WriteLn(StatMsg[IOEr]);
+     TEr:      WriteLn(StatMsg[TEr]);
+     Fer:      WriteLn(StatMsg[FEr]);
+     Ok:       begin
+               WriteLn(StatMsg[ReadParam]);
+               Match;}
+	       case WriteTag(&#x27;conver~1.mp3&#x27;) of
+		      IOEr:	WriteLn(StatMsg[IOEr]);
+		      TEr:	WriteLn(StatMsg[TEr]);
+		      FEr:	WriteLn(StatMsg[FEr]);
+		      Ok:	WriteLn(StatMsg[Ok]);
+	       end;
+	       {end;}
+{end;}
+with Tag do
+     begin
+     WriteLn(&#x27;&quot;&#x27;,Title,&#x27;&quot;&#x27;);
+     WriteLn(&#x27;&quot;&#x27;,Artist,&#x27;&quot;&#x27;);
+     WriteLn(&#x27;&quot;&#x27;,Album,&#x27;&quot;&#x27;);
+     WriteLn(&#x27;&quot;&#x27;,Year,&#x27;&quot;&#x27;);
+     WriteLn(&#x27;&quot;&#x27;,Comment,&#x27;&quot;&#x27;);
+     WriteLn(&#x27;&quot;&#x27;,Genre,&#x27;&quot;&#x27;);
+     end;
+repeat until KeyPressed;
+ end.
+</code></pre>
+        </div>
+    </div>
+</body>
+</html>

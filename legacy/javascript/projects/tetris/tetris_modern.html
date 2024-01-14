@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta charset="UTF-8">
+<title>tetris modern</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #696 url('bgnd.gif');
+	color: #363;
+	font-family: arial, sans-serif;
+	font-size: 12pt;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+#gameWrapper {
+	transform: scale(1.2);
+	transform-origin: center center;
+}
+
+a {
+	color: #9c9;
+	text-decoration: none;
+}
+a:hover, a:active { color: #fc6; }
+a:visited { color: #9c9; }
+
+hr {
+	margin: 0;
+	height: 1px;
+	width: 100%;
+	color: #9c9;
+	text-align: center;
+}
+
+table { border: none; border-collapse: collapse; }
+th { color: #363; font-size: 14.4pt; font-weight: bold; }
+td {
+	margin: 0;
+	padding: 0;
+	color: #363;
+	font-size: 12pt;
+	border: none;
+	vertical-align: middle;
+	text-align: center;
+}
+
+table.simple { border: 1px solid #9c9; border-top-width: 12px; }
+table.simple td { border: 1px solid #9c9; }
+
+table.tetris {
+	border: 1px solid #9c9;
+	border-top: 12px solid #9c9;
+	margin: 12px;
+}
+table.tetris td { border: none; }
+table.tetris td.empty { background: transparent; }
+table.tetris td.red { background: red; }
+table.tetris td.orange { background: orange; }
+table.tetris td.yellow { background: yellow; }
+table.tetris td.green { background: green; }
+table.tetris td.aqua { background: aqua; }
+table.tetris td.blue { background: blue; }
+table.tetris td.purple { background: purple; }
+table.tetris td.gray { background: gray; }
+table.tetris td.brown { background: brown; }
+table.tetris td.aquamarine { background: aquamarine; }
+table.tetris td.honeydew { background: honeydew; }
+table.tetris td.tomato { background: tomato; }
+table.tetris td.palevioletred { background: palevioletred; }
+table.tetris td.dimgray { background: dimgray; }
+table.tetris td.greenyellow { background: greenyellow; }
+table.tetris td.filled { background: #363; }
+
+#tetrisnextboard {
+	text-align: center;
+	display: flex;
+	justify-content: center;
+}
+
+input, select, option {
+	background: #9c9;
+	color: #363;
+	border: 1px solid #363;
+	margin: 2.4px;
+	cursor: pointer;
+	font-family: arial, sans-serif;
+	font-size: 12pt;
+}
+
+.cell-center { text-align: center; }
+
+.menu_passive, .menu_active, .menu_hover {
+	margin: 6px;
+	padding: 6px;
+	border: 1px solid;
+	text-align: center;
+	font-family: arial, sans-serif;
+	font-size: 14.4pt;
+	font-weight: 900;
+	cursor: pointer;
+}
+.menu_hover {
+	border-color: #9c9 #363 #363 #9c9;
+	color: #9c9;
+}
+.menu_active {
+	padding: 6px 4px 4px 6px;
+	border-color: #363 #9c9 #9c9 #363;
+	color: #fc6;
+}
+.menu_passive {
+	border-color: #696;
+	color: #363;
+}
+
+#helpModal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	inset: 0;
+	background: rgba(0,0,0,0.5);
+	overflow: auto;
+}
+#helpModalContent {
+	background: #696;
+	margin: 5% auto;
+	padding: 20px;
+	border: 12px solid #9c9;
+	max-width: 650px;
+	width: 90%;
+	max-height: 85vh;
+	overflow-y: auto;
+	color: #363;
+	font-family: arial, sans-serif;
+	font-size: 11pt;
+	position: relative;
+}
+#helpModalContent h2 { color: #fc6; margin-top: 0; font-size: 18pt; }
+#helpModalContent h3 { color: #9c9; font-size: 14pt; margin-top: 15px; }
+#helpModalContent ul { margin: 10px 0; padding-left: 25px; }
+#helpModalContent li { margin: 5px 0; }
+
+.closeHelp {
+	color: #9c9;
+	float: right;
+	font-size: 24pt;
+	font-weight: bold;
+	cursor: pointer;
+	line-height: 20px;
+}
+.closeHelp:hover { color: #fc6; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Tetris game (modern version). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/projects/tetris/tetris_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects/tetris/tetris_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects/tetris/tetris_modern.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="tetris modern">
+<meta property="og:description" content="Tetris game (modern version). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/projects/tetris/tetris_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tetris modern">
+<meta name="twitter:description" content="Tetris game (modern version). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+
+<script>
+/*(c) kusaku 2001 - completely rewritten with modern JavaScript */
+
+'use strict';
+
+// Constants
+const ROWS = 20;
+const COLS = 10;
+const CELL_SIZE = 22;
+const NEXT_SIZE = 5;
+const SHAPE_COST = 50;
+const MAX_RECORDS = 5;
+const MIN_FALL_DISTANCE_FOR_ROTATION = 3;
+const ROTATION_PENALTY_THRESHOLD_LOW = 5;
+const ROTATION_PENALTY_THRESHOLD_MED = 10;
+
+const SPEEDS = [1000, 902, 810, 722, 640, 562, 490, 422, 360, 302, 250, 202, 160, 122, 90, 62, 40, 22, 10];
+const COLOR_STYLES = ["empty", "red", "orange", "yellow", "green", "aqua", "blue", "purple", "gray", "brown", "aquamarine", "honeydew", "tomato", "palevioletred", "dimgray", "greenyellow", "filled"];
+const SIMPLE_STYLES = ["empty", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled"];
+
+const SHAPES_TRITIX = [
+	[[1,1,1]],
+	[[2,2], [0,2]],
+	[[3,3], [3,0]]
+];
+
+const SHAPES_TETRIS = [
+	[[1,1,1], [0,0,1]],
+	[[2,2,2], [0,2,0]],
+	[[3,3,3], [3,0,0]],
+	[[4,4,0], [0,4,4]],
+	[[0,5,5], [5,5,0]],
+	[[6,6], [6,6]],
+	[[7,7,7,7]]
+];
+
+const SHAPES_PENTIX = [
+	[[1,1,1,1,1]],
+	[[2,2,2,2], [0,0,0,2]],
+	[[3,3,3,3], [0,0,3,0]],
+	[[4,4,4,4], [0,4,0,0]],
+	[[5,5,5,5], [5,0,0,0]],
+	[[6,6,6], [0,6,6]],
+	[[7,7,7], [7,7,0]],
+	[[8,8,8], [8,0,8]],
+	[[9,9,9], [0,0,9], [0,0,9]],
+	[[10,10,0], [0,10,10], [0,0,10]],
+	[[11,11,11], [0,11,0], [0,11,0]],
+	[[0,12,0], [12,12,12], [0,12,0]],
+	[[0,13,0], [13,13,13], [0,0,13]],
+	[[0,14,0], [14,14,14], [14,0,0]]
+];
+
+// Shape states
+const ShapeState = {
+	ROTATELEFT: 1,
+	ROTATERIGHT: 2,
+	CHANGESHAPE: 3,
+	MOVERIGHT: 4,
+	MOVELEFT: 5,
+	DROP: 6,
+	FREEFALL: 7,
+	INACTIVE: 8,
+	STICKED: 9,
+	EMPTY: 0
+};
+
+// Game state
+let gameInstance = null;
+let currentShapes = SHAPES_TETRIS;
+let currentStyles = COLOR_STYLES;
+let topScores = new Array(MAX_RECORDS);
+let actionEnabled = false;
+let actionTimeout = null;
+
+// Shape class
+class Shape {
+	constructor(x, y, elements, game) {
+		this.game = game;
+		this.elements = elements.map(row => [...row]);
+		this.rows = elements.length;
+		this.columns = elements[0].length;
+		this.x = x;
+		this.y = y;
+		this.state = ShapeState.INACTIVE;
+		this.rotationState = 0;
+		this.originalElements = elements.map(row => [...row]);
+		this.updateCenter();
+	}
+
+	updateCenter() {
+		this.centerX = Math.floor(this.columns / 2);
+		this.centerY = Math.floor(this.rows / 2);
+	}
+
+	setState(state) {
+		if (this.state !== ShapeState.STICKED) {
+			this.state = state;
+		}
+	}
+
+	clone() {
+		const cloned = new Shape(this.x, this.y, this.elements, this.game);
+		cloned.rotationState = this.rotationState;
+		cloned.originalElements = this.originalElements.map(row => [...row]);
+		return cloned;
+	}
+
+	canPlace(dx = 0, dy = 0, testElements = null) {
+		const x = this.x + dx;
+		const y = this.y + dy;
+		const elements = testElements || this.elements;
+		const rows = elements.length;
+		const cols = elements[0].length;
+
+		if (x < 0 || x + cols > COLS || y + rows > ROWS || y < 0) {
+			return false;
+		}
+
+		for (let i = 0; i < rows; i++) {
+			for (let j = 0; j < cols; j++) {
+				if (elements[i][j] !== ShapeState.EMPTY) {
+					const boardY = y + i;
+					const boardX = x + j;
+					if (boardY >= 0 && this.game.board[boardY][boardX] !== ShapeState.EMPTY) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	rotate(clockwise) {
+		const newRows = this.columns;
+		const newCols = this.rows;
+		const rotated = Array(newRows).fill(null).map(() => Array(newCols).fill(ShapeState.EMPTY));
+
+		// Rotate matrix
+		if (clockwise) {
+			for (let i = 0; i < this.rows; i++) {
+				for (let j = 0; j < this.columns; j++) {
+					rotated[j][this.rows - 1 - i] = this.elements[i][j];
+				}
+			}
+		} else {
+			for (let i = 0; i < this.rows; i++) {
+				for (let j = 0; j < this.columns; j++) {
+					rotated[this.columns - 1 - j][i] = this.elements[i][j];
+				}
+			}
+		}
+
+		// Try rotation at current position
+		if (this.canPlace(0, 0, rotated)) {
+			this.applyRotation(rotated, newRows, newCols, clockwise);
+			return true;
+		}
+
+		// Try wall kicks
+		const offsets = [[0, 0], [1, 0], [-1, 0], [0, -1], [1, -1], [-1, -1]];
+		for (const [dx, dy] of offsets) {
+			if (this.canPlace(dx, dy, rotated)) {
+				this.applyRotation(rotated, newRows, newCols, clockwise);
+				this.x += dx;
+				this.y += dy;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	applyRotation(rotated, newRows, newCols, clockwise) {
+		this.elements = rotated;
+		this.rows = newRows;
+		this.columns = newCols;
+		this.updateCenter();
+		this.rotationState = clockwise ? (this.rotationState + 1) % 4 : (this.rotationState + 3) % 4;
+	}
+
+	countNeighbors(x = null, y = null) {
+		x = x ?? this.x;
+		y = y ?? this.y;
+		let count = 0;
+
+		for (let i = 0; i < this.rows; i++) {
+			for (let j = 0; j < this.columns; j++) {
+				if (this.elements[i][j] !== ShapeState.EMPTY) {
+					const boardY = y + i;
+					const boardX = x + j;
+
+					// Check all four directions
+					if (boardY === 0 || (boardY > 0 && this.game.board[boardY - 1][boardX] !== ShapeState.EMPTY)) count++;
+					if (boardY === ROWS - 1 || (boardY < ROWS - 1 && this.game.board[boardY + 1][boardX] !== ShapeState.EMPTY)) count++;
+					if (boardX === 0 || (boardX > 0 && this.game.board[boardY][boardX - 1] !== ShapeState.EMPTY)) count++;
+					if (boardX === COLS - 1 || (boardX < COLS - 1 && this.game.board[boardY][boardX + 1] !== ShapeState.EMPTY)) count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	countEmptySpaces(x = null, y = null) {
+		x = x ?? this.x;
+		y = y ?? this.y;
+		let count = 0;
+
+		for (let i = 0; i < this.rows; i++) {
+			for (let j = 0; j < this.columns; j++) {
+				if (this.elements[i][j] !== ShapeState.EMPTY && y + i + 1 < ROWS) {
+					const belowEmpty = (i === this.rows - 1 || this.elements[i + 1][j] === ShapeState.EMPTY) &&
+					                   this.game.board[y + i + 1][x + j] === ShapeState.EMPTY;
+					if (belowEmpty) count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	getFallDistance() {
+		const test = this.clone();
+		let distance = 0;
+		while (test.canPlace(0, 1)) {
+			test.y++;
+			distance++;
+		}
+		return distance;
+	}
+}
+
+// Game class
+class TetrisGame {
+	constructor(field, fieldNext, scoreField, speed, level, allowNext, selfMode, playerName) {
+		this.field = field;
+		this.fieldNext = fieldNext;
+		this.scoreField = scoreField;
+		this.speed = speed;
+		this.level = level;
+		this.allowNext = allowNext;
+		this.selfMode = selfMode;
+		this.playerName = playerName;
+
+		this.board = Array(ROWS).fill(null).map(() => Array(COLS).fill(ShapeState.EMPTY));
+		this.score = 0;
+		this.scoreChange = 0;
+		this.active = true;
+		this.shape = null;
+		this.nextShape = null;
+		this.driverInterval = null;
+		this.fallInterval = null;
+
+		this.initBoard();
+		this.shape = this.createShape();
+		this.nextShape = this.createShape();
+		this.shape.setState(ShapeState.FREEFALL);
+		this.drawer = new Drawer(this);
+		this.drawer.redraw(true);
+		this.start();
+		
+		if (this.selfMode) {
+			actionEnabled = false;
+			setTimeout(() => {
+				if (this.active && this.shape) {
+					this.selfPlay();
+				}
+			}, 100);
+		}
+	}
+
+	initBoard() {
+		const rowsToFill = Math.round(ROWS * this.level / 10 * 0.8);
+		for (let i = ROWS - rowsToFill; i < ROWS; i++) {
+			for (let j = 0; j < COLS; j++) {
+				if (Math.random() > 0.45) {
+					this.board[i][j] = Math.floor(Math.random() * 14) + 1;
+				}
+			}
+		}
+	}
+
+	createShape() {
+		const shapeData = currentShapes[Math.floor(Math.random() * currentShapes.length)];
+		const x = Math.floor((COLS - shapeData[0].length) / 2);
+		const y = Math.max(shapeData[0].length, shapeData.length) - Math.floor(shapeData[0].length / 2);
+		const shape = new Shape(x, y, shapeData, this);
+		
+		shape.originalElements = shapeData.map(row => [...row]);
+		shape.rotationState = 0;
+		
+		// Random initial rotation
+		const rotations = Math.floor(Math.random() * 4);
+		for (let i = 0; i < rotations; i++) {
+			shape.rotate(true);
+		}
+		
+		return shape;
+	}
+
+	getBoardWithShape() {
+		const board = this.board.map(row => [...row]);
+		if (this.shape && this.shape.state !== ShapeState.INACTIVE) {
+			for (let i = 0; i < this.shape.rows; i++) {
+				for (let j = 0; j < this.shape.columns; j++) {
+					if (this.shape.elements[i][j] !== ShapeState.EMPTY) {
+						const y = this.shape.y + i;
+						const x = this.shape.x + j;
+						if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+							board[y][x] = this.shape.elements[i][j];
+						}
+					}
+				}
+			}
+		}
+		return board;
+	}
+
+	start() {
+		this.driverInterval = setInterval(() => this.driver(), 1);
+		this.updateFallSpeed();
+	}
+
+	stop() {
+		if (this.driverInterval) clearInterval(this.driverInterval);
+		if (this.fallInterval) clearInterval(this.fallInterval);
+		this.active = false;
+	}
+
+	updateFallSpeed() {
+		if (this.fallInterval) clearInterval(this.fallInterval);
+		const speedIndex = Math.min(this.speed + Math.floor(this.score / 100), SPEEDS.length - 1);
+		
+		this.fallInterval = setInterval(() => {
+			if (this.active && this.shape && this.shape.state === ShapeState.FREEFALL) {
+				this.shape.setState(ShapeState.DROP);
+				this.driver();
+			}
+		}, SPEEDS[speedIndex]);
+	}
+
+	driver() {
+		if (!this.shape) return;
+
+		switch (this.shape.state) {
+			case ShapeState.FREEFALL:
+				break;
+
+			case ShapeState.DROP:
+				this.shape.setState(ShapeState.FREEFALL);
+				if (this.shape.canPlace(0, 1)) {
+					this.shape.y++;
+				} else {
+					this.shape.setState(ShapeState.STICKED);
+				}
+				this.drawer.redraw(false);
+				break;
+
+			case ShapeState.CHANGESHAPE:
+				this.shape.setState(ShapeState.FREEFALL);
+				this.changeShape();
+				break;
+
+			case ShapeState.MOVELEFT:
+				this.shape.setState(ShapeState.FREEFALL);
+				if (this.shape.canPlace(-1, 0)) {
+					this.shape.x--;
+				}
+				this.drawer.redraw(false);
+				break;
+
+			case ShapeState.MOVERIGHT:
+				this.shape.setState(ShapeState.FREEFALL);
+				if (this.shape.canPlace(1, 0)) {
+					this.shape.x++;
+				}
+				this.drawer.redraw(false);
+				break;
+
+			case ShapeState.ROTATELEFT:
+				this.shape.setState(ShapeState.FREEFALL);
+				if (this.shape.rotate(false)) {
+					this.drawer.redraw(false);
+				}
+				break;
+
+			case ShapeState.ROTATERIGHT:
+				this.shape.setState(ShapeState.FREEFALL);
+				if (this.shape.rotate(true)) {
+					this.drawer.redraw(false);
+				}
+				break;
+
+			case ShapeState.STICKED:
+				this.lockShape();
+				break;
+		}
+	}
+
+	changeShape() {
+		const cost = SHAPE_COST * (1 + (this.allowNext ? 1 : 0));
+		if (this.score >= cost && this.nextShape) {
+			this.scoreChange = -cost;
+			this.score += this.scoreChange;
+			this.shape = this.nextShape;
+			this.nextShape = this.createShape();
+			this.drawer.redraw(true);
+			if (this.selfMode) {
+				actionEnabled = false;
+				this.selfPlay();
+			}
+		}
+	}
+
+	lockShape() {
+		// Place shape on board
+		for (let i = 0; i < this.shape.rows; i++) {
+			for (let j = 0; j < this.shape.columns; j++) {
+				if (this.shape.elements[i][j] !== ShapeState.EMPTY) {
+					const y = this.shape.y + i;
+					const x = this.shape.x + j;
+					if (y >= 0) {
+						this.board[y][x] = this.shape.elements[i][j];
+					}
+				}
+			}
+		}
+
+		// Calculate score
+		const neighbors = this.shape.countNeighbors();
+		const emptySpaces = this.shape.countEmptySpaces();
+		const linesCleared = this.clearLines();
+		this.scoreChange = (neighbors - emptySpaces) * (linesCleared + 1);
+		this.score += this.scoreChange;
+
+		// Update speed
+		const newSpeed = Math.floor(this.score / 100);
+		if (newSpeed > this.speed) {
+			this.speed = newSpeed;
+			this.updateFallSpeed();
+		}
+
+		// Get next shape
+		this.shape = this.nextShape;
+		this.nextShape = this.createShape();
+		this.shape.setState(ShapeState.FREEFALL);
+
+		// Check game over
+		if (!this.shape.canPlace()) {
+			this.gameOver();
+			return;
+		}
+
+		this.drawer.redraw(true);
+		if (this.selfMode) {
+			actionEnabled = false;
+			this.selfPlay();
+		}
+	}
+
+	clearLines() {
+		let linesCleared = 0;
+		for (let i = ROWS - 1; i >= 0; i--) {
+			if (this.board[i].every(cell => cell !== ShapeState.EMPTY)) {
+				this.board.splice(i, 1);
+				this.board.unshift(Array(COLS).fill(ShapeState.EMPTY));
+				linesCleared++;
+				i++;
+			}
+		}
+		return linesCleared;
+	}
+
+	// Optimized AI position finding
+	findBestPosition(shape, nextShape = null) {
+		let bestScore = -Infinity;
+		let bestX = shape.x;
+		let bestRot = shape.rotationState;
+
+		const originalData = shape.originalElements || shape.elements.map(row => [...row]);
+		const currentRot = shape.rotationState;
+		const currentX = shape.x;
+		const currentY = shape.y;
+		const fallDistance = shape.getFallDistance();
+
+		// Try all rotations
+		for (let rot = 0; rot < 4; rot++) {
+			const testShape = new Shape(0, 0, originalData, this);
+			testShape.rotationState = 0;
+			
+			// Rotate to target rotation
+			for (let i = 0; i < rot; i++) {
+				if (!testShape.rotate(true)) break;
+			}
+
+			// Try all horizontal positions
+			const maxX = COLS - testShape.columns + 1;
+			for (let x = 0; x < maxX; x++) {
+				testShape.x = x;
+				testShape.y = currentY;
+
+				// Drop to bottom
+				while (testShape.canPlace(0, 1)) {
+					testShape.y++;
+				}
+
+				if (testShape.y <= currentY) continue;
+
+				// Calculate score
+				let score = testShape.y * 2 + testShape.countNeighbors() - testShape.countEmptySpaces() * 2;
+
+				// Penalties
+				score -= Math.abs(x - currentX) * 0.3;
+				
+				const rotDiff = Math.abs(rot - currentRot);
+				let rotPenalty = rotDiff * 2;
+				if (fallDistance < ROTATION_PENALTY_THRESHOLD_LOW && rotDiff > 0) {
+					rotPenalty = rotDiff * 10;
+				} else if (fallDistance < ROTATION_PENALTY_THRESHOLD_MED && rotDiff > 0) {
+					rotPenalty = rotDiff * 5;
+				}
+				score -= rotPenalty;
+
+				// Consider next shape
+				if (nextShape) {
+					const tempBoard = this.simulatePlacement(testShape);
+					const linesCleared = this.simulateClearLines(tempBoard);
+					score += linesCleared * 20 + 10;
+				}
+
+				if (score > bestScore) {
+					bestScore = score;
+					bestX = x;
+					bestRot = rot;
+				}
+			}
+		}
+
+		return { x: bestX, rot: bestRot };
+	}
+
+	simulatePlacement(shape) {
+		const tempBoard = this.board.map(row => [...row]);
+		for (let i = 0; i < shape.rows; i++) {
+			for (let j = 0; j < shape.columns; j++) {
+				if (shape.elements[i][j] !== ShapeState.EMPTY) {
+					const y = shape.y + i;
+					const x = shape.x + j;
+					if (y >= 0) tempBoard[y][x] = shape.elements[i][j];
+				}
+			}
+		}
+		return tempBoard;
+	}
+
+	simulateClearLines(board) {
+		let linesCleared = 0;
+		for (let i = ROWS - 1; i >= 0; i--) {
+			if (board[i].every(cell => cell !== ShapeState.EMPTY)) {
+				board.splice(i, 1);
+				board.unshift(Array(COLS).fill(ShapeState.EMPTY));
+				linesCleared++;
+				i++;
+			}
+		}
+		return linesCleared;
+	}
+
+	selfPlay() {
+		if (!this.active || !this.shape) return;
+		
+		if (actionTimeout) {
+			clearTimeout(actionTimeout);
+			actionTimeout = null;
+		}
+		
+		actionEnabled = true;
+		this.continuousSelfPlay();
+	}
+
+	continuousSelfPlay() {
+		if (!this.active || !this.shape || !actionEnabled || this.shape.state === ShapeState.STICKED) {
+			return;
+		}
+		
+		const best = this.findBestPosition(this.shape, this.allowNext ? this.nextShape : null);
+		const currentRot = this.shape.rotationState;
+		const needsRotation = best.rot !== currentRot;
+		const fallDistance = this.shape.getFallDistance();
+		const currentX = this.shape.x;
+		const targetX = best.x;
+
+		// Rotation logic
+		if (needsRotation && this.shape.state === ShapeState.FREEFALL && fallDistance > MIN_FALL_DISTANCE_FOR_ROTATION) {
+			let rotDiff = (best.rot - currentRot + 4) % 4;
+			if (rotDiff === 3) rotDiff = -1;
+			
+			if (rotDiff > 0) {
+				this.shape.setState(ShapeState.ROTATERIGHT);
+			} else if (rotDiff < 0) {
+				this.shape.setState(ShapeState.ROTATELEFT);
+			}
+			this.driver();
+			actionTimeout = setTimeout(() => this.continuousSelfPlay(), 180);
+			return;
+		}
+
+		// Horizontal movement
+		if (currentX !== targetX && this.shape.state === ShapeState.FREEFALL) {
+			const moveDir = (currentX > targetX) ? ShapeState.MOVELEFT : ShapeState.MOVERIGHT;
+			this.shape.setState(moveDir);
+			this.driver();
+			actionTimeout = setTimeout(() => this.continuousSelfPlay(), 120);
+			return;
+		}
+
+		// Drop when aligned
+		if (this.shape.state === ShapeState.FREEFALL && currentX === targetX) {
+			if (!needsRotation || fallDistance <= MIN_FALL_DISTANCE_FOR_ROTATION) {
+				this.shape.setState(ShapeState.DROP);
+				this.driver();
+				actionTimeout = setTimeout(() => this.continuousSelfPlay(), 90);
+				return;
+			}
+		}
+
+		// Periodic re-evaluation
+		actionTimeout = setTimeout(() => this.continuousSelfPlay(), 
+			this.shape.state === ShapeState.FREEFALL ? 200 : 100);
+	}
+
+	gameOver() {
+		this.stop();
+		saveScore(this.playerName, this.score);
+		setTimeout(() => {
+			alert(`Game Over!\nFinal Score: ${this.score}\nLevel: ${Math.floor(this.score / 100) + 1}`);
+			displayTop10();
+		}, 100);
+	}
+}
+
+// Drawer class
+class Drawer {
+	constructor(game) {
+		this.game = game;
+		this.oldBoard = game.getBoardWithShape();
+	}
+
+	fillCell(table, row, col, className) {
+		if (table?.rows?.[row]?.cells?.[col]) {
+			table.rows[row].cells[col].className = className;
+		}
+	}
+
+	redraw(full = false) {
+		const newBoard = this.game.getBoardWithShape();
+
+		if (full) {
+			// Redraw everything
+			for (let i = 0; i < ROWS; i++) {
+				for (let j = 0; j < COLS; j++) {
+					this.fillCell(this.game.field, i, j, currentStyles[newBoard[i][j]]);
+				}
+			}
+
+			// Clear next field
+			for (let i = 0; i < NEXT_SIZE; i++) {
+				for (let j = 0; j < NEXT_SIZE; j++) {
+					this.fillCell(this.game.fieldNext, i, j, currentStyles[0]);
+				}
+			}
+
+			// Draw next shape
+			if (this.game.allowNext && this.game.nextShape) {
+				const xPos = Math.floor(2.5 - this.game.nextShape.columns / 2);
+				const yPos = Math.floor(2.5 - this.game.nextShape.rows / 2);
+				for (let i = 0; i < this.game.nextShape.rows; i++) {
+					for (let j = 0; j < this.game.nextShape.columns; j++) {
+						if (this.game.nextShape.elements[i][j] !== ShapeState.EMPTY) {
+							this.fillCell(this.game.fieldNext, i + yPos, j + xPos, 
+								currentStyles[this.game.nextShape.elements[i][j]]);
+						}
+					}
+				}
+			}
+
+			// Update score
+			const sign = this.game.scoreChange >= 0 ? '+' : '';
+			this.game.scoreField.textContent = `${this.game.score}(${sign}${this.game.scoreChange})`;
+		} else {
+			// Only redraw changed cells
+			for (let i = 0; i < ROWS; i++) {
+				for (let j = 0; j < COLS; j++) {
+					if (newBoard[i][j] !== this.oldBoard[i][j]) {
+						this.fillCell(this.game.field, i, j, currentStyles[newBoard[i][j]]);
+					}
+				}
+			}
+		}
+
+		this.oldBoard = newBoard;
+	}
+}
+
+// Cookie management
+function getCookie(name) {
+	const prefix = name + "=";
+	const cookies = document.cookie.split(';');
+	for (let cookie of cookies) {
+		cookie = cookie.trim();
+		if (cookie.indexOf(prefix) === 0) {
+			return decodeURIComponent(cookie.substring(prefix.length));
+		}
+	}
+	return null;
+}
+
+function setCookie(name, value, days) {
+	const date = new Date();
+	date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+	document.cookie = `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/`;
+}
+
+function saveScore(name, score) {
+	let insertPos = 0;
+	while (insertPos < MAX_RECORDS && topScores[insertPos] && score <= topScores[insertPos][1]) {
+		insertPos++;
+	}
+
+	for (let i = MAX_RECORDS - 1; i > insertPos; i--) {
+		topScores[i] = topScores[i - 1];
+	}
+
+	const date = new Date().toLocaleString();
+	topScores[insertPos] = [name, score, date];
+
+	for (let i = 0; i < MAX_RECORDS && topScores[i]; i++) {
+		setCookie(`${i}n`, topScores[i][0], 365);
+		setCookie(`${i}s`, topScores[i][1], 365);
+		setCookie(`${i}d`, topScores[i][2], 365);
+	}
+}
+
+function loadScores() {
+	for (let i = 0; i < MAX_RECORDS; i++) {
+		const name = getCookie(`${i}n`);
+		const score = getCookie(`${i}s`);
+		const date = getCookie(`${i}d`);
+		if (name && score) {
+			topScores[i] = [name, parseInt(score), date || ''];
+		}
+	}
+}
+
+function clearScores() {
+	for (let i = 0; i < MAX_RECORDS; i++) {
+		topScores[i] = null;
+		setCookie(`${i}n`, '', -1);
+		setCookie(`${i}s`, '', -1);
+		setCookie(`${i}d`, '', -1);
+	}
+	displayTop10();
+}
+
+function displayTop10() {
+	let html = '<table class=simple>';
+	html += '<tr><th colspan=4>Leaders</th></tr>';
+	html += '<tr><th>#</th><th>Name</th><th>Score</th><th>Date</th></tr>';
+
+	let hasScores = false;
+	for (let i = 0; i < MAX_RECORDS; i++) {
+		if (topScores[i]) {
+			html += `<tr><td>${i + 1}</td><td>${topScores[i][0]}</td><td>${topScores[i][1]}</td><td>${topScores[i][2]}</td></tr>`;
+			hasScores = true;
+		}
+	}
+
+	if (!hasScores) {
+		html += '<tr><td colspan=4>No scores yet!</td></tr>';
+	}
+
+	html += '<tr><td colspan=4><div class="menu_passive" onmouseover="this.className=\'menu_hover\'" onmouseout="this.className=\'menu_passive\'" onmouseup="this.className=\'menu_hover\'" onclick="clearScores();" onmousedown="this.className=\'menu_active\'">Clear</div></td></tr>';
+	html += '</table>';
+
+	const topten = document.getElementById('topten');
+	topten.innerHTML = html;
+	topten.style.visibility = 'visible';
+}
+
+function createFieldHTML(rows, cols, cellH, cellW, className, idName) {
+	let html = `<table id="${idName}" name="${idName}" class="${className}">`;
+	for (let i = 0; i < rows; i++) {
+		html += '<tr>';
+		for (let j = 0; j < cols; j++) {
+			html += `<td style="height:${cellH}px;width:${cellW}px;"></td>`;
+		}
+		html += '</tr>';
+	}
+	html += '</table>';
+	return html;
+}
+
+function generateComputerName() {
+	const vowels = ["a", "e", "i", "o", "y", "u", "oo", "ee", "er", "ea", "or", "ur"];
+	const consonants = ["b", "c", "dr", "pr", "st", "bl", "cr", "ks", "ph", "h", "sh", "ch", "kh", "x", "k"];
+	const syllables = Math.ceil(Math.random() * 3);
+	let name = '';
+	for (let i = 0; i < syllables; i++) {
+		name += consonants[Math.floor(Math.random() * consonants.length)] + 
+		        vowels[Math.floor(Math.random() * vowels.length)];
+	}
+	return name;
+}
+
+function initGame() {
+	if (gameInstance?.active) {
+		gameInstance.stop();
+	}
+
+	const speed = parseInt(document.getElementById('playerSpeed').value);
+	const level = parseInt(document.getElementById('playerLevel').value);
+	const allowNext = document.getElementById('playerAllowNext').checked;
+	const selfMode = document.getElementById('selfMode').checked;
+	let playerName = document.getElementById('playerName').value || 'anonymous';
+
+	if (selfMode) {
+		playerName = generateComputerName();
+		document.getElementById('playerName').value = playerName;
+	}
+
+	// Set shape set
+	if (document.getElementById('tritix').checked) currentShapes = SHAPES_TRITIX;
+	else if (document.getElementById('tetris').checked) currentShapes = SHAPES_TETRIS;
+	else if (document.getElementById('pentix').checked) currentShapes = SHAPES_PENTIX;
+
+	// Set style
+	currentStyles = document.getElementById('colorstyle').checked ? COLOR_STYLES : SIMPLE_STYLES;
+
+	const field = document.getElementById('tetrisfield');
+	const fieldNext = document.getElementById('tetrisfieldnext');
+	const scoreField = document.getElementById('scoreboard');
+
+	gameInstance = new TetrisGame(field, fieldNext, scoreField, speed, level, allowNext, selfMode, playerName);
+}
+
+// Event handlers
+function handleKeyPress(e) {
+	if (!gameInstance?.active || gameInstance.selfMode || !gameInstance.shape) return;
+
+	const keyCode = e.keyCode || e.which;
+	const keyMap = {
+		38: ShapeState.CHANGESHAPE,  // Up arrow
+		37: ShapeState.MOVELEFT,     // Left arrow
+		39: ShapeState.MOVERIGHT,    // Right arrow
+		40: ShapeState.DROP,          // Down arrow
+		90: ShapeState.ROTATELEFT,    // Z
+		122: ShapeState.ROTATELEFT,   // z
+		88: ShapeState.ROTATERIGHT,   // X
+		120: ShapeState.ROTATERIGHT,  // x
+		32: () => alert("Press OK to continue...") // Space
+	};
+
+	const action = keyMap[keyCode];
+	if (typeof action === 'function') {
+		action();
+	} else if (action) {
+		gameInstance.shape.setState(action);
+		gameInstance.driver(); // Ensure driver processes the state change
+	}
+}
+
+function handleShowNextChange() {
+	if (gameInstance?.active) {
+		gameInstance.allowNext = document.getElementById('playerAllowNext').checked;
+		gameInstance.drawer.redraw(true);
+	}
+}
+
+function handleSelfModeChange() {
+	if (!gameInstance?.active) return;
+	
+	const wasSelfMode = gameInstance.selfMode;
+	gameInstance.selfMode = document.getElementById('selfMode').checked;
+	
+	gameInstance.updateFallSpeed();
+	
+	if (gameInstance.selfMode && !wasSelfMode) {
+		actionEnabled = false;
+		if (actionTimeout) clearTimeout(actionTimeout);
+		gameInstance.selfPlay();
+	} else if (!gameInstance.selfMode && wasSelfMode) {
+		actionEnabled = false;
+		if (actionTimeout) clearTimeout(actionTimeout);
+	}
+}
+
+// Help modal functions
+function showHelp() {
+	document.getElementById('helpModal').style.display = 'block';
+}
+
+function closeHelp() {
+	document.getElementById('helpModal').style.display = 'none';
+}
+
+// Initialize on load
+window.addEventListener('load', () => {
+	document.getElementById('tetrisboard').innerHTML = createFieldHTML(ROWS, COLS, CELL_SIZE, CELL_SIZE, 'tetris', 'tetrisfield');
+	document.getElementById('tetrisnextboard').innerHTML = createFieldHTML(NEXT_SIZE, NEXT_SIZE, CELL_SIZE, CELL_SIZE, 'tetris', 'tetrisfieldnext');
+	document.addEventListener('keydown', (e) => {
+		// Close help modal with Escape key
+		if (e.key === 'Escape' && document.getElementById('helpModal').style.display === 'block') {
+			closeHelp();
+			return;
+		}
+		handleKeyPress(e);
+	});
+	
+	document.getElementById('playerAllowNext').addEventListener('change', handleShowNextChange);
+	document.getElementById('selfMode').addEventListener('change', handleSelfModeChange);
+	
+	loadScores();
+});
+
+window.addEventListener('beforeunload', () => {
+	if (gameInstance?.active) {
+		gameInstance.stop();
+	}
+});
+</script>
+
+<body>
+<div id="gameWrapper">
+<table style="height:100%;width:100%">
+<tr><td>
+<table class=simple>
+    <tr>
+        <td style="text-align:center">
+			<div id=scoreboard style="background:#696;border-bottom:#9c9 1px solid;border-left:#9c9 1px solid;border-right:#9c9 1px solid;border-top:#9c9 12px solid;font-family:arial;font-size:18pt;font-weight:900;margin:12px;text-align:center">WELCOME</div>
+        </td>
+        <td rowspan="2">
+	<form id=optform name=optform>
+		<table class=simple style="background:#696;margin:10px">
+			<tr>
+				<td colspan="3" class="cell-center">tetris modern</td>
+			</tr>
+			<tr>
+				<td>Player name:</td>
+				<td colspan=2>
+					<input id=playerName maxlength=20 value=anonimous name=playerName style="width:80%">
+				</td>
+			</tr>
+			<tr>
+				<td>Play:</td>
+				<td colspan=2>
+					<input type="radio" name=gametype id=tritix> tritix
+					<input type="radio" name=gametype id=tetris checked> tetris
+					<input type="radio" name=gametype id=pentix> pentix.
+				</td>
+			</tr>
+			<tr>
+				<td>Figures:</td>
+				<td colspan=2>
+					<input type="radio" name=color id=colorstyle checked> colour
+					<input type="radio" name=color id=simplestyle> simple.
+				</td>
+			</tr>
+			<tr>
+				<td>Speed:</td>
+				<td colspan=2>
+					<select id=playerSpeed name=playerSpeed style="width:80%">
+						<option value="0">Very slow</option>
+						<option value="1">Slow</option> 
+						<option value="2" selected>Normal</option>
+						<option value="3">Fast</option>
+						<option value="4">Very fast</option>
+						<option value="5">Extreme</option>
+						<option value="6">Rapid</option>
+						<option value="7">Quick</option>
+						<option value="8">Swift</option>
+						<option value="9">Rapid</option>
+					</select> 
+				</td>
+			</tr>
+			<tr>
+				<td>Level:</td>
+				<td colspan=2>
+					<select id=playerLevel name=playerLevel style="width:80%">
+						<option value="0" selected>Trivial</option>
+						<option value="1">Easy</option> 
+						<option value="2">Medium</option>
+						<option value="3">Hard</option>
+						<option value="4">Very hard</option>
+						<option value="5">Expert</option>
+						<option value="6">Master</option>
+						<option value="7">Extreme</option>
+						<option value="8">Insane</option>
+						<option value="9">Impossible</option>
+					</select> 
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="cell-center">Show next: <input type="checkbox" id=playerAllowNext name=playerAllowNext checked></td>
+			</tr>
+			<tr>
+				<td colspan="3" class="cell-center">Computer plays: <input type="checkbox" id=selfMode name=selfMode></td>
+			</tr>
+			<tr>
+				<td>
+					<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout="this.className='menu_passive'" onmouseup="this.className='menu_hover'" onclick="initGame();" onmousedown="this.className='menu_active'"> 
+					Start
+					</div>
+				</td>
+				<td>
+					<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout="this.className='menu_passive'" onmouseup="this.className='menu_hover'" onclick="displayTop10();" onmousedown="this.className='menu_active'"> 
+					Top 5
+					</div>
+				</td>
+				<td>
+					<div class="menu_passive" onmouseover="this.className='menu_hover'" onmouseout="this.className='menu_passive'" onmouseup="this.className='menu_hover'" onclick="showHelp();" onmousedown="this.className='menu_active'"> 
+					Help
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<hr>
+	<div id=tetrisnextboard></div>
+	</td>
+	</tr>
+	<tr>
+		<td>
+		<div id=tetrisboard></div>
+		</td>
+	</tr>
+<tr>
+	<td>
+		<div style="color:#363;font-size:8.4pt;margin:0px;padding-bottom:6px;padding-left:6px;padding-right:6px;padding-top:6px">
+		(c) <a href="mailto:me@kusaku.su?subject=webmaster">kusaku</a> 2001
+		<br> 
+		No rights reserved. 
+		<br> 
+		Freeware: use this software on your own risk.
+		<br> 
+		This game is a part of <a href="http://www.physfac.nm.ru/">Physfac@RU</a> site.
+		<br>
+		</div>
+	</td>
+	<td>
+		<div style="color:#9c9;font-size:8.4pt;margin:0px;padding-bottom:6px;padding-left:6px;padding-right:6px;padding-top:6px">
+		Controls:
+		<br>
+		Pause - Space Rotation Z - anticlockwise / X - clockwise
+		<br>
+		Movement &rarr;- right / &larr;- left / &darr;- drop, 
+		<br>
+		Select new figure with a loss of scores - &uarr;.
+		</div>
+	</td>
+</tr>
+</table>
+</td></tr>
+</table>
+</div>
+<div id=topten onclick="this.style.visibility='hidden'" style="background:#696;cursor:pointer;left:12px;position:absolute;top:12px;visibility:hidden;transform:scale(1.2);transform-origin:top left;">
+</div>
+
+<!-- Help Modal -->
+<div id="helpModal" onclick="if(event.target===this) closeHelp();">
+	<div id="helpModalContent">
+		<span class="closeHelp" onclick="closeHelp();">&times;</span>
+		<h2>Game Help & Rules</h2>
+		
+		<h3>Scoring System</h3>
+		<p>Score is calculated when a piece lands:</p>
+		<ul>
+			<li><strong>Base Formula:</strong> (Neighbors - Empty Spaces) × (Lines Cleared + 1)</li>
+			<li><strong>Neighbors:</strong> Counts adjacent filled cells (top, bottom, left, right) around each block of the placed piece. More neighbors = better fit = higher score.</li>
+			<li><strong>Empty Spaces:</strong> Counts empty cells directly below each block of the placed piece. Fewer gaps = better placement = higher score.</li>
+			<li><strong>Line Clearing Bonus:</strong> When you clear lines, your score is multiplied by (Lines Cleared + 1). Clearing multiple lines at once gives exponential bonuses!</li>
+			<li><strong>Examples:</strong></li>
+			<ul>
+				<li>Piece with 8 neighbors, 2 empty spaces, clears 1 line: (8-2) × 2 = 12 points</li>
+				<li>Piece with 12 neighbors, 0 empty spaces, clears 2 lines: (12-0) × 3 = 36 points</li>
+			</ul>
+			<li><strong>Shape Change Cost:</strong> Press ↑ to change to next piece, but it costs 50 points (or 100 points if "Show next" is enabled). Use wisely!</li>
+			<li><strong>Level Progression:</strong> Every 100 points increases your level by 1, making pieces fall faster. Level = floor(Score ÷ 100)</li>
+		</ul>
+		
+		<h3>AI Algorithm (Computer Plays)</h3>
+		<p>The AI uses a sophisticated evaluation system to find optimal piece placement:</p>
+		<ul>
+			<li><strong>Position Evaluation:</strong> For each piece, the AI tests all 4 possible rotations and all horizontal positions (0 to board width). For each combination, it:</li>
+			<ul>
+				<li>Simulates dropping the piece to the bottom</li>
+				<li>Calculates a score based on: Y-position × 2 + neighbors - empty spaces × 2</li>
+				<li>Applies penalties for distance from current position and rotation changes</li>
+				<li>If "Show next" is enabled, also simulates placing the next piece and adds bonuses for line clearing potential</li>
+			</ul>
+			<li><strong>Scoring Factors:</strong></li>
+			<ul>
+				<li><strong>Lower placement:</strong> Pieces placed lower score better (Y-position × 2)</li>
+				<li><strong>More neighbors:</strong> Better fit with existing pieces (+1 per neighbor)</li>
+				<li><strong>Fewer gaps:</strong> Empty spaces below are penalized (-2 per gap)</li>
+				<li><strong>Line clearing:</strong> Potential to clear lines adds +20 per line cleared</li>
+			</ul>
+			<li><strong>Penalties:</strong></li>
+			<ul>
+				<li><strong>Distance penalty:</strong> Moving horizontally costs 0.3 × distance</li>
+				<li><strong>Rotation penalty:</strong> Rotating costs 2 × rotation difference</li>
+				<li><strong>Low rotation penalty:</strong> Rotating when piece is &lt;5 rows from landing costs 10× penalty, &lt;10 rows costs 5× penalty</li>
+			</ul>
+			<li><strong>Smart Movement:</strong></li>
+			<ul>
+				<li>AI prioritizes rotation first (if piece has room to fall)</li>
+				<li>Then moves horizontally toward optimal position</li>
+				<li>Finally drops the piece when aligned</li>
+				<li>Avoids risky rotations when piece is too close to landing (&lt;3 rows)</li>
+			</ul>
+			<li><strong>Timing:</strong> AI has human-like delays: 180ms for rotation, 120ms for horizontal movement, 90ms for dropping, 200ms for re-evaluation</li>
+			<li><strong>Next Piece Lookahead:</strong> When "Show next" is enabled, AI considers both current and next piece, simulating line clears and evaluating future board state</li>
+		</ul>
+		
+		<h3>Game Mechanics</h3>
+		<ul>
+			<li><strong>Board Size:</strong> 20 rows × 10 columns</li>
+			<li><strong>Line Clearing:</strong> When a row is completely filled, it's removed and all rows above drop down. Multiple lines can be cleared simultaneously.</li>
+			<li><strong>Game Over:</strong> Occurs when a new piece cannot be placed at the top of the board</li>
+			<li><strong>Wall Kicks:</strong> When rotating near walls, the game tries to shift the piece slightly to make rotation possible</li>
+			<li><strong>Random Rotation:</strong> New pieces start with a random rotation (0-3 rotations)</li>
+		</ul>
+		
+		<h3>Game Types</h3>
+		<ul>
+			<li><strong>Tritix:</strong> Simplest mode with 3 basic shapes. Each shape consists of 3 blocks arranged in simple patterns (straight line, L-shapes). Good for beginners.</li>
+			<li><strong>Tetris:</strong> Classic mode with 7 standard Tetris pieces. Includes I-piece (4 blocks in a line), O-piece (2×2 square), and various L-shaped pieces. The most balanced gameplay.</li>
+			<li><strong>Pentix:</strong> Advanced mode with 14 complex pieces. Each piece consists of 5 blocks arranged in various patterns including straight lines, L-shapes, T-shapes, S/Z-shapes, plus shapes, and more complex arrangements. More challenging and strategic.</li>
+		</ul>
+		
+		<h3>Options & Settings</h3>
+		<ul>
+			<li><strong>Speed (0-9):</strong> Initial falling speed. Higher values = faster falling. Speed also increases automatically with level.</li>
+			<li><strong>Level (0-9):</strong> Starting difficulty. Higher levels start with more randomly filled rows at the bottom (up to ~80% of board height).</li>
+			<li><strong>Show Next:</strong> Displays the next piece in the preview area. Enables better planning but increases shape change cost from 50 to 100 points.</li>
+			<li><strong>Computer Plays:</strong> Enables AI to play automatically. Can be toggled during gameplay.</li>
+			<li><strong>Figures Style:</strong></li>
+			<ul>
+				<li><strong>Colour:</strong> Each piece type has a unique color (red, orange, yellow, green, aqua, blue, purple, gray, brown, etc.)</li>
+				<li><strong>Simple:</strong> All pieces appear as filled gray blocks. Easier to distinguish shapes but less visually appealing.</li>
+			</ul>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
