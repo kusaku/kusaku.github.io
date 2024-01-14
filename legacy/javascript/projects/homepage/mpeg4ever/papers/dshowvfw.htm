@@ -1,0 +1,116 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0 bgcolor=#666666 background="../bg.jpg">
+<TABLE WIDTH=602 ALIGN=center BORDER=0 CELLSPACING=0 CELLPADDING=0 height="100%">
+	<TR>
+		<TD bgcolor=black width=1></TD>
+		<TD bgcolor=white>
+<TABLE width=600 border=0 cellspacing=0 cellpadding=0 bordercolor=black height="100%">
+	<TR>
+		<TD height=107 align=middle valign=top width=600><A href="../main.htm"><IMG border=0 height=107 src="../header.gif" vspace=2 width=550></A></TD>
+	</TR>
+	<TR>
+		<TD width=600 valign=top>		
+			<TABLE WIDTH=600 border=0 cellspacing=0 cellpadding=2>
+			<TR><TD width=600 bgcolor=black align=middle valign=center><FONT color=#ffffff face=Tahoma 
+                  size=2><STRONG> 
+             DIRECTSHOW 
+                  И VIDEO FOR 
+            WINDOWS</STRONG></FONT></TD></TR>
+			</TABLE>
+			<TABLE WIDTH=600 border=0 cellspacing=0 cellpadding=20>
+				<TR>
+					<TD width=600 align=left valign=top bgcolor=white height=1>
+                  <P><FONT face=Tahoma size=2><STRONG>В этой статье рассмотрим 
+                  механизмы работы DirectShow и Video for 
+                  Windows.</STRONG></FONT></P>
+                  <P><FONT face=Tahoma size=2>  Изначально в 
+                  системе Windows, начиная с версии 3.11 существовала 
+                  встроенная поддержка мультимедиа-данных, таких как .wav, MIDI и 
+                  видео файлы. Каждому типу фийлов ставилось в 
+                  соответствие какое-либо устройство, и подсистема мультимедиа по полной 
+                  программе его использовала. Эта система называется 
+                  MCI (multimedia&nbsp;??? interface или что-то в этом духе). 
+                  Видеоустройство называется Video for Windows. Но потом MS сделала DirectX, 
+                  а точнее DirectMedia, другой универсальный интерфейс. 
+                  Все современные плееры-комбайны скорее всего используют именно 
+                  его, пользуясь компонентом ActiveX, который легко встраивается 
+                  в приложения, но есть и те, которые используют MCI. Следовательно 
+                  почти все видео, которое мы смотрим, декодируется 
+                  с помощью DirectShow.</FONT></P>
+                  <P><FONT face=Tahoma size=2>DirectShow MPEG4 кодек:</FONT></P>
+                  <UL>
+                    <LI><FONT face=Tahoma size=2>может использовать 
+                    оверлеи</FONT>
+                    <LI><FONT face=Tahoma size=2>поддерживает 
+                    постпоцессинг</FONT>
+                    <LI><FONT face=Tahoma size=2>обычно - только декодер</FONT></LI></UL>
+                  <P><FONT face=Tahoma size=2>Video for Windows MPEG4 
+                  кодек:</FONT></P>
+                  <UL>
+                    <LI><FONT face=Tahoma size=2>может кодировать и 
+                    декодировать</FONT>
+                    <LI><FONT face=Tahoma size=2>не использует 
+                    оверлеи</FONT></LI></UL>
+                  <P><FONT face=Tahoma size=2>VirtualDub и его клон NunDub используют 
+                  MCI, а Windows Meida Player, BSPlayer, ZoomPlayer, PlayA, 
+                  Sasami2k и прочее - DirectShow. Однако если в системе нет DirectShow кодека, 
+                  то они могут использовать MCI. Чтобы определить, какой 
+                  тип кодека используется, в WMP достаточно посмотреть список фильтров, и 
+                  там есть только Video Renderer, то значит используется VfW-кодек. 
+                  В Windows есть поистине универсальный проигрыватель - mplay32.exe. 
+                  Он способен использовать как MCI, так и 
+              DirectShow.</FONT></P>
+                  <P><FONT face=Tahoma size=2>Не все видео-кодеки имеют 
+                  DirectShow декодер, следовательно преимущества оверлея для них 
+                  недоступны. Существует возможность насильного включения 
+                  оверлея, для этого надо добавить в graph фильтр, который может 
+                  выводить в оверлей. Не всякий фильтр возможно вставит в graph, 
+                  но ffdshow отлично туда вставляется, если указать в списке 
+                  поддерживаемых им FOURCC raw-видео. 
+            </FONT></P>
+					</TD>
+				</TR>
+			</TABLE>
+			<TABLE WIDTH=600 border=0 cellspacing=0 cellpadding=2>
+			<TR><TD width=600 bgcolor=black align=middle valign=center><FONT color=white face=Tahoma size=2><STRONG>*****</STRONG></FONT></TD></TR>
+			</TABLE>			
+		</TD>
+	</TR>
+	<TR>
+		<TD height=30 align=middle>
+			<TABLE WIDTH="100%"     
+            border=0 cellspacing=0 cellpadding=0 height=1>
+				<TR>
+					<TD width=600 height=10 align=middle valign=center><FONT face=Tahoma size=2>(c) <a href="https://kusaku.su">kusaku</a> 2003</FONT></TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+</TABLE>
+			</TD>
+		<TD bgcolor=black width=1></TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>

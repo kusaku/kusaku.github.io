@@ -1,0 +1,188 @@
+<HTML>
+<HEAD>
+<META content="text/html; charset=windows-1251" http-equiv=Content-Type>
+<META content="aaks, aks, aks, aks, что, aks, aks, футер, Тестовая, home, page, сайт" name=keywords>
+<META content="TЄЁрэшЎр aks." name=description>
+<LINK rel="stylesheet" href="../../styles.css" type="text/css">
+<TITLE>[Разное : Скрипты]</TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<BODY topmargin=0 leftmargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" height="100%">
+  <TR>
+    <TD align=middle valign=center>
+		<TABLE ALIGN=center BORDER=0 CELLSPACING=0 CELLPADDING=3 width="100%">
+			<TR>
+				<TD align=middle>
+					<table align=center class="flyer">
+						<tr>
+							<td align=middle>
+							<A href="javascript:history.back()">&lt;&lt;&lt;Назад</a>
+							</td>
+						</tr>
+					</table>
+				</TD>
+			</TR>
+		</TABLE>
+    </TD>
+  </TR>
+  <TR>
+    <TD height="100%" align=middle valign=center>
+		<TABLE ALIGN=center BORDER=0 CELLSPACING=0 CELLPADDING=3 width=600>
+			<TR>
+				<TD align=middle>
+					<table align=center class="flyer" width="100%">
+						<tr>
+							<td align=middle>
+							Разное : Скрипты
+							</td>
+						</tr>
+					</table>
+				</TD>
+			</TR>
+			<TR>
+				<TD align=middle>
+			<table align=center class="flyer" width="100%" height=300>
+				<tr>
+					<td align=middle valign=center>
+					just sample!
+					</td>
+				</tr>
+			</table>
+				</TD>
+			</TR>
+			<TR>
+				<TD align=middle>
+				<table align=center class="flyer" width="100%">
+					<tr>
+						<td align=middle>
+						&nbsp;
+						</td>
+					</tr>
+				</table>
+				</TD>
+			</TR>
+		</TABLE>
+    </TD>
+  </TR>
+</TABLE>
+</BODY>
+<script LANGUAGE="JavaScript1.2">
+<!-- Original:  Altan (snow@altan.hr) -->
+<!-- Web Site:  https://www.altan.hr/snow -->
+
+<!-- This script and many more are available free online at -->
+<!-- The JavaScript Source!! https://javascript.internet.com -->
+
+<!-- Begin
+var no = 25; // snow number
+var speed = 10; // smaller number moves the snow faster
+var snowflake = "snow.gif";
+
+var ns4up = (document.layers) ? 1 : 0;  // browser sniffer
+var ie4up = (document.all) ? 1 : 0;
+var dx, xp, yp;    // coordinate and position variables
+var am, stx, sty;  // amplitude and step variables
+var i, doc_width = 800, doc_height = 600;
+if (ns4up) {
+doc_width = self.innerWidth;
+doc_height = self.innerHeight;
+} else if (ie4up) {
+doc_width = document.body.clientWidth;
+doc_height = document.body.clientHeight;
+}
+dx = new Array();
+xp = new Array();
+yp = new Array();
+am = new Array();
+stx = new Array();
+sty = new Array();
+for (i = 0; i < no; ++ i) {  
+dx[i] = 0;                        // set coordinate variables
+xp[i] = Math.random()*(doc_width-50);  // set position variables
+yp[i] = Math.random()*doc_height;
+am[i] = Math.random()*20;         // set amplitude variables
+stx[i] = 0.02 + Math.random()/10; // set step variables
+sty[i] = 0.7 + Math.random();     // set step variables
+if (ns4up) {                      // set layers
+if (i == 0) {
+document.write("<layer name=\"dot"+ i +"\" left=\"15\" ");
+document.write("top=\"15\" visibility=\"show\"><img src=\"");
+document.write(snowflake + "\" border=\"0\"></layer>");
+} else {
+document.write("<layer name=\"dot"+ i +"\" left=\"15\" ");
+document.write("top=\"15\" visibility=\"show\"><img src=\"");
+document.write(snowflake + "\" border=\"0\"></layer>");
+   }
+} else if (ie4up) {
+if (i == 0) {
+document.write("<div id=\"dot"+ i +"\" style=\"POSITION: ");
+document.write("absolute; Z-INDEX: "+ i +"; VISIBILITY: ");
+document.write("visible; TOP: 15px; LEFT: 15px;\"><img src=\"");
+document.write(snowflake + "\" border=\"0\"></div>");
+} else {
+document.write("<div id=\"dot"+ i +"\" style=\"POSITION: ");
+document.write("absolute; Z-INDEX: "+ i +"; VISIBILITY: ");
+document.write("visible; TOP: 15px; LEFT: 15px;\"><img src=\"");
+document.write(snowflake + "\" border=\"0\"></div>");
+      }
+   }
+}
+function snowNS() {  // Netscape main animation function
+for (i = 0; i < no; ++ i) {  // iterate for every dot
+yp[i] += sty[i];
+if (yp[i] > doc_height-50) {
+xp[i] = Math.random()*(doc_width-am[i]-30);
+yp[i] = 0;
+stx[i] = 0.02 + Math.random()/10;
+sty[i] = 0.7 + Math.random();
+doc_width = self.innerWidth;
+doc_height = self.innerHeight;
+}
+dx[i] += stx[i];
+document.layers["dot"+i].top = yp[i];
+document.layers["dot"+i].left = xp[i] + am[i]*Math.sin(dx[i]);
+}
+setTimeout("snowNS()", speed);
+}
+function snowIE() {  // IE main animation function
+for (i = 0; i < no; ++ i) {  // iterate for every dot
+yp[i] += sty[i];
+if (yp[i] > doc_height-50) {
+xp[i] = Math.random()*(doc_width-am[i]-30);
+yp[i] = 0;
+stx[i] = 0.02 + Math.random()/10;
+sty[i] = 0.7 + Math.random();
+doc_width = document.body.clientWidth;
+doc_height = document.body.clientHeight;
+}
+dx[i] += stx[i];
+document.all["dot"+i].style.pixelTop = yp[i];
+document.all["dot"+i].style.pixelLeft = xp[i] + am[i]*Math.sin(dx[i]);
+}
+setTimeout("snowIE()", speed);
+}
+if (ns4up) {
+snowNS();
+} else if (ie4up) {
+snowIE();
+}
+// End -->
+</script>
+</HTML>

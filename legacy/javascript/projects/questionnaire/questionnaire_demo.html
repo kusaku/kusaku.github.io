@@ -1,0 +1,370 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="VI60_defaultClientScript" CONTENT="JavaScript">
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE>Questionnaire</TITLE>
+<STYLE>
+BODY
+{
+	background:#696 url('../../physfac/bgnd.gif');
+	color:#363;
+	font-family:arial;
+	font-size:14pt;
+	overflow:scroll;
+	margin:10px;
+	padding:10px;
+	font-family:arial;
+	color:#363;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA
+{
+	background:#9c9;
+	color:#363;
+	border:1px solid #363;
+	margin:2px;
+	cursor:hand;
+	font-family:arial;
+	font-size:14pt;
+	overflow:hidden;
+}
+
+.qwestion
+{
+	background:orange;
+	color:red;
+	font-size:16pt;
+}
+
+.variants
+{
+	background:green;
+	color:lime;
+	font-size:14pt;
+}
+</STYLE>
+<SCRIPT LANGUAGE=javascript>
+<!--
+
+function QuestionMaker(quantity, qObjs, QField)
+{
+	this.askQuestion = AskQuestion;
+	this.putAnsver = PutAnsver;
+	this.exportQ = ExportQ;
+	this.importQ = ImportQ;
+	this.nextQ = NextQ;
+	this.prevQ = PrevQ;
+	this.count = 0;
+	this.quantity = quantity;
+	this.qObjs = qObjs;
+	this.QField = QField;
+	this.current = this.qObjs[this.count];
+	this.askQuestion(this.current);
+}
+
+function ExportQ()
+{
+	var QSArr = new Array(this.quantity);
+	for (var i=0; i<this.quantity; i++)
+	{
+		QSArr[i] = 0;
+		for (var k=0; k<this.qObjs[i].cvars; k++)
+			if (this.qObjs[i].value[k]) QSArr[i] = k + 1;
+	}
+	var cookieValue = Arr2Str(QSArr,":");
+	setCookie("ansvers", cookieValue, 365);
+	alert("Answers saved to cookie: " + cookieValue);
+}
+function ImportQ()
+{
+	if (s=getCookie("ansvers"))
+		var QSArr = Str2Arr(s, ":")
+	else return;
+	if (QSArr.length!=this.quantity) return;
+	for (var i=0; i<this.quantity; i++)
+		{
+			for (var k=0; k<this.qObjs[i].cvars; k++)
+				this.qObjs[i].value[k] = false;
+			if (QSArr[i] != 0)
+				{
+				this.qObjs[i].value[QSArr[i] - 1] = true;
+				this.qObjs[i].ansvered = true;
+				}
+		}
+	this.current = this.qObjs[this.count];
+	this.askQuestion(this.current);
+}
+
+function QuestionObj(text, cvars, buttext, value, type)
+{
+	this.RADIOONE = 1;
+	this.RADIOMUL = 2;
+	this.INPUTONE = 3;
+	this.INPUTMUL = 4;
+	this.type = type; //Q.RADIOONE
+	this.text = text;
+	this.cvars = cvars;
+	this.buttext = buttext;
+	this.value = value;
+	this.ansvered = false;
+}
+
+function AskQuestion(Q)
+{
+	var s = new String();
+	switch (Q.type)
+	{
+	case Q.RADIOONE :
+		s += "<p class=qwestion>";
+		//s += "Question number#" + this.count + ":<br>";
+		s += Q.text;
+		s += "</p>";
+		s += "<div class=variants>";
+		s += "<form id=qform>";
+		for (var i=0; i<Q.cvars; i++)
+			{
+			s += Q.buttext[i];
+			s += "<INPUT type=radio name=foo id=variant" + i;
+			s += (Q.value[i]) ? " checked>" : ">";
+			}
+		s += "</form>";
+		s += "</div>";
+	break;
+	case Q.RADIOMUL :
+		s += "<p class=qwestion>";
+		//s += "Question number#" + this.count + ":<br>";
+		s += Q.text;
+		s += "</p>";
+		s += "<div class=variants>";
+		s += "<form id=qform>";
+		for (var i=0; i<Q.cvars; i++)
+			{
+			s += Q.buttext[i];
+			s += "<INPUT type=checkbox id=variant" + i;
+			s += (Q.value[i]) ? " checked>" : ">";
+			}
+		s += "</form>";
+		s += "</div>";
+	break;
+	case Q.INPUTONE :
+		s += "<p class=qwestion>";
+		//s += "Question number#" + this.count + ":<br>";
+		s += Q.text;
+		s += "</p>";
+		s += "<div class=variants>";
+		s += "<form id=qform>";
+		for (var i=0; i<Q.cvars; i++)
+			{
+			s += Q.buttext[i];
+			s += "<INPUT type=text id=variant" + i;
+			s += " value=" + Q.value[i] + ">";
+			}
+		s += "</form>";
+		s += "</div>";
+		this.QField.innerHTML = s;
+	break;
+	case Q.INPUTMUL :
+		s += "<p class=qwestion>";
+		//s += "Question number#" + this.count + ":<br>";
+		s += Q.text;
+		s += "</p>";
+		s += "<div class=variants>";
+		s += "<form id=qform>";
+		for (var i=0; i<Q.cvars; i++)
+			{
+			s += Q.buttext[i];
+			s += "<TEXTAREA rows=3 cols=20 id=variant" + i + ">";
+			s += "" + Q.value[i] + "</TEXTAREA>";
+			}
+		s += "</form>";
+		s += "</div>";
+	break;
+	}
+
+	this.QField.innerHTML = s;
+}
+
+function PutAnsver(Q)
+{
+	switch (Q.type)
+	{
+	case Q.RADIOONE :
+	case Q.RADIOMUL :
+		for (var i=0; i<Q.cvars; i++)
+			if (Q.value[i] = qform["variant" + i].checked) Q.ansvered = true;
+	break;
+	case Q.INPUTONE:
+	case Q.INPUTMUL:
+		for (var i=0; i<Q.cvars; i++)
+			if ((Q.value[i] = qform["variant" + i].value)!="") Q.ansvered = true;
+	break;
+	}
+}
+
+function NextQ()
+{
+	this.putAnsver(this.current);
+	this.count = (this.count == this.quantity - 1) ? 0 : this.count + 1;
+	this.current = this.qObjs[this.count];
+	this.askQuestion(this.current);
+}
+
+function PrevQ()
+{
+	this.putAnsver(this.current);
+	this.count = (this.count == 0) ? this.quantity - 1 : this.count - 1;
+	this.current = this.qObjs[this.count];
+	this.askQuestion(this.current);
+}
+
+function setCookie(name, value, savefor, path, domain, secure)
+{
+	var expires = null;
+	if (savefor)
+	{
+		now = new Date();
+		now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+		expires = now.toGMTString();
+	}
+	var curCookie = name + "=" + escape(value) +
+		((expires) ? ";expires=" + expires : "") +
+		((path) ? ";path=" + path : "") +
+		((domain) ? ";domain=" + domain : "") +
+		((secure) ? ";secure" : "");
+		document.cookie = curCookie;
+}
+
+function getCookie(name)
+{
+	var prefix = name + "="
+	var cookieStartIndex = document.cookie.indexOf(prefix)
+	if (cookieStartIndex == -1)
+		return false
+	var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+	if (cookieEndIndex == -1)
+		cookieEndIndex = document.cookie.length
+	return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+
+function Str2Arr(str, delim)
+{
+	var arr = new Array();
+	var start = 0;
+	var end = str.indexOf(delim, start);
+	while ((end = str.indexOf(delim, start + delim.length)) > -1)
+	{
+		arr[arr.length] = str.substring(start,end);
+		start = end + delim.length;
+	}
+	arr[arr.length] = str.substring(start, str.length);
+	return arr;
+}
+
+function Arr2Str(arr, delim)
+{
+	var str = new String();
+	for (var i=0; i<arr.length - 1; i++)
+		str += "" + arr[i] + delim;
+	str += "" + arr[i];
+	return str;
+}
+
+function Start()
+{
+	QM = new QuestionMaker(5,
+	new Array(
+	new QuestionObj("Ваш пол:", 3, new Array("Мужской:", "Женский:", "Не определился:"), new Array(false, false, false), 1),
+	new QuestionObj("Ваше имя, фамилиля, отчество:", 3, new Array("Имя", "Фамилиля", "Отчество"), new Array("", "", ""), 3),
+	new QuestionObj("Ваш возраст:", 7, new Array("до 10 лет","10-13 лет","13-16 лет","16-20 лет","20-30 лет","30-50 лет","50 и более лет"), new Array(false,false,false,false,false,false,false), 1),
+	new QuestionObj("Реквизиты:", 2, new Array("Адрес", "Место работы"), new Array("бомжатник", "мусорный бак"), 4),
+	new QuestionObj("Ваша любимая музыка:", 2, new Array("Trance", "House"), new Array("", ""), 2))
+	, QField);
+}
+
+function Dec2Custom(num, base)
+{
+	var pow = 0;
+	var digits = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+	var arr = new Array();
+	while (num >= Math.pow(base, pow)) pow++;
+	while (pow > 0)
+	{
+		var deca = Math.pow(base, --pow);
+		arr[arr.length] = digits[(num - num % deca) / deca];
+		num %= deca;
+	}
+	return Arr2Str(arr,"|");
+}
+
+function Custom2Dec(str, base)
+{
+	var digits = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+	var arr = Str2Arr(str,"|");
+	var num = 0;
+	for (var i=0; i<arr.length; i++)
+		for (var k=0; k<digits.length; k++)
+			if (arr[i]==digits[k]) num += k * Math.pow(base, arr.length - i - 1);
+	return num;
+}
+
+function Export2ASCII(QMO)
+{
+	var arr = new Array();
+	for (var i=0; i<QMO.quantity - 3; i+=3)
+		arr[i] = QMO.qObjs[i].value[0] + "" + QMO.qObjs[i+1].value[0] + "" + QMO.qObjs[i+2].value[0];
+	str = Arr2Str(arr, "|");
+}
+
+setTimeout("Export2ASCII(QM);",1000);
+
+window.onload = new Function("Start();/*QM.importQ();*/");
+window.onunload = new Function("QM.putAnsver(QM.current);QM.exportQ();");
+//-->
+</SCRIPT>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Questionnaire demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/questionnaire/questionnaire_demo.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/questionnaire/questionnaire_demo.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/questionnaire/questionnaire_demo.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Questionnaire">
+<META PROPERTY="og:description" CONTENT="Questionnaire demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/questionnaire/questionnaire_demo.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Questionnaire">
+<META NAME="twitter:description" CONTENT="Questionnaire demo. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY>
+<DIV ID=QField></DIV>
+<INPUT TYPE="button" VALUE="<<<" ID=button1 NAME=button1 ONCLICK="QM.prevQ()">
+<INPUT TYPE="button" VALUE=">>>" ID=button2 NAME=button2 ONCLICK="QM.nextQ()">
+<FONT COLOR=orangered FACE=monospace STYLE="FONT-WEIGHT: bold">|ARM <INPUT TYPE="checkbox" ONCLICK="destroy.disabled=!this.checked">
+<INPUT TYPE="button" VALUE="New Poll" ID=destroy ONCLICK="Start()" DISABLED>|</FONT>
+<INPUT TYPE="button" VALUE="Save Answers" ONCLICK="QM.putAnsver(QM.current);QM.exportQ();">
+</BODY>
+</HTML>

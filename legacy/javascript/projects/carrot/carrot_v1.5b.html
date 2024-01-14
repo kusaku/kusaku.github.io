@@ -1,0 +1,344 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">
+<META NAME="VI60_defaultClientScript" CONTENT="JavaScript">
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<STYLE>
+		BODY
+		{
+			overflow:hidden;
+		}
+		INPUT, SELECT, OPTION, TEXTAREA
+		{
+			background:#EEF;
+			color:#000;
+			border:1px solid #000;
+			margin:2px;
+			cursor:hand;
+			font-family:Tahoma,Arial;
+			font-size:8pt;
+			overflow:hidden;
+		}
+		A
+		{
+			color:#F00;
+			font-family:Tahoma,Arial;
+			font-size:8pt;
+			text-decoration:none;
+		}
+	</STYLE>
+<TITLE>��������� ����</TITLE>
+<SCRIPT LANGUAGE=javascript>
+		<!--
+        var myAgent;
+        var Merlin;
+        var stub = 1;
+        var position = 0;
+        var reading = false;
+
+        var range = null;
+        var box = null;
+        var box_timer = null;
+        var read_timer = 0;
+        var run_flag = false;
+
+        var currentUrl = new String();
+        var urlHistory = new Array();
+
+        function InitAgent()
+        {
+            try
+            {
+                myAgent = new ActiveXObject("Agent.Control.2");
+                myAgent.Connected = true;
+                myAgent.Characters.Load("Merlin");
+                Merlin = myAgent.Characters("Merlin");
+                Merlin.LanguageID = 0x0419;
+                Merlin.Show();
+                Merlin.Stop();
+                Merlin.Play("Wave");
+                Merlin.Speak("������, ����!|�������, ��������!|���, ���� ����!|����������, �������!");
+                Merlin.Play("RestPose");
+                setInterval("if (!run_flag) setInterval(\"run_flag = true; if (www.document.body) www.document.body.onclick = SetPosition;\", 100); run_flag = false;", 1000);
+                setInterval("if (reading && myAgent.AudioOutput.Status==0 && read_timer > 5) {ReadNext();read_timer = 0;} else read_timer++;", 100);
+                www.document.body.innerHTML += "<H1>����� ����������!</H1>";
+            }
+            catch (Exception)
+            {
+                www.document.body.innerHTML += "<H1>����� �� ����������!</H1>";
+            }
+            finally
+            {
+                if (location.href.indexOf("http://") == -1) browser.style.display = "block";
+                if (getCookie("!LAST!")) url.value = getCookie("!LAST!");
+                www.document.body.innerHTML += "<H1>��������� ����. ������ 1.5b</H1>";
+                www.document.body.innerHTML += "<B>���� ������ ������ �������� � ������ ������, ������� ����� ���������� Internet Explorer, ��������� ������� ������ � Microsoft Agent.</B><HR>";
+                www.document.body.innerHTML += "<LI>������ 'back' ��� �������� �� ���������� ��������.</LI>";
+                www.document.body.innerHTML += "<LI>������ 'go!' ��� �������� �������� �� �������� ������.</LI>";
+                www.document.body.innerHTML += "<LI>������ '�����' ��� ������ ��������� ������ (������ ��� ��������� ��������).</LI>";
+                www.document.body.innerHTML += "<LI>������ '������/����' ��� ������ ������ ��� ���������.</LI>";
+                www.document.body.innerHTML += "<LI>������ '���������' ��� ��������� ��������� � �������� ������.</LI>";
+                www.document.body.innerHTML += "<LI>���������� ���� ��� ������ ���������� �����������, ������������ � ������ �������� ������.</LI>";
+                www.document.body.innerHTML += "<LI>�������� ������������ ��������� �����������.</LI>";
+                www.document.body.innerHTML += "<LI>�������� ����� �������������� ����������.</LI>";
+                www.document.body.innerHTML += "<LI>����������� ����� ���������� ������.</LI>";
+                www.document.body.innerHTML += "<LI>��������� ������ ������ ������������ ��� ������ � ����������������� ��� ��������� ��������.</LI>";
+                www.document.body.innerHTML += "<LI>����� ������ ����� ����������� ������, ������ ����� � �������� ������. ��� ���� ����� �������� �����������, � �������� �������� ������, � �������� ������ ��� �����.</LI>";
+                www.document.body.innerHTML += "<LI>� ������ ������� ��������� ����� ��������� �����������.</LI>";
+                www.document.body.innerHTML += "<LI>� ����� ������ �������� �������� ����� ����������� � ������.</LI>";
+            }
+        }
+
+        function Unificator(str)
+        {
+            var val = 0;
+            for (var i=0; i<str.length; i++)
+                val += str.charCodeAt(i) * i;
+            return "uni" + val;
+        }
+
+        function UnLoad()
+        {
+            Merlin.Stop();
+            range = null;
+            box = null;
+            if (position > 0) setCookie(Unificator(currentUrl), position, 365);
+        }
+
+        function Go()
+        {
+            UnLoad();
+            try
+            {
+                www.location.href = url.value;
+                currentUrl = url.value;
+                urlHistory[urlHistory.length] = currentUrl;
+                setCookie("!LAST!", currentUrl, 365);
+                position = (position = parseInt(getCookie(Unificator(currentUrl)))) ? position : 0;
+                if (!reading)
+                {
+                    Merlin.Stop();
+                    if (verbose.checked) Merlin.Speak((position > 0) ? "� ����������� �� ����������� " + position + "." : "��� �� �����...");
+                }
+
+            }
+            catch (Exception)
+            {
+                reading = false;
+                Merlin.Stop();
+                if (verbose.checked) Merlin.Speak("� ���������, �� ���� ������, ��� ��� �� ���� ������� ��������. ��� ������� � �������� ������������.");
+            }
+        }
+
+        function ReadSentence(text)
+        {
+            Merlin.Play("RestPose");
+            if (text)
+                Merlin.Speak(text);
+        }
+
+        function ResetRange(newposition)
+        {
+            try
+            {
+                if (!www.document.body) return false;
+
+                if (!range)
+                {
+                    range = www.document.body.createTextRange();
+                    range.collapse(true);
+                    range.move("textedit", -1);
+                    range.move("sentence", newposition);
+                }
+
+                if (!box)
+                {
+                    box = www.document.createElement("DIV");
+                    box.Morph = function (c,t,l,w,h)
+                    {
+                        var n = 25;
+                        if (c==0)
+                        {
+                            clearTimeout(box_timer);
+                            top_delta = ((ct = box.offsetTop) - t)/n;
+                            left_delta = ((cl = box.offsetLeft) - l)/n;
+                            width_delta = ((cw = box.offsetWidth) - w)/n;
+                            hight_delta = ((ch = box.offsetHeight) - h)/n;
+                            box_timer = setTimeout("box.Morph(" + (c + 1) + ");", 10);
+                        }
+                        else if (c>n)
+                            clearTimeout(box_timer);
+                        else
+                        {
+                            box.style.top = Math.round(ct -= top_delta) + 'px';
+                            box.style.left = Math.round(cl -= left_delta) + 'px';
+                            box.style.width = Math.round(cw -= width_delta) + 'px';
+                            box.style.height = Math.round(ch -= hight_delta) + 'px';
+                            box_timer = setTimeout("box.Morph(" + (c + 1) + ");", 10);
+                        }
+                    }
+                    box.style.position = 'absolute';
+                    box.style.backgroundColor = 'rgb(0,51,170)';
+                    box.style.filter = "alpha(opacity=25)";
+                    box.style.zIndex = "-1";
+                    box.Morph(0,2*range.offsetTop-range.boundingTop-2,range.boundingLeft-2,range.boundingWidth,range.boundingHeight);
+                    www.document.body.appendChild(box);
+                }
+            }
+            catch (Exception)
+            {
+                reading = false;
+                Merlin.Stop();
+                if (verbose.checked) Merlin.Speak("� ���������, �� ���� ������, ��� ��� �� ���� �������� ������ � ������. ��� ������� � �������� ������������.");
+                return false;
+            }
+            finally
+            {
+                position = newposition;
+            }
+            return true;
+        }
+
+        function SetPosition(newposition)
+        {
+            for (var dig = www.event.srcElement; dig.tagName != "A" && dig.parentElement;dig = dig.parentElement);
+            if (dig.tagName=="A")
+            {
+                url.value = dig.href;
+                Go();
+                return false;
+            }
+            if (!ResetRange(newposition)) return;
+            else
+            {
+                var newrange = www.document.body.createTextRange();
+                newrange.moveToPoint(www.event.x, www.event.y);
+                newrange.expand("sentence");
+                //newrange.moveEnd("word", -1);
+                box.Morph(0,2*newrange.offsetTop-newrange.boundingTop-2,newrange.boundingLeft-2,newrange.boundingWidth,newrange.boundingHeight);
+                newrange.collapse(true);
+                range.move("textedit", -1)
+                for (fwd=0,position=0;range.compareEndPoints("StartToStart", newrange)==-1&&(fwd=range.move("sentence", 100))!=0;position+=fwd);
+                for (;range.compareEndPoints("StartToStart", newrange)==1&&range.move("sentence", -1)!=0;position--);
+                if (!reading && verbose.checked)
+                {
+                    Merlin.Stop();
+                    Merlin.Speak("����������� " + position + ".");
+                }
+            }
+        }
+
+        function ReadNext()
+        {
+            if (!ResetRange(position)) return;
+            fwd = range.moveEnd("sentence", stub);
+            range.execCommand("BackColor","","transparent");
+            range.execCommand("ForeColor","","#ff3300");
+            range.scrollIntoView(true);
+            ReadSentence(range.text);
+            //range.moveEnd("word", -1);
+            box.Morph(0,2*range.offsetTop-range.boundingTop-2,range.boundingLeft-2,range.boundingWidth,range.boundingHeight);
+            range.moveStart("sentence", stub);
+            if (!fwd)
+            {
+                status = "";
+                reading = false;
+                if (verbose.checked)
+                {
+                    Merlin.Speak("����� ��������. ��� ����� - " + position + " �����������.");
+                    Merlin.Play("Greet");
+                    Merlin.Speak("������� �� ��������!");
+                    Merlin.Play("RestPose");
+                }
+            }
+            status = "���� ������ � ������ ����������� ����� " + position + "...";
+            position += stub;
+        }
+
+
+        function setCookie(name, value, savefor, path, domain, secure)
+        {
+            var expires = null;
+            if (savefor)
+            {
+                now = new Date();
+                now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+                expires = now.toGMTString();
+            }
+
+            var curCookie = name + "=" + escape(value) +
+                ((expires) ? ";expires=" + expires : "") +
+                ((path) ? ";path=" + path : "") +
+                ((domain) ? ";domain=" + domain : "") +
+                ((secure) ? ";secure" : "");
+                document.cookie = curCookie;
+        }
+
+        function getCookie(name)
+        {
+            var prefix = name + "="
+            var cookieStartIndex = document.cookie.indexOf(prefix)
+            if (cookieStartIndex == -1)
+                return false
+            var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+            if (cookieEndIndex == -1)
+                cookieEndIndex = document.cookie.length
+            return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+        }
+
+        //-->
+</SCRIPT>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="��������� ���� � talking character (TTS). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, ������ ���������, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.5b.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.5b.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.5b.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="��������� ����">
+<META PROPERTY="og:description" CONTENT="��������� ���� � talking character (TTS). Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.5b.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="��������� ����">
+<META NAME="twitter:description" CONTENT="��������� ���� � talking character (TTS). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY BOTTOMMARGIN=0 LEFTMARGIN=0 RIGHTMARGIN=0 TOPMARGIN=0 ONLOAD="InitAgent();" ONUNLOAD="UnLoad();">
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0 HEIGHT="100%">
+	<TR HEIGHT=1>
+		<TD><INPUT TYPE=button VALUE="back" ONCLICK="if(urlHistory.length>1){url.value=urlHistory[urlHistory.length-2];urlHistory.length-=2;Go();}"><!--INPUT onchange="stub=(stub=parseInt(this.value))?stub:1;this.value=stub;" size=1 value=1--></TD>
+		<TD WIDTH="100%"><INPUT TYPE=text ID=url STYLE="WIDTH: 99%"></TD>
+		<TD ID=browser STYLE="DISPLAY: NONE;"><INPUT TYPE=file ONPROPERTYCHANGE="url.value=this.value;Go();" STYLE="WIDTH: 0%; BORDER: NONE;"></TD>
+		<TD><INPUT TYPE=button VALUE="go!" ONCLICK="Go();"></TD>
+		<TD><INPUT TYPE=button VALUE="������/����" ONCLICK="Merlin.Stop();reading=!reading;"></TD>
+		<TD><INPUT ONCLICK="myAgent.PropertySheet.Visible=true;myAgent.ShowDefaultCharacterProperties()" TYPE=button VALUE=���������></TD>
+		<TD><SELECT ONCHANGE="stub=parseInt(this.value)"><OPTION SELECTED VALUE=1>1</OPTION><OPTION VALUE=3>3</OPTION><OPTION VALUE=5>5</OPTION><OPTION VALUE=10>10</OPTION><OPTION VALUE=50>50</OPTION></SELECT><INPUT ID=verbose TYPE=checkbox CHECKED></TD>
+		<TD><A HREF="http://kusaku.su/" TITLE="made by kusaku">&nbsp;kusaku&nbsp;</A></TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=8><IFRAME SRC="about:blank" HEIGHT="100%" WIDTH="100%" ID=www FRAMEBORDER=0 FRAMESPACING=0></IFRAME></TD>
+	</TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gas Simulation (PMOR Variant) - Turbo Pascal Programs</title>
+<meta name="description" content="Gas Simulation (PMOR Variant) - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-pmor-variant.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-pmor-variant.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-pmor-variant.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Gas Simulation (PMOR Variant) - Turbo Pascal Programs">
+<meta property="og:description" content="Gas Simulation (PMOR Variant) - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-pmor-variant.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gas Simulation (PMOR Variant) - Turbo Pascal Programs">
+<meta name="twitter:description" content="Gas Simulation (PMOR Variant) - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-number { color: #79c0ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+        html.dark .hljs-function { color: #d2a8ff; }
+        html.dark .hljs-variable { color: #ffa657; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>    <script>
+        // Register Pascal language for highlight.js
+        hljs.registerLanguage('pascal', function(hljs) {
+            return {
+                keywords: {
+                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
+                    built_in: 'boolean char integer real text string',
+                    literal: 'true false'
+                },
+                contains: [
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_NUMBER_MODE
+                ]
+            };
+        });
+    </script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Turbo Pascal Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Gas Simulation (PMOR Variant)</h1>
+        <p class="text-gray-600 mb-6">A variant of the gas simulation with PMOR (possibly parameter modification or optimization) features.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-pascal">﻿program Gas;
+
+uses
+  Crt, Graph;
+
+const
+   Memory  =    100;
+   Windows =      4;
+   dt      =   5e-3;
+   maxCount=   1000;
+   maxStat =    100;
+
+type
+  ResolutionPreference = (Lower, Higher);
+  ColorList = array [1..Windows] of integer;
+
+  pTVector = ^TVector;
+  TVector = record
+    x,y : Double;
+  end;
+
+  pTParticleObj = ^TParticleObj;
+  TParticleObj = object
+    acc,
+    vel,
+    cur : TVector;
+    radius,
+    sforce : Double;
+    underF : Boolean;
+    number : Integer;
+    constructor Init(_cur, _vel: TVector; _radius, _sforce: Double; _number : Integer);
+    procedure IntegrateFirst(dt: Double);
+    procedure IntegrateSecond(dt: Double);
+    procedure Draw;
+    destructor Done;
+    private
+    function DistTo(That: pTParticleObj): Double;
+    function GetForce(That: pTParticleObj): pTVector;
+  end;
+  TContainer = record
+    part : array[1..maxCount] of pTParticleObj;
+    count: Integer;
+    radius: Integer;
+    sforce: Integer;
+    minX, minY, maxX, maxY : Double;
+    minVel, maxVel: Integer;
+    enableGraph: Boolean;
+    needDispose: Boolean;
+    skipFrames: Integer;
+  end;
+  TStatistic = record
+    statData : array[1..maxStat] of Integer;
+    fromStat, toStat : Integer;
+    curStat: Integer;
+    statCount: Integer;
+    statGaps: Integer;
+  end;
+
+var
+  Xmax,
+  Ymax,
+  ViewXmax,
+  ViewYmax : integer;
+  Ch: char;
+  GraphDriver, GraphMode : integer;
+  CurPage : Integer;
+  EnableStat, StatChanged : Boolean;
+  container: TContainer;
+  statistic: TStatistic;
+  zero: TVector;
+
+constructor TParticleObj.Init(_cur, _vel: TVector; _radius, _sforce: Double; _number : Integer);
+begin
+     cur := _cur;
+     vel := _vel;
+     radius := _radius;
+     sforce := _sforce;
+     number := _number;
+end;
+
+function TParticleObj.DistTo(That : pTParticleObj): Double;
+var res: Double;
+begin
+     with That^.cur do
+     res := Sqrt((cur.x - x) * (cur.x - x) + (cur.y - y) * (cur.y - y));
+     if res = 0 then DistTo := 1
+     else DistTo := res;
+end;
+
+function TParticleObj.GetForce(That : pTParticleObj): pTVector;
+var resS: Double;
+    resV: TVector;
+    presV: pTVector;
+    dist: Double;
+begin
+   dist := DistTo(That);
+   resS := radius - dist;
+   if resS &gt; 0 then resS := resS * sforce
+   else resS := 0;
+   with That^.cur do
+   begin
+       resV.x := (cur.x - x) / dist * resS;
+       resV.y := (cur.y - y) / dist * resS;
+   end;
+
+   GetForce := @resV;
+end;
+
+procedure TParticleObj.IntegrateFirst(dt: Double);
+var i: Integer;
+    force: TVector;
+    curWall: TVector;
+    wall: pTParticleObj;
+begin
+     acc.x := 0;
+     acc.y := 0;
+
+     curWall.x := container.minX;
+     curWall.y := cur.y;
+     New(wall, Init(curWall, zero, 0, 0, 0));
+     force := GetForce(wall)^;
+     Dispose(wall);
+     acc.x := acc.x + force.x;
+     acc.y := acc.y + force.y;
+
+     curWall.x := container.maxX;
+     curWall.y := cur.y;
+     New(wall, Init(curWall, zero, 0, 0, 0));
+     force := GetForce(wall)^;
+     Dispose(wall);
+     acc.x := acc.x + force.x;
+     acc.y := acc.y + force.y;
+
+     curWall.x := cur.x;
+     curWall.y := container.minY;
+     New(wall, Init(curWall, zero, 0, 0, 0));
+     force := GetForce(wall)^;
+     Dispose(wall);
+     acc.x := acc.x + force.x;
+     acc.y := acc.y + force.y;
+
+     curWall.x := cur.x;
+     curWall.y := container.maxY;
+     New(wall, Init(curWall, zero, 0, 0, 0));
+     force := GetForce(wall)^;
+     Dispose(wall);
+     acc.x := acc.x + force.x;
+     acc.y := acc.y + force.y;
+
+     for i:=1 to container.count do
+         if i&lt;&gt;number then
+              begin
+                   force := GetForce(container.part[i])^;
+                   acc.x := acc.x + force.x;
+                   acc.y := acc.y + force.y;
+              end;
+
+     if (acc.x &lt;&gt; 0) or (acc.y &lt;&gt; 0) then
+        underF := True
+     else underF := False;
+
+     EnableStat := EnableStat and not underF;
+
+     vel.x := vel.x + acc.x * dt;
+     vel.y := vel.y + acc.y * dt;
+end;
+
+procedure TParticleObj.IntegrateSecond(dt: Double);
+begin
+     cur.x := cur.x + vel.x * dt;
+     cur.y := cur.y + vel.y * dt;
+end;
+
+procedure TParticleObj.Draw;
+begin
+    if underF then
+       begin
+           SetColor(4);
+           SetFillStyle(SolidFill, 4);
+           FillEllipse(Trunc(cur.x), Trunc(cur.y), Trunc(radius/2), Trunc(radius/2));
+       end
+    else
+       begin
+           SetColor(9);
+           SetFillStyle(SolidFill, 9);
+           FillEllipse(Trunc(cur.x), Trunc(cur.y), Trunc(radius/2), Trunc(radius/2));
+       end;
+end;
+
+destructor TParticleObj.Done;
+begin
+end;
+
+function IntToStr(I: Real): String;
+var
+  S: string[16];
+begin
+  Str(I:8:0, S);
+  IntToStr := S;
+end;
+
+procedure ChangePage;
+begin
+  if CurPage = 0 then
+    begin
+        CurPage := 1;
+        SetActivePage(1);
+        SetVisualPage(0);
+    end
+  else
+    begin
+        CurPage := 0;
+        SetActivePage(0);
+        SetVisualPage(1);
+    end;
+end;
+
+procedure FullPort;
+begin
+  SetViewPort(0, 0, Xmax, Ymax, ClipOn);
+end;
+
+procedure Frame;
+begin
+  SetViewPort(0, 0, Xmax, Ymax-(TextHeight(&#x27;M&#x27;)+4)-1,ClipOn);
+  SetColor(MaxColors);
+  Rectangle(0, 0, Xmax-1, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-1)-1);
+  SetViewPort(1, 1, Xmax-2, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-1)-2,ClipOn);
+end;
+
+procedure MessageFrame(Msg:string);
+begin
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  Frame;
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  Frame;
+end;
+
+procedure AddMeasure;
+var i,k: Integer;
+    cvel: Double;
+    gapW: Double;
+begin
+     if (statistic.curStat &gt;= statistic.fromStat) and
+     (statistic.curStat &lt;= statistic.toStat) then
+     begin
+     gapW := 3 * container.maxVel / statistic.statGaps;
+     with statistic do
+     for i:=1 to statGaps do
+          for k:=1 to container.count do
+               begin
+                    with container.part[i]^.vel do
+                    cvel := Sqrt(x * x + y * y);
+                    if (cvel &gt; gapW * (i - 1)) and (cvel &lt; gapW * i) then
+                    Inc(statData[i]);
+               end;
+     end;
+     Inc(statistic.curStat);
+     MessageFrame(Concat(&#x27;Current measure #&#x27;, IntToStr(statistic.curStat)));
+end;
+
+procedure DrawStatPlot;
+var i, maxStat: Integer;
+begin
+    with statistic, container do
+    begin
+    maxStat := 0;
+
+    for i:=1 to statGaps do
+        if maxStat &lt; statData[i] then maxStat := statData[i];
+
+    ChangePage;
+    Graph.ClearViewPort;
+    SetColor(10);
+    Graph.Rectangle(Trunc(minX), Trunc(minY), Trunc(maxX), Trunc(maxY));
+    SetColor(4);
+    for i:=1 to statGaps do
+        Graph.Rectangle(
+        Trunc(minX + (maxX - minX)/statGaps*(i-1)),
+        Trunc(maxY),
+        Trunc(minX + (maxX - minX)/statGaps*i),
+        Trunc(maxY - (maxY - minY)/maxStat*statData[i]));
+    ChangePage;
+    end;
+end;
+
+procedure WaitToGo;
+var
+  Ch : char;
+begin
+  MessageFrame(&#x27;Press any key to continue, Esc quits.&#x27;);
+  repeat until KeyPressed;
+  Ch := ReadKey;
+  if Ch = #27 then begin
+      CloseGraph;
+      Halt(1);
+    end
+  else
+  MessageFrame(&#x27;Press &quot;n&quot; to change parameters, Esc quits.&#x27;);
+end;
+
+procedure DrawPoints;
+var
+   i : Integer;
+begin
+  ChangePage;
+  Graph.ClearViewPort;
+  SetColor(7);
+  with container do
+  Graph.Rectangle(Trunc(minX), Trunc(minY), Trunc(maxX), Trunc(maxY));
+  for i:=1 to container.count do
+      container.part[i]^.Draw;
+end;
+
+procedure MainCycle(dt: Double);
+var i,k : Integer;
+begin
+     EnableStat := True;
+     for i:=1 to container.count do
+     begin
+          container.part[i]^.IntegrateFirst(dt);
+     end;
+     for i:=1 to container.count do
+     begin
+          container.part[i]^.IntegrateSecond(dt);
+     end;
+     StatChanged := StatChanged or not EnableStat;
+     if EnableStat and StatChanged then
+        begin
+         AddMeasure;
+         StatChanged := False;
+        end;
+end;
+
+procedure InputParam(var param: Integer; Msg: String);
+var Ch : Char;
+    Done: Boolean;
+    StrVal: String;
+    i: Integer;
+begin
+    Done := False;
+    Str(param, StrVal);
+       repeat
+           MessageFrame(Concat(Msg, &#x27; : &#x27;, StrVal));
+           Ch:=ReadKey;
+           case Ch of
+               #13: Done:=True;
+               &#x27;0&#x27;..&#x27;9&#x27; : StrVal := Concat(StrVal, Ch);
+               #8: Delete(StrVal, Length(StrVal), 1);
+           else
+               MessageFrame(&#x27;Must be a numeric value!&#x27;);
+               repeat until KeyPressed;
+               ReadKey;
+           end;
+       until Done;
+    Val(StrVal, param, i);
+end;
+
+procedure InputParamB(var param: Boolean; Msg: String);
+var Ch : Char;
+    Done: Boolean;
+    StrVal: String;
+    i: Integer;
+begin
+    Done := False;
+    if param then StrVal := &#x27;Y&#x27;
+    else StrVal := &#x27;N&#x27;;
+       repeat
+           MessageFrame(Concat(Msg, &#x27; [Y/N]: &#x27;, StrVal));
+           Ch:=ReadKey;
+           case Ch of
+               #13: Done:=True;
+               &#x27;y&#x27;,&#x27;Y&#x27;,&#x27;n&#x27;,&#x27;N&#x27; : StrVal := Ch;
+               #8: Delete(StrVal, Length(StrVal), 1);
+           else
+               MessageFrame(&#x27;Must be &quot;y&quot; or &quot;n&quot;!&#x27;);
+               repeat until KeyPressed;
+               ReadKey;
+           end;
+       until Done and (Length(StrVal) = 1);
+    param := (StrVal = &#x27;y&#x27;) or (StrVal = &#x27;Y&#x27;);
+end;
+
+procedure MakeContainer;
+var i: Integer;
+    cur, vel: TVector;
+begin
+     if container.needDispose then
+            for i:=1 to container.count do
+                    Dispose(container.part[i]);
+     repeat
+         InputParam(container.count, &#x27;Input numbers of particles (1..1000)&#x27;);
+         if (container.count &lt; 1) or (container.count &gt; MaxCount) then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not ((container.count &lt; 1) or (container.count &gt; MaxCount));
+     repeat
+         InputParam(container.radius, &#x27;Input radius of particles (1..20)&#x27;);
+         if (container.radius &lt; 1) or (container.radius &gt; 20) then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not ((container.radius &lt; 1) or (container.radius &gt; 20));
+     repeat
+         InputParam(container.sforce, &#x27;Input spring force of particles (0..100000)&#x27;);
+         if (container.sforce &gt; 100000) then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not ((container.sforce &gt; 100000));
+     repeat
+         InputParam(container.minVel, &#x27;Input minimal velocity&#x27;);
+         InputParam(container.maxVel, &#x27;Input maximal velocity&#x27;);
+         if container.minVel &gt; container.minVel then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not (container.minVel &gt; container.maxVel);
+     InputParamB(container.enableGraph, &#x27;Enable graphics&#x27;);
+     if (container.enableGraph) then
+     repeat
+         InputParam(container.skipFrames, &#x27;Number of skipped frame per calculation (0..50)&#x27;);
+         if (container.skipFrames &lt; 0) or (container.skipFrames &gt; 50) then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not ((container.skipFrames &lt; 0) or (container.skipFrames &gt; 50));
+
+    for i:=1 to container.count do
+    begin
+         cur.x := (container.maxX - container.minX) * Random + container.minX;
+         cur.y := (container.maxY - container.minY) * Random + container.minY;
+         vel.x := 2 * (container.maxVel) * (0.5 - Random);
+         vel.y := 2 * (container.maxVel) * (0.5 - Random);
+         New(container.part[i], Init(cur, vel, container.radius, container.sforce, i));
+    end;
+    container.needDispose := True;
+    MessageFrame(&#x27;Press &quot;n&quot; to change parameters, Esc quits.&#x27;);
+end;
+
+procedure MakeStatistic;
+begin
+     repeat
+         InputParam(statistic.statCount, &#x27;Input number of measurements (&lt;100)&#x27;);
+         if statistic.statCount &gt; maxStat then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not (statistic.statCount &gt; maxStat);
+     repeat
+         InputParam(statistic.fromStat, &#x27;Input first measure of statistics&#x27;);
+         InputParam(statistic.toStat, &#x27;Input last measure of statistics&#x27;);
+         if statistic.fromStat &gt; statistic.toStat then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not (statistic.fromStat &gt; statistic.toStat);
+     repeat
+         InputParam(statistic.statGaps, &#x27;Input number columns on histogramm (&lt;100)&#x27;);
+         if statistic.statGaps &gt; 100 then
+         begin
+              MessageFrame(&#x27;Wrong input!&#x27;);
+              repeat until KeyPressed;
+              ReadKey;
+         end;
+     until not (statistic.statGaps &gt; 100);
+     statistic.curStat:=0;
+end;
+
+procedure CheckForUserInput;
+begin
+  if KeyPressed then begin
+    Ch := ReadKey;
+    case Ch of
+    &#x27;n&#x27;,&#x27;N&#x27;: begin
+             MakeContainer;
+             MakeStatistic;
+             end;
+    &#x27;s&#x27;,&#x27;S&#x27;: AddMeasure;
+    else
+        WaitToGo;
+    end;
+  end;
+end;
+
+procedure DoMagic;
+var i : Integer;
+    counter: Integer;
+begin
+     container.count := 25;
+     container.radius := 7;
+     container.sforce := 10000;
+     container.minVel := 75;
+     container.maxVel := 300;
+     container.minX := ViewXmax/6*1;
+     container.minY := ViewYmax/6*1;
+     container.maxX := ViewXmax/6*5;
+     container.maxY := ViewYmax/6*5;
+     container.needDispose := False;
+     container.enableGraph := True;
+     container.skipFrames := 0;
+
+     MakeContainer;
+
+     statistic.fromStat:=0;
+     statistic.toStat:=100;
+     statistic.statGaps:=30;
+     statistic.statCount:=100;
+
+     MakeStatistic;
+
+  counter := container.skipFrames;
+  repeat
+   MainCycle(dt);
+   if container.enableGraph then
+     if counter &gt; container.skipFrames then
+        begin
+             DrawPoints;
+             counter := 0;
+        end
+     else
+        counter := counter + 1;
+    CheckForUserInput;
+  until (statistic.curStat = statistic.statCount);
+    begin
+      DrawStatPlot;
+    end;
+end;
+
+procedure TestGraphError(GraphErr: integer);
+begin
+  if GraphErr &lt;&gt; grOk then begin
+    Writeln(&#x27;Graphics error: &#x27;, GraphErrorMsg(GraphErr));
+    repeat until keypressed;
+    Ch := readkey;
+    Halt(1);
+  end;
+end;
+
+procedure Init;
+begin
+  GraphDriver := Detect;
+  DetectGraph(GraphDriver, GraphMode);
+  TestGraphError(GraphResult);
+  case GraphDriver of
+    CGA        : begin
+                   GraphDriver := CGA;
+                   GraphMode := CGAC1;
+                 end;
+
+    MCGA       : begin
+                   case GraphMode of
+                     MCGAMed, MCGAHi: GraphMode := MCGAC1;
+                   end;
+                 end;
+
+    EGA         : begin
+                      GraphMode := EGAHi;
+                  end;
+
+    EGA64       : begin
+                      GraphMode := EGA64Hi;
+                  end;
+
+     PC3270     : begin
+                   GraphDriver := CGA;
+                   GraphMode := CGAC1;
+                 end;
+
+
+     ATT400     : case GraphMode of
+                    ATT400C1,
+                    ATT400C2,
+                    ATT400Med,
+                    ATT400Hi  :
+                      begin
+                        GraphMode := ATT400C1;
+                      end;
+                  end;
+
+  end;
+  InitGraph(GraphDriver, GraphMode, &#x27;&#x27;);
+  TestGraphError(GraphResult);
+  SetGraphMode(1);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  Xmax := GetMaxX;
+  Ymax := GetMaxY;
+  ViewXmax := Xmax - 2;
+  ViewYmax := (Ymax - (TextHeight(&#x27;M&#x27;) + 4) - 1) - 2;
+end;
+
+var WantAgain: Boolean;
+
+begin
+   Init;
+   Frame;
+   repeat
+      DoMagic;
+      InputParamB(WantAgain, &#x27;Do you want to start again?&#x27;);
+   until not WantAgain;
+   CloseGraph;
+   RestoreCrtMode;
+   Writeln(&#x27;Have a nice day!&#x27;);
+end.
+</code></pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brownian Motion - Modern</title>
+<style>
+/* ===== Base Styles ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background: #696 url('bgnd.gif');
+    color: #363;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Form Elements ===== */
+input, select, option {
+    background: #9c9;
+    color: #363;
+    border: 1px solid #363;
+    margin: 2px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+}
+
+/* ===== Canvas Area ===== */
+#mainTable {
+    width: 100%;
+    flex: 1;
+    border-collapse: collapse;
+    display: table;
+    min-height: 0;
+    table-layout: fixed;
+}
+
+#mainTable tr:first-child {
+    height: 100%;
+}
+
+#mainTable tr:first-child td {
+    height: 100%;
+    padding: 0;
+    vertical-align: top;
+    position: relative;
+}
+
+#canvasContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid #9c9;
+    background: #696 url('bgnd.gif');
+    box-sizing: border-box;
+}
+
+#canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    background: transparent;
+}
+
+/* ===== Status Bar / Legend ===== */
+.legend {
+    padding: 5px;
+    background: #9c9;
+    border: 1px solid #9c9;
+    color: #363;
+    font-size: 8pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.legend-left {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.legend-left span {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.legend-right {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+    padding-left: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.legend-right .stat {
+    white-space: nowrap;
+}
+
+.legend-right .stat span {
+    display: inline-block;
+    min-width: 80px;
+    text-align: right;
+    font-family: monospace;
+}
+
+/* ===== Controls ===== */
+#controlsWrapper {
+    flex-shrink: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: #696 url('bgnd.gif');
+    overflow-x: auto;
+}
+
+#controlsForm {
+    padding: 4px 6px;
+    background: #696 url('bgnd.gif');
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    margin: 0 auto;
+}
+
+.control-group {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3px 6px;
+    margin: 0;
+    gap: 4px;
+    border: 1px solid #9c9;
+    border-radius: 3px;
+    background: rgba(156, 204, 156, 0.3);
+    min-width: fit-content;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.control-group label {
+    display: inline-block;
+    margin: 0 2px 0 0;
+    font-weight: bold;
+    font-size: 8pt;
+    text-align: left;
+    color: #363;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+.control-group > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.control-group > div > div {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.control-group input[type="button"] {
+    margin: 0;
+    padding: 3px 6px;
+    font-size: 8pt;
+    white-space: nowrap;
+}
+
+.control-group input[type="text"],
+.control-group input[type="number"],
+.control-group select {
+    margin: 0;
+    padding: 2px 4px;
+    font-size: 9pt;
+}
+
+.control-group input[type="checkbox"] {
+    margin-right: 4px;
+}
+
+.control-group label[style*="font-size: 8pt"] {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.control-group br {
+    display: none;
+}
+
+/* ===== Help Modal ===== */
+.help-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+}
+
+.help-content {
+    background-color: #9c9;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 700px;
+    border: 3px solid #363;
+    border-radius: 5px;
+    color: #363;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.help-content h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    color: #363;
+    border-bottom: 2px solid #363;
+}
+
+.help-content .close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #363;
+    cursor: pointer;
+}
+
+.help-content .close:hover {
+    color: #000;
+}
+
+.help-content p {
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.help-content ul {
+    margin: 10px 0;
+    padding-left: 30px;
+}
+
+.help-content li {
+    margin: 5px 0;
+}
+
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Brownian motion simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/projects/physfac/brown_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects/physfac/brown_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects/physfac/brown_modern.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Brownian Motion - Modern">
+<meta property="og:description" content="Brownian motion simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/projects/physfac/brown_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brownian Motion - Modern">
+<meta name="twitter:description" content="Brownian motion simulation (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+<body>
+<div id="controlsWrapper">
+<form id="MySuperForm" name="MySuperForm" id="controlsForm">
+    <!-- Simulation Controls -->
+    <div class="control-group">
+        <label>⏯️ Playback:</label>
+        <div>
+            <input type="button" value="⏪ Rev" onclick="dt=-dt; updateStats(); saveSettings();" title="Reverse time direction">
+            <input type="button" id="pauseBtn" value="⏸️" onclick="togglePause()" title="Pause/Resume">
+            <input type="button" value="⏩ ×2" onclick="if (spd!=256) {spd*=2; saveSettings();}" title="Double speed">
+            <input type="button" value="⏪ ÷2" onclick="if (spd!=1) {spd/=2; saveSettings();}" title="Halve speed">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>⚙️ dt:</label>
+        <div>
+            <input type="button" value="Reset" onclick="dt = TimeTick; updateStats(); saveSettings();" title="Reset time step">
+            <input type="button" value="×2" onclick="dt *= 2; updateStats(); saveSettings();" title="Double dt">
+            <input type="button" value="×10" onclick="dt *= 10; updateStats(); saveSettings();" title="10x dt">
+            <input type="button" value="÷2" onclick="dt /= 2; updateStats(); saveSettings();" title="Halve dt">
+            <input type="button" value="÷10" onclick="dt /= 10; updateStats(); saveSettings();" title="1/10 dt">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>👁️:</label>
+        <div>
+            <input type="button" value="Toggle" onclick="switchShow()" title="Show/hide particles">
+        </div>
+    </div>
+    
+    <!-- Setup Controls -->
+    <div class="control-group">
+        <label>🔷 Object:</label>
+        <div>
+            <select id="obj" style="min-width: 100px; font-size: 8pt;">
+                <option value="none">None</option>
+                <option value="bigring" selected>Big Ring</option>
+                <option value="hv">HV (small)</option>
+                <option value="hexagon">Hexagon</option>
+                <option value="spiral">Spiral</option>
+                <option value="flower">Flower</option>
+                <option value="diamond">Diamond</option>
+                <option value="plus">Plus</option>
+                <option value="pentagon">Pentagon</option>
+                <option value="octagon">Octagon</option>
+                <option value="ring">Double Ring</option>
+                <option value="spiralstar">Spiral Star</option>
+                <option value="fractal">Fractal Tree</option>
+            </select>
+            <label style="font-size: 7pt; font-weight: normal;">R:</label>
+            <input type="number" min="1" max="99" value="15" style="width: 45px; font-size: 8pt;" onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 1 && val <= 99) {brad=val; saveSettings();}">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>⚛️ Particles:</label>
+        <div>
+            <label style="font-size: 7pt; font-weight: normal;">Count:</label>
+            <input type="number" min="0" max="10000" value="36" style="width: 60px; font-size: 8pt;" onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 0 && val <= 10000) {partcount=val; saveSettings();}">
+            <label style="font-size: 7pt; font-weight: normal;">Layout:</label>
+            <select id="part" style="font-size: 8pt;">
+                <option value="ordered" selected>Grid</option>
+                <option value="random">Random</option>
+            </select>
+            <label style="font-size: 7pt; font-weight: normal;">R:</label>
+            <input type="number" min="1" max="99" value="15" style="width: 45px; font-size: 8pt;" onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 1 && val <= 99) {prad=val; saveSettings();}">
+            <input type="checkbox" id="zeroVel" style="margin-left: 4px;"> <label style="font-size: 7pt; font-weight: normal; display: inline;">Zero V</label>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>🌍 Gravity:</label>
+        <div>
+            <input type="checkbox" id="gravityCheck" onclick="use_gravity = this.checked">
+            <label style="font-size: 7pt; font-weight: normal; display: inline;">Enable</label>
+            <label style="font-size: 7pt; font-weight: normal;">X:</label>
+            <input type="number" value="0" style="width: 50px; font-size: 8pt;" onchange="if (!isNaN(val = parseInt(this.value))) {gravX=val*gravScale; saveSettings();}">
+            <label style="font-size: 7pt; font-weight: normal;">Y:</label>
+            <input type="number" value="60" style="width: 50px; font-size: 8pt;" onchange="if (!isNaN(val = parseInt(this.value))) {gravY=val*gravScale; saveSettings();}">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>⚙️ Integration:</label>
+        <div>
+            <select id="integrationMethod" style="font-size: 8pt;" onchange="onIntegrationMethodChange(this.value)">
+                <option value="euler" selected>Euler</option>
+                <option value="rk4">RK4</option>
+                <option value="verlet">Verlet</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label>💥 Collision:</label>
+        <div>
+            <select id="collisionModel" style="font-size: 8pt;" onchange="onCollisionModelChange(this.value)">
+                <option value="elastic" selected>Elastic</option>
+                <option value="inelastic">Inelastic</option>
+                <option value="hardbody">Hard Body</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="control-group">
+        <label>🔄:</label>
+        <div>
+            <input type="button" value="Restart" onclick="reinit()" title="Restart simulation">
+            <input type="button" value="❓" onclick="showHelp()" title="Help">
+        </div>
+    </div>
+</form>
+</div>
+
+<table id="mainTable" style="border:0px;border-collapse:collapse;">
+    <tr>
+        <td style="border:1px solid #9c9; padding: 0;">
+            <div id="canvasContainer">
+                <canvas id="canvas"></canvas>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="legend" style="height: auto;">
+            <div class="legend-left">
+                <span><img src="/legacy/javascript/projects/physfac/part.gif" style="vertical-align:middle"> - Normal Particle</span>
+                <span><img src="/legacy/javascript/projects/physfac/partf.gif" style="vertical-align:middle"> - Particle under Force</span>
+                <span><img src="hothand.gif" style="vertical-align:middle"> - HotHand (particle manipulator). Click to drag, click again to release.</span>
+            </div>
+            <div class="legend-right" id="statusInfo">
+                <span class="stat">Particles: <span id="statParticles">0</span></span>
+                <span class="stat">Time Step: <span id="statDt">0</span></span>
+                <span class="stat">Kinetic: <span id="statKinetic">0</span></span>
+                <span class="stat">Potential: <span id="statPotential">0</span></span>
+                <span class="stat">Total: <span id="statEnergy">0</span></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="helpModal" class="help-modal">
+    <div class="help-content">
+        <span class="close" onclick="closeHelp()">&times;</span>
+        <h2>Brownian Motion Simulation</h2>
+        <p><strong>What is Brownian Motion?</strong></p>
+        <p>Brownian motion is the random movement of particles suspended in a fluid (liquid or gas) resulting from their collision with fast-moving molecules in the fluid. This simulation demonstrates the physics of particle interactions, including:</p>
+        <ul>
+            <li><strong>Particle collisions:</strong> Particles repel each other when they get too close</li>
+            <li><strong>Brownian forces:</strong> Random forces that cause particles to move erratically</li>
+            <li><strong>Boundary interactions:</strong> Particles bounce off the walls of the container</li>
+            <li><strong>Gravity:</strong> Optional gravitational force can be applied</li>
+        </ul>
+        
+        <p><strong>Controls:</strong></p>
+        <ul>
+            <li><strong>⏯️ Playback:</strong> Reverse time direction, Pause/Resume, increase/decrease simulation speed (×2, ÷2)</li>
+            <li><strong>⚙️ dt (Time Step):</strong> Adjust precision - Reset, ×2, ×10, ÷2, ÷10. Smaller dt = more accurate but slower</li>
+            <li><strong>👁️ Display:</strong> Toggle particle visibility</li>
+            <li><strong>🔷 Object:</strong> Create predefined shapes:
+                <ul>
+                    <li><strong>None:</strong> No object</li>
+                    <li><strong>HV Shape (small):</strong> Small H-V pattern</li>
+                    <li><strong>Geometric Shapes:</strong> Hexagon, Spiral, Flower, Diamond, Plus, Pentagon, Octagon</li>
+                    <li><strong>Rings:</strong> Double Ring, Big Ring</li>
+                    <li><strong>Spiral Star:</strong> Star-shaped spiral pattern</li>
+                    <li><strong>Fractal Tree:</strong> Starfish-like fractal pattern</li>
+                </ul>
+                Set object radius (R) before creating
+            </li>
+            <li><strong>⚛️ Particles:</strong>
+                <ul>
+                    <li><strong>Count:</strong> Number of particles (0-10000)</li>
+                    <li><strong>Layout:</strong> Grid (ordered) or Random placement</li>
+                    <li><strong>Radius:</strong> Particle size</li>
+                    <li><strong>Zero velocity:</strong> Start particles with zero initial velocity</li>
+                </ul>
+            </li>
+            <li><strong>🌍 Gravity:</strong> Enable and set X/Y components (default Y=60 for downward gravity)</li>
+            <li><strong>⚙️ Integration Method:</strong>
+                <ul>
+                    <li><strong>Euler (Semi-Implicit):</strong> Fast, good for most cases, stable</li>
+                    <li><strong>Runge-Kutta 4 (RK4):</strong> More accurate, better for complex dynamics, slower</li>
+                    <li><strong>Verlet:</strong> Best energy conservation, ideal for long simulations, symplectic</li>
+                </ul>
+            </li>
+            <li><strong>💥 Collision Model:</strong>
+                <ul>
+                    <li><strong>Elastic (Spring):</strong> Particles repel with spring-like forces, energy conserved (default)</li>
+                    <li><strong>Inelastic (Damped):</strong> Damped spring forces, energy dissipates over time</li>
+                    <li><strong>Hard Body:</strong> Instantaneous impulse-based collisions, perfect momentum transfer, no overlap</li>
+                </ul>
+            </li>
+            <li><strong>🔄 Actions:</strong> Restart simulation, Show Help</li>
+            <li><strong>👋 HotHand:</strong> Click on canvas to create a particle manipulator. Click and drag to move particles, click again to release</li>
+        </ul>
+        
+        <p><strong>Status Bar:</strong></p>
+        <ul>
+            <li><strong>Left side:</strong> Legend showing particle types (Normal, Under Force, HotHand)</li>
+            <li><strong>Right side:</strong> Real-time statistics:
+                <ul>
+                    <li><strong>Particles:</strong> Current particle count</li>
+                    <li><strong>Time Step:</strong> Current dt value</li>
+                    <li><strong>Kinetic Energy:</strong> Total kinetic energy (0.5 × m × v²)</li>
+                    <li><strong>Potential Energy:</strong> Total potential energy from particle compressions</li>
+                    <li><strong>Total Energy:</strong> Sum of kinetic + potential energy</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <p><strong>Tips:</strong></p>
+        <ul>
+            <li>Start with default settings (36 particles, Euler, Elastic) to see basic Brownian motion</li>
+            <li>Create different shapes and watch how they interact with particles - shapes are made of particles too!</li>
+            <li>Enable gravity (Y=60) to see particles fall and settle at the bottom</li>
+            <li>Use HotHand to push particles around and observe their reactions</li>
+            <li>Try different integration methods: Euler for speed, RK4 for accuracy, Verlet for energy conservation</li>
+            <li>Hard Body collisions work best with RK4 or Verlet integration - particles won't stick to boundaries</li>
+            <li>Watch the energy statistics - in Elastic mode with Verlet, total energy should remain relatively constant</li>
+            <li>Adjust dt for faster (larger dt, less accurate) or slower (smaller dt, more accurate) simulations</li>
+            <li>Try creating a Fractal Tree object with many particles for interesting dynamics</li>
+            <li>Use "Zero velocity" checkbox to start particles at rest, then watch them accelerate due to collisions</li>
+        </ul>
+        
+        <p style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #363; font-size: 7pt; color: #666;">
+            (c) <a href="mailto:me@kusaku.su?subject=brown" style="color:#363;">kusaku</a> 2001 - Brownian Motion Simulation<br>
+            No rights reserved - Modernized for modern browsers
+        </p>
+    </div>
+</div>
+
+<script>
+/*(c) kusaku 2001 - Modernized for modern browsers */
+
+// ===== Constants =====
+const TimeTick = 0.001;
+const MAX_VELOCITY = 10000;
+const MAX_COMPRESSION = 30;
+const GRID_CELL_SIZE = 60; // ~4x particle radius for optimal performance
+const SPATIAL_GRID_THRESHOLD = 50; // Use spatial grid for particle counts above this
+const HARD_BODY_PASSES = 3; // Number of collision resolution passes for hard body
+const STATS_UPDATE_INTERVAL = 10; // Update stats every N frames
+const FPS_CALC_INTERVAL = 60; // Calculate FPS every N frames
+const PARTICLE_IMAGE_SIZE = 12; // Size of particle images (for drawing offset)
+const BOUNDARY_TOLERANCE = 0.1; // Boundary proximity tolerance
+
+// ===== Simulation Parameters =====
+let defForce = -5e5;
+let defBrownForce = -1e6;
+let dampingFactor = 1.0;
+let partcount = 36;
+let prad = 15;
+let brad = 15;
+let maxInitVel = 3000;
+let use_gravity = false;
+let gravScale = 1000;
+let gravX = 0 * gravScale;
+let gravY = 60 * gravScale;
+let dt = TimeTick;
+let spd = 1;
+let part = [];
+let bcnt = 0;
+let pcnt = 0;
+let minX, minY, maxX, maxY;
+let dragging = false;
+let showparts = true;
+let mx = 0, my = 0;
+let animationId = null;
+let isPaused = false;
+
+// Integration and collision model settings
+let integrationMethod = 'euler'; // 'euler', 'rk4', 'verlet'
+let collisionModel = 'elastic'; // 'elastic', 'inelastic', 'hardbody'
+let restitutionCoeff = 0.9; // For inelastic collisions (0 = fully inelastic, 1 = fully elastic)
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('canvasContainer');
+
+let hotHand = null;
+
+// Load images
+const partImg = new Image();
+partImg.src = "part.gif";
+const partfImg = new Image();
+partfImg.src = "partf.gif";
+const hhImg = new Image();
+hhImg.src = "hothand.gif";
+
+let imagesLoaded = false;
+let imagesToLoad = 3;
+let imagesLoadedCount = 0;
+
+function checkImagesLoaded() {
+    imagesLoadedCount++;
+    if (imagesLoadedCount >= imagesToLoad) {
+        imagesLoaded = true;
+    }
+}
+
+partImg.onload = checkImagesLoaded;
+partfImg.onload = checkImagesLoaded;
+hhImg.onload = checkImagesLoaded;
+
+function random(value) {
+    return value - (Math.random() * 2 * value);
+}
+
+// Optimized Particle class with squared distance calculations
+class Particle {
+    constructor(obj, x, y, vX, vY, rad, number) {
+        this.obj = obj;
+        this.number = number;
+        this.rad = rad;
+        this.radSq = rad * rad; // Cache squared radius
+        this.x = x;
+        this.y = y;
+        this.vX = vX;
+        this.vY = vY;
+        this.dvX = 0;
+        this.dvY = 0;
+        this.distTo = [];
+        this.isUnderForce = false;
+        // For Verlet integration
+        this.prevX = x;
+        this.prevY = y;
+        // For collision detection
+        this.mass = 1.0; // Assume unit mass
+    }
+
+    // Optimized: use squared distance to avoid sqrt when possible
+    distSq(x, y) {
+        const dx = this.x - x;
+        const dy = this.y - y;
+        return dx * dx + dy * dy;
+    }
+
+    dist(x, y) {
+        return Math.sqrt(this.distSq(x, y));
+    }
+
+    force(dist) {
+        if (dist <= 0) return 0; // Prevent division by zero
+        if (dist < this.rad) {
+            if (collisionModel === 'hardbody') {
+                // Hard body: instant collision response, no continuous force
+                return 0;
+            } else if (collisionModel === 'inelastic') {
+                // Inelastic: damped spring force
+                const compression = this.rad - dist;
+                return defForce * compression * restitutionCoeff;
+            } else {
+                // Elastic: spring force (default)
+                return defForce * (this.rad - dist);
+            }
+        }
+        return 0;
+    }
+    
+    // Hard body collision response (instantaneous)
+    hardBodyCollision(that) {
+        const dDistSq = this.distSq(that.x, that.y);
+        const dDist = Math.sqrt(dDistSq);
+        const minRad = Math.min(this.rad, that.rad);
+        
+        if (dDist < minRad && dDist > 0) {
+            // Calculate collision normal
+            const nx = (that.x - this.x) / dDist;
+            const ny = (that.y - this.y) / dDist;
+            
+            // Relative velocity
+            const relVx = that.vX - this.vX;
+            const relVy = that.vY - this.vY;
+            
+            // Relative velocity along collision normal
+            const relVel = relVx * nx + relVy * ny;
+            
+            // Don't resolve if separating
+            if (relVel > 0) return;
+            
+            // Calculate impulse (assuming equal mass)
+            const impulse = 2 * relVel / (this.mass + that.mass);
+            
+            // Apply impulse
+            this.vX += impulse * that.mass * nx;
+            this.vY += impulse * that.mass * ny;
+            that.vX -= impulse * this.mass * nx;
+            that.vY -= impulse * this.mass * ny;
+            
+            // Separate particles to prevent overlap
+            const overlap = minRad - dDist;
+            const separationX = nx * overlap * 0.5;
+            const separationY = ny * overlap * 0.5;
+            this.x -= separationX;
+            this.y -= separationY;
+            that.x += separationX;
+            that.y += separationY;
+            
+            this.isUnderForce = true;
+            that.isUnderForce = true;
+        }
+    }
+
+    brownForce(dist, i) {
+        if (this.distTo[i] < 3 * this.rad) return defBrownForce * (this.distTo[i] - dist) / this.distTo[i];
+        else return 0;
+    }
+
+    integrate(that, dt) {
+        const dDistSq = this.distSq(that.x, that.y);
+        const dDist = Math.sqrt(dDistSq);
+        let dV = this.force(dDist) * dt;
+        const dDistNorm = (dDist === 0) ? 1 : dDist;
+        this.dvX += dV * (that.x - this.x) / dDistNorm;
+        this.dvY += dV * (that.y - this.y) / dDistNorm;
+        this.isUnderForce = this.isUnderForce || dV;
+    }
+
+    brownIntegrate(that, dt) {
+        const dDist = this.dist(that.x, that.y);
+        const dV = this.brownForce(
+            this.dist(that.x - (this.vX - that.vX) * dt * dampingFactor, 
+                     that.y - (this.vY - that.vY) * dt * dampingFactor), 
+            that.number
+        ) * dt;
+        const dDistNorm = (dDist === 0) ? 1 : dDist;
+        this.dvX += dV * (that.x - this.x) / dDistNorm;
+        this.dvY += dV * (that.y - this.y) / dDistNorm;
+    }
+
+    // Optimized: eliminate temporary object creation for boundaries
+    // Uses same force calculation as integrate() but with proper direction vectors
+    integrateBoundaries(dt) {
+        // Left boundary - virtual particle at (minX, this.y)
+        const distLeft = this.x - minX;
+        if (distLeft < this.rad) {
+            const compression = this.rad - distLeft;
+            const dV = defForce * compression * dt;
+            const dDistNorm = (distLeft === 0) ? 1 : distLeft;
+            // Direction: (minX - this.x) / distLeft = -1, so push right
+            this.dvX += dV * (minX - this.x) / dDistNorm;
+            this.isUnderForce = this.isUnderForce || dV;
+        }
+        // Right boundary - virtual particle at (maxX, this.y)
+        const distRight = maxX - this.x;
+        if (distRight < this.rad) {
+            const compression = this.rad - distRight;
+            const dV = defForce * compression * dt;
+            const dDistNorm = (distRight === 0) ? 1 : distRight;
+            // Direction: (maxX - this.x) / distRight = +1, so push left
+            this.dvX += dV * (maxX - this.x) / dDistNorm;
+            this.isUnderForce = this.isUnderForce || dV;
+        }
+        // Top boundary - virtual particle at (this.x, minY)
+        const distTop = this.y - minY;
+        if (distTop < this.rad) {
+            const compression = this.rad - distTop;
+            const dV = defForce * compression * dt;
+            const dDistNorm = (distTop === 0) ? 1 : distTop;
+            // Direction: (minY - this.y) / distTop = -1, so push down
+            this.dvY += dV * (minY - this.y) / dDistNorm;
+            this.isUnderForce = this.isUnderForce || dV;
+        }
+        // Bottom boundary - virtual particle at (this.x, maxY)
+        const distBottom = maxY - this.y;
+        if (distBottom < this.rad) {
+            const compression = this.rad - distBottom;
+            const dV = defForce * compression * dt;
+            const dDistNorm = (distBottom === 0) ? 1 : distBottom;
+            // Direction: (maxY - this.y) / distBottom = +1, so push up
+            this.dvY += dV * (maxY - this.y) / dDistNorm;
+            this.isUnderForce = this.isUnderForce || dV;
+        }
+        // HotHand
+        if (hotHand) {
+            this.integrate(hotHand, dt);
+        }
+    }
+
+    // Calculate acceleration from forces
+    calculateAcceleration() {
+        let ax = this.dvX;
+        let ay = this.dvY;
+        
+        if (use_gravity) {
+            ax += gravX;
+            ay += gravY;
+        }
+        
+        return { ax, ay };
+    }
+    
+    // Euler integration (semi-implicit)
+    integrateEuler(dt) {
+        this.integrateBoundaries(dt);
+        
+        if (use_gravity) {
+            this.dvX += gravX * dt;
+            this.dvY += gravY * dt;
+        }
+
+        this.vX += this.dvX;
+        this.vY += this.dvY;
+        this.vX = (isNaN(this.vX)) ? 0 : this.vX;
+        this.vY = (isNaN(this.vY)) ? 0 : this.vY;
+        
+        // Clamp velocity to prevent numerical instability
+        const MAX_VELOCITY = 10000;
+        if (Math.abs(this.vX) > MAX_VELOCITY) {
+            this.vX = Math.sign(this.vX) * MAX_VELOCITY;
+        }
+        if (Math.abs(this.vY) > MAX_VELOCITY) {
+            this.vY = Math.sign(this.vY) * MAX_VELOCITY;
+        }
+        
+        this.x += this.vX * dt;
+        this.y += this.vY * dt;
+
+        if (this.x > maxX || this.x < minX || this.y > maxY || this.y < minY) {
+            this.vX = 0;
+            this.vY = 0;
+        }
+
+        this.dvX = 0;
+        this.dvY = 0;
+    }
+    
+    // Runge-Kutta 4 integration
+    integrateRK4(dt) {
+        // Store initial state
+        const x0 = this.x, y0 = this.y, vx0 = this.vX, vy0 = this.vY;
+        
+        // Helper to calculate boundary force at given position (without modifying particle state)
+        const calcBoundaryAccel = (x, y) => {
+            let ax = 0, ay = 0;
+            const distLeft = x - minX;
+            if (distLeft < this.rad) {
+                ax += defForce * (this.rad - distLeft);
+            }
+            const distRight = maxX - x;
+            if (distRight < this.rad) {
+                ax -= defForce * (this.rad - distRight);
+            }
+            const distTop = y - minY;
+            if (distTop < this.rad) {
+                ay += defForce * (this.rad - distTop);
+            }
+            const distBottom = maxY - y;
+            if (distBottom < this.rad) {
+                ay -= defForce * (this.rad - distBottom);
+            }
+            return { ax, ay };
+        };
+        
+        // Calculate forces at current state (k1) - only gravity, boundaries handled separately
+        const k1Boundary = calcBoundaryAccel(x0, y0);
+        const k1vx = k1Boundary.ax + (use_gravity ? gravX : 0);
+        const k1vy = k1Boundary.ay + (use_gravity ? gravY : 0);
+        
+        // k2: acceleration at midpoint using k1
+        const x2 = x0 + vx0 * dt * 0.5;
+        const y2 = y0 + vy0 * dt * 0.5;
+        const vx2 = vx0 + k1vx * dt * 0.5;
+        const vy2 = vy0 + k1vy * dt * 0.5;
+        const k2Boundary = calcBoundaryAccel(x2, y2);
+        const k2vx = k2Boundary.ax + (use_gravity ? gravX : 0);
+        const k2vy = k2Boundary.ay + (use_gravity ? gravY : 0);
+        
+        // k3: acceleration at midpoint using k2
+        const vx3 = vx0 + k2vx * dt * 0.5;
+        const vy3 = vy0 + k2vy * dt * 0.5;
+        const k3Boundary = calcBoundaryAccel(x2, y2);
+        const k3vx = k3Boundary.ax + (use_gravity ? gravX : 0);
+        const k3vy = k3Boundary.ay + (use_gravity ? gravY : 0);
+        
+        // k4: acceleration at endpoint using k3
+        const x4 = x0 + vx0 * dt;
+        const y4 = y0 + vy0 * dt;
+        const vx4 = vx0 + k3vx * dt;
+        const vy4 = vy0 + k3vy * dt;
+        const k4Boundary = calcBoundaryAccel(x4, y4);
+        const k4vx = k4Boundary.ax + (use_gravity ? gravX : 0);
+        const k4vy = k4Boundary.ay + (use_gravity ? gravY : 0);
+        
+        // Combine k1-k4 using RK4 formula
+        let vxNew = vx0 + (k1vx + 2*k2vx + 2*k3vx + k4vx) * dt / 6;
+        let vyNew = vy0 + (k1vy + 2*k2vy + 2*k3vy + k4vy) * dt / 6;
+        
+        // Update position using average velocity
+        let xNew = x0 + (vx0 + vxNew) * dt * 0.5;
+        let yNew = y0 + (vy0 + vyNew) * dt * 0.5;
+        
+        // Boundary correction BEFORE setting position - prevent sticking
+        if (xNew < minX + this.rad) {
+            xNew = minX + this.rad;
+            vxNew = Math.max(0, vxNew); // Only allow velocity away from boundary
+        }
+        if (xNew > maxX - this.rad) {
+            xNew = maxX - this.rad;
+            vxNew = Math.min(0, vxNew); // Only allow velocity away from boundary
+        }
+        if (yNew < minY + this.rad) {
+            yNew = minY + this.rad;
+            vyNew = Math.max(0, vyNew); // Only allow velocity away from boundary
+        }
+        if (yNew > maxY - this.rad) {
+            yNew = maxY - this.rad;
+            vyNew = Math.min(0, vyNew); // Only allow velocity away from boundary
+        }
+        
+        this.x = xNew;
+        this.y = yNew;
+        this.vX = vxNew;
+        this.vY = vyNew;
+        
+        // Clamp velocity
+        const MAX_VELOCITY = 10000;
+        if (Math.abs(this.vX) > MAX_VELOCITY) this.vX = Math.sign(this.vX) * MAX_VELOCITY;
+        if (Math.abs(this.vY) > MAX_VELOCITY) this.vY = Math.sign(this.vY) * MAX_VELOCITY;
+    }
+    
+    // Verlet integration (better energy conservation)
+    integrateVerlet(dt) {
+        // Initialize prevX/prevY on first step if not set
+        if (this.prevX === undefined || this.prevX === this.x) {
+            this.prevX = this.x - this.vX * dt;
+            this.prevY = this.y - this.vY * dt;
+        }
+        
+        // Store current position
+        const tempX = this.x;
+        const tempY = this.y;
+        
+        // Calculate acceleration from boundaries (without modifying particle state)
+        let ax = 0, ay = 0;
+        const distLeft = this.x - minX;
+        if (distLeft < this.rad) {
+            ax += defForce * (this.rad - distLeft);
+        }
+        const distRight = maxX - this.x;
+        if (distRight < this.rad) {
+            ax -= defForce * (this.rad - distRight);
+        }
+        const distTop = this.y - minY;
+        if (distTop < this.rad) {
+            ay += defForce * (this.rad - distTop);
+        }
+        const distBottom = maxY - this.y;
+        if (distBottom < this.rad) {
+            ay -= defForce * (this.rad - distBottom);
+        }
+        
+        if (use_gravity) {
+            ax += gravX;
+            ay += gravY;
+        }
+        
+        // Verlet: x(t+dt) = 2*x(t) - x(t-dt) + a(t)*dt^2
+        let xNew = 2 * this.x - this.prevX + ax * dt * dt;
+        let yNew = 2 * this.y - this.prevY + ay * dt * dt;
+        
+        // Boundary correction before updating position - prevent sticking
+        const boundaryThreshold = this.rad + BOUNDARY_TOLERANCE;
+        const wasAtLeftBoundary = this.x <= minX + boundaryThreshold;
+        const wasAtRightBoundary = this.x >= maxX - boundaryThreshold;
+        const wasAtTopBoundary = this.y <= minY + boundaryThreshold;
+        const wasAtBottomBoundary = this.y >= maxY - boundaryThreshold;
+        
+        if (xNew < minX + this.rad) {
+            xNew = minX + this.rad;
+            // Adjust prevX to simulate bounce and prevent sticking
+            const bounceDist = (this.x - xNew);
+            this.prevX = this.x + bounceDist * 0.8; // Reflect previous position
+        }
+        if (xNew > maxX - this.rad) {
+            xNew = maxX - this.rad;
+            const bounceDist = (this.x - xNew);
+            this.prevX = this.x + bounceDist * 0.8;
+        }
+        if (yNew < minY + this.rad) {
+            yNew = minY + this.rad;
+            const bounceDist = (this.y - yNew);
+            this.prevY = this.y + bounceDist * 0.8;
+        }
+        if (yNew > maxY - this.rad) {
+            yNew = maxY - this.rad;
+            const bounceDist = (this.y - yNew);
+            this.prevY = this.y + bounceDist * 0.8;
+        }
+        
+        // Update position
+        this.x = xNew;
+        this.y = yNew;
+        
+        // Update velocity: v(t) = (x(t+dt) - x(t-dt)) / (2*dt)
+        this.vX = (xNew - this.prevX) / (2 * dt);
+        this.vY = (yNew - this.prevY) / (2 * dt);
+        
+        // Zero velocity component if particle is at boundary and moving toward it
+        if ((this.x <= minX + boundaryThreshold || wasAtLeftBoundary) && this.vX < 0) this.vX = 0;
+        if ((this.x >= maxX - boundaryThreshold || wasAtRightBoundary) && this.vX > 0) this.vX = 0;
+        if ((this.y <= minY + boundaryThreshold || wasAtTopBoundary) && this.vY < 0) this.vY = 0;
+        if ((this.y >= maxY - boundaryThreshold || wasAtBottomBoundary) && this.vY > 0) this.vY = 0;
+        
+        // Clamp velocity
+        if (Math.abs(this.vX) > MAX_VELOCITY) this.vX = Math.sign(this.vX) * MAX_VELOCITY;
+        if (Math.abs(this.vY) > MAX_VELOCITY) this.vY = Math.sign(this.vY) * MAX_VELOCITY;
+        
+        // Update previous position
+        this.prevX = tempX;
+        this.prevY = tempY;
+    }
+    
+    set(dt) {
+        if (integrationMethod === 'rk4') {
+            this.integrateRK4(dt);
+        } else if (integrationMethod === 'verlet') {
+            this.integrateVerlet(dt);
+        } else {
+            this.integrateEuler(dt);
+        }
+    }
+}
+
+// Spatial Hash Grid for O(n) collision detection
+class SpatialGrid {
+    constructor(cellSize) {
+        this.cellSize = cellSize;
+        this.grid = new Map();
+    }
+
+    clear() {
+        this.grid.clear();
+    }
+
+    getCellKey(x, y) {
+        const cellX = Math.floor(x / this.cellSize);
+        const cellY = Math.floor(y / this.cellSize);
+        return `${cellX},${cellY}`;
+    }
+
+    insert(particle) {
+        const key = this.getCellKey(particle.x, particle.y);
+        if (!this.grid.has(key)) {
+            this.grid.set(key, []);
+        }
+        this.grid.get(key).push(particle);
+    }
+
+    getNeighbors(particle) {
+        const neighbors = [];
+        const cellX = Math.floor(particle.x / this.cellSize);
+        const cellY = Math.floor(particle.y / this.cellSize);
+        
+        // Check current cell and 8 surrounding cells
+        for (let dx = -1; dx <= 1; dx++) {
+            for (let dy = -1; dy <= 1; dy++) {
+                const key = `${cellX + dx},${cellY + dy}`;
+                const cell = this.grid.get(key);
+                if (cell) {
+                    neighbors.push(...cell);
+                }
+            }
+        }
+        return neighbors;
+    }
+}
+
+// Spatial grid for optimized collision detection
+let spatialGrid = null;
+
+// Helper: Initialize/clear spatial grid
+function initSpatialGrid() {
+    if (!spatialGrid) {
+        spatialGrid = new SpatialGrid(GRID_CELL_SIZE);
+    }
+    spatialGrid.clear();
+    const totalParticles = pcnt + bcnt;
+    for (let i = 0; i < totalParticles; i++) {
+        const p = part[i];
+        if (p) spatialGrid.insert(p);
+    }
+}
+
+// Helper: Clamp velocity and handle NaN
+function clampVelocity(p) {
+    if (isNaN(p.vX) || Math.abs(p.vX) > MAX_VELOCITY) {
+        p.vX = isNaN(p.vX) ? 0 : Math.sign(p.vX) * MAX_VELOCITY;
+    }
+    if (isNaN(p.vY) || Math.abs(p.vY) > MAX_VELOCITY) {
+        p.vY = isNaN(p.vY) ? 0 : Math.sign(p.vY) * MAX_VELOCITY;
+    }
+}
+
+function time() {
+    if (isPaused) return;
+    
+    const totalParticles = pcnt + bcnt;
+    if (totalParticles === 0) return;
+    
+    // Use spatial grid for large particle counts, brute force for small counts
+    const useSpatialGrid = totalParticles > SPATIAL_GRID_THRESHOLD;
+    
+    for (let times = 0; times !== spd; times++) {
+        if (collisionModel === 'hardbody') {
+            // Hard body: integrate motion first (boundaries still use forces)
+            const gravXdt = use_gravity ? gravX * dt : 0;
+            const gravYdt = use_gravity ? gravY * dt : 0;
+            
+            for (let i = 0; i < totalParticles; i++) {
+                const p = part[i];
+                if (!p) continue;
+                
+                // Only integrate boundaries, not particle-particle forces
+                p.integrateBoundaries(dt);
+                if (use_gravity) {
+                    p.dvX += gravXdt;
+                    p.dvY += gravYdt;
+                }
+                p.vX += p.dvX;
+                p.vY += p.dvY;
+                clampVelocity(p);
+                
+                p.x += p.vX * dt;
+                p.y += p.vY * dt;
+                
+                // Boundary check - stop particles that escape
+                if (p.x > maxX || p.x < minX || p.y > maxY || p.y < minY) {
+                    p.vX = p.vY = 0;
+                }
+                p.dvX = p.dvY = 0;
+            }
+            
+            // Now resolve hard body collisions
+            if (useSpatialGrid) {
+                initSpatialGrid();
+                // Resolve hard body collisions (multiple passes for stability)
+                for (let pass = 0; pass < HARD_BODY_PASSES; pass++) {
+                    for (let i = 0; i < totalParticles; i++) {
+                        const p = part[i];
+                        if (!p) continue;
+                        const neighbors = spatialGrid.getNeighbors(p);
+                        for (const neighbor of neighbors) {
+                            if (neighbor === p) continue;
+                            const nIdx = neighbor.number;
+                            if (nIdx != null && nIdx > i) {
+                                p.hardBodyCollision(neighbor);
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Brute force hard body collisions (multiple passes)
+                for (let pass = 0; pass < HARD_BODY_PASSES; pass++) {
+                    for (let i = 0; i < totalParticles; i++) {
+                        const p = part[i];
+                        if (!p) continue;
+                        for (let j = i + 1; j < totalParticles; j++) {
+                            const p2 = part[j];
+                            if (p2) p.hardBodyCollision(p2);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Elastic/Inelastic: apply forces
+            if (useSpatialGrid) {
+                initSpatialGrid();
+                
+                // Brownian particles interact with regular particles
+                for (let i = 0; i < bcnt; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    const neighbors = spatialGrid.getNeighbors(p);
+                    for (const neighbor of neighbors) {
+                        if (neighbor === p) continue;
+                        const nIdx = neighbor.number;
+                        if (nIdx != null && nIdx >= bcnt) {
+                            p.integrate(neighbor, dt);
+                        }
+                    }
+                }
+                
+                // Regular particles interact with all particles
+                for (let i = bcnt; i < totalParticles; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    for (const neighbor of spatialGrid.getNeighbors(p)) {
+                        if (neighbor !== p) p.integrate(neighbor, dt);
+                    }
+                }
+                
+                // Brownian particles interact with each other (brute force - usually small count)
+                for (let i = 0; i < bcnt; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    for (let k = 0; k < bcnt; k++) {
+                        if (k !== i) {
+                            const p2 = part[k];
+                            if (p2) p.brownIntegrate(p2, dt);
+                        }
+                    }
+                }
+            } else {
+                // Brute force for small particle counts
+                for (let i = 0; i < bcnt; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    for (let k = bcnt; k < totalParticles; k++) {
+                        const p2 = part[k];
+                        if (p2 && k !== i) p.integrate(p2, dt);
+                    }
+                }
+                for (let i = bcnt; i < totalParticles; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    for (let k = 0; k < totalParticles; k++) {
+                        const p2 = part[k];
+                        if (p2 && k !== i) p.integrate(p2, dt);
+                    }
+                }
+                // Brownian particles interact with each other
+                for (let i = 0; i < bcnt; i++) {
+                    const p = part[i];
+                    if (!p) continue;
+                    for (let k = 0; k < bcnt; k++) {
+                        if (k !== i) {
+                            const p2 = part[k];
+                            if (p2) p.brownIntegrate(p2, dt);
+                        }
+                    }
+                }
+            }
+            
+            // Update all particles using selected integration method
+            for (let i = 0; i < totalParticles; i++) {
+                const p = part[i];
+                if (p) p.set(dt);
+            }
+        }
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (!imagesLoaded) return;
+
+    const totalParticles = pcnt + bcnt;
+    const imgOffset = PARTICLE_IMAGE_SIZE / 2;
+    
+    // Optimize rendering: batch by image type, cache rounded positions
+    // First pass: draw normal particles
+    for (let i = 0; i < totalParticles; i++) {
+        const p = part[i];
+        if (!p) continue;
+        if (!showparts && i >= bcnt) continue;
+        if (p.isUnderForce) continue; // Skip force particles for now
+        
+        // Use bitwise OR for faster integer rounding: x | 0
+        ctx.drawImage(partImg, (p.x | 0) - imgOffset, (p.y | 0) - imgOffset);
+    }
+    
+    // Second pass: draw particles under force
+    for (let i = 0; i < totalParticles; i++) {
+        const p = part[i];
+        if (!p) continue;
+        if (!showparts && i >= bcnt) continue;
+        if (!p.isUnderForce) continue;
+        
+        ctx.drawImage(partfImg, (p.x | 0) - imgOffset, (p.y | 0) - imgOffset);
+        p.isUnderForce = false;
+    }
+
+    if (hotHand) {
+        ctx.drawImage(hhImg, (hotHand.x | 0) - imgOffset, (hotHand.y | 0) - imgOffset);
+    }
+}
+
+// Cache DOM elements for stats (updated once on load)
+let statElements = null;
+
+function initStatElements() {
+    statElements = {
+        particles: document.getElementById('statParticles'),
+        dt: document.getElementById('statDt'),
+        kinetic: document.getElementById('statKinetic'),
+        potential: document.getElementById('statPotential'),
+        energy: document.getElementById('statEnergy')
+    };
+}
+
+function updateStats() {
+    if (!statElements) initStatElements();
+    
+    // Update particle count
+    const totalParticles = pcnt + bcnt;
+    if (statElements.particles) statElements.particles.textContent = totalParticles;
+    
+    // Update time step (format scientific notation if needed, show absolute value)
+    const dtAbs = Math.abs(dt);
+    let dtDisplay = dtAbs.toExponential(2);
+    if (dtAbs >= 0.001 && dtAbs < 1000) {
+        dtDisplay = dtAbs.toFixed(4);
+    }
+    if (statElements.dt) statElements.dt.textContent = (dt < 0 ? '-' : '') + dtDisplay;
+    
+    // Calculate kinetic energy (0.5 * m * v^2, assuming m=1)
+    let kineticEnergy = 0;
+    for (let i = 0; i < totalParticles; i++) {
+        const p = part[i];
+        if (p) {
+            kineticEnergy += (p.vX * p.vX + p.vY * p.vY) * 0.5;
+        }
+    }
+    
+    // Calculate potential energy from particle interactions
+    // Optimize: use squared distances to avoid sqrt where possible
+    let potentialEnergy = 0;
+    const k = Math.abs(defForce);
+    const kHalf = k * 0.5;
+    
+    // Particle-particle interactions (only check overlapping particles)
+    for (let i = 0; i < totalParticles; i++) {
+        const p1 = part[i];
+        if (!p1) continue;
+        
+        for (let j = i + 1; j < totalParticles; j++) {
+            const p2 = part[j];
+            if (!p2) continue;
+            
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distSq = dx * dx + dy * dy;
+            const minRad = Math.min(p1.rad, p2.rad);
+            const minRadSq = minRad * minRad;
+            
+            if (distSq < minRadSq && distSq > 0) {
+                const dist = Math.sqrt(distSq);
+                const compression = Math.min(minRad - dist, MAX_COMPRESSION);
+                potentialEnergy += kHalf * compression * compression;
+            }
+        }
+    }
+    
+    // Particle-boundary interactions (optimized)
+    for (let i = 0; i < totalParticles; i++) {
+        const p = part[i];
+        if (!p) continue;
+        
+        // Left boundary
+        const distLeft = p.x - minX;
+        if (distLeft < p.rad && distLeft > 0) {
+            const compression = Math.min(p.rad - distLeft, MAX_COMPRESSION);
+            potentialEnergy += kHalf * compression * compression;
+        }
+        // Right boundary
+        const distRight = maxX - p.x;
+        if (distRight < p.rad && distRight > 0) {
+            const compression = Math.min(p.rad - distRight, MAX_COMPRESSION);
+            potentialEnergy += kHalf * compression * compression;
+        }
+        // Top boundary
+        const distTop = p.y - minY;
+        if (distTop < p.rad && distTop > 0) {
+            const compression = Math.min(p.rad - distTop, MAX_COMPRESSION);
+            potentialEnergy += kHalf * compression * compression;
+        }
+        // Bottom boundary
+        const distBottom = maxY - p.y;
+        if (distBottom < p.rad && distBottom > 0) {
+            const compression = Math.min(p.rad - distBottom, MAX_COMPRESSION);
+            potentialEnergy += kHalf * compression * compression;
+        }
+        // HotHand interaction
+        if (hotHand) {
+            const dx = p.x - hotHand.x;
+            const dy = p.y - hotHand.y;
+            const distSq = dx * dx + dy * dy;
+            const minRadHH = Math.min(p.rad, hotHand.rad);
+            const minRadHHSq = minRadHH * minRadHH;
+            
+            if (distSq < minRadHHSq && distSq > 0) {
+                const dist = Math.sqrt(distSq);
+                const compression = Math.min(minRadHH - dist, MAX_COMPRESSION);
+                potentialEnergy += kHalf * compression * compression;
+            }
+        }
+    }
+    
+    const totalEnergy = kineticEnergy + potentialEnergy;
+    
+    // Format numbers (round and localize)
+    const formatEnergy = (value) => Math.round(value).toLocaleString();
+    
+    // Update display using cached elements
+    if (statElements.kinetic) statElements.kinetic.textContent = formatEnergy(kineticEnergy);
+    if (statElements.potential) statElements.potential.textContent = formatEnergy(potentialEnergy);
+    if (statElements.energy) statElements.energy.textContent = formatEnergy(totalEnergy);
+}
+
+let statsUpdateCounter = 0;
+// Performance monitoring
+let frameCount = 0;
+let lastFpsTime = performance.now();
+let currentFps = 0;
+
+function animate() {
+    time();
+    draw();
+    
+    // Update stats every N frames (reduced frequency for performance)
+    statsUpdateCounter++;
+    if (statsUpdateCounter >= STATS_UPDATE_INTERVAL) {
+        updateStats();
+        statsUpdateCounter = 0;
+    }
+    
+    // Calculate FPS every N frames
+    frameCount++;
+    if (frameCount >= FPS_CALC_INTERVAL) {
+        const now = performance.now();
+        currentFps = Math.round(60000 / (now - lastFpsTime));
+        lastFpsTime = now;
+        frameCount = 0;
+    }
+    
+    animationId = requestAnimationFrame(animate);
+}
+
+function reset() {
+    const rect = container.getBoundingClientRect();
+    
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    minX = 2;
+    minY = 2;
+    maxX = canvas.width - 2;
+    maxY = canvas.height - 2;
+    
+    // Reinitialize spatial grid with new dimensions
+    spatialGrid = null;
+}
+
+function addObject() {
+    const pleft = (maxX - minX) / 2;
+    const ptop = (maxY - minY) / 2;
+    
+    bcnt = 0;
+    const objType = document.getElementById('obj').value;
+
+    const shapes = {
+        none: () => { bcnt = 0; },
+        hv: () => {
+            bcnt = 19;
+            const coords = [
+                [10, 0], [10, -10], [10, -20], [10, -30], [10, -40], [10, -50],
+                [17, -25], [26, -27], [32, -20], [32, 0], [35, -10], [45, -20],
+                [50, -10], [55, 0], [59, -10], [63, -20], [60, -51], [65, -30], [64, -40]
+            ];
+            coords.forEach((coord, i) => {
+                part[i] = new Particle("part" + i, coord[0] + pleft - 20, coord[1] + ptop + 20, 0, 0, brad, i);
+            });
+        },
+        hexagon: () => {
+            bcnt = 36;
+            // Outer hexagon - larger radius, fewer particles for better spacing
+            for (let i = 0; i < 18; i++) {
+                const angle = (i / 18) * Math.PI * 2;
+                const r = 50;
+                part[i] = new Particle("part" + i, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i);
+            }
+            // Inner hexagon - larger radius
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const r = 32;
+                part[i + 18] = new Particle("part" + (i + 18), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 18);
+            }
+            // Center - larger radius
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const r = 15;
+                part[i + 30] = new Particle("part" + (i + 30), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 30);
+            }
+        },
+        spiral: () => {
+            bcnt = 40;
+            for (let i = 0; i < 40; i++) {
+                const t = i / 40;
+                const angle = t * Math.PI * 6; // 3 full rotations
+                const r = 10 + t * 50; // Spiral from radius 10 to 60
+                part[i] = new Particle("part" + i, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i);
+            }
+        },
+        flower: () => {
+            bcnt = 42;
+            // Center
+            part[0] = new Particle("part0", 0 + pleft, 0 + ptop, 0, 0, brad, 0);
+            // Petals (6 petals, 7 particles each) - balanced spacing
+            for (let petal = 0; petal < 6; petal++) {
+                const petalAngle = (petal / 6) * Math.PI * 2;
+                for (let i = 0; i < 7; i++) {
+                    const t = i / 6;
+                    const angle = petalAngle + (t - 0.5) * 0.4; // Slight spread
+                    const r = 16 + t * 36; // Balanced radius
+                    const idx = 1 + petal * 7 + i;
+                    part[idx] = new Particle("part" + idx, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, idx);
+                }
+            }
+        },
+        diamond: () => {
+            bcnt = 45;
+            // Create diamond shape with multiple layers - larger scale
+            let idx = 0;
+            // Top to bottom layers
+            for (let layer = 0; layer < 9; layer++) {
+                const y = -35 + layer * 8.75;
+                const width = Math.abs(4 - layer) + 1; // Width increases then decreases
+                const startX = -(width - 1) * 8.75;
+                for (let x = 0; x < width; x++) {
+                    part[idx] = new Particle("part" + idx, startX + x * 17.5 + pleft, y + ptop, 0, 0, brad, idx);
+                    idx++;
+                }
+            }
+        },
+        plus: () => {
+            bcnt = 41;
+            const spacing = 4.5; // Balanced spacing
+            // Vertical bar - larger scale with better spacing
+            for (let i = 0; i < 21; i++) {
+                part[i] = new Particle("part" + i, 0 + pleft, (-40 + i * spacing) + ptop, 0, 0, brad, i);
+            }
+            // Horizontal bar (avoid center overlap) - larger scale with better spacing
+            let idx = 21;
+            for (let i = 0; i < 21; i++) {
+                const x = -40 + i * spacing;
+                if (Math.abs(x) > 3) { // Skip center to avoid overlap
+                    part[idx] = new Particle("part" + idx, x + pleft, 0 + ptop, 0, 0, brad, idx);
+                    idx++;
+                }
+            }
+        },
+        pentagon: () => {
+            bcnt = 35;
+            // Outer pentagon - larger radius
+            for (let i = 0; i < 15; i++) {
+                const angle = (i / 15) * Math.PI * 2;
+                const r = 48;
+                part[i] = new Particle("part" + i, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i);
+            }
+            // Inner pentagon - larger radius
+            for (let i = 0; i < 10; i++) {
+                const angle = (i / 10) * Math.PI * 2;
+                const r = 32;
+                part[i + 15] = new Particle("part" + (i + 15), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 15);
+            }
+            // Center - larger radius
+            for (let i = 0; i < 10; i++) {
+                const angle = (i / 10) * Math.PI * 2;
+                const r = 15;
+                part[i + 25] = new Particle("part" + (i + 25), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 25);
+            }
+        },
+        octagon: () => {
+            bcnt = 40;
+            // Outer octagon - larger radius
+            for (let i = 0; i < 16; i++) {
+                const angle = (i / 16) * Math.PI * 2;
+                const r = 50;
+                part[i] = new Particle("part" + i, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i);
+            }
+            // Middle ring - larger radius
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const r = 35;
+                part[i + 16] = new Particle("part" + (i + 16), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 16);
+            }
+            // Inner ring - larger radius
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const r = 20;
+                part[i + 28] = new Particle("part" + (i + 28), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 28);
+            }
+            // Center - larger radius
+            for (let i = 0; i < 4; i++) {
+                const angle = (i / 4) * Math.PI * 2;
+                const r = 10;
+                part[i + 36] = new Particle("part" + (i + 36), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 36);
+            }
+        },
+        ring: () => {
+            bcnt = 48;
+            // Outer ring - larger radius, fewer particles for better spacing
+            for (let i = 0; i < 20; i++) {
+                const angle = (i / 20) * Math.PI * 2;
+                const r = 60;
+                part[i] = new Particle("part" + i, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i);
+            }
+            // Inner ring - larger radius, fewer particles
+            for (let i = 0; i < 20; i++) {
+                const angle = (i / 20) * Math.PI * 2;
+                const r = 38;
+                part[i + 20] = new Particle("part" + (i + 20), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 20);
+            }
+            // Add 8 more particles in between rings for visual density
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const r = 49;
+                part[i + 40] = new Particle("part" + (i + 40), Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, i + 40);
+            }
+        },
+        spiralstar: () => {
+            bcnt = 0;
+            // Create spiral star pattern - less dense
+            for (let arm = 0; arm < 5; arm++) {
+                const armAngle = (arm / 5) * Math.PI * 2;
+                // Reduced from 10 to 6 particles per arm for less density
+                for (let i = 0; i < 6; i++) {
+                    const t = i / 5;
+                    const angle = armAngle + t * 0.3; // Slight curve
+                    const r = 15 + t * 55; // Increased starting radius and spacing
+                    part[bcnt] = new Particle("part" + bcnt, Math.cos(angle) * r + pleft, Math.sin(angle) * r + ptop, 0, 0, brad, bcnt);
+                    bcnt++;
+                }
+            }
+        },
+        bigring: () => {
+            bcnt = 60;
+            // Large single ring with good spacing
+            const radius = 70; // Large radius
+            const numParticles = 60;
+            for (let i = 0; i < numParticles; i++) {
+                const angle = (i / numParticles) * Math.PI * 2;
+                part[i] = new Particle("part" + i, Math.cos(angle) * radius + pleft, Math.sin(angle) * radius + ptop, 0, 0, brad, i);
+            }
+        },
+        fractal: () => {
+            // Starfish-like fractal generator (radial symmetry)
+            bcnt = 0;
+            const numArms = 5; // 5 arms like a starfish
+            const maxDepth = 3;
+            const baseLength = 35;
+            const lengthRatio = 0.65; // Each branch is 65% of parent
+            const angleSpread = Math.PI / 4; // 45 degrees between branches
+            const minSpacing = 8; // Further reduced for denser pattern
+            
+            function addBranch(x, y, angle, length, depth) {
+                if (depth > maxDepth || bcnt >= 50) return;
+                
+                const endX = x + Math.cos(angle) * length;
+                const endY = y + Math.sin(angle) * length;
+                
+                // Add particles along the branch with denser spacing
+                const steps = Math.max(4, Math.floor(length / minSpacing)); // More steps for density
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const px = x + (endX - x) * t;
+                    const py = y + (endY - y) * t;
+                    
+                    // Check if too close to existing particles (only check against nearby particles)
+                    let tooClose = false;
+                    // Only check last few particles for performance
+                    const checkRange = Math.min(15, bcnt);
+                    for (let j = Math.max(0, bcnt - checkRange); j < bcnt; j++) {
+                        if (part[j]) {
+                            const dist = Math.sqrt((px - (part[j].x - pleft)) ** 2 + (py - (part[j].y - ptop)) ** 2);
+                            if (dist < minSpacing) {
+                                tooClose = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!tooClose && bcnt < 50) {
+                        part[bcnt] = new Particle("part" + bcnt, px + pleft, py + ptop, 0, 0, brad, bcnt);
+                        bcnt++;
+                    }
+                    if (bcnt >= 50) break;
+                }
+                
+                // Recursively add child branches (branching outward)
+                if (depth < maxDepth && bcnt < 50) {
+                    const newLength = length * lengthRatio;
+                    // Left branch
+                    addBranch(endX, endY, angle - angleSpread, newLength, depth + 1);
+                    // Right branch
+                    if (bcnt < 50) {
+                        addBranch(endX, endY, angle + angleSpread, newLength, depth + 1);
+                    }
+                }
+            }
+            
+            // Create starfish pattern: 5 arms radiating from center
+            // Single center particle
+            if (bcnt < 50) {
+                part[bcnt] = new Particle("part" + bcnt, 0 + pleft, 0 + ptop, 0, 0, brad, bcnt);
+                bcnt++;
+            }
+            // Grow arms outward
+            for (let arm = 0; arm < numArms; arm++) {
+                const armAngle = (arm / numArms) * Math.PI * 2 - Math.PI / 2; // Start from top
+                addBranch(0, 0, armAngle, baseLength, 0);
+            }
+        }
+    };
+
+    if (shapes[objType]) shapes[objType]();
+
+    // Fix: ensure we only calculate distances for particles that exist
+    for (let i = 0; i !== bcnt; i++) {
+        if (!part[i]) continue;
+        part[i].distTo = [];
+        for (let k = 0; k !== bcnt; k++) {
+            if (!part[k]) continue;
+            part[i].distTo[k] = part[i].dist(part[k].x, part[k].y);
+        }
+    }
+}
+
+function addParticles() {
+    if (pcnt === 0) return; // No particles to add
+    
+    const row = Math.ceil(Math.sqrt(pcnt));
+    const spx = (maxX - minX) / (row + 1);
+    const spy = (maxY - minY) / (row + 1);
+    const partType = document.getElementById('part').value;
+    const zeroVel = document.getElementById('zeroVel').checked;
+
+    if (partType === "ordered") {
+        for (let i = 0; i !== row; i++) {
+            for (let k = 0; k !== row; k++) {
+                const idx = bcnt + i * row + k;
+                if (idx < bcnt + pcnt) {
+                    part[idx] = new Particle("part" + idx, (k + 1) * spx, (i + 1) * spy, 0, 0, prad, idx);
+                }
+            }
+        }
+    } else if (partType === "random") {
+        for (let i = bcnt; i !== (bcnt + pcnt); i++) {
+            part[i] = new Particle("part" + i, Math.abs(random(maxX - minX * 6)) + minX * 3, 
+                Math.abs(random(maxY - minY * 6)) + minY * 3, 0, 0, prad, i);
+        }
+    }
+
+    if (!zeroVel) {
+        for (let i = bcnt; i !== (bcnt + pcnt); i++) {
+            if (part[i]) {
+                part[i].vX = random(maxInitVel);
+                part[i].vY = random(maxInitVel);
+            }
+        }
+    }
+}
+
+function init() {
+    pcnt = partcount;
+    bcnt = 0;
+    dragging = false;
+    showparts = true;
+    part = [];
+
+    reset();
+    addObject();
+    addParticles();
+
+    hotHand = new Particle("hothand_id", minX + 10, minY + 10, 0, 0, 50, null);
+
+    // Initialize Verlet state if Verlet integration is selected
+    if (integrationMethod === 'verlet') {
+        const totalParticles = pcnt + bcnt;
+        for (let i = 0; i < totalParticles; i++) {
+            if (part[i]) {
+                part[i].prevX = part[i].x - part[i].vX * dt;
+                part[i].prevY = part[i].y - part[i].vY * dt;
+            }
+        }
+        if (hotHand) {
+            hotHand.prevX = hotHand.x - hotHand.vX * dt;
+            hotHand.prevY = hotHand.y - hotHand.vY * dt;
+        }
+    }
+
+    if (animationId) cancelAnimationFrame(animationId);
+    updateStats(); // Update stats immediately
+    animationId = requestAnimationFrame(animate);
+}
+
+function reinit() {
+    saveSettings(); // Save current settings before restarting
+    if (animationId) cancelAnimationFrame(animationId);
+    init();
+}
+
+function onIntegrationMethodChange(method) {
+    integrationMethod = method;
+    saveSettings();
+    
+    // Initialize Verlet state if switching to Verlet
+    if (method === 'verlet') {
+        const totalParticles = pcnt + bcnt;
+        for (let i = 0; i < totalParticles; i++) {
+            if (part[i]) {
+                // Initialize prevX/prevY for Verlet integration
+                part[i].prevX = part[i].x - part[i].vX * dt;
+                part[i].prevY = part[i].y - part[i].vY * dt;
+            }
+        }
+        if (hotHand) {
+            hotHand.prevX = hotHand.x - hotHand.vX * dt;
+            hotHand.prevY = hotHand.y - hotHand.vY * dt;
+        }
+    }
+}
+
+// Settings persistence
+function saveSettings() {
+    const settings = {
+        integrationMethod: integrationMethod,
+        collisionModel: collisionModel,
+        partcount: partcount,
+        prad: prad,
+        obj: document.getElementById('obj').value,
+        brad: brad,
+        use_gravity: use_gravity,
+        gravX: gravX / gravScale,
+        gravY: gravY / gravScale,
+        dt: dt,
+        spd: spd,
+        showparts: showparts,
+        partLayout: document.getElementById('part').value,
+        zeroVel: document.getElementById('zeroVel').checked
+    };
+    localStorage.setItem('brownMotionSettings', JSON.stringify(settings));
+}
+
+function loadSettings() {
+    try {
+        const saved = localStorage.getItem('brownMotionSettings');
+        if (!saved) return;
+        
+        const settings = JSON.parse(saved);
+        
+        // Load settings into variables
+        if (settings.integrationMethod !== undefined) integrationMethod = settings.integrationMethod;
+        if (settings.collisionModel !== undefined) collisionModel = settings.collisionModel;
+        if (settings.partcount !== undefined) partcount = settings.partcount;
+        if (settings.prad !== undefined) prad = settings.prad;
+        if (settings.brad !== undefined) brad = settings.brad;
+        if (settings.use_gravity !== undefined) use_gravity = settings.use_gravity;
+        if (settings.gravX !== undefined) gravX = settings.gravX * gravScale;
+        if (settings.gravY !== undefined) gravY = settings.gravY * gravScale;
+        if (settings.dt !== undefined) dt = settings.dt;
+        if (settings.spd !== undefined) spd = settings.spd;
+        if (settings.showparts !== undefined) showparts = settings.showparts;
+        
+        // Update UI elements (simplified with helper)
+        const updateElement = (id, value, prop = 'value') => {
+            const el = document.getElementById(id);
+            if (el && value !== undefined) el[prop] = value;
+        };
+        
+        const updateAllInputs = (selector, value) => {
+            const inputs = document.querySelectorAll(selector);
+            if (inputs.length > 0 && value !== undefined) {
+                inputs.forEach(input => input.value = value);
+            }
+        };
+        
+        updateElement('obj', settings.obj);
+        updateElement('part', settings.partLayout);
+        updateElement('integrationMethod', settings.integrationMethod);
+        updateElement('collisionModel', settings.collisionModel);
+        updateElement('gravityCheck', settings.use_gravity, 'checked');
+        updateElement('zeroVel', settings.zeroVel, 'checked');
+        
+        const partcountInput = document.querySelector('input[type="number"][onchange*="partcount"]');
+        if (partcountInput && settings.partcount !== undefined) partcountInput.value = settings.partcount;
+        
+        updateAllInputs('input[type="number"][onchange*="prad"]', settings.prad);
+        updateAllInputs('input[type="number"][onchange*="brad"]', settings.brad);
+        
+        const gravInputs = document.querySelectorAll('input[type="number"][onchange*="grav"]');
+        if (gravInputs.length >= 2 && settings.gravX !== undefined && settings.gravY !== undefined) {
+            gravInputs[0].value = settings.gravX;
+            gravInputs[1].value = settings.gravY;
+        }
+        
+    } catch (e) {
+        console.error('Failed to load settings:', e);
+    }
+}
+
+function onCollisionModelChange(model) {
+    collisionModel = model;
+    saveSettings();
+    
+    // If switching to hard body, resolve any existing overlaps immediately
+    if (model === 'hardbody') {
+        const totalParticles = pcnt + bcnt;
+        // Quick pass to separate overlapping particles
+        for (let i = 0; i < totalParticles; i++) {
+            if (!part[i]) continue;
+            for (let j = i + 1; j < totalParticles; j++) {
+                if (part[j]) {
+                    const dDistSq = part[i].distSq(part[j].x, part[j].y);
+                    const dDist = Math.sqrt(dDistSq);
+                    const minRad = Math.min(part[i].rad, part[j].rad);
+                    if (dDist < minRad && dDist > 0) {
+                        // Separate particles
+                        const nx = (part[j].x - part[i].x) / dDist;
+                        const ny = (part[j].y - part[i].y) / dDist;
+                        const overlap = minRad - dDist;
+                        const separationX = nx * overlap * 0.5;
+                        const separationY = ny * overlap * 0.5;
+                        part[i].x -= separationX;
+                        part[i].y -= separationY;
+                        part[j].x += separationX;
+                        part[j].y += separationY;
+                    }
+                }
+            }
+        }
+    }
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    const btn = document.getElementById('pauseBtn');
+    if (isPaused) {
+        btn.value = '▶️ Play';
+        btn.title = 'Resume simulation';
+    } else {
+        btn.value = '⏸️ Pause';
+        btn.title = 'Pause simulation';
+    }
+    if (!isPaused && !animationId) {
+        animationId = requestAnimationFrame(animate);
+    }
+}
+
+function switchShow() {
+    showparts = !showparts;
+    saveSettings();
+}
+
+function isParticle(name) {
+    for (let i = 0; i !== bcnt + pcnt; i++) {
+        if (part[i] && part[i].obj === name) return i + 1;
+    }
+    return false;
+}
+
+function handleClick(e) {
+    const rect = canvas.getBoundingClientRect();
+    mx = e.clientX - rect.left;
+    my = e.clientY - rect.top;
+    
+    dragging = !dragging;
+    if (dragging) {
+        const dragInterval = setInterval(() => {
+            if (!dragging) {
+                clearInterval(dragInterval);
+                return;
+            }
+            if (hotHand) {
+                hotHand.x = Math.max(Math.min(mx, maxX), minX);
+                hotHand.y = Math.max(Math.min(my, maxY), minY);
+                hotHand.vX = 0;
+                hotHand.vY = 0;
+            }
+        }, 25);
+    }
+}
+
+function handleMouseMove(e) {
+    const rect = canvas.getBoundingClientRect();
+    mx = e.clientX - rect.left;
+    my = e.clientY - rect.top;
+}
+
+function showHelp() {
+    document.getElementById('helpModal').style.display = 'block';
+}
+
+function closeHelp() {
+    document.getElementById('helpModal').style.display = 'none';
+}
+
+// Close help modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('helpModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+window.addEventListener('load', () => {
+    // Initialize cached DOM elements
+    initStatElements();
+    
+    // Load saved settings before initializing
+    loadSettings();
+    
+    init();
+    window.addEventListener('resize', reset);
+    canvas.addEventListener('click', handleClick);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    document.getElementById('gravityCheck').addEventListener('change', function() {
+        use_gravity = this.checked;
+        saveSettings();
+    });
+    
+    // Add event listeners to save settings when controls change
+    document.getElementById('obj').addEventListener('change', saveSettings);
+    document.getElementById('part').addEventListener('change', saveSettings);
+    document.getElementById('zeroVel').addEventListener('change', saveSettings);
+    
+    // Particle count input
+    const partcountInput = document.querySelector('input[type="number"][onchange*="partcount"]');
+    if (partcountInput) {
+        partcountInput.addEventListener('change', saveSettings);
+    }
+    
+    // Particle radius inputs
+    document.querySelectorAll('input[type="number"][onchange*="prad"]').forEach(input => {
+        input.addEventListener('change', saveSettings);
+    });
+    
+    // Object radius inputs
+    document.querySelectorAll('input[type="number"][onchange*="brad"]').forEach(input => {
+        input.addEventListener('change', saveSettings);
+    });
+    
+    // Gravity inputs
+    document.querySelectorAll('input[type="number"][onchange*="grav"]').forEach(input => {
+        input.addEventListener('change', saveSettings);
+    });
+});
+</script>
+</body>
+</html>

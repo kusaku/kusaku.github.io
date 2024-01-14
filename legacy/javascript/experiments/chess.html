@@ -1,0 +1,559 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META NAME=VI60_defaultClientScript CONTENT=JavaScript>
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+<SCRIPT LANGUAGE=javascript>
+<!--
+var fff = "";
+var ggg = "";
+var letters = new Array("A","B","C","D","E","F","G","H", "error!");
+
+var extObject = function()
+{
+	//..  
+	for (var i = 0; i < arguments.length; i++)
+		for (var k in arguments[i])
+			this[k] = arguments[i][k];
+	this.clone = function(myclone)
+	{
+		fff = "begin clonning...\n";
+		if (!myclone) myclone = new Object();
+		for (var i in this)
+		{
+			// ..no looping detection!
+			if (typeof(this[i])=="object" && this[i].clone)
+			{
+				fff += i + " is object\n";
+				myclone[i] =  new Object();
+				this[i].clone(myclone[i]);
+			}
+			else if (typeof(this[i])=="object" && !this[i].clone)
+			{
+				fff += i + " is object, but not cloneable\n";
+				myclone[i] = this[i];
+			}			
+			else
+			{
+				fff += i + " is not object\n";
+				myclone[i] = this[i];
+			}
+		}
+		fff += "end clonning...\n";
+		log.innerText += fff;		
+		return myclone;
+	}				
+}
+
+var moveable = function()
+{
+	// ..   
+	this._direct_move = function(to_x, to_y)
+	{
+		this.x = to_x;
+		this.y = to_y;
+	}		
+	this._custom_move = function(move_matrix)
+	{
+		var center = Math.floor(move_matrix.length / 2);	
+		var size = move_matrix.length;
+		for (var x = 0; x < size; x++)
+			for (var y = 0; y < size; y++)
+			{
+				if (move_matrix[x][y] != 0)
+				{
+					var table_x = this.x - center + x;
+					var table_y = this.y - center + y;
+					if (table_x < 0 || table_y < 0 || table_x > 7 || table_y > 7) continue;
+					//fff = this.name + " moved to " + table_x + ":" + table_y + " (custom)<BR>";
+					//log.innerHTML = fff + log.innerHTML;										
+					this.considerposition(table_x,table_y);
+				}
+			}
+	}
+	this._move = function(step_x, step_y, max_steps)
+	{
+		max_steps++;		
+		for (var x = this.x, y = this.y, step = 0;
+		x > -1 && y > -1 && x < 8 && y < 8 && step < max_steps;
+		x += step_x, y += step_y, step++)
+		{
+			//fff = this.name + " moved to " + x + ":" + y + "(max_steps=" + max_steps + " step=" + step + ")<BR>";
+			//log.innerHTML = fff + log.innerHTML;
+			if (this.considerposition(x,y) && step) break;
+		}
+	}
+	this._move_tl = function(max_steps)
+	{
+		this._move(-1, -1, max_steps);
+	}
+	this._move_t = function(max_steps)
+	{
+		this._move(0, -1, max_steps);
+	}
+	this._move_tr = function(max_steps)
+	{
+		this._move(1, -1, max_steps);
+	}
+	this._move_r = function(max_steps)
+	{
+		this._move(1, 0, max_steps);
+	}
+	this._move_br = function(max_steps)
+	{
+		this._move(1, 1, max_steps);
+	}
+	this._move_b = function(max_steps)
+	{
+		this._move(0, 1, max_steps);
+	}
+	this._move_bl = function(max_steps)
+	{
+		this._move(-1, 1, max_steps);
+	}
+	this._move_l = function(max_steps)
+	{
+		this._move(-1, 0, max_steps);
+	}
+}
+
+var driveable = function(max_iteration)
+{
+	//..  
+	this.iteration = 0;
+	this.max_iteration = max_iteration;
+	this.profit = 0;
+	this.movecostmatrix = null;
+	this.resetmatrix = function()
+	{
+		var that = new Array(
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0),
+				   new Array(0,0,0,0,0,0,0,0));
+		return that;
+	}
+	//this.movecostmatrix = null; //this.newmatrix.clone();
+	this.considerposition = function(x,y)
+	{
+		if (table[x][y] && table[x][y].color == this.color)
+		{
+			//fff = "that was WRONG move!<BR>";
+			this.movecostmatrix[x][y] -= 99;
+			//log.innerHTML = fff + log.innerHTML;
+			return true;
+		}
+		if (table.currentdepth > 0)
+		{
+			//fff = "<HR>started iteration (table.currentdepth=" + table.currentdepth + ")<BR>";
+			//log.innerHTML = fff + log.innerHTML;
+			var temp = table[x][y]; 
+			table[x][y] = this;
+			table[this.x][this.y] = null;
+			this.movecostmatrix[x][y] -= table.play((this.color) ? 0 : 1);
+			table[this.x][this.y] = this;
+			table[x][y] = temp;
+			//fff = "stopped iteration<HR>";
+			//log.innerHTML = fff + log.innerHTML;
+		}
+		if (table[x][y] && table[x][y].color != this.color)
+		{
+			//fff = "that was EATEABLE move!<BR>";
+			//log.innerHTML = fff + log.innerHTML;
+			this.movecostmatrix[x][y] += table[x][y].cost;
+			return true;
+		}
+		else
+		{
+			//fff = "that was NORMAL move!<BR>";
+			//log.innerHTML = fff + log.innerHTML;
+			this.movecostmatrix[x][y] += 1;
+			return false;
+		}
+	}
+	this.best_x;
+	this.best_y;
+	this.findprofit = function()
+	{
+		var max_cost = -1e20;
+		this.best_x = this.x;
+		this.best_y = this.y;
+		var profit = 0;
+		for (var x = 0; x < 8; x++)
+			for (var y = 0; y < 8; y++)
+			{
+				profit += this.movecostmatrix[x][y];
+				if (this.movecostmatrix[x][y] && this.movecostmatrix[x][y] > max_cost)
+				{
+					max_cost = this.movecostmatrix[x][y];
+					this.best_x = x;	
+					this.best_y = y;
+				}
+				//this.movecostmatrix[x][y] = 0; // .. .
+			}
+		//alert();
+		return profit;
+	}
+	this.dobestmove = function()	
+	{
+		var s = "figure is " + this.name + "<BR>";
+		s += "movecostmatrix:<BR>";
+		for (var y = 0; y < 8; y++)
+		{
+			for (var x = 0; x < 8; x++)
+				s += " : " + this.movecostmatrix[x][y];
+				//if ( > max_cost)	
+			s += " :<BR>";
+		}
+		s += "bests move to x:" + this.best_x + " y:" + this.best_y + "<BR>";
+		s += "current x:" + this.x + " y:" + this.y + "<BR>";
+				
+		table[this.x][this.y] = null;
+		table[this.best_x][this.best_y] = this;
+		this.x = this.best_x;
+		this.y = this.best_y;
+		log.innerHTML = s + log.innerHTML;	
+		//this._direct_move(this.best_x,this.best_y)
+		//this.current_x = this.best_x;
+		//this.current_y = this.best_y;
+	}
+}
+
+var figure = function(x, y, color, name)
+{
+	this.x = x;
+	this.y = y;
+	this.color = color;
+	this.name = name;
+}
+
+var peska = function(x, y, color)
+{
+	this.sign = "P"
+	this.cost = 5;
+	this.firststep = true;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		/*if (this.color == 1)
+		{
+			if (this.firststep)
+				this._move_b(Math.min(2,7 - this.y));
+			else*/
+			{
+				var move_matrix = new Array( //   90ccw ! 001
+					new Array(1,0,1),
+					new Array(1,0,1),
+					new Array(1,0,1));
+				this._custom_move(move_matrix);
+			}
+		/*}		
+		if (this.color == 0)
+		{
+			if (this.firststep)
+				this._move_t(Math.min(2,this.y));
+			else
+			{
+				var move_matrix = new Array( //   90ccw ! 100
+					new Array(1,0,1),
+					new Array(1,0,1),
+					new Array(1,0,1));
+				this._custom_move(move_matrix);
+			}
+		}*/
+		this.firststep = false;
+		return this.findprofit();
+	}
+}
+
+var slon = function(x, y, color)
+{
+	this.sign = "E"
+	this.cost = 10;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		this._move_t(this.y);
+		this._move_r(7 - this.x);
+		this._move_b(7 - this.y);
+		this._move_l(this.x);
+		return this.findprofit();
+	}
+}
+
+var losad = function()
+{
+	this.sign = "H"
+	this.cost = 25;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		var move_matrix = new Array( //   90ccw -    ...
+			new Array(0,1,0,1,0),
+			new Array(1,0,0,0,1),
+			new Array(0,0,0,0,0),
+			new Array(1,0,0,0,1),
+			new Array(0,1,0,1,0));
+		this._custom_move(move_matrix);
+		return this.findprofit();
+	}
+}
+
+var lodka = function(x, y, color)
+{
+	this.sign = "B"
+	this.cost = 25;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		this._move_tl(Math.min(this.x, this.y));
+		this._move_tr(Math.min(7 - this.x, this.y));
+		this._move_br(Math.min(7 - this.x, 7 - this.y));
+		this._move_bl(Math.min(this.x, 7 - this.y));
+		return this.findprofit();
+	}
+}
+
+var fers = function()
+{
+	this.sign = "F"
+	this.cost = 50;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		this._move_tl(Math.min(this.x, this.y));
+		this._move_t(this.y);
+		this._move_tr(Math.min(7 - this.x, this.y));
+		this._move_r(7 - this.x);
+		this._move_br(Math.min(7 - this.x, 7 - this.y));
+		this._move_b(7 - this.y);
+		this._move_bl(Math.min(this.x, 7 - this.y));
+		this._move_l(this.x);
+		return this.findprofit();
+	}
+}
+
+var korol = function(x, y, color)
+{
+	this.sign = "K"
+	this.cost = 100;
+	this.move = function()
+	{
+		this.movecostmatrix = this.resetmatrix();
+		this._move_tl(sss = Math.min(1,Math.min(this.x, this.y)));
+		this._move_t(Math.min(1,this.y));
+		this._move_tr(Math.min(1,Math.min(7 - this.x, this.y)));
+		this._move_r(Math.min(1,7 - this.x));
+		this._move_br(Math.min(1,Math.min(7 - this.x, 7 - this.y)));
+		this._move_b(Math.min(1,7 - this.y));
+		this._move_bl(Math.min(1,Math.min(this.x, 7 - this.y)));
+		this._move_l(Math.min(1,this.x));
+		return this.findprofit();
+	}
+}
+
+var graphics = function()
+{
+	this.update = function()
+	{
+		for (var x = 0; x < 8; x++)
+			for (var y = 0; y < 8; y++)
+				if (this[x][y])
+					chess_table.rows[y].cells[x].innerHTML = "<H3><FONT COLOR=" + ((this[x][y].color)? "red>" : "green>") + this[x][y].sign + "</H2>";
+				else
+					chess_table.rows[y].cells[x].innerHTML = "";
+	}
+	this.maketable = function(prefix, size)
+	{
+		var n = 0;
+		var s = "<table align=center id=chess_table>";
+		for (y = 0; y < 8; y++)
+		{
+			s += "<tr>";
+			for (x = 0; x < 8; x++)
+			{
+				var color = (n++%2) ? "#AAAAAA" : "#CCCCCC";
+				s += "<td align=middle onclick=temp_hooker(" + x + "," + y + ") style=\"height:" + size + "px;width:" + size + "px;background:" + color + ";cursor:hand\">&nbsp</td>\n";
+			}
+			n++;
+			s += "</tr>\n"
+		}
+		s += "</table>";
+		return s;
+	}
+}
+
+var gameengine = function()
+{
+	this.blacks_profit;
+	this.whites_profit;
+	this.blacks;
+	this.whites;
+	this.reset = function()
+	{
+		this[0][1] = new extObject(new driveable(0), new moveable(), new figure(0,1,1,"black_peska1"), new peska());
+		this[1][1] = new extObject(new driveable(0), new moveable(), new figure(1,1,1,"black_peska2"), new peska());
+		this[2][1] = new extObject(new driveable(0), new moveable(), new figure(2,1,1,"black_peska3"), new peska());
+		this[3][1] = new extObject(new driveable(0), new moveable(), new figure(3,1,1,"black_peska4"), new peska());
+		this[4][1] = new extObject(new driveable(0), new moveable(), new figure(4,1,1,"black_peska5"), new peska());
+		this[5][1] = new extObject(new driveable(0), new moveable(), new figure(5,1,1,"black_peska6"), new peska());
+		this[6][1] = new extObject(new driveable(0), new moveable(), new figure(6,1,1,"black_peska7"), new peska());
+		this[7][1] = new extObject(new driveable(0), new moveable(), new figure(7,1,1,"black_peska8"), new peska());
+
+		this[0][6] = new extObject(new driveable(0), new moveable(), new figure(0,6,0,"white_peska1"), new peska());
+		this[1][6] = new extObject(new driveable(0), new moveable(), new figure(1,6,0,"white_peska2"), new peska());
+		this[2][6] = new extObject(new driveable(0), new moveable(), new figure(2,6,0,"white_peska3"), new peska());
+		this[3][6] = new extObject(new driveable(0), new moveable(), new figure(3,6,0,"white_peska4"), new peska());
+		this[4][6] = new extObject(new driveable(0), new moveable(), new figure(4,6,0,"white_peska5"), new peska());
+		this[5][6] = new extObject(new driveable(0), new moveable(), new figure(5,6,0,"white_peska6"), new peska());
+		this[6][6] = new extObject(new driveable(0), new moveable(), new figure(6,6,0,"white_peska7"), new peska());
+		this[7][6] = new extObject(new driveable(0), new moveable(), new figure(7,6,0,"white_peska8"), new peska());
+
+		this[0][0] = new extObject(new driveable(0), new moveable(), new figure(0,0,1,"black_slon1"), new slon());
+		this[7][0] = new extObject(new driveable(0), new moveable(), new figure(7,0,1,"black_sl?n2"), new slon());
+		this[0][7] = new extObject(new driveable(0), new moveable(), new figure(0,7,0,"white_slon1"), new slon());
+		this[7][7] = new extObject(new driveable(0), new moveable(), new figure(7,7,0,"white_slon2"), new slon());
+
+		this[1][0] = new extObject(new driveable(0), new moveable(), new figure(1,0,1,"black_losad1"), new losad());
+		this[6][0] = new extObject(new driveable(0), new moveable(), new figure(6,0,1,"black_losad2"), new losad());
+		this[1][7] = new extObject(new driveable(0), new moveable(), new figure(1,7,0,"white_losad1"), new losad());
+		this[6][7] = new extObject(new driveable(0), new moveable(), new figure(6,7,0,"white_losad2"), new losad());
+
+		this[2][0] = new extObject(new driveable(0), new moveable(), new figure(2,0,1,"black_lodka1"), new lodka());
+		this[5][0] = new extObject(new driveable(0), new moveable(), new figure(5,0,1,"black_lodka2"), new lodka());
+		this[2][7] = new extObject(new driveable(0), new moveable(), new figure(2,7,0,"white_lodka1"), new lodka());
+		this[5][7] = new extObject(new driveable(0), new moveable(), new figure(5,7,0,"white_lodka2"), new lodka());
+
+		this[3][0] = new extObject(new driveable(0), new moveable(), new figure(3,0,1,"black_fers"), new fers());
+		this[4][0] = new extObject(new driveable(0), new moveable(), new figure(4,0,1,"black_korol"), new korol());
+		this[3][7] = new extObject(new driveable(0), new moveable(), new figure(3,7,0,"white_fers"), new fers());
+		this[4][7] = new extObject(new driveable(0), new moveable(), new figure(3,7,0,"white_korol"), new korol());
+		
+		this.blacks = new Array(this[0][1], this[1][1], this[2][1], this[3][1], this[4][1], this[5][1], this[6][1], this[7][1], 
+								this[0][0], this[1][0], this[2][0], this[3][0], this[4][0], this[5][0], this[6][0], this[7][0]);
+		this.whites = new Array(this[0][6], this[1][6], this[2][6], this[3][6], this[4][6], this[5][6], this[6][6], this[7][6],
+								this[0][7], this[1][7], this[2][7], this[3][7], this[4][7], this[5][7], this[6][7], this[7][7]);
+	}
+	this.playdepth = 1;
+	this.currentdepth = 1;
+	this.play = function(color)
+	{		
+		var profit = 0;
+		if (this.currentdepth > 0)
+		{
+			this.currentdepth--;
+			side = (color) ? this.blacks : this.whites;
+			for (var i=0; i < side.length; i++)
+				profit += side[i].move();
+			this.currentdepth++;
+		}
+		return profit;
+	}
+}
+
+var table = new extObject(
+	new Array(
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null)),
+	new extObject(new Array(null,null,null,null,null,null,null,null))),
+	new graphics(),
+	new gameengine());
+
+table.reset();
+
+
+//table[5][5] = new extObject(new driveable(0), new moveable(), new figure(5,5,1,"blackfers"), new fers());
+/*
+table[7][2].move();
+table[7][2].findbestmove();
+table[7][2].dobestmove();
+*/
+
+var disp = function()
+{
+/*
+		var s = "figures are \n";
+		for (var y = 0; y < 8; y++)
+		{
+			for (var x = 0; x < 8; x++)
+				s += ":" + ((table[x][y]) ? table[x][y].color : "9");
+				//if ( > max_cost)	
+			s += ":\n";
+		}
+		alert(s);
+*/	
+	table.update();
+}
+window.document.onkeypress = disp;
+
+temp_hooker = function(x,y)
+{
+	status = ("hooked at " + x + ":" + y);
+	if (!table[x][y]) return;
+	//fff = table[x][y].name + " is walking!<HR>";
+	//log.innerHTML = fff + log.innerHTML;	
+	table[x][y].move();
+	table[x][y].findprofit();
+	table[x][y].dobestmove();
+	disp();
+}
+
+
+
+//-->
+</SCRIPT>
+
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Chess board demo with piece movement and object cloning. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, chess">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/experiments/chess.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/experiments/chess.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/experiments/chess.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Chess Demo - Kirill Arkhipenko">
+<META PROPERTY="og:description" CONTENT="Chess board demo with piece movement and object cloning. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/experiments/chess.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Chess Demo - Kirill Arkhipenko">
+<META NAME="twitter:description" CONTENT="Chess board demo with piece movement and object cloning. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY>
+<SCRIPT LANGUAGE=javascript>
+<!--
+document.write(table.maketable(1,40));
+//-->
+</SCRIPT>
+<DIV ID=log STYLE="HEIGHT: 232px; OVERFLOW: auto; POSITION: absolute;">log:<BR></DIV>
+</BODY>
+</HTML>

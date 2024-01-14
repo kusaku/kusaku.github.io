@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf8" ?>
+<menuItem>
+	<content>Навигация</content>
+	<menuItem>
+		<content>&lt;A href="index.html"&gt;Домой&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A href="why.html"&gt;Почему&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A href="i2107.html"&gt;Фотографии&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A href="route.html"&gt;Путеводитель&lt;/A&gt;</content>
+	</menuItem>
+	<menuItem>
+		<content>&lt;A href="forum.html"&gt;Форум&lt;/A&gt;</content>
+	</menuItem>
+</menuItem>

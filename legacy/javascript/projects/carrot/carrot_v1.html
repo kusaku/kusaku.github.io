@@ -1,0 +1,154 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META CONTENT="text/html; charset=windows-1251" HTTP-EQUIV=Content-Type>
+<TITLE>Говорящий хрен</TITLE>
+<STYLE>
+        BODY
+        {
+            overflow:hidden;
+        }
+        INPUT, SELECT, OPTION, TEXTAREA
+        {
+            background:#EEF;
+            color:#000;
+            border:1px solid #000;
+            margin:2px;
+            cursor:hand;
+            font-family:Tahoma,Arial;
+            font-size:8pt;
+            overflow:hidden;
+        }
+        A
+        {
+            color:#F00;
+            font-family:Tahoma,Arial;
+            font-size:8pt;
+            text-decoration:none;
+        }
+    </STYLE>
+<SCRIPT LANGUAGE=javascript>
+        <!--
+        function readerTTS(window, langID, Character)
+        {
+            this.window = window;
+            this.langID = (langID) ? langID : 0x0419;
+            this.Character = (Character) ? Character : "Peedy";
+
+            this.agent = null;
+            this.talker = null;
+            this.init = function()
+            {
+                this.agent = new ActiveXObject("Agent.Control");
+                this.agent.Connected = true;
+                this.agent.Characters.Load(this.Character);
+                this.talker = this.agent.Characters.Character(this.Character);
+                this.talker.LanguageID = this.langID;
+            }
+            this.tell = function(text)
+            {
+                this.talker.speak(text);
+            }
+            this.position = 0;
+            this.range = null
+            this.box = null;
+            this.box_timer = null;
+            this.resetRange = function()
+            {
+                if (this.window.document.body) return false;
+
+                if (!this.range)
+                {
+                    this.range = this.window.document.body.createTextRange();
+                    this.range.collapse(true);
+                    this.range.move("textedit", -1);
+                    this.range.move("sentence", this.position);
+                }
+                if (!this.box)
+                {
+                    this.box = this.window.document.createElement("DIV");
+                    this.box.Morph = function (c,t,l,w,h)
+                    {
+                        var n = 25;
+                        if (c==0)
+                        {
+                            clearTimeout(this.box_timer);
+                            this.box.top_delta = ((ct = this.box.offsetTop) - t)/n;
+                            this.box.left_delta = ((cl = this.box.offsetLeft) - l)/n;
+                            this.box.width_delta = ((cw = this.box.offsetWidth) - w)/n;
+                            this.box.hight_delta = ((ch = this.box.offsetHeight) - h)/n;
+                            this.box_timer = setTimeout("this.box.Morph(" + (c + 1) + ");", 10);
+                        }
+                        else if (c>n)
+                            clearTimeout(this.box_timer);
+                        else
+                        {
+                            this.box.style.top = Math.round(ct -= this.box.top_delta) + 'px';
+                            this.box.style.left = Math.round(cl -= this.box.left_delta) + 'px';
+                            this.box.style.width = Math.round(cw -= this.box.width_delta) + 'px';
+                            this.box.style.height = Math.round(ch -= this.box.hight_delta) + 'px';
+                            this.box_timer = setTimeout("this.box.Morph(" + (c + 1) + ");", 10);
+                        }
+                    }
+                    this.box.style.position = 'absolute';
+                    this.box.style.backgroundColor = 'rgb(187,187,255)';
+                    this.box.style.filter = "alpha(opacity=25)";
+                    this.box.style.zIndex = "-1";
+                    this.window.document.body.appendChild(this.box);
+                    this.box.Morph(0,2*range.offsetTop-range.boundingTop-2,range.boundingLeft-2,range.boundingWidth,range.boundingHeight);
+                }
+            }
+            this.url = null
+            this.go = function(url)
+            {
+
+            }
+
+        }
+
+        a = new (readerTTS)
+        a.init();
+        a.talker.Show();
+        a.talker.Speak("Привет, кекс!|Здорово, братэлло!|Хай, херр юзер!|Здравствуй, милашка!");
+
+        //-->
+    </SCRIPT>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Говорящий хрен — talking character (TTS) with Peedy. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, TTS, Peedy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Говорящий хрен">
+<META PROPERTY="og:description" CONTENT="Говорящий хрен — talking character (TTS) with Peedy. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/carrot/carrot_v1.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Говорящий хрен">
+<META NAME="twitter:description" CONTENT="Говорящий хрен — talking character (TTS) with Peedy. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<BODY BOTTOMMARGIN=0 LEFTMARGIN=0 RIGHTMARGIN=0 TOPMARGIN=0>
+123
+</BODY>
+</HTML>

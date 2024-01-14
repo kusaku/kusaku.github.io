@@ -1,0 +1,300 @@
+<HTML>
+<HEAD>
+<TITLE>..::Карта сайта::..</TITLE>
+<META HTTP-EQUIV="Content-Language" content="ru">
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<META NAME="author" CONTENT="kusaku">
+<META NAME="robots" CONTENT="index,all">
+<META NAME="revisit-after" CONTENT="15 days">
+<META NAME="title" CONTENT="Домашняя страница kusaku / дизайн и программирование / поиск работы">
+<META NAME="description" CONTENT="Карта сайта kusaku. Навигация по всем разделам сайта.">
+<META NAME="keywords" CONTENT="карта сайта, навигация, sitemap, kusaku">
+<LINK rel="canonical" href="https://kusaku.su/legacy/javascript/projects/homepage/sitemap.html">
+<META property="og:title" content="Карта сайта kusaku">
+<META property="og:description" content="Карта сайта kusaku. Навигация по всем разделам сайта.">
+<META property="og:url" content="https://kusaku.su/legacy/javascript/projects/homepage/sitemap.html">
+<META property="og:type" content="website">
+<META property="og:site_name" content="kusaku.su">
+<META property="og:image" content="https://kusaku.su/avatar.webp">
+<META name="twitter:card" content="summary">
+<META name="twitter:title" content="Карта сайта kusaku">
+<META name="twitter:description" content="Карта сайта kusaku. Навигация по всем разделам сайта.">
+<META name="twitter:image" content="https://kusaku.su/avatar.webp">
+<LINK rel="icon" type="image/png" sizes="32x32" href="https://kusaku.su/favicon-32x32.png">
+<LINK rel="icon" type="image/png" sizes="16x16" href="https://kusaku.su/favicon-16x16.png">
+<LINK rel="apple-touch-icon" sizes="180x180" href="https://kusaku.su/apple-touch-icon.png">
+<LINK rel="stylesheet" href="styles.css" type="text/css">
+<LINK rel="stylesheet" href="menushnik_modern.css" type="text/css">
+<SCRIPT language="JavaScript" type="text/JavaScript" src="menushnik_modern.js">
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/JavaScript" src="floater_modern.js">
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/JavaScript">
+var menu_file = "menushnik.xml";
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/JavaScript">
+var s;
+
+function Explore(menu, prefix)
+{
+	if (!menu || !menu.submenus) return;
+
+	if (menu.submenus.length > 0 && !menu.locked)
+		for (var i=0; i<menu.submenus.length; i++)
+			Explore(menu.submenus[i], prefix + "<SPAN onclick=\"if(window.menu && window.menu.hooker) window.menu.hooker('MOUSEOVER');\">" + menu.content + "</SPAN> &gt; ");
+	else if (menu.submenus.length > 0 && menu.locked)
+		s += prefix + "<A title=\"Это меню заблокировано - требуется пароль\" href=\"unlock.html?" + (menu.shortcut || "") + "\">" + menu.content + "</A> (закрыто)\n";
+	else if (menu.locked)
+		s += prefix + "<A title=\"Это меню заблокировано - требуется пароль\" href=\"unlock.html?" + (menu.shortcut || "") + "\">(закрыто)</A>\n";
+	else
+		s += prefix + "<SPAN onclick=\"if(window.menu && window.menu.hooker) window.menu.hooker('MOUSEOVER');\">" + menu.content + "</SPAN>\n";
+}
+
+function DoMap()
+{
+	if (!window.menu || !window.menu.submenus)
+	{
+		setTimeout(DoMap, 500);
+		return;
+	}
+	s = "<UL>";
+	Explore(window.menu, "<LI>");
+	s = s.replace(/<IMG/ig, "<NOIMG");
+	s = s.replace(/<BR>/ig, " ");
+	var sitemapEl = document.getElementById("sitemap");
+	if (sitemapEl) {
+		sitemapEl.innerHTML = s + "</LI></UL>";
+	}
+}
+
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', DoMap);
+} else {
+	DoMap();
+}
+
+</SCRIPT>
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0>
+<TABLE border=0 cellPadding=0 cellSpacing=0 height="100%" width="100%">
+  <TR>
+    <TD height="100%" ><TABLE height="100%" border="0" cellpadding="0" cellspacing="0">
+      <TR bgcolor="#000000">
+        <TD><TABLE border=0 cellPadding=0 cellSpacing=0 height="100%">
+          <TR>
+            <TD align=middle height="100%">
+              <DIV class="pdmenu">
+                <SPAN id="menushnik"></SPAN>
+              </DIV>
+              <SCRIPT language="JavaScript" type="text/JavaScript">
+                MakeMenu(menu_file, "menushnik");
+              </SCRIPT>
+            </TD>
+          </TR>
+          <TR>
+            <TD><IMG height=21 src="images/bush_01.gif" width=96></TD>
+          </TR>
+        </TABLE></TD>
+        <TD><TABLE border=0 cellPadding=0 cellSpacing=0>
+          <TR>
+            <TD><IMG height=69 src="images/morda.gif" width=292></TD>
+            <TD noWrap class=banner>здесь живёт<BR>kusaku</TD>
+          </TR>
+        </TABLE></TD>
+        <TD><IMG height=69 src="images/topright_01.gif" width=165></TD>
+      </TR>
+      <TR valign="top">
+        <TD><TABLE height="100%" border="0" cellpadding="0" cellspacing="0" background="images/bgbush.gif">
+          <TR>
+            <TD height="179"><IMG height=179 src="images/bush_02.gif" width=96></TD>
+          </TR>
+          <TR>
+            <TD height="100%"></TD>
+          </TR>
+        </TABLE></TD>
+        <TD><TABLE width="100%" height="100%" border=0 cellPadding=0 cellSpacing=0>
+          <TR>
+            <TD class=header>
+
+Карта сайта
+</TD>
+          </TR>
+          <TR>
+            <TD class=maintext height="100%" vAlign=top>
+  <HR>
+				  <SPAN id=sitemap>
+				  <P>Подожди до конца загрузки страницы. Если этот текст не
+				  изчез, значит твой браузер не поддерживает навигацию,
+				  используемую на сайте.</P></SPAN>
+				  <HR>
+				  <P>Некоторые ветви меню могут быть
+			  заблокированы.</P>
+<TABLE id="my_links" border=0 cellPadding=0 cellSpacing=0 style="left: 610px; position: absolute; top: 160px; width: 134px;" name="floater">
+  <TR bgcolor="#000000">
+    <TD style="cursor: pointer;" name="roller" class="floater">&nbsp;v</TD>
+    <TD style="cursor: move;" name="mover" class="floater" width="100%" align="center">ссылки</TD>
+    <TD style="cursor: pointer;" name="closer" class="floater">x&nbsp;</TD>
+  </TR>
+  <TR bgcolor="#FFFFFF">
+    <TD colSpan=3 name="content">
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/my">ЖЖ friends (my)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/com">ЖЖ friends (com)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/int">ЖЖ friends (int)</a></p>
+      <p><a href="https://www.livejournal.com/users/aks1983/friends/gfx">ЖЖ friends (gfx)</a></p>
+      <p><a href="https://www.skazhi.ru/index.php?act=Search&CODE=getnew">skazhi.ru</a></p>
+  </TR>
+</TABLE>
+
+<TABLE id="my_clock" border=0 cellPadding=0 cellSpacing=0 style="left: 610px; position: absolute; top: 300px; width: 134px; height: 124px;" name="floater">
+  <TR bgcolor="#000000">
+    <TD style="cursor: pointer;" name="roller" class="floater">&nbsp;v</TD>
+    <TD style="cursor: move;" name="mover" class="floater" width="100%" height="1" align="center">часы</TD>
+    <TD style="cursor: pointer;" name="closer" class="floater">x&nbsp;</TD>
+  </TR>
+  <TR bgcolor="#FFFFFF">
+    <TD colSpan=3 name="content">
+      <A style="font-size: xx-small; color: #FF0000; position: absolute; left: 55px; top: 78px;" href="https://kusaku.su/">kusaku</A>
+<SCRIPT language="JavaScript" type="text/JavaScript">
+<!--
+(function() {
+    var clockContainer = document.getElementById('my_clock');
+    if (!clockContainer) return;
+
+    var contentCell = clockContainer.querySelector('[name="content"]');
+    if (!contentCell) return;
+
+    var digits = "12 &middot; &middot; 3 &middot; &middot; 6 &middot; &middot; 9 &middot; &middot;".split(" ");
+    var ieFace = [];
+    var ieHours = [];
+    var ieMinutes = [];
+    var ieSeconds = [];
+
+    // Create digit elements
+    for (var i = 0; i < digits.length; i++) {
+        var div = document.createElement('div');
+        div.id = 'ieFace_' + i;
+        div.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        div.innerHTML = digits[i];
+        contentCell.appendChild(div);
+        ieFace.push(div);
+    }
+
+    // Create hand elements
+    for (var i = 0; i < 20; i++) {
+        var divHours = document.createElement('div');
+        divHours.id = 'ieHours_' + i;
+        divHours.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divHours.innerHTML = '<strong>&middot;</strong>';
+        contentCell.appendChild(divHours);
+        ieHours.push(divHours);
+
+        var divMinutes = document.createElement('div');
+        divMinutes.id = 'ieMinutes_' + i;
+        divMinutes.style.cssText = 'position:absolute;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divMinutes.innerHTML = '&middot;';
+        contentCell.appendChild(divMinutes);
+        ieMinutes.push(divMinutes);
+
+        var divSeconds = document.createElement('div');
+        divSeconds.id = 'ieSeconds_' + i;
+        divSeconds.style.cssText = 'position:absolute;color:red;text-align:center;top:0px;left:0px;width:16px;height:16px;';
+        divSeconds.innerHTML = '&middot;';
+        contentCell.appendChild(divSeconds);
+        ieSeconds.push(divSeconds);
+    }
+
+    function time_goes_by() {
+        var pi = Math.PI;
+        var date = new Date();
+
+        function assign(obj_q, r, arg, shift) {
+            obj_q.style.top = Math.round(r * Math.sin(arg) + shift) + "px";
+            obj_q.style.left = Math.round(r * Math.cos(arg) + shift) + "px";
+        }
+
+        for (var i = 0; i < digits.length; i++) {
+            assign(ieFace[i], 36, 2 * i * pi / digits.length - pi / 2, 60);
+        }
+
+        for (var i = 0; i < 20; i++) {
+            assign(ieHours[i], i, (date.getHours() / 6 + date.getMinutes() / 360) * pi - pi / 2, 60);
+            assign(ieMinutes[i], i * 1.4, (date.getMinutes() / 30 + date.getSeconds() / 1800) * pi - pi / 2, 60);
+            assign(ieSeconds[i], i * 1.5, date.getSeconds() / 30 * pi - pi / 2, 60);
+        }
+
+        setTimeout(time_goes_by, 1000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', time_goes_by);
+    } else {
+        time_goes_by();
+    }
+})();
+//-->
+</SCRIPT>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+          </TR>
+        </TABLE></TD>
+        <TD height="100%"><TABLE height="100%" border="0" cellpadding="0" cellspacing="0" background="images/bgright.gif">
+          <TR>
+            <TD height="50"><IMG src="images/topright_02.gif" width="165" height="50"></TD>
+          </TR>
+          <TR>
+            <TD height="100%"></TD>
+          </TR>
+          <TR>
+            <TD height="212" align="right" valign="bottom">
+<!--Rating@Mail.ru COUNTEr--><script language="JavaScript" type="text/javascript"><!--
+d=document;var a='';a+=';r='+escape(d.referrer)
+js=10//--></script><script language="JavaScript1.1" type="text/javascript"><!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script><script language="JavaScript1.2" type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12//--></script><script language="JavaScript1.3" type="text/javascript"><!--
+js=13//--></script><script language="JavaScript" type="text/javascript"><!--
+d.write('<a href="https://top.mail.ru/jump?from=942302"'+
+' target=_top><img src="https://d0.c6.be.a0.top.list.ru/counter'+
+'?id=942302;t=216;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border=0 height=31 width=88/><\/a>')
+if(11<js)d.write('<'+'!-- ')//--></script><noscript><a
+target=_top href="https://top.mail.ru/jump?from=942302"><img
+src="https://d0.c6.be.a0.top.list.ru/counter?js=na;id=942302;t=216"
+border=0 height=31 width=88
+alt="Рейтинг@Mail.ru"/></a></noscript><script language="JavaScript" type="text/javascript"><!--
+if(11<js)d.write('--'+'>')//--></script><!--/COUNTER-->
+            </TD>
+          </TR>
+        </TABLE></TD>
+      </TR>
+      <TR bgcolor="#CCCCCC">
+        <TD align="center"><A title="индексирование" href="robots.html">...</A></TD>
+        <TD align="center" class="copyrght">&copy; <A title="made by kusaku" href="https://kusaku.su">kusaku</A> 2004</TD>
+        <TD></TD>
+      </TR>
+    </TABLE></TD>
+    <TD WIDTH="100%" BGCOLOR=#CCCCCC></TD>
+  </TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Form CGI - Perl CGI Scripts</title>
+<meta name="description" content="Order Form CGI - Perl CGI script by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Perl, CGI">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/perl/order-form-cgi.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/perl/order-form-cgi.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/perl/order-form-cgi.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Order Form CGI - Perl - Kirill Arkhipenko">
+<meta property="og:description" content="Perl CGI script by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/perl/order-form-cgi.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Order Form CGI - Perl - Kirill Arkhipenko">
+<meta name="twitter:description" content="Perl CGI script by Kirill Arkhipenko. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/perl/perl.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Perl Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Order Form CGI (Zakaz) <span class="text-xl font-normal text-gray-600">(2004)</span></h1>
+        <p class="text-gray-600 mb-6">A CGI script for processing order forms, developed in 2004. Handles order submissions with fields for product name, model, condition, notes, company name, contact person, email, website, city, and phone. Features include: form validation, profanity filtering, duplicate request prevention, order status tracking (executed/not executed), admin interface for marking orders as executed, pagination (4 orders per page), IP address and browser tracking, and template-based HTML output.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">File-Based Storage (No Database):</h2>
+            <p class="text-gray-600 mb-4">This script does not use a database. Instead, it reads and writes data directly to plain text files:</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li><strong>zakaz.txt</strong> - Stores all order entries in a custom XML-like format with entries wrapped in <code>&lt;gbrec&gt;</code> tags</li>
+                <li><strong>zakaz.dat</strong> - Stores the total count of orders</li>
+                <li><strong>lastreq.dat</strong> - Stores the last request to prevent duplicate submissions</li>
+                <li><strong>passwd.dat</strong> - Stores admin password for order management access</li>
+            </ul>
+            <p class="text-gray-600">This file-based approach was common in 2004 when database setup was more complex and many shared hosting providers didn't include database access. The script parses the text files line by line, extracts order data using pattern matching, and writes new orders by appending to the file. While simpler than database-driven solutions, this approach works well for small to medium-sized order management systems.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Features:</h2>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li>Order form submission with validation</li>
+                <li>Product selection (forklift, stacker, cart, etc.)</li>
+                <li>Condition selection (new/used)</li>
+                <li>Company and contact information fields</li>
+                <li>Profanity filtering</li>
+                <li>Order status tracking</li>
+                <li>Admin interface for order management</li>
+                <li>Pagination (4 orders per page)</li>
+                <li>Template-based HTML output (zakaz.dot)</li>
+                <li>File-based storage - no database required (zakaz.txt, zakaz.dat)</li>
+            </ul>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Perl Source Code (zakaz.cgi):</h2>
+            <pre><code class="language-perl">#!/usr/bin/perl
+
+sub ReqDecoder
+{
+	my($i, $t1, $t2, %hash);
+	foreach (split /&amp;/,$_[0])
+	{
+		s/\+/ /g;
+		if (/=/)
+		{
+			$t1 = $`;
+			$t2 = $&#x27;;   
+			$t1 =~ s/%([0-9A-H]{2})/pack(&#x27;C&#x27;,hex($1))/egi;
+			$t2 =~ s/%([0-9A-H]{2})/pack(&#x27;C&#x27;,hex($1))/egi;
+			$t1 =~ tr/a-z/A-Z/;
+			$hash{$t1} = $t2;
+		}            
+	}
+
+	return %hash;
+}
+
+################################################################################################
+
+sub WriteBook
+{
+   	my($ans, $ok, $test, @time);
+    $ans = &quot;РЕЗУЛЬТАТ:&lt;br&gt;\n&quot;;
+    $ok = 0;
+
+	open (lastreq, &quot;&lt;lastreq.dat&quot;) || sub {$ans .= &quot;Файла данных запроса нет - не могу прочитать!&lt;br&gt;\n&quot;;};
+	$test = &lt;lastreq&gt;;
+	close (lastreq);
+
+	if ($q eq $test)
+	{
+	    return $ans.&quot;Повторный запрос - отклонен...&lt;br&gt;\n&quot;;
+	}
+	else
+	{
+	   	open (lastreq, &quot;&gt;lastreq.dat&quot;) || sub {$ans .= &quot;Не могу записать в файл данных запроса!&lt;br&gt;\n&quot;;};
+		print lastreq $q;
+		close (lastreq);
+	}
+
+    if ($req{&#x27;CBTOVAR&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Товар не указан!&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{&#x27;EDMODEL&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Модель не указана!&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{&#x27;CBSTATUS&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Состояние не указано!&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{&#x27;EDFIRMA&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Название фирмы не указано!&lt;br&gt;\n&quot;;
+	}
+
+	    if ($req{&#x27;EDTOWN&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Город не указан!&lt;br&gt;\n&quot;;
+	}
+
+    if ($req{&#x27;EDTELNUM&#x27;} =~ /\S/)
+    {
+		$ok++;
+    }
+    else
+    {
+    	$ans .= &quot;Телефон не указан!&lt;br&gt;\n&quot;;
+	}
+
+	
+    if ($req{&#x27;MMPRIMETA&#x27;} =~ /\S/)
+    {
+    	$req{&#x27;MMPRIMETA&#x27;} = substr $req{&#x27;MMPRIMETA&#x27;}, 0, 512;
+       	$req{&#x27;MMPRIMETA&#x27;} =~ s/&amp;/&amp;amp;/g;
+    	$req{&#x27;MMPRIMETA&#x27;} =~ s/&lt;/&amp;lt;/g;
+    	$req{&#x27;MMPRIMETA&#x27;} =~ s/&gt;/&amp;gt;/g;
+    	$req{&#x27;MMPRIMETA&#x27;} =~ s/\r\n/&lt;br&gt;/g;
+        if ($req{&#x27;MMPRIMETA&#x27;} =~ /ху[йеяе]/i || $req{&#x27;MSG&#x27;} =~ /пизд/i || $req{&#x27;MSG&#x27;} =~ /бля/i || $req{&#x27;MSG&#x27;} =~ /fuck/i)
+	    {
+			$ans .= &quot;&gt;У нас не матерятся: &amp;quot;..$&amp;..&amp;quot;...&lt;br&gt;\n&quot;;
+		}
+		else
+		{
+			$ok++;
+		}
+    }
+    else
+    {
+		$ok++;
+    }
+
+    if ($ok == 7)
+    {
+	    open(gb, &quot;&gt;&gt;zakaz.txt&quot;) || sub {$ans .= &quot;Не могу открыть файл записей!&lt;br&gt;\n&quot;;};
+		print gb &quot;&lt;gbrec&gt;\n&quot;;
+		print gb &quot;Executed &gt; no\n&quot;;
+		print gb &quot;From &gt; $ENV{&#x27;REMOTE_ADDR&#x27;}\n&quot;;
+		print gb &quot;Browser &gt; $ENV{&#x27;HTTP_USER_AGENT&#x27;}\n&quot;;
+		print gb &quot;Referer &gt; $ENV{&#x27;HTTP_REFERER&#x27;}\n&quot;;
+		print gb &quot;CBTOVAR &gt; $req{&#x27;CBTOVAR&#x27;}\n&quot;;
+		print gb &quot;EDMODEL &gt; $req{&#x27;EDMODEL&#x27;}\n&quot;;
+		print gb &quot;CBSTATUS &gt; $req{&#x27;CBSTATUS&#x27;}\n&quot;;
+		print gb &quot;MMPRIMETA &gt; $req{&#x27;MMPRIMETA&#x27;}\n&quot; if ($req{&#x27;MMPRIMETA&#x27;});
+		print gb &quot;EDFIRMA &gt; $req{&#x27;EDFIRMA&#x27;}\n&quot;;
+		print gb &quot;EDNAME &gt; $req{&#x27;EDNAME&#x27;}\n&quot; if ($req{&#x27;EDNAME&#x27;});
+		print gb &quot;EDMAIL &gt; $req{&#x27;EDMAIL&#x27;}\n&quot; if ($req{&#x27;EDMAIL&#x27;});
+		print gb &quot;EDSITE &gt; $req{&#x27;EDSITE&#x27;}\n&quot; if ($req{&#x27;EDSITE&#x27;});
+		print gb &quot;EDTOWN &gt; $req{&#x27;EDTOWN&#x27;}\n&quot;;
+		print gb &quot;EDTELNUM &gt; $req{&#x27;EDTELNUM&#x27;}\n&quot;;
+		@time = localtime(time);
+		@time[0] = (@time[0] &lt; 10) ? &quot;0&quot;.@time[0] : @time[0];
+		@time[1] = (@time[1] &lt; 10) ? &quot;0&quot;.@time[1] : @time[1];
+		@time[2] = (@time[2] &lt; 10) ? &quot;0&quot;.@time[2] : @time[2];
+		@time[3] = (@time[3] &lt; 10) ? &quot;0&quot;.@time[3] : @time[3];
+   		@time[4]++;
+		@time[4] = (@time[4] &lt; 10) ? &quot;0&quot;.@time[4] : @time[4];
+        @time[5] = @time[5] + 1900;
+		print gb &quot;TIME &gt; @time[3].@time[4].@time[5]&amp;nbsp;@time[2]:@time[1]:@time[0]\n&quot;;
+		print gb &quot;&lt;/gbrec&gt;\n\n&quot;;
+        close(gb);
+		$count++;
+        open(st, &quot;&gt;zakaz.dat&quot;) || return $ans.&quot;Не могу записать в файл данных!&lt;br.\n&quot;;
+			print st $count.&quot;\n&quot;;
+		close(st);
+		$ans .= &quot;Запись успешно добавлена!&lt;br&gt;\n&quot;;
+        $succAdd = &quot;true&quot;;
+	}
+	else
+	{
+		$ans .= &quot;Запись не может быть добавлена!&lt;br&gt;\n&quot;;
+        $succAdd = &quot;false&quot;;
+	}
+    return $ans;
+}
+
+################################################################################################
+
+sub GuestBook
+{
+   	my($i, $str, %current);
+	print  &quot;\n\n&lt;!-- here zakaz begins --&gt;\n\n&quot;;
+	open(gb, &quot;zakaz.txt&quot;) || sub {$ans .= &quot;Файла записей нет - добавьте хотя бы одну запись!&lt;br&gt;\n&quot;;};
+	$i = 0;
+	do 
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи (или файла)
+	    {
+		    chomp($str);
+		    $current{$`} = $&#x27; if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш %current
+		}
+		if (%current)
+		{
+			$i++;
+			if ($i &gt;= $req{&#x27;READFROM&#x27;} &amp;&amp; $i &lt;= $req{&#x27;READTO&#x27;})
+			{                               
+			$current{&#x27;Executed&#x27;} = &quot;&lt;a href=http://$ENV{&#x27;HTTP_HOST&#x27;}/cgi-bin/zakaz.cgi?readfrom=$req{&#x27;READFROM&#x27;}&amp;readto=$req{&#x27;READTO&#x27;}&amp;authority=$req{&#x27;AUTHORITY&#x27;}&amp;action=sanitarize&amp;what=$i&gt;&quot; . (($current{&#x27;Executed&#x27;} =~ /yes/i) ? &quot;да&quot; : &quot;нет&quot;) . &quot;&lt;/a&gt;&quot;;
+print &lt;&lt;EOF;
+&lt;TABLE class=output_form&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&lt;B&gt;Заказ №$i&lt;/B&gt;&lt;/TD&gt;
+    &lt;TD&gt;Поступил $current{&#x27;TIME&#x27;} IP: $current{&#x27;From&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&lt;B&gt;Выполнен:&lt;/B&gt;&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;Executed&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Наименование товара:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;CBTOVAR&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Модель(марка) товара:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDMODEL&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Состояние:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;CBSTATUS&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Примечание:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;MMPRIMETA&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Название фирмы(оргнизации):&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDFIRMA&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Контактное лицо:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDNAME&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;E-Mail:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDMAIL&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Сайт:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDSITE&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Город:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDTOWN&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Телефон:&lt;/TD&gt;
+    &lt;TD&gt;$current{&#x27;EDTELNUM&#x27;}&lt;/TD&gt;&lt;/TR&gt;
+&lt;/TABLE&gt;
+EOF
+		    }
+		}
+		%current = %a; #убили хеш
+	}
+	until (eof || $i &gt; $req{&#x27;READTO&#x27;});
+	print &quot;Заказная книга пуста - добавьте хотя бы одну запись!&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+	print &quot;\n\n&lt;!-- here zakaz ends --&gt;\n\n&quot;;
+}
+
+################################################################################################
+
+sub SanitarizeGuestBook
+{
+   	my($ans, $i, $str);
+    $ans = &quot;Обработка Заказной книги:&lt;br&gt;\n&quot;;
+    open(newgb,&quot;&gt;&gt;zakaz.tmp&quot;) || return $ans.&quot;Не могу создать новый файл записей!&lt;br&gt;\n&quot;;
+	open(gb, &quot;zakaz.txt&quot;) || return $ans.&quot;Не могу открыть старый файл записей!&lt;br&gt;\n&quot;;
+	$i = 0;
+	$count = 0;
+	do 
+	{
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;gbrec&gt;/i)) {} #нашли начало записи (или конец файла)
+		while (($str = &lt;gb&gt;) &amp;&amp; ($str !~ /&lt;\/gbrec&gt;/i)) #обработка, пока не конец записи или файла
+	    {
+		    chomp($str);
+		    $current{$`} = $&#x27; if ($str =~ / &gt; /); #если подходит под шаблон - добавляем в хеш
+		}
+		if (%current)
+		{
+			$i++;
+			if (!$_[0] &amp;&amp; $current{&#x27;Executed&#x27;} =~ /no/)
+			{
+				$count++;
+				print newgb &quot;\n&lt;gbrec&gt;\n&quot;;
+				foreach $key (sort(keys %current))
+				{
+					print newgb &quot;$key &gt; $current{$key}\n&quot;;
+				}
+				print newgb &quot;&lt;\/gbrec&gt;\n&quot;;				
+			}
+			elsif($_[0])
+			{
+				if ($i == $_[0])
+				{
+					$current{&#x27;Executed&#x27;} = ($current{&#x27;Executed&#x27;} =~ /no/) ? &quot;yes&quot; : &quot;no&quot;;
+				}
+				$count++;
+				print newgb &quot;\n&lt;gbrec&gt;\n&quot;;
+				foreach $key (sort(keys %current))
+				{
+					print newgb &quot;$key &gt; $current{$key}\n&quot;;
+				}
+				print newgb &quot;&lt;\/gbrec&gt;\n&quot;;				
+			}
+		}
+		%current = %a; #убили хеш
+	}
+	until (eof gb);
+	$ans .= &quot;Заказная книга оказалась пуста - нечего было обрабатывать!&lt;br&gt;\n&quot; if ($i == 0);
+   	close(gb);
+   	close(newgb);
+
+    unlink &quot;zakaz.txt&quot;;
+    rename &quot;zakaz.tmp&quot;, &quot;zakaz.txt&quot;;
+
+	open(st, &quot;&gt;zakaz.dat&quot;) || return $ans.&quot;Не могу записать в файл данных!&lt;br.\n&quot;;
+		print st $count.&quot;\n&quot;;
+	close(st);
+
+	return $ans.&quot;Обработано $count записей (всего было $i).\n&quot;;
+}
+
+################################################################################################
+
+sub Numbers
+{
+   	my($ans, $i, $k);
+  	$ans = &quot;\n&lt;!-- here numbers begin --&gt;\n&quot;;
+	for ($i = 1; $i &lt; $count; $i+=$_[0])
+	{
+		$k = $i + $_[0];
+		$k = $count if $k &gt; $count;
+		if ($i &gt;= $req{&#x27;READFROM&#x27;} &amp;&amp; $k &lt;= $req{&#x27;READTO&#x27;})
+		{
+			$ans .= &quot;[$i..$k]\n&quot;;
+		}
+		else
+		{
+	        $ans .= &quot;&lt;a href=http://$ENV{&#x27;HTTP_HOST&#x27;}/cgi-bin/zakaz.cgi?readfrom=$i&amp;readto=$k&quot; . (($imboss) ? &quot;&amp;authority=$req{&#x27;AUTHORITY&#x27;}&quot; : &quot;&quot;) . &quot;&gt;[$i..$k]&lt;/a&gt;\n&quot;;
+	    }
+	}
+   	$ans .= &quot;&lt;br&gt;\n&lt;!-- here numbers end --&gt;\n&quot;;
+   	return $ans;
+}
+
+################################################################################################
+
+sub CheckBoss
+{
+	my($pw,$ans);
+	if (open(pwf, &quot;passwd.dat&quot;))
+	{
+		$pw = &lt;pwf&gt;;
+		$ans = ($_[0] eq $pw);
+      	close(pwf);
+	}
+	else
+	{
+		open(pwf, &quot;&gt;passwd.dat&quot;);
+		print pwf $_[0];
+		$ans = true;
+      	close(pwf);
+	}
+	return $ans;
+}
+
+################################################################################################
+
+sub Error
+{
+	print $_[0];
+}
+
+################################################################################################
+
+if ($ENV{&#x27;REQUEST_METHOD&#x27;} =~ /get/i)
+{
+	$q = ($ENV{&#x27;QUERY_STRING&#x27;});
+}
+if ($ENV{&#x27;REQUEST_METHOD&#x27;} =~ /post/i)
+{
+	sysread STDIN, $q = ($ENV{&#x27;QUERY_STRING&#x27;}), $ENV{&#x27;CONTENT_LENGTH&#x27;};
+}
+
+%req = ReqDecoder($q);
+
+################################################################################################
+
+print &quot;Content-Type: text/html\n\n&quot;;
+open SHABLON, &quot;zakaz.dot&quot; || Error(&quot;Отсутствует шаблон страницы!&lt;br&gt;\n&quot;);
+while (($str = &lt;SHABLON&gt;) !~ /&lt;!--%zakaz%--&gt;/i)
+{
+print $str;
+}
+
+################################################################################################
+
+$imboss = CheckBoss($req{&#x27;AUTHORITY&#x27;}) if ($req{&#x27;AUTHORITY&#x27;});
+
+open(st, &quot;zakaz.dat&quot;) || Error(&quot;Файла данных нет - необходимо инициализировать счетчик!&lt;br&gt;\n&quot;);
+	$count = &lt;st&gt;;
+   	$count = $&amp; if ($count =~ /\d+/g);
+close(st);
+
+################################################################################################
+$succAdd = &quot;true&quot;;
+$a = WriteBook if ($req{&#x27;ACTION&#x27;} =~ /add/i);
+
+if ($imboss)
+{
+	if (!$req{&#x27;READFROM&#x27;} || !$req{&#x27;READTO&#x27;} || $req{&#x27;READFROM&#x27;} &gt; $count || $req{&#x27;READFROM&#x27;} &gt; $req{&#x27;READTO&#x27;})
+	{
+		$req{&#x27;READFROM&#x27;} = $count - 4;
+		$req{&#x27;READTO&#x27;} = $count;    
+	}
+
+	print &quot;&lt;a href=http://$ENV{&#x27;HTTP_HOST&#x27;}/cgi-bin/zakaz.cgi?action=sanitarize&amp;authority=$req{&#x27;AUTHORITY&#x27;}&gt;|Удалить выполненные заказы|&lt;/a&gt;&lt;br&gt;&quot;;
+	print Numbers(4);
+	print SanitarizeGuestBook($req{&#x27;WHAT&#x27;}) if ($req{&#x27;ACTION&#x27;} =~ /sanitarize/i);
+	GuestBook;
+	print Numbers(4);
+	print &quot;&lt;a href=http://$ENV{&#x27;HTTP_HOST&#x27;}/cgi-bin/zakaz.cgi?action=sanitarize&amp;authority=$req{&#x27;AUTHORITY&#x27;}&gt;|Удалить выполненные заказы|&lt;/a&gt;&lt;br&gt;&quot;;
+}
+################################################################################################
+else
+{
+	if ($succAdd ne &quot;true&quot;)
+	{
+		$req{&#x27;MMPRIMETA&#x27;} =~ s/&lt;br&gt;/\n/g;
+		print $a.&quot;Исправьте, пожалуйста, неверные поля:&lt;br&gt;&quot;;
+	}
+	else
+	{
+		print $a;
+		%req = %a;
+	}
+
+print &lt;&lt;EOF;
+&lt;FORM action=&quot;http://$ENV{&#x27;HTTP_HOST&#x27;}/cgi-bin/zakaz.cgi&quot; method=post&gt;
+&lt;TABLE class=input_form border=0 cellPadding=0 cellSpacing=0&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Наименование товара&lt;/TD&gt;
+    &lt;TD&gt;
+      &lt;INPUT name=ACTION type=hidden value=ADD&gt; &lt;SELECT id=CbTovar 
+      name=CbTovar&gt; &lt;OPTION selected&gt;Погрузчик&lt;/OPTION&gt; 
+        &lt;OPTION&gt;Штабелер&lt;/OPTION&gt; &lt;OPTION&gt;Тележка&lt;/OPTION&gt; 
+        &lt;OPTION&gt;Электротележка&lt;/OPTION&gt; &lt;OPTION&gt;Электротягач&lt;/OPTION&gt; 
+        &lt;OPTION&gt;Аккумуляторная батарея&lt;/OPTION&gt; &lt;OPTION&gt;Запасная 
+        часть(и)&lt;/OPTION&gt; &lt;OPTION&gt;Другое...&lt;/OPTION&gt;&lt;/SELECT&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Модель(марка) товара&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdModel name=EdModel value=&quot;$req{&#x27;EDMODEL&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Состояние&lt;/TD&gt;
+    &lt;TD&gt;&lt;SELECT id=CbStatus name=CbStatus ?&gt; &lt;OPTION 
+        selected&gt;Новый(ая)&lt;/OPTION&gt; &lt;OPTION&gt;Б/у&lt;/OPTION&gt;&lt;/SELECT&gt; &lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Примечание&lt;/TD&gt;
+    &lt;TD&gt;&lt;TEXTAREA cols=70 id=MmPrimeta name=MmPrimeta rows=6&gt;$req{&#x27;MMPRIMETA&#x27;}&lt;/TEXTAREA&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD colSpan=2 align=center&gt;&lt;H1&gt;Координаты для связи с Вами&lt;/H1&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Название фирмы(оргнизации)&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdFirma name=EdFirma value=&quot;$req{&#x27;EDFIRMA&#x27;}&quot;&gt; &lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Контактное лицо&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdName name=EdName value=&quot;$req{&#x27;EDNAME&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;E-Mail&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdMail name=EdMail value=&quot;$req{&#x27;EDMAIL&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;Сайт&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdSite name=EdSite value=&quot;$req{&#x27;EDSITE&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Город&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdTown name=EdTown value=&quot;$req{&#x27;EDTOWN&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;*Телефон&lt;/TD&gt;
+    &lt;TD&gt;&lt;INPUT id=EdTelNum name=EdTelNum value=&quot;$req{&#x27;EDTELNUM&#x27;}&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD colSpan=2 align=middle&gt;&lt;INPUT name=Submit type=submit value=&quot;Отправить заказ&quot;&gt; &lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/FORM&gt;
+EOF
+}
+################################################################################################
+do 
+{
+	$str = &lt;SHABLON&gt;;
+	print $str;
+}
+until (eof);
+close(SHABLON);
+################################################################################################
+</code></pre>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">HTML Template (zakaz.dot):</h2>
+            <pre><code class="language-html">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;&lt;HTML&gt;
+&lt;HEAD&gt;&lt;TITLE&gt;Заказ&lt;/TITLE&gt;
+&lt;BASE href=kusaku/sss/&gt;
+&lt;META NAME=&quot;GENERATOR&quot; Content=&quot;MSHTML 5.00.3700.6699&quot;&gt;
+&lt;LINK rel=&quot;stylesheet&quot; href=&quot;aks_images/styles.css&quot; type=&quot;text/css&quot;&gt; 
+&lt;SCRIPT LANGUAGE=javascript&gt;
+&lt;!--
+
+imageLoader = 
+{
+	imageArray: new Array(),
+	cache: function()
+	{
+		for (var i=0; i&lt;imageLoader.cache.arguments.length; i++)
+		{
+			imageLoader.imageArray[i] = new Image();
+			imageLoader.imageArray[i].src = imageLoader.cache.arguments[i];
+		}
+	}
+}
+
+imageLoader.cache(&quot;aks_images/cart_off.gif&quot;, &quot;aks_images/cart_on.gif&quot;);
+
+floater = 
+{
+	fly: null,
+	moveEnabled: false,
+	shrinkEnabled: false,
+	dleft: 0,
+	dtop: 0,
+	timer: null,
+	move: function()
+	{
+		if (event.clientX &lt; 15 || event.clientY &lt; 15) return;
+		fly.style.left = (event.clientX - floater.dleft - 2) + &quot;px&quot;;
+		fly.style.top = (event.clientY - floater.dtop - 2) + &quot;px&quot;;
+	},
+	morph: function(c,t,l,w,h)
+	{   	
+		var n = 25;
+		if (c==0)
+		{
+			clearTimeout(floater.timer);
+			floater.top_delta = ((floater.ct = floater.fly.offsetTop) - t)/n;
+			floater.left_delta = ((floater.cl = floater.fly.offsetLeft) - l)/n;
+			//floater.width_delta = ((floater.cw = floater.fly.offsetWidth) - w)/n;
+			//floater.hight_delta = ((floater.ch = floater.fly.offsetHeight) - h)/n;
+			floater.timer = setTimeout(&quot;floater.morph(&quot; + (c + 1) + &quot;);&quot;, 10);
+		}
+		else if (c&gt;n)
+			clearTimeout(floater.timer);
+		else
+		{
+			floater.fly.style.top = Math.round(floater.ct -= floater.top_delta) + &#x27;px&#x27;;
+			floater.fly.style.left = Math.round(floater.cl -= floater.left_delta) + &#x27;px&#x27;;
+			//floater.fly.style.width = Math.round(floater.cw -= floater.width_delta) + &#x27;px&#x27;;
+			//floater.fly.style.height = Math.round(floater.ch -= floater.hight_delta) + &#x27;px&#x27;;
+			floater.timer = setTimeout(&quot;floater.morph(&quot; + (c + 1) + &quot;);&quot;, 10);
+		}
+	},
+	hooker: function(action)	
+	{
+		var dig = event.srcElement;
+		var x = dig.offsetLeft;
+		var y = dig.offsetTop;
+		var w = dig.offsetWidth;
+		var h = dig.offsetHeight;
+
+		while (dig = dig.offsetParent)
+		{
+			x += dig.offsetLeft;
+			y += dig.offsetTop;
+		}
+		
+		if (action==&quot;mouseover&quot;) floater.fly.src = &quot;aks_images/cart_on.gif&quot;;
+		if (action==&quot;mouseout&quot;) floater.fly.src = &quot;aks_images/cart_off.gif&quot;;
+		if (event.srcElement.tagName==&quot;IMG&quot;)
+			floater.morph(0, y - 33, x + w/2 - 25, w, h);
+		
+	},
+	init: function()
+	{
+		var SafeAttachEvt = function (my_event, handler)
+		{
+			if (eval(my_event))
+			{
+				var old_handler = eval(my_event);
+				eval(my_event + &quot; = function(){old_handler();handler();}&quot;);
+			}
+			else
+				eval(my_event + &quot; = function(){handler();}&quot;);
+		}
+		
+		floater.fly = new Image();
+		floater.fly.src = &quot;aks_images/cart_off.gif&quot;;
+		floater.fly.style.position = &quot;absolute&quot;;
+		floater.fly.style.left = &quot;-100px&quot;;
+		floater.fly.style.top = &quot;-100px&quot;;
+		document.body.appendChild(floater.fly);
+		
+		for (var i=0; i&lt; document.links.length; i++)
+		{
+			document.links[i].attachEvent(&quot;onmouseover&quot;, function(){floater.hooker(&quot;mouseover&quot;)});
+			document.links[i].attachEvent(&quot;onmouseout&quot;, function(){floater.hooker(&quot;mouseout&quot;)});
+		}
+	}
+}
+window.onload = function(){ floater.init();}
+//--&gt;
+&lt;/SCRIPT&gt;
+&lt;/HEAD&gt;
+&lt;BODY bottomMargin=0 leftMargin=0 rightMargin=0 topMargin=0&gt;
+&lt;TABLE border=0 cellPadding=0 cellSpacing=0 height=&quot;100%&quot; style=&quot;HEIGHT: 100%&quot; 
+width=&quot;100%&quot;&gt;
+  
+  &lt;TR&gt;
+    &lt;TD background=&quot;&quot;&gt;
+      &lt;TABLE bgColor=#006600 border=0 cellPadding=0 cellSpacing=0 
+      style=&quot;WIDTH: 100%&quot; width=&quot;100%&quot;&gt;
+        
+        &lt;TR&gt;
+          &lt;TD&gt;&lt;IMG alt=&quot;&quot; 
+            src=&quot;aks_images/logo.gif&quot;&gt;&lt;/TD&gt;
+          &lt;TD align=middle style=&quot;WIDTH: 100%&quot; width=&quot;100%&quot;&gt;&lt;FONT 
+            color=lime&gt;баннер сюда!&lt;/FONT&gt; &lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;
+      &lt;TABLE border=0 cellPadding=0 cellSpacing=0 width=&quot;100%&quot;&gt;
+        
+        &lt;TR&gt;
+          &lt;TD align=middle background=aks_images/cart_back.gif&gt;&lt;IMG alt=&quot;&quot; 
+            src=&quot;aks_images/cart_back.gif&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD background=aks_images/bar.gif&gt;
+      &lt;TABLE border=0 cellPadding=0 cellSpacing=0 height=&quot;100%&quot; 
+      style=&quot;HEIGHT: 100%&quot; width=&quot;100%&quot;&gt;
+        
+        &lt;TR&gt;
+          &lt;TD&gt;&lt;IMG alt=&quot;&quot; src=&quot;aks_images/bar.gif&quot;&gt;&lt;/TD&gt;
+          &lt;TD align=middle vAlign=top&gt;&lt;A href=&quot;http://&quot; id=aaa&gt;&lt;IMG alt=&quot;&quot; 
+            border=0 height=32 hspace=0 src=&quot;aks_images/about.gif&quot; style=&quot;HEIGHT: 32px; WIDTH: 128px&quot; useMap=&quot;&quot; width=128 &gt;&lt;/A&gt;&lt;/TD&gt;
+          &lt;TD align=middle vAlign=top&gt;&lt;A href=&quot;/cgi-bin/zakaz.cgi&quot;&gt;&lt;IMG alt=&quot;&quot; 
+            border=0 height=32 hspace=0 src=&quot;aks_images/zakaz.gif&quot; 
+            style=&quot;HEIGHT: 32px; WIDTH: 128px&quot; useMap=&quot;&quot; width=128&gt;&lt;/A&gt;&lt;/TD&gt;
+          &lt;TD align=middle vAlign=top&gt;&lt;A href=&quot;http://&quot;&gt;&lt;IMG alt=&quot;&quot; border=0 
+            height=32 hspace=0 src=&quot;aks_images/servis.gif&quot; 
+            style=&quot;HEIGHT: 32px; WIDTH: 128px&quot; useMap=&quot;&quot; width=128&gt;&lt;/A&gt;&lt;/TD&gt;
+          &lt;TD align=middle vAlign=top&gt;&lt;A href=&quot;http://&quot;&gt;&lt;IMG alt=&quot;&quot; border=0 
+            height=32 hspace=0 src=&quot;aks_images/zapchasti.gif&quot; 
+            style=&quot;HEIGHT: 32px; WIDTH: 128px&quot; useMap=&quot;&quot; 
+        width=128&gt;&lt;/A&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD bgColor=#99cc99 height=&quot;100%&quot; style=&quot;HEIGHT: 100%&quot;&gt;
+      &lt;TABLE border=0 cellPadding=0 cellSpacing=0 height=&quot;100%&quot; 
+      style=&quot;HEIGHT: 100%&quot; width=&quot;100%&quot;&gt;
+        
+        &lt;TR&gt;
+          &lt;TD align=middle background=aks_images/grad_g.gif&gt;&lt;IMG alt=&quot;&quot; 
+            src=&quot;aks_images/grad_g.gif&quot;&gt;&lt;/TD&gt;
+          &lt;TD background=&quot;&quot; bgColor=#006600 style=&quot;WIDTH: 1px&quot; width=1&gt;&lt;/TD&gt;
+          &lt;TD align=middle background=aks_images/grad_w.gif style=&quot;WIDTH: 600px&quot; 
+          width=600&gt;&lt;IMG alt=&quot;&quot; src=&quot;aks_images/grad_w.gif&quot;&gt;&lt;/TD&gt;
+          &lt;TD background=&quot;&quot; bgColor=#006600 style=&quot;WIDTH: 1px&quot; width=1&gt;&lt;/TD&gt;
+          &lt;TD align=middle background=aks_images/grad_g.gif&gt;&lt;IMG alt=&quot;&quot; 
+            src=&quot;aks_images/grad_g.gif&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&lt;/TD&gt;
+          &lt;TD bgColor=#006600 height=&quot;100%&quot; style=&quot;HEIGHT: 100%&quot;&gt;&lt;/TD&gt;
+          &lt;TD bgColor=white height=&quot;100%&quot; style=&quot;HEIGHT: 100%; WIDTH: 750px&quot; 
+          width=750&gt;
+            &lt;TABLE border=0 cellPadding=5 cellSpacing=0 height=&quot;100%&quot; 
+            style=&quot;HEIGHT: 100%&quot; width=&quot;100%&quot;&gt;
+              
+              &lt;TR&gt;
+                &lt;TD align=middle vAlign=top&gt;&lt;IMG alt=&quot;&quot; 
+                  src=&quot;aks_images/cart.gif&quot;&gt; &lt;HR&gt;
+              &lt;!--%zakaz%--&gt;
+              &lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/TD&gt;
+          &lt;TD bgColor=#006600&gt;&lt;/TD&gt;
+          &lt;TD&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD align=middle bgColor=#006600 height=1 style=&quot;HEIGHT: 1px&quot;&gt;&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD align=middle bgColor=#99cc99&gt;&lt;FONT size=2&gt;Design by &lt;/FONT&gt;&lt;A 
+      href=&quot;http://www.ozarenie.spb.ru/&quot;&gt;&lt;FONT size=2&gt;Ozarenie&lt;/FONT&gt;&lt;/A&gt;&lt;FONT 
+      size=2&gt; (альтернативный дизайн от &lt;/FONT&gt;&lt;A 
+      href=&quot;https://kusaku.su/&quot;&gt;&lt;FONT size=2&gt;kusaku&lt;/FONT&gt;&lt;/A&gt;&lt;FONT
+      size=2&gt;)&lt;/FONT&gt; &lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;/BODY&gt;
+
+&lt;/HTML&gt;
+</code></pre>
+        </div>
+    </div>
+</body>
+</html>

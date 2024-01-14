@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnCriptor/DeCriptor by kusaku</title>
+<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			background: #696;
+			color: #363;
+			font: 10pt arial, sans-serif;
+			overflow: scroll;
+		}
+
+		form {
+			height: 100%;
+			padding: 30px;
+			box-sizing: border-box;
+		}
+
+		center {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		input, select, textarea {
+			background: #9c9;
+			color: #363;
+			border: 1px solid #363;
+			margin: 2px;
+			font: 10pt arial, sans-serif;
+		}
+
+		input, select {
+			cursor: pointer;
+		}
+
+		input[type="button"] {
+			transition: background-color 0.1s ease, transform 0.05s ease;
+		}
+
+		input[type="button"]:hover {
+			background: #adad;
+		}
+
+		input[type="button"]:active {
+			background: #8b8b;
+			transform: scale(0.98);
+		}
+
+		textarea {
+			cursor: text;
+			flex: 1;
+			min-height: 0;
+			width: 100%;
+		}
+
+		.button-row {
+			flex-shrink: 0;
+		}
+
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1000;
+			inset: 0;
+			overflow: auto;
+			background: rgba(0, 0, 0, 0.5);
+		}
+
+		.modal-content {
+			background: #9c9;
+			margin: 5% auto;
+			padding: 20px;
+			border: 2px solid #363;
+			width: 80%;
+			max-width: 700px;
+			max-height: 80vh;
+			overflow-y: auto;
+			color: #363;
+			font: 10pt arial, sans-serif;
+		}
+
+		.modal-header {
+			font-weight: bold;
+			font-size: 12pt;
+			margin-bottom: 15px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #363;
+		}
+
+		.modal-section {
+			margin-bottom: 15px;
+		}
+
+		.modal-section-title {
+			font-weight: bold;
+			margin: 10px 0 5px;
+		}
+
+		.modal-close {
+			float: right;
+			font-size: 20pt;
+			font-weight: bold;
+			line-height: 20px;
+			cursor: pointer;
+			color: #363;
+		}
+
+		.modal-close:hover {
+			color: #000;
+		}
+	</style>
+<script>
+		const dic_int = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+		const dic_eng = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n\r\t ";
+		const dic_rus = "!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+		const dic_simple_int = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+		const dic_simple_eng = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n\r\t ";
+		const dic_simple_rus = "0123456789АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+
+		const dictionaries = {
+			dic_int, dic_eng, dic_rus,
+			dic_simple_int, dic_simple_eng, dic_simple_rus
+		};
+
+		const escapeMap = { '\\': '\\\\', '"': '\\"', '\t': '\\t', '\r': '\\r', '\n': '\\n' };
+
+		function escapeChar(c) {
+			return escapeMap[c] || c;
+		}
+
+		function unescapeString(str) {
+			let result = '';
+			for (let i = 0; i < str.length; i++) {
+				if (str[i] === '\\' && i + 1 < str.length) {
+					const esc = { n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\' }[str[i + 1]];
+					if (esc !== undefined) {
+						result += esc;
+						i++;
+					} else {
+						result += str[i];
+					}
+				} else {
+					result += str[i];
+				}
+			}
+			return result;
+		}
+
+		function EnCriptor(string, key, morph, dic) {
+			let res = '', resRaw = '', pos = 0, currentKey = key;
+
+			for (let i = 0; i < string.length; i++) {
+				const firstIdx = dic.indexOf(string[i]);
+				const secondIdx = dic.indexOf(currentKey[pos]);
+
+				if (firstIdx === -1 || secondIdx === -1) {
+					res += string[i];
+					resRaw += string[i];
+					if (firstIdx !== -1) pos = (pos + 1) % currentKey.length;
+					continue;
+				}
+
+				const encrypted = dic.charAt((firstIdx + secondIdx) % dic.length);
+				res += escapeChar(encrypted);
+				resRaw += encrypted;
+				pos = (pos + 1) % currentKey.length;
+
+				if (morph && pos === 0 && resRaw.length >= currentKey.length) {
+					currentKey = resRaw.substr(resRaw.length - currentKey.length);
+				}
+			}
+
+			return res;
+		}
+
+		function DeCriptor(string, key, morph, dic) {
+			let unescapedString;
+			try {
+				unescapedString = unescapeString(string);
+			} catch (e) {
+				return "Troubles in input, check if \", \\n, \\r, \\t or \\ are persist in code.";
+			}
+
+			let res = '', pos = 0, currentKey = key;
+
+			for (let i = 0; i < unescapedString.length; i++) {
+				const firstIdx = dic.indexOf(unescapedString[i]);
+				const secondIdx = dic.indexOf(currentKey[pos]);
+
+				if (firstIdx === -1 || secondIdx === -1) {
+					res += unescapedString[i];
+					pos = (pos + 1) % currentKey.length;
+					continue;
+				}
+
+				res += dic.charAt((firstIdx - secondIdx + dic.length) % dic.length);
+				pos = (pos + 1) % currentKey.length;
+
+				if (morph && pos === 0 && res.length >= currentKey.length) {
+					currentKey = unescapedString.substr(res.length - currentKey.length);
+				}
+			}
+
+			return res;
+		}
+
+		function getFormData() {
+			const form = document.getElementById('myform');
+			return {
+				form,
+				decoded: form.decoded.value,
+				encoded: form.encoded.value,
+				key: form.key.value,
+				morph: form.morph.checked,
+				dic: dictionaries[form.dictionary.value]
+			};
+		}
+
+		function encryptTop() {
+			const { form, decoded, key, morph, dic } = getFormData();
+			if (!dic) {
+				alert('Invalid dictionary');
+				return;
+			}
+			form.encoded.value = EnCriptor(decoded, key, morph, dic);
+		}
+
+		function decryptBottom() {
+			const { form, encoded, key, morph, dic } = getFormData();
+			if (!dic) {
+				alert('Invalid dictionary');
+				return;
+			}
+			form.decoded.value = DeCriptor(encoded, key, morph, dic);
+		}
+
+		function showHelp() {
+			document.getElementById('helpModal').style.display = 'block';
+		}
+
+		function closeHelp() {
+			document.getElementById('helpModal').style.display = 'none';
+		}
+
+		window.onclick = (e) => {
+			if (e.target.id === 'helpModal') closeHelp();
+		};
+	</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Encryptor/Decryptor for text (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/tools/coder/coder_modern.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/tools/coder/coder_modern.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/tools/coder/coder_modern.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="EnCriptor/DeCriptor by kusaku">
+<meta property="og:description" content="Encryptor/Decryptor for text (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/tools/coder/coder_modern.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EnCriptor/DeCriptor by kusaku">
+<meta name="twitter:description" content="Encryptor/Decryptor for text (modern). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</HEAD>
+<body>
+	<form id="myform">
+		<center>
+			<textarea id="decoded">это пример простой шифровальной/дешифровальной машины. верхнее поле - нешифрованный текст, нижнее - шифрованый.
+для начала шифрования введите шифруемый текст, выберите параметры шифрования и нажмите кнопку "Encript top".
+для начала дешифрования введите шифрованный текст, выберите параметры дешифрования и нажмите кнопку "Decript bottom".
+в поле ключа вводится ключ. имеется возмижность выбора среди шести словарей - от полного (весь используемый в вводе диапазон символов) до краткого (только буквы, цифры, знаки переноса и табуляции). "morph" используется для более стойкого шифрования.
+ключ должен состоять из символов используемого словаря. "morph" может замедлить шифрование больших текстов. шифрованный текст не может содержать знаков табуляции, переносов, одиночных символов \ и " .
+для шифрования скриптов можно использовать следующий пример:
+
+function DeCriptor(string, key)
+{
+	var dic="!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+	var res = "";
+	var pos = 0;
+	for (var i=0; i<string.length; i++)
+	{
+	first = string.charAt(i);
+	second = key.charAt(pos);
+	res += dic.charAt((dic.indexOf(first) - dic.indexOf(second) + dic.length) % dic.length);
+	pos = (pos + 1) % key.length;
+	}
+	eval(res);
+}
+
+DeCriptor(%шифр%,%ключ%);
+
+чтобы предотвратить открытое использование ключа, можно использовать следующюю конструкцию:
+
+<script>
+<!--
+....
+document.write("//--" + ">");
+DeCriptor(%шифр%,%ключ%);
+//-->
+</script></textarea>
+			<div class="button-row">
+				<input type="button" value="Encript top" onclick="encryptTop()" style="min-width: 120px; width: auto;">
+				<input id="key" value="secretkey" style="text-align: center; min-width: 150px; width: auto;">
+				<input id="morph" type="checkbox">morph
+				<select id="dictionary">
+					<option selected value="dic_int">int</option>
+					<option value="dic_eng">eng</option>
+					<option value="dic_rus">rus</option>
+					<option value="dic_simple_int">simple_int</option>
+					<option value="dic_simple_eng">simple_eng</option>
+					<option value="dic_simple_rus">simple_rus</option>
+				</select>
+				<input type="button" value="Decript bottom" onclick="decryptBottom()" style="min-width: 120px; width: auto;">
+				<input type="button" value="Help" onclick="showHelp()" style="min-width: 80px; width: auto;">
+			</div>
+			<textarea id="encoded"></textarea>
+		</center>
+	</form>
+
+	<div id="helpModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="modal-close" onclick="closeHelp()">&times;</span>
+				<strong>ENCRYPTOR/DECRYPTOR - HELP</strong>
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">WHAT IS THIS?</div>
+				This is a symmetric encryption/decryption tool that uses a dictionary-based cipher algorithm. 
+				It allows you to encrypt and decrypt text using a secret key.
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">HOW IT WORKS:</div>
+				The encryption algorithm works by:<br>
+				1. Taking each character from your text<br>
+				2. Finding its position in the selected dictionary<br>
+				3. Taking the corresponding character from the key<br>
+				4. Adding their positions together (modulo dictionary length)<br>
+				5. Using the resulting character as the encrypted output<br><br>
+				Decryption reverses this process by subtracting positions instead of adding.
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">HOW TO USE:</div>
+				<strong>ENCRYPTION:</strong><br>
+				1. Enter your plain text in the top textarea<br>
+				2. Enter a secret key in the key field<br>
+				3. Select a dictionary (see below)<br>
+				4. Optionally check 'morph' for stronger encryption<br>
+				5. Click 'Encript top' button<br>
+				6. The encrypted text appears in the bottom textarea<br><br>
+				<strong>DECRYPTION:</strong><br>
+				1. Enter encrypted text in the bottom textarea<br>
+				2. Enter the same secret key used for encryption<br>
+				3. Select the same dictionary used for encryption<br>
+				4. Check 'morph' if it was used during encryption<br>
+				5. Click 'Decript bottom' button<br>
+				6. The decrypted text appears in the top textarea
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">DICTIONARIES:</div>
+				- <strong>int</strong>: Full international dictionary (all printable ASCII + Russian Cyrillic)<br>
+				- <strong>eng</strong>: English dictionary (ASCII printable characters only)<br>
+				- <strong>rus</strong>: Russian dictionary (Cyrillic characters only)<br>
+				- <strong>simple_int</strong>: Simplified international (alphanumeric + Cyrillic)<br>
+				- <strong>simple_eng</strong>: Simplified English (alphanumeric only)<br>
+				- <strong>simple_rus</strong>: Simplified Russian (numbers + Cyrillic only)<br><br>
+				<strong>IMPORTANT:</strong> The key must only contain characters from the selected dictionary!
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">MORPH FEATURE:</div>
+				When enabled, the encryption key automatically changes during encryption based on the encrypted output. 
+				This makes the encryption stronger but:<br>
+				- Slows down encryption/decryption of large texts<br>
+				- Must be enabled for both encryption AND decryption<br>
+				- The key evolves as encryption progresses
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">LIMITATIONS:</div>
+				- Encrypted text cannot contain raw tab characters, newlines, backslashes, or quotes<br>
+				- These characters are automatically escaped (\t, \n, \\, \")<br>
+				- Characters not in the selected dictionary are preserved as-is
+			</div>
+			<div class="modal-section">
+				<div class="modal-section-title">SECURITY NOTE:</div>
+				This is a simple educational tool. For real security, use modern encryption algorithms like AES. 
+				This tool is suitable for obfuscation and learning purposes only.
+			</div>
+		</div>
+	</div>
+</body>
+</html>

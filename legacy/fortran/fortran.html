@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fortran Projects - Legacy Projects</title>
+<meta name="description" content="Fortran programs from university studies">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy, Fortran">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/fortran/fortran.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/fortran/fortran.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/fortran/fortran.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Fortran Projects - Legacy - Kirill Arkhipenko">
+<meta property="og:description" content="Fortran programs from university studies. Author: Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/fortran/fortran.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fortran Projects - Legacy - Kirill Arkhipenko">
+<meta name="twitter:description" content="Fortran programs from university studies. kusaku, retrewert, aks1983.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+        
+        /* Modern card styling */
+        .project-card {
+            transition: all 0.2s ease-in-out;
+        }
+        html.light .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+        }
+        html.light .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        html.dark .project-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J8N1Q1GVVB');
+    </script>
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+        ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-6">
+                <a href="/legacy/index.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to legacy projects
+                </a>
+            </nav>
+            <h1 class="text-5xl font-bold text-gray-900 mb-3">Fortran Projects</h1>
+            <p class="text-lg text-gray-600 max-w-3xl">A collection of Fortran programs from university studies</p>
+        </header>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8 project-card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-3">Fortran Programs <span class="text-lg font-normal text-gray-600">(2002)</span></h2>
+            <p class="text-gray-600 mb-2">A collection of Fortran 90 programs written during university studies. These programs demonstrate numerical methods, statistical analysis, and algorithm implementation using modern Fortran features.</p>
+            <p class="text-gray-600 mb-4 text-sm italic">Fortran (Formula Translation) is one of the oldest high-level programming languages, still widely used in scientific computing and numerical analysis. These programs showcase Fortran 90 features including dynamic memory allocation, recursive subroutines, and modern programming constructs. We had a short Fortran course in the university, which introduced us to this powerful language for scientific computing.</p>
+            <div class="mt-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Programs:</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li><a href="/legacy/fortran/montecarlo.html" class="text-blue-600 hover:underline">Monte Carlo Method →</a> <span class="text-sm text-gray-500">(2002)</span> - Calculates the area of an ellipse using Monte Carlo random sampling method with iterative precision improvement</li>
+                    <li><a href="/legacy/fortran/readnsort.html" class="text-blue-600 hover:underline">Read and Sort →</a> <span class="text-sm text-gray-500">(2002)</span> - Reads numbers from a file, calculates mean and dispersion statistics, and sorts data using recursive quicksort algorithm</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

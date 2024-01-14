@@ -1,0 +1,23 @@
+# robots.txt for kusaku.su - Kirill Arkhipenko (Кирилл Архипенко), kusaku, retrewert, aks1983
+# Allow all crawlers to index the site
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://kusaku.su/sitemap.xml
+
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /

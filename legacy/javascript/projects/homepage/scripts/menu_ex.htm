@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+</HEAD>
+<SCRIPT LANGUAGE=javascript>
+<!--
+
+var HIDDEN = 0
+var SHOWN = -1;
+var mainMenu = null;
+
+function addHandlers(that)
+{
+	that.dispStyle = (that.obj.runtimeStyle.display == 'none') ? 'block' : that.obj.runtimeStyle.display;
+	that.Hide = new Function("this.obj.style.display = 'none'; this.state = HIDDEN;");
+	that.Show = new Function("this.obj.style.display = this.dispStyle; this.state = SHOWN;");
+	that.obj.onmouseover = new Function("status = getByObj(mainMenu, this).number;");
+	that.obj.onmouseout = new Function("mainMenu;");
+	that.obj.onclick = new Function("var a = getByObj(mainMenu, this); if (a.state == HIDDEN) {for (var i in a.child) a.child[i].Show()} else {for (var i in a.child) a.child[i].Hide();} if (a.state == HIDDEN) {a.state = SHOWN;} else {a.state == HIDDEN;}");
+}
+
+function MenuItem(obj, child, state, number, addH)
+{
+	this.obj = obj;
+	this.child = child;
+	this.state = state;
+	this.number = number;
+	if (addH) addHandlers(this);
+}
+
+function addItem(obj, place, addH)
+{
+	if (place==null)
+	{
+		mainMenu = new MenuItem(obj, null, SHOWN, -1)
+		return true;
+	}
+	if (!mainMenu) return false;
+	if (typeof(place) == 'number')
+	{
+		addChild(mainMenu, new MenuItem(obj, null, SHOWN, place, addH), place)
+	}
+	else if (typeof(place) == 'object')
+	{
+		var toItem = mainMenu;
+		for (var i=0; i<place.length - 1; i++)
+		{
+			try
+			{
+				toItem = toItem.child[place[i]];
+			}
+			catch(Exception)
+			{
+				alert("no such item for " + place[i] + ":" + i);
+				return false;
+			}
+		}
+		addChild(toItem, new MenuItem(obj, null, SHOWN, place[i], addH), place[i]);		
+	}
+	else return false;
+	return true;			
+}
+
+function addChild(menu, child, place)
+{
+	if (menu.child == null)
+	{
+		menu.child = new Array();
+		menu.child[place] = child;
+	}
+	else
+	{
+		menu.child[place] = child;
+	}
+}
+
+function getByObj(node, obj)
+{
+	if (!node) return false;
+	if (node.obj == obj) return node;
+	if (!node.child) return false
+	else
+	{
+		for (var c in node.child)
+		{
+			if ((typeof(node.child[c]) == 'object') && (ret = getByObj(node.child[c], obj))) return ret;
+
+		}
+	}
+	return false;
+}
+	
+//-->
+</SCRIPT>
+<BODY>
+<TABLE WIDTH=75% BORDER=1 CELLSPACING=1 CELLPADDING=1 id=main>
+	<TR id=lev1>
+		<TD id=lev11>lev11</TD><TD id=lev12>lev12</TD><TD id=lev13>lev13</TD>
+	</TR>
+	<TR id=lev2>
+		<TD id=lev21>lev21</TD><TD id=lev22>lev22</TD><TD id=lev23>lev23</TD>
+	</TR>
+	<TR id=lev3>
+		<TD id=lev31>lev31</TD><TD id=lev32>lev32</TD><TD id=lev33>lev33</TD>
+	</TR>
+</TABLE>
+
+<SCRIPT LANGUAGE=javascript>
+<!--
+addItem(main, null, true);
+addItem(lev1, 0, true);
+addItem(lev2, 1, true);
+addItem(lev3, 2, true);
+addItem(lev11, new Array(0,0), true);
+addItem(lev12, new Array(0,1), true);
+addItem(lev13, new Array(0,2), true);
+addItem(lev21, new Array(1,0), true);
+addItem(lev22, new Array(1,1), true);
+addItem(lev23, new Array(1,2), true);
+addItem(lev31, new Array(2,0), true);
+addItem(lev32, new Array(2,1), true);
+addItem(lev33, new Array(2,2), true);
+//-->
+</SCRIPT>
+
+</BODY>
+</HTML>

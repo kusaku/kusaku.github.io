@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gas Simulation (First Version) - Turbo Pascal Programs</title>
+<meta name="description" content="Gas Simulation First Version - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-first-version.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-first-version.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-first-version.html">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Gas Simulation (First Version) - Turbo Pascal Programs">
+<meta property="og:description" content="Gas Simulation First Version - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/gas/gas-simulation-first-version.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gas Simulation (First Version) - Turbo Pascal Programs">
+<meta name="twitter:description" content="Gas Simulation First Version - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+        html.light body { background: #ffffff; color: #24292f; }
+        html.dark body { background: #0d1117; color: #c9d1d9; }
+        html.light .bg-white { background-color: #ffffff; }
+        html.dark .bg-white { background-color: #161b22; }
+        html.light .text-gray-600 { color: #57606a; }
+        html.dark .text-gray-600 { color: #8b949e; }
+        html.light .text-gray-700 { color: #24292f; }
+        html.dark .text-gray-700 { color: #c9d1d9; }
+        html.light .text-gray-900 { color: #24292f; }
+        html.dark .text-gray-900 { color: #c9d1d9; }
+        html.light .border-gray-200 { border-color: #d0d7de; }
+        html.dark .border-gray-200 { border-color: #30363d; }
+        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
+        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
+
+        /* Link hover effects */
+        html.light a:hover { color: #0969da; }
+        html.dark a:hover { color: #1f6feb; }
+        html.dark pre { background: #161b22 !important; }
+        html.dark pre code { color: #c9d1d9; background: transparent !important; }
+        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
+        html.dark .hljs-keyword { color: #ff7b72; }
+        html.dark .hljs-string { color: #a5d6ff; }
+        html.dark .hljs-number { color: #79c0ff; }
+        html.dark .hljs-comment { color: #8b949e; }
+        html.dark .hljs-function { color: #d2a8ff; }
+        html.dark .hljs-variable { color: #ffa657; }
+    </style>
+<script>
+        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = () => {
+            const theme = localStorage.theme ?? 'system';
+            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+            document.documentElement.classList.toggle('light', !isDark);
+            document.documentElement.classList.toggle('dark', isDark);
+        };
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
+        hljs.highlightAll();
+    </script>    <script>
+        // Register Pascal language for highlight.js
+        hljs.registerLanguage('pascal', function(hljs) {
+            return {
+                keywords: {
+                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
+                    built_in: 'boolean char integer real text string',
+                    literal: 'true false'
+                },
+                contains: [
+                    hljs.C_LINE_COMMENT_MODE,
+                    hljs.C_BLOCK_COMMENT_MODE,
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.C_NUMBER_MODE
+                ]
+            };
+        });
+    </script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <nav class="mb-6">
+            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Turbo Pascal Projects
+            </a>
+        </nav>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Gas Simulation (First Version)</h1>
+        <p class="text-gray-600 mb-6">An early version of the gas particle simulation program.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
+            <pre><code class="language-pascal">﻿program Oscill;
+
+uses
+  Crt, Graph;
+
+const
+   Memory  =    100;
+   Windows =      4;
+   Count   =     49;
+   dt      =   5e-3;
+   MaxStat =    120;
+
+type
+  ResolutionPreference = (Lower, Higher);
+  ColorList = array [1..Windows] of integer;
+  TVector = record
+    x,y : Double;
+  end;
+  TParticle = record
+    acc,
+    act,
+    vel,
+    cur : TVector;
+    radius : Double;
+    underF : Boolean;
+  end;
+
+var
+  Xmax,
+  Ymax,
+  ViewXmax,
+  ViewYmax : integer;
+  Colors: ColorList;
+  Ch: char;
+  BackColor:integer;
+  GraphDriver, GraphMode : integer;
+  MaxColors: word;
+  Particles: array[1..Count] of TParticle;
+  BoxXmax, BoxYmax, BoxXmin, BoxYmin: Double;
+  CurPage : Integer;
+  StatData : array[1..MaxStat, 1..Count] of Double;
+  EnableStat, StatChanged : Boolean;
+  CurStat : Integer;
+function IntToStr(I: Real): String;
+var
+  S: string[16];
+begin
+  Str(I:16:8, S);
+  IntToStr := S;
+end;
+
+procedure ChangePage;
+begin
+  if CurPage = 0 then
+    begin
+        CurPage := 1;
+        SetActivePage(1);
+        SetVisualPage(0);
+    end
+  else
+    begin
+        CurPage := 0;
+        SetActivePage(0);
+        SetVisualPage(1);
+    end;
+end;
+
+procedure FullPort;
+{ Set the view port to the entire screen }
+begin
+  SetViewPort(0, 0, Xmax, Ymax, ClipOn);
+end; { FullPort }
+
+procedure Frame;
+begin
+  SetViewPort(0, 0, Xmax, Ymax-(TextHeight(&#x27;M&#x27;)+4)-1,ClipOn);
+  SetColor(MaxColors);
+  Rectangle(0, 0, Xmax-1, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-1)-1);
+  SetViewPort(1, 1, Xmax-2, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-1)-2,ClipOn);
+end  { Frame };
+
+procedure MessageFrame(Msg:string);
+begin
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  Frame;
+  ChangePage;
+  FullPort;
+  SetColor(MaxColors);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+  SetLineStyle(SolidLn, 0, NormWidth);
+  SetFillStyle(EmptyFill, 0);
+  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  Frame;
+end;
+
+procedure ShowStats;
+var i: Integer;
+    Nrg: Double;
+begin
+     Inc(CurStat);
+
+     for i:=1 to Count do
+         StatData[CurStat, i] := Sqrt(Particles[i].vel.x * Particles[i].vel.x + Particles[i].vel.y * Particles[i].vel.y);
+
+     MessageFrame(Concat(&#x27;Current measure, # &#x27;, IntToStr(CurStat)));
+end;
+
+procedure DrawStatPlot;
+const
+    countGaps = 30;
+var maxVel: Double;
+    i, k, m, maxGap: Integer;
+    Gap: array[1..countGaps] of Integer;
+begin
+    maxVel := 0;
+    for i:=1 to MaxStat do
+        for k:=1 to Count do
+            if maxVel &lt; StatData[i, k] then maxVel := StatData[i, k];
+
+    for i:=1 to countGaps do Gap[i] := 0;
+
+    for i:=1 to MaxStat do
+        for k:=1 to Count do
+             for m:=1 to countGaps do
+                  if (StatData[i,k] &gt; maxVel/countGaps*(m - 1)) and (StatData[i,k] &lt; maxVel/countGaps*(m))
+                     then Gap[m] := Gap[m] + 1;
+    maxGap := 0;
+    for i:=1 to countGaps do
+        if maxGap &lt; Gap[i] then maxGap := Gap[i];
+
+
+    ChangePage;
+    Graph.ClearViewPort;
+    Graph.Rectangle(Round(BoxXmin), Round(BoxYmin), Round(BoxXmax), Round(BoxYmax));
+
+    SetColor(4);
+    for i:=1 to countGaps do
+        Graph.Rectangle(
+        Round(BoxXmin + (BoxXmax - BoxXmin)/countGaps*(i-1)),
+        Round(BoxYmax),
+        Round(BoxXmin + (BoxXmax - BoxXmin)/countGaps*i),
+        Round(BoxYmax - (BoxYmax - BoxYmin)/maxGap*Gap[i]));
+    ChangePage;
+
+end;
+
+procedure WaitToGo;
+var
+  Ch : char;
+begin
+  MessageFrame(&#x27;Press any key to continue... Esc aborts&#x27;);
+  repeat until KeyPressed;
+  Ch := ReadKey;
+  if Ch = #27 then begin
+      CloseGraph;
+      Writeln(&#x27;All done.&#x27;);
+      Halt(1);
+    end
+  else
+    ClearViewPort;
+  MessageFrame(&#x27;Press a key to stop action, Esc quits.&#x27;);
+end;
+
+procedure CheckForUserInput;
+begin
+  if KeyPressed then begin
+    Ch := ReadKey;
+    if Ch = &#x27;s&#x27; then ShowStats
+    else if Ch &lt;&gt; #27 then WaitToGo;
+  end;
+end;
+procedure DrawPoints;
+var
+   i : Integer;
+begin
+  ChangePage;
+  Graph.ClearViewPort;
+  SetColor(7);
+  Graph.Rectangle(Round(BoxXmin), Round(BoxYmin), Round(BoxXmax), Round(BoxYmax));
+
+  for i:=1 to Count do
+    if Particles[i].underF then
+       begin
+           SetColor(4);
+           SetFillStyle(SolidFill, 4);
+           Graph.FillEllipse(Round(Particles[i].cur.x), Round(Particles[i].cur.y), 3, 3);
+       end
+    else
+       begin
+             SetColor(9);
+           SetFillStyle(SolidFill, 9);
+           Graph.FillEllipse(Round(Particles[i].cur.x), Round(Particles[i].cur.y), 3, 3);
+       end;
+end;
+
+function DistFromTo(This, That : TParticle): Double;
+var res: Double;
+begin
+     res := Sqrt((This.cur.x - That.cur.x)*(This.cur.x - That.cur.x) + (This.cur.y - That.cur.y)*(This.cur.y - That.cur.y));
+     if res = 0 then DistFromTo := 1
+     else DistFromTo := res;
+end;
+
+function GetForce(This, That : TParticle): Double;
+var res : Double;
+begin
+   res := This.radius - DistFromTo(This, That);
+   if res &gt; 0 then GetForce := res * 1e4
+   else GetForce := 0;
+end;
+
+function GetForceX(This, That : TParticle): Double;
+begin
+   GetForceX := GetForce(This, That) * (This.cur.x - That.cur.x) / DistFromTo(This, That);
+end;
+
+function GetForceY(This, That : TParticle): Double;
+begin
+   GetForceY := GetForce(This, That) * (This.cur.y - That.cur.y) / DistFromTo(This, That);
+end;
+
+procedure MainCycle(dt: Double);
+var i,k : Integer;
+    wall: TParticle;
+begin
+     for i:=1 to Count do
+     begin
+          Particles[i].acc.x := 0;
+          Particles[i].acc.y := 0;
+     end;
+
+     for i:=1 to Count do
+     begin
+          wall.radius := 3;
+          wall.cur.x := BoxXmin;
+          wall.cur.y := Particles[i].cur.y;
+          Particles[i].acc.x :=  Particles[i].acc.x + GetForceX(Particles[i], wall);
+          Particles[i].acc.y :=  Particles[i].acc.y + GetForceY(Particles[i], wall);
+          wall.cur.x := BoxXmax;
+          wall.cur.y := Particles[i].cur.y;
+          Particles[i].acc.x :=  Particles[i].acc.x + GetForceX(Particles[i], wall);
+          Particles[i].acc.y :=  Particles[i].acc.y + GetForceY(Particles[i], wall);
+          wall.cur.x := Particles[i].cur.x;
+          wall.cur.y := BoxYmin;
+          Particles[i].acc.x :=  Particles[i].acc.x + GetForceX(Particles[i], wall);
+          Particles[i].acc.y :=  Particles[i].acc.y + GetForceY(Particles[i], wall);
+          wall.cur.x := Particles[i].cur.x;
+          wall.cur.y := BoxYmax;
+          Particles[i].acc.x :=  Particles[i].acc.x + GetForceX(Particles[i], wall);
+          Particles[i].acc.y :=  Particles[i].acc.y + GetForceY(Particles[i], wall);
+     end;
+
+     EnableStat := True;
+
+     for i:=1 to Count do
+        for k:=1 to Count do
+           if i&lt;&gt;k then
+               begin
+                    Particles[i].acc.x :=  Particles[i].acc.x + GetForceX(Particles[i], Particles[k]);
+                    Particles[i].acc.y :=  Particles[i].acc.y + GetForceY(Particles[i], Particles[k]);
+                    if (Particles[i].acc.x &lt;&gt; 0) or (Particles[i].acc.y &lt;&gt; 0) then Particles[i].underF := True
+                    else Particles[i].underF := False;
+                    EnableStat := EnableStat and not Particles[i].underF;
+               end;
+
+     StatChanged := StatChanged or not EnableStat;
+
+     for i:=1 to Count do
+     begin
+          Particles[i].vel.x := Particles[i].vel.x + (Particles[i].acc.x + Particles[i].acc.x)/2 * dt;
+          Particles[i].vel.y := Particles[i].vel.y + (Particles[i].acc.y + Particles[i].acc.y)/2 * dt;
+          Particles[i].cur.x := Particles[i].cur.x + Particles[i].vel.x * dt;
+          Particles[i].cur.y := Particles[i].cur.y + Particles[i].vel.y * dt;
+          Particles[i].act.x := Particles[i].acc.x;
+          Particles[i].act.y := Particles[i].acc.y;
+     end;
+
+     if EnableStat and StatChanged then
+        begin
+         ShowStats;
+         StatChanged := False;
+        end;
+     DrawPoints;
+end;
+
+procedure DoMagic;
+var i : Integer;
+    test: TParticle;
+begin
+     BoxXmin := ViewXmax/6*1;
+     BoxXmax := ViewXmax/6*5;
+     BoxYmin := ViewYmax/6*1;
+     BoxYmax := ViewYmax/6*5;
+
+     Randomize;
+
+     for i:=1 to Count do
+         begin
+              Particles[i].cur.x := (BoxXmax - BoxXmin) * Random + BoxXmin;
+              Particles[i].cur.y := (BoxYmax - BoxYmin) * Random + BoxYmin;
+{              Particles[i].vel.x := 500 * (0.5 - Random);
+              Particles[i].vel.y := 500 * (0.5 - Random);}
+              Particles[i].vel.y := 170;
+              Particles[i].radius := 7;
+         end;
+
+  repeat
+    MainCycle(dt);
+{    test.cur.x := Particles[1].cur.x + 1;
+    test.cur.y := Particles[1].cur.y + 1;
+   MessageFrame(IntToStr(Particles[1].acc.x));}
+    CheckForUserInput;
+  until (Ch = #27) or (CurStat = MaxStat);
+  if Ch&lt;&gt;#27 then DrawStatPlot;
+  WaitToGo;
+end;
+
+procedure TestGraphError(GraphErr: integer);
+begin
+  if GraphErr &lt;&gt; grOk then begin
+    Writeln(&#x27;Graphics error: &#x27;, GraphErrorMsg(GraphErr));
+    repeat until keypressed;
+    ch := readkey;
+    Halt(1);
+  end;
+end;
+
+procedure Init;
+var
+  Err, I: integer;
+  StartX, StartY: integer;
+  Resolution: ResolutionPreference;
+  s: string;
+begin
+  Resolution := Lower;
+  if paramcount &gt; 0 then begin
+    s := paramstr(1);
+    if s[1] = &#x27;/&#x27; then
+      if upcase(s[2]) = &#x27;H&#x27; then
+        Resolution := Higher;
+  end;
+
+  Ch := &#x27; &#x27;;
+  GraphDriver := Detect;
+  DetectGraph(GraphDriver, GraphMode);
+  TestGraphError(GraphResult);
+  case GraphDriver of
+    CGA        : begin
+                   GraphDriver := CGA;
+                   GraphMode := CGAC1;
+                 end;
+
+    MCGA       : begin
+                   case GraphMode of
+                     MCGAMed, MCGAHi: GraphMode := MCGAC1;
+                   end;
+                 end;
+
+    EGA         : begin
+                    If Resolution = Lower then
+                      GraphMode := EGALo
+                    else
+                      GraphMode := EGAHi;
+                  end;
+
+    EGA64       : begin
+                    If Resolution = Lower then
+                      GraphMode := EGA64Lo
+                    else
+                      GraphMode := EGA64Hi;
+                  end;
+
+     PC3270     : begin
+                   GraphDriver := CGA;
+                   GraphMode := CGAC1;
+                 end;
+
+
+     ATT400     : case GraphMode of
+                    ATT400C1,
+                    ATT400C2,
+                    ATT400Med,
+                    ATT400Hi  :
+                      begin
+                        GraphMode := ATT400C1;
+                      end;
+                  end;
+
+  end;
+  InitGraph(GraphDriver, GraphMode, &#x27;&#x27;);
+  TestGraphError(GraphResult);
+  SetGraphMode(1);
+  SetTextStyle(DefaultFont, HorizDir, 1);
+  SetTextJustify(CenterText, TopText);
+
+  MaxColors := GetMaxColor;
+  BackColor := 0;
+  Xmax := GetMaxX;
+  Ymax := GetMaxY;
+  ViewXmax := Xmax - 2;
+  ViewYmax := (Ymax - (TextHeight(&#x27;M&#x27;) + 4) - 1) - 2;
+end; {init}
+
+
+begin
+   Init;
+   Frame;
+   MessageFrame(&#x27;Press a key to stop action, Esc quits.&#x27;);
+   DoMagic;
+   CloseGraph;
+   RestoreCrtMode;
+   Writeln(&#x27;The End.&#x27;);
+end.
+</code></pre>
+        </div>
+    </div>
+</body>
+</html>

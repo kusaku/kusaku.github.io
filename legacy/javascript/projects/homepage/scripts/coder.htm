@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+<META name=VI60_defaultClientScript content=JavaScript>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE>EnCriptor/DeCriptor by kusaku</TITLE>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<style>
+BODY
+{
+ background:#696 url('bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:scroll;
+ margin:0px;
+ padding:0px;
+ font-family:arial;
+ color:#363;
+}
+
+INPUT, SELECT, OPTION, TEXTAREA
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+}
+</style>
+<SCRIPT LANGUAGE=javascript>
+<!--
+
+dic_int = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t "
+dic_eng = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n\r\t "
+dic_rus = "!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t "
+dic_simple_int = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t "
+dic_simple_eng = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n\r\t "
+dic_simple_rus = "0123456789АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t "
+
+function EnCriptor(string, key, morph, dic)
+{
+	var res = "";
+	var pos = 0;
+	for (var i=0; i<string.length; i++)
+	{		
+	first = string.charAt(i);		
+	second = key.charAt(pos);
+	var a = dic.charAt((dic.indexOf(first) + dic.indexOf(second)) % dic.length);
+	if (a == "\\") a = "\\\\";
+	if (a == "\"") a = "\\\"";
+	if (a == "\t") a = "\\t";
+	if (a == "\r") a = "\\r";
+	if (a == "\n") a = "\\n";
+	res += a;
+	pos = (pos + 1) % key.length;
+	if (morph & !pos) key = eval("\"" + res + "\".substr( + \"" + res + "\".length - key.length)");
+	if (res.length%100==0) status = "progress " + Math.round(res.length/string.length*1000)/10 + "%..."
+	}
+	status = "";
+	return res;
+}
+
+function DeCriptor(string, key, morph, dic)
+{
+	try
+	{
+		eval("string = \"" + string + "\"");
+	}
+	catch (Exception)
+	{
+		return "Troubles in input, check if \", \\n, \\r, \\t or \\ are persist in code."
+	}
+	var res = "";
+	var pos = 0;	
+	for (var i=0; i<string.length; i++)	
+	{		
+	first = string.charAt(i);
+	second = key.charAt(pos);		
+	res += dic.charAt((dic.indexOf(first) - dic.indexOf(second) + dic.length) % dic.length);		
+	pos = (pos + 1) % key.length;
+	if (morph & !pos) key = string.substr(res.length - key.length);
+	if (res.length%100==0) status = "progress " + Math.round(res.length/string.length*1000)/10 + "%..."
+	}	
+	status = "";
+	return res;
+}
+
+//-->
+</SCRIPT>
+</HEAD>
+<BODY>
+<form id=myform>
+<center><TEXTAREA id=decoded style="HEIGHT: 45%; WIDTH: 95%">это пример простой шифровальной/дешифровальной машины. верхнее поле - нешифрованный текст, нижнее - шифрованый.
+для начала шифрования введите шифруемый текст, выберите параметры шифрования и нажмите кнопку "Encript top".
+для начала дешифрования введите шифрованный текст, выберите параметры дешифрования и нажмите кнопку "Decript bottom".
+в поле ключа вводится ключ. имеется возмижность выбора среди шести словарей - от полного (весь используемый в вводе диапазон символов) до краткого (только буквы, цифры, знаки переноса и табуляции). "morph" используется для более стойкого шифрования. 
+ключ должен состоять из символов используемого словаря. "morph" может замедлить шифрование больших текстов. шифрованный текст не может содержать знаков табуляции, переносов, одиночных символов \ и " .
+для шифрования скриптов можно использовать следующий пример:
+
+function DeCriptor(string, key)
+{
+	var dic="!\"#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя\n\r\t ";
+	var res = "";
+	var pos = 0;	
+	for (var i=0; i&lt;string.length; i++)	
+	{		
+	first = string.charAt(i);
+	second = key.charAt(pos);		
+	res += dic.charAt((dic.indexOf(first) - dic.indexOf(second) + dic.length) % dic.length);	
+	pos = (pos + 1) % key.length;
+	}	
+	eval(res);
+}
+
+DeCriptor(%шифр%,%ключ%);
+
+чтобы предотвратить открытое использование ключа, можно использовать следующюю конструкцию:
+
+&lt;script&gt;
+&lt;--
+....
+document.write("//--" + "&gt;");
+DeCriptor(%шифр%,%ключ%);
+//--&gt;
+&lt;/script&gt;
+</TEXTAREA><br>
+<INPUT type="button" value="Encript top" onclick="myform.encoded.value=EnCriptor(myform.decoded.value,myform.key.value,myform.morph.checked,eval(myform.dictionary[myform.dictionary.selectedIndex].value))" style="WIDTH: 15%">
+<INPUT id=key value="secretkey" style="TEXT-ALIGN: center; WIDTH: 20%">
+<INPUT id=morph type=checkbox>morph
+<SELECT id=dictionary>
+<OPTION selected value=dic_int>int</OPTION>
+<OPTION value=dic_eng>eng</OPTION>
+<OPTION value=dic_rus>rus</OPTION>
+<OPTION value=dic_simple_int>simple_int</OPTION>
+<OPTION value=dic_simple_eng>simple_eng</OPTION>
+<OPTION value=dic_simple_rus>simple_rus</OPTION>
+</SELECT>
+<INPUT type="button" value="Decript bottom" onclick="myform.decoded.value=DeCriptor(myform.encoded.value,myform.key.value,myform.morph.checked,eval(myform.dictionary[myform.dictionary.selectedIndex].value))" style="WIDTH: 15%"><br><TEXTAREA id=encoded style="HEIGHT: 45%; WIDTH: 95%"></TEXTAREA>
+</center>
+</form>
+</BODY>
+</HTML>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<title></title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<style>
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+  color: #000000;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 100;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5em;
+  text-indent: 1.2em;
+}
+
+p > * {
+  line-height: normal;
+  text-indent: 0;
+}
+
+.column {
+  width: 80%;
+  margin: 30px auto;
+  overflow: auto;
+}
+
+.col1, .col2 {
+  width: 50%;
+}
+
+.col1 {
+  float: left;
+  clear: left;
+}
+
+.col2 {
+  float: right;
+  clear: right;
+}
+
+.col1 > p, .col2 > p {
+  padding-right: 80px;
+}
+
+table {
+  margin: 0 auto;
+}
+
+.mdash {
+  padding: 0;
+  margin-left: -13px;
+}
+
+.mdash li {
+  line-height: 1.5;
+  list-style: none;
+}
+
+.mdash li:before {
+  content: '';
+  width: 9px;
+  height: 1px;
+  background-color: #858585;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+a[rel] {
+  color: #353434;
+  border-bottom: 1px dashed #353434;
+}
+
+a[href] {
+  color: #0070ed;
+  border: none;
+}
+
+/* Controls */
+
+.control {
+  font-size: 0;
+  vertical-align: middle;
+}
+
+.rating-stars {
+  display: inline-block;
+  margin: 3px 5px;
+}
+
+.rating-stars > input {
+  display: none;
+}
+
+.rating-stars > label {
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAkCAYAAACE7WrnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAitJREFUeNq0lDFoGlEYx7+XEyGTEEiXlIKFTJIMEToEQkAIHAjBoQGhSAXBqKRgFkkQChkEMRCy6ZBQuwQDIXVo4aBT6VA6mGzugXSpU4bG03i8/J9cE0+9O3Oagx/f3Xuff9/3vff+jHNOk3im7BLq9foamBtbqNPpxEHMLo9ZlVar1WYRrsEfMO/3+zVHK2q32xHgBl4QcFxaq9WKAdKJOypNUZQ3CL97FwheyrLcMBWqVquf8B51sOtCfDcUCh08rKhSqWwhHAJpRBGxARvhcPjXQGnlcnkV4RzM2Ih8B++i0WjDtEelUukVwqWF2DHYTCQShqPg6s9SVVX8i8diNe50Oq3Zbj+EAkACZEIwn88P9NE15OwEez7F6j4AUe4emNZLlsE3SyGc4P9CJyCVy+VuxEc2m/2CcATEhqz3CxmanclkFhC+imYWCgVlWIOQk0TYAa+Row3tEW65BnxmIuLBXBE5y8Az8u2fqLFNTqjJ1sD4Dkl3FAfjOST9ZQaHpBfcmUOSShHgBl7g3CHpFiXddqPAmUPSBRvqkLTEzR2SfrKxHJJW+KNDksIcOSTJfNAh6Yw9ySHpLTd3SPrMRnJIes+tHZL+ka1DUorbOySEAkACZEKQ9plkL9REYrMbBQ0QBhnQ1MdmgGwvpEJI7cYTME8f+SnYx/si+KHPrQ/8TjT7gW1aAFdANowbc5J6jtQ7PtV30zXgowNu6pCYKyJnGTyPQ94LMABGKVcUD/7A3QAAAABJRU5ErkJggg==');
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  cursor: pointer;
+}
+
+.rating-stars:hover > label:hover ~ label,
+.rating-stars:not(:hover) > input:checked ~ label {
+  background-position: 0 0;
+}
+
+.progress-bar {
+  margin: 3px 5px;
+  display: inline-block;
+  height: 13px;
+  width: 210px;
+  border-radius: 7px;
+  box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, .29);
+  position: relative;
+}
+
+.progress-bar .progress-bar-bar {
+  display: inline-block;
+  height: 100%;
+  border-radius: 7px;
+  background: linear-gradient(to bottom, #abff58 0%, #28bf14 50%, #8bda1a 90%, #28bf14 100%);
+  background: -ms-linear-gradient(top, #abff58 0%, #28bf14 50%, #8bda1a 90%, #28bf14 100%);
+}
+
+.progress-bar .progress-bar-text {
+  text-align: center;
+  font-size: 9px;
+  line-height: 13px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Button */
+.button {
+  display: inline-block;
+  position: relative;
+  font-family: ​"PT Sans", sans-serif;;
+  font-size: 11px;
+  min-height: 18px;
+  line-height: 11px;
+  background: linear-gradient(to bottom, #f2f2f2 30%, #e2e2e2 70%);
+  background: -ms-linear-gradient(top, #f2f2f2 30%, #e2e2e2 70%);
+  border-radius: 6px;
+  padding: 2px 17px 3px;
+  margin: 3px 5px;
+  text-shadow: 1px 1px 0 #FFFFFF;
+  outline: 0 none;
+  border: 0 none;
+  cursor: pointer;
+  overflow: visible;
+}
+
+/* Gradient border */
+.button:before {
+  background: linear-gradient(to bottom, #e5e5e5 0%, #a8a8a8 100%);
+  background: -ms-linear-gradient(top, #e5e5e5 0%, #a8a8a8 100%);
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  right: -1px;
+  z-index: -1;
+  border-radius: 7px;
+  display: block;
+}
+
+.button:focus {
+  box-shadow: 0px 0px 3px 0px rgba(0, 35, 219, .94);
+}
+
+.button:focus:not(:active):before {
+  display: none;
+}
+
+.button:hover {
+  background: linear-gradient(to bottom, #feffeb 30%, #fdffcf 70%);
+}
+
+.button:active {
+  background: linear-gradient(to bottom, #f2f2f2 30%, #e3e3e3 70%);
+  background: -ms-linear-gradient(top, #f2f2f2 30%, #e3e3e3 70%);
+  box-shadow: inset 0px 2px 3px -1px rgba(0, 0, 0, .35);
+  text-shadow: none;
+  padding: 3px 17px 2px
+}
+
+.button:active:before {
+  background: linear-gradient(to bottom, #a6a6a6 0%, #e3e3e3 100%);
+  background: -ms-linear-gradient(top, #a6a6a6 0%, #e3e3e3 100%);
+}
+
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</script>
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<meta name="description" content="Yandex CSS3 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<meta name="author" content="Kirill Arkhipenko">
+<link rel="canonical" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css3-layout.html">
+<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css3-layout.html">
+<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css3-layout.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Legacy - Kirill Arkhipenko">
+<meta property="og:description" content="Yandex CSS3 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta property="og:url" content="https://kusaku.su/legacy/javascript/experiments/yandex/yandex-css3-layout.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="kusaku.su">
+<meta property="og:image" content="https://kusaku.su/avatar.webp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Legacy - Kirill Arkhipenko">
+<meta name="twitter:description" content="Yandex CSS3 layout demo (multi-column). Legacy JavaScript by Kirill Arkhipenko.">
+<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
+</head>
+<body>
+<div class="column">
+  <p>
+    Рейтинг -
+    <span class="control rating-stars">
+      <input type="radio" name="rating" checked="checked"/>
+      <label for="star1">1 star</label><input type="radio" id="star1" name="rating" value="1"/>
+      <label for="star2">2 stars</label><input type="radio" id="star2" name="rating" value="2"/>
+      <label for="star3">3 stars</label><input type="radio" id="star3" name="rating" value="3"/>
+      <label for="star4">4 stars</label><input type="radio" id="star4" name="rating" value="4"/>
+      <label for="star5">5 stars</label><input type="radio" id="star5" name="rating" value="5"/>
+    </span>, прогресс-бар -
+    <span class="control progress-bar">
+      <span class="progress-bar-bar" style="width: 20%;"></span>
+      <span class="progress-bar-text">20%</span>
+    </span> и кнопка -
+    <button class="control button" onclick="">Кнопка</button>
+  </p>
+
+  <table>
+    <tr>
+      <td>
+        <button class="control button" onclick="">Кнопка 1</button>
+      </td>
+      <td>
+        <button class="control button" onclick="">Кнопка 2</button>
+      </td>
+      <td>
+        <button class="control button" onclick="">Кнопка 3</button>
+      </td>
+    </tr>
+  </table>
+
+  <ul>
+    <li>
+      <button class="control button" onclick="">Кнопка с очень длинным текстом, которая никуда не помещается, но тем не менее существует.</button>
+    </li>
+    <li>
+      <button class="control button" onclick="">Кнопка</button>
+    </li>
+    <li>
+      <button class="control button" onclick=""></button>
+    </li>
+  </ul>
+
+  <h1 class="col1">Тема: &laquo;Сюжетный анапест: основные моменты&raquo;</h1>
+
+  <div class="col1">
+
+    <p>
+      Нельзя восстановить истинной хронологической последовательности событий, потому что мелькание мыслей параллельно. Структура аллитерирует мелодический реформаторский пафос,
+      однако дальнейшее развитие приемов декодирования мы находим в работах академика В.Виноградова. Аллюзия наблюдаема. Аллитерация, как бы это ни казалось парадоксальным,
+      параллельна. Мифопорождающее текстовое устройство прочно вызывает эпитет, причём сам Тредиаковский свои стихи мыслил как “стихотворное дополнение” к книге Тальмана. </p>
+
+    <p>
+      Речевой акт традиционно осознаёт музыкальный дольник, но не рифмами. Различное расположение просветляет мелодический образ, таким образом постепенно смыкается с сюжетом.
+      Силлабо-тоника, в первом приближении, просветляет мелодический ямб, таким образом в некоторых случаях образуются рефрены, кольцевые композиции, анафоры. </p>
+  </div>
+  <div class="col2">
+    <p>
+      Представленный лексико-семантический анализ является психолингвистическим в своей основе, но мифопорождающее текстовое устройство аллитерирует мифологический генезис
+      свободного стиха, об этом свидетельствуют краткость и завершенность формы, бессюжетность, своеобразие тематического развертывания. </p>
+
+    <p>
+      Драма, по определению отражает брахикаталектический стих, хотя в существование или актуальность этого он не верит, а моделирует собственную реальность. Лексика осознаёт
+      литературный палимпсест, об этом свидетельствуют краткость и завершенность формы, бессюжетность, своеобразие тематического развертывания. </p>
+
+    <ul class="mdash">
+      <li>Курит ли трупка мой</li>
+      <li><a href="#">из трупка тфой пихтишь</a></li>
+      <li><a rel="tipbox" title="Или мой кафе пил">Или мой кафе пил</a></li>
+      <li>тфой в щашешка сидишь</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

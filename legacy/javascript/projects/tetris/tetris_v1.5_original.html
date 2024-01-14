@@ -1,0 +1,1237 @@
+<!doctype html public "-//w3c//dtd html 3.2 final//ru">
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META NAME="generator" CONTENT="microsoft visual studio 6.0">
+<TITLE>tetris v1.5</TITLE>
+<STYLE>
+BODY
+{
+ margin:0px;
+ padding:0px;
+ background:#696 url('bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:hidden;
+}
+
+A
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+A:hover
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:active
+{
+ color:#fc6;
+ text-decoration:none;
+}
+
+A:visited
+{
+ color:#9c9;
+ text-decoration:none;
+}
+
+HR
+{
+ margin:0px;
+ height:1px;
+ width:100%;
+ color:#9c9;
+ text-align:center;
+}
+
+TABLE 
+{
+ border:none;
+ border-collapse:collapse;
+}
+
+TH 
+{
+ color:#363;
+ font-size:12pt;
+ font-weight:bold;
+}
+
+TD 
+{
+ margin:0px;
+ padding:0px;
+ color:#363;
+ font-size:10pt;
+ border:none;
+ vertical-align:middle;
+ text-align:center;
+}
+
+TABLE.simple
+{
+ border:1px solid #9c9;
+ border-top-width:10px;
+}
+
+TABLE.simple TD
+{ 
+ border:1px solid #9c9;
+}
+
+TABLE.tetris
+{
+ border:1px solid #9c9;
+ border-top:10px solid #9c9;
+ margin:10px;
+}
+
+TABLE.tetris TD
+{
+ border:none;
+}
+
+TABLE.tetris TD.empty
+{ 
+ background:transparent;
+}
+
+TABLE.tetris TD.red
+{ 
+ background:red red.gif;
+}
+
+TABLE.tetris TD.orange
+{ 
+ background:orange orange.gif;
+}
+
+TABLE.tetris TD.yellow
+{ 
+ background:yellow yellow.gif;
+}
+
+TABLE.tetris TD.green
+{ 
+ background:green green.gif;
+}
+
+TABLE.tetris TD.aqua
+{ 
+ background:aqua aqua.gif;
+}
+
+TABLE.tetris TD.blue
+{ 
+ background:blue blue.gif;
+}
+
+TABLE.tetris TD.purple
+{ 
+ background:purple purple.gif;
+}
+
+TABLE.tetris TD.gray
+{ 
+ background:gray gray.gif;
+}
+
+TABLE.tetris TD.brown
+{ 
+ background:brown brown.gif;
+}
+
+TABLE.tetris TD.aquamarine
+{ 
+ background:aquamarine aquamarine.gif;
+}
+
+TABLE.tetris TD.honeydew
+{ 
+ background:honeydew honeydew.gif;
+}
+
+TABLE.tetris TD.tomato
+{ 
+ background:tomato tomato.gif;
+}
+
+TABLE.tetris TD.palevioletred
+{ 
+ background:palevioletred palevioletred.gif;
+}
+
+TABLE.tetris TD.dimgray
+{ 
+ background:dimgray dimgray.gif;
+}
+
+TABLE.tetris TD.greenyellow
+{
+ background:greenyellow greenyellow.gif;
+}
+
+TABLE.tetris TD.filled
+{
+ background:#363 filled.gif;
+}
+
+INPUT, SELECT, OPTION
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+}
+
+.menu_passive,.menu_active,.menu_hover
+{
+ margin:5px;
+ padding:5px;
+ border-width:1px;
+ border-style:solid;
+ text-align:center;
+ font-family:arial;
+ font-size:12pt;
+ font-weight:900;
+ cursor:hand;
+}
+
+.menu_hover
+{
+ border-top-color:#9c9;
+ border-right-color:#363;
+ border-bottom-color:#363;
+ border-left-color:#9c9;
+ color:#9c9;
+}
+
+.menu_active
+{
+ padding:6px 4px 4px 6px;
+ border-top-color:#363;
+ border-right-color:#9c9;
+ border-bottom-color:#9c9;
+ border-left-color:#363;
+ color:#fc6;
+}
+
+.menu_passive
+{
+ border-color:#696;
+ color:#363;
+}
+
+</STYLE>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Tetris game (v1.5 original). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/tetris/tetris_v1.5_original.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/tetris/tetris_v1.5_original.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/tetris/tetris_v1.5_original.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="tetris v1.5">
+<META PROPERTY="og:description" CONTENT="Tetris game (v1.5 original). Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/tetris/tetris_v1.5_original.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="tetris v1.5">
+<META NAME="twitter:description" CONTENT="Tetris game (v1.5 original). Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+
+<SCRIPT LANGUAGE=javascript>
+<!--
+/*(c) kusaku 2001 */
+
+var tetrisrows = 20;
+var tetriscolumns = 10;
+var cellhi = 16;
+var cellwi = cellhi;
+var firstplay = true;
+var totalscore = 0;
+var tetris;
+var shapes;
+var shtraff = 50;
+var actions = new Array();
+var enabledAction = false;
+var maxRecords = 5;
+var top10 = new Array(maxRecords);
+var TAct;
+
+var speeds = new Array(1000, 902, 810, 722, 640, 562, 490, 422, 360, 302, 250, 202, 160, 122, 90, 62, 40, 22, 10);
+var colorStyles = new Array("empty", "red", "orange", "yellow", "green", "aqua", "blue", "purple", "gray", "brown", "aquamarine", "honeydew", "tomato", "palevioletred", "dimgray", "greenyellow", "filled");
+var simpleStyles = new Array("empty", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled", "filled");
+
+var shapesForTritix = new Array(
+	new Array(new Array(1,1,1)),
+	new Array(new Array(2,2),
+			  new Array(0,2)),
+	new Array(new Array(3,3),
+			  new Array(3,0)));
+	
+var shapesForTetris = new Array(
+	new Array(new Array(1,1,1),
+			  new Array(0,0,1)),
+	new Array(new Array(2,2,2),
+			  new Array(0,2,0)),
+	new Array(new Array(3,3,3),
+			  new Array(3,0,0)),
+	new Array(new Array(4,4,0),
+			  new Array(0,4,4)),
+	new Array(new Array(0,5,5),
+			  new Array(5,5,0)),
+	new Array(new Array(6,6),
+			  new Array(6,6)),
+	new Array(new Array(7,7,7,7)));
+	
+var shapesForPentix = new Array(
+	new Array(new Array(1,1,1,1,1)),
+	new Array(new Array(2,2,2,2),
+			  new Array(0,0,0,2)),
+	new Array(new Array(3,3,3,3),
+			  new Array(0,0,3,0)),
+	new Array(new Array(4,4,4,4),
+			  new Array(0,4,0,0)),
+	new Array(new Array(5,5,5,5),
+			  new Array(5,0,0,0)),
+	new Array(new Array(6,6,6),
+			  new Array(0,6,6)),
+	new Array(new Array(7,7,7),
+			  new Array(7,7,0)),
+	new Array(new Array(8,8,8),
+			  new Array(8,0,8)),
+	new Array(new Array(9,9,9),
+			  new Array(0,0,9),
+			  new Array(0,0,9)),
+	new Array(new Array(10,10,0),
+			  new Array(0,10,10),
+			  new Array(0,0,10)),
+	new Array(new Array(11,11,11),
+			  new Array(0,11,0),
+			  new Array(0,11,0)),
+	new Array(new Array(0,12,0),
+			  new Array(12,12,12),
+			  new Array(0,12,0)),
+	new Array(new Array(0,13,0),
+			  new Array(13,13,13),
+			  new Array(0,0,13)),
+	new Array(new Array(0,14,0),
+			  new Array(14,14,14),
+			  new Array(14,0,0)))
+
+
+
+function Game(rows, columns, gamename, playername, score, field, fieldNext, scorefield, speed, level, allownext, selfmode)
+{
+	this.EMPTY = 0;
+	this.FILLED = 16;
+	this.CHANGESHAPE = 0;
+	this.ADDSHAPE = 1;
+	this.rows = rows;
+	this.columns = columns;
+	this.gamename = gamename;
+	this.playername = playername;
+	this.scoreSucc = 0;
+	this.score = score;
+	this.speed = speed;
+	this.level = level;
+	this.allownext = allownext;
+	this.selfmode = selfmode;
+	this.active = true;
+	this.field = field;
+	this.fieldNext = fieldNext;
+	this.scorefield = scorefield;
+	this.getField = GetField;
+	this.getCells = GetCells;
+	this.getShape = GetShape;
+	this.addElements = AddElements;
+	this.cutElements = CutElements;	
+	this.checkLines = CheckLines;
+	this.deleteLine = DeleteLine;
+	this.driver = Driver;
+	this.shapeFall = new Function("if (this.shape.state==this.shape.FREEFALL) {this.shape.setState(this.shape.DROP);" + this.gamename + ".driver(" + this.gamename + ".shape)}");
+	this.destroy = Destroy;
+	this.selfPlay = SelfPlay;
+	this.cell = this.getField(this.level);
+	this.speeds = speeds;
+	this.changeSpeed = new Function("speed", "clearInterval(this.TSFall);this.TSFall=setInterval(this.gamename+\".shapeFall()\",this.speeds[this.speed]);");
+	this.logic = Logic;
+	this.shape = this.getShape();
+	this.next = this.getShape();
+	this.shape.state = this.shape.FREEFALL
+	this.painter = new Drawer(this);
+	this.painter.redraw(true);
+	this.TSDriver = setInterval(this.gamename + ".driver(" + this.gamename + ".shape)", 1);
+	this.TSFall = setInterval(this.gamename + ".shapeFall()", this.speeds[this.speed]);
+}
+
+function Driver(that)
+{
+	with (that) switch (state)
+	{
+		case FREEFALL:
+			//this.painter.redraw(false);
+		break;
+		
+		case DROP:
+			setState(FREEFALL);
+			if (notIntersect(x, y + 1)) y++;
+			else state = STICKED;
+			this.painter.redraw(false);
+		break;
+		
+		case CHANGESHAPE:
+			setState(FREEFALL);
+			this.logic(this.CHANGESHAPE);
+		break;
+
+		case MOVELEFT:
+			setState(FREEFALL);
+			if (notIntersect(x - 1, y)) x--;
+			this.painter.redraw(false);
+		break;
+		
+		case MOVERIGHT:
+			setState(FREEFALL);
+			if (notIntersect(x + 1, y)) x++;
+			this.painter.redraw(false);
+		break;
+		
+		case ROTATELEFT:
+			setState(FREEFALL);
+			if (rotate(false)) this.painter.redraw(false);
+		break;
+		
+		case ROTATERIGHT:
+			setState(FREEFALL);
+			if (rotate(true)) this.painter.redraw(false);
+		break;
+		
+		case INACTIVE:
+		break;
+		
+		case STICKED:
+			this.logic(this.ADDSHAPE);
+		break;
+	}
+}
+
+function Logic(action)
+{
+	var allowchange = false;
+	
+	with (this) switch (action)
+	{
+		case CHANGESHAPE:
+			if (score >= shtraff * (1 + allownext))
+			{
+				allowchange = true;
+				scoreSucc = shtraff * (1 + allownext);
+				score -= scoreSucc;
+				shape = next;
+			}			
+		break;
+		case ADDSHAPE:
+			allowchange = true;
+			scoreSucc = shape.getNumOfNbh(shape.x, shape.y) - shape.getNumOfMpt(shape.x, shape.y);
+			shape.state = shape.INACTIVE;
+			addElements(shape);
+			scoreSucc *= checkLines(shape.y, shape.rows) + 1;
+			score += scoreSucc;
+			if (score / 100 - 1 > speed) changeSpeed(speed++);
+		break;
+	}
+	
+	if (allowchange)
+	with (this) if (next.notIntersect(next.x, next.y, next.rows, next.columns, next.elements))
+	{
+		if (selfmode) enabledAction = false;
+		shape = next;
+		shape.setState(shape.FREEFALL);
+		next = getShape();
+		painter.redraw(true);
+		if (selfmode) selfPlay(shape);
+	}
+	else destroy();
+	
+	CollectGarbage();
+}
+
+function Destroy()
+{
+	clearInterval(this.TSDriver);
+	clearInterval(this.TSFall);
+	
+	if (this.selfmode) clearTimeout(TAct);
+
+	for (i=0;i!=this.rows;i++)
+		for (k=0;k!=this.columns;k++)
+			if (this.cell[i][k] != this.EMPTY) this.cell[i][k] = this.FILLED;
+
+	this.painter.redraw(false);
+
+	for (i=0;i!=5;i++)
+		for (k=0;k!=5;k++)
+			this.painter.fillCell(this.fieldNext, i, k, this.painter.styles[0]);
+	
+	this.active = false;
+	
+	saveData(this.playername, this.score);
+	displayTop10();
+}
+
+function GetField(level)
+{
+	var rowsToFill = Math.round(this.rows * level / 10 * 0.8);
+	
+	cells = new Array(this.rows);
+	for (i=0;i!=this.rows - rowsToFill;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++) cells[i][k] = this.EMPTY;
+	}
+	for (i=this.rows - rowsToFill;i!=this.rows;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++)
+			if (Math.random() > .45) cells[i][k] = this.EMPTY;
+			else cells[i][k] = Math.round(Math.random() * 14) + 1;
+	}
+	return cells;
+}
+
+function GetCells()
+{
+	var cells = new Array(this.rows);
+	for (i=0;i!=this.rows;i++)
+	{
+		cells[i] = new Array(this.columns);
+		for (k=0;k!=this.columns;k++) cells[i][k] = this.cell[i][k];
+	}
+	return cells;
+}
+
+function GetShape()
+{
+	var number = Math.floor(shapes.length * Math.random());	
+	var elements = shapes[number];
+	var x = Math.round((this.columns - elements[0].length)/2);
+	var y = Math.max(elements[0].length, elements.length) - Math.floor(elements[0].length/2);
+	
+	shape = new Shape(x, y, elements, elements.length, elements[0].length, this);
+	
+	var number = Math.round(4 * Math.random());
+	
+	for (n=0;n<number;n++) shape.rotate(true)
+
+	return shape;
+}
+
+function AddElements(inshape)
+{
+	for (i=0;i!=inshape.rows;i++)		
+		for (k=0;k!=inshape.columns;k++)
+			if (inshape.elements[i][k] != inshape.EMPTY)
+				this.cell[inshape.y + i][inshape.x + k] = inshape.elements[i][k];
+}
+
+function CutElements(inshape)
+{
+	for (i=0;i!=inshape.rows;i++)		
+		for (k=0;k!=inshape.columns;k++)
+			if (inshape.elements[i][k] != inshape.EMPTY)
+				this.cell[inshape.y + i][inshape.x + k] = this.EMPTY;
+}
+
+function CheckLines(y, height)
+{
+	var lines = 0;
+	for (i=y;i!=y+height;i++)
+	{
+		var haveFullLine = true;
+		for (k=0;k!=this.columns;k++) haveFullLine = haveFullLine && (this.cell[i][k] != this.EMPTY);
+		if (haveFullLine) 
+		{
+			lines++;
+			this.deleteLine(i);
+			i--;
+		}
+	}
+	return lines;
+}
+
+function DeleteLine(number)
+{
+	for (i=number;i!=1;i--)		
+		for (k=0;k!=this.columns;k++)
+			this.cell[i][k] = this.cell[i - 1][k];
+}
+
+
+function BestPosition(game, inshape)
+{
+	var plshape = inshape.clone();
+	var usefullness = 0;
+		
+	this.mostusefull = -100000;
+	this.bestx = inshape.x;
+	this.besty = inshape.y;
+	this.bestrot = 0;
+	this.bpshape;
+	
+	with (plshape) for (var rot=0;rot<4;rot++)
+	{
+		var maxxpos = game.columns - plshape.columns + 1;
+		for (plshape.x=0;plshape.x!=maxxpos;plshape.x++)
+		{
+			y = inshape.y;
+			while (notIntersect(x, y + 1)) y++;
+			
+			usefullness = y + getNumOfNbh() - getNumOfMpt();
+			
+			if (arguments.length > 2)
+			{
+	 			game.addElements(plshape);
+	 			var oldx = usefullness;
+				var s = "var bestpos2nd = new BestPosition(game";
+				for(i=2;i!=arguments.length;i++)
+					s += ", arguments[" + i + "]";
+				s += ");"
+				eval(s);
+				game.cutElements(plshape);
+				usefullness += bestpos2nd.mostusefull / 2;
+			}
+
+			if (this.mostusefull < usefullness && y > inshape.y)
+			{
+				this.mostusefull = usefullness;
+				this.bestx = x;
+				this.besty = y;
+				this.bestrot = rot;
+				this.bpshape = clone()
+			}
+			
+		}
+		x = inshape.x;
+		y = inshape.y;
+	if (!rotate(true)) break;
+	}
+}
+
+function SelfPlay(inshape)
+{
+	actions = new Array();
+	
+	//var bestpos = new BestPosition(this, this.shape, this.next);
+	
+	if (this.allownext)
+		var bestpos = new BestPosition(this, this.shape, this.next);
+	else 
+		var bestpos = new BestPosition(this, this.shape);
+		
+	var bestx = bestpos.bestx;
+	var bestrot = bestpos.bestrot;
+	
+	bestpos = null;
+	
+	CollectGarbage();
+		
+	var rotdir = (bestrot == 3) ? inshape.ROTATELEFT : inshape.ROTATERIGHT;
+
+	if (bestrot == 1) bestx += inshape.rows - inshape.corx - inshape.cory;
+	if (bestrot == 2) bestx += inshape.columns - 2 * inshape.corx;
+	if (bestrot == 3) bestx += inshape.cory - inshape.corx;
+	
+	bestrot = Math.min(4 - bestrot, bestrot);
+	
+	for (rot=0;rot!=bestrot;rot++) actions[rot] = rotdir;
+	for (i=bestrot;i!=bestrot + Math.abs(inshape.x - bestx);i++) actions[i] = (shape.x > bestx) ? inshape.MOVELEFT : inshape.MOVERIGHT;
+	for (i=bestrot + Math.abs(inshape.x - bestx);i!=100;i++) actions[i] = inshape.DROP;
+
+	enabledAction = true;
+	Manipulator(0, true);
+}
+
+
+function Shape(x, y, elements, rows, columns, game)
+{
+	this.ROTATELEFT = 1;
+	this.ROTATERIGHT = 2;
+	this.CHANGESHAPE = 3;
+	this.MOVERIGHT = 4;
+	this.MOVELEFT = 5;
+	this.DROP = 6;
+	this.FREEFALL = 7;
+	this.INACTIVE = 8;
+	this.STICKED = 9;
+	this.EMPTY = 0;
+	this.state = this.INACTIVE;
+	this.sticked = false;
+	this.game = game;
+	this.elements = elements;
+	this.rows = rows;
+	this.columns = columns;
+	this.bounds = new Bounds(this);	
+	this.x = x;
+	this.y = y;
+	this.corx = Math.floor(this.columns/2);
+	this.cory = Math.floor(this.rows/2);
+	this.setState = new Function("state", "if (this.state!=this.STICKED) this.state = state;");
+	this.clone = new Function("return new Shape(this.x, this.y, this.elements, this.rows, this.columns, this.game);");
+	this.notIntersect = NotIntersect;
+	this.getNumOfNbh = GetNumOfNbh;
+	this.getNumOfMpt = GetNumOfMpt;
+	this.rotate = Rotate;
+}
+
+function Bounds(that)
+{
+	this.minX = that.columns;
+	this.minY = that.rows;
+	this.maxX = 0;
+	this.maxY = 0
+
+	for (var i=0; i!=that.columns; i++)
+		for (var k=0; k!=that.rows; k++)
+			if (that.elements[k][i]!=that.EMPTY)
+			{
+				if (this.minX > i) this.minX = i;
+				if (this.minY > k) this.minY = k;
+				if (this.maxX < i) this.maxX = i;
+				if (this.maxY < k) this.maxY = i;
+			}	
+	return this;
+}
+
+var _el =	new Array(new Array(1,0,0),
+			new Array(0,1,1),
+			new Array(0,0,0));
+var _shape = new Shape(0, 0, _el, _el.length, _el[0].length, null);
+var _bounds = new Bounds(_shape);
+
+function Rotate(clockwise)
+{
+	var rotated = false;
+	
+	with (this) if (clockwise)
+	{
+			stencil = new Array(columns);
+			for (i=0;i!=columns;i++)
+			{
+				stencil[i] = new Array(rows);
+				for (k=0; k!=rows; k++)
+				stencil[i][k] = elements[rows - k - 1][i];
+			}
+			if (notIntersect(x, y, columns, rows, stencil))
+			{
+				var t = columns;
+				columns = rows;
+				rows = t;
+				elements = stencil;
+				bounds = new Bounds(this);	
+				rotated = true;
+			}
+	}
+	else
+	{
+			stencil = new Array(columns);
+			for (i=0;i!=columns;i++)
+			{
+				stencil[i] = new Array(rows);
+				for (k=0;k!=rows;k++)
+				stencil[i][k] = elements[k][columns - i - 1];
+			}
+			if (notIntersect(x, y, columns, rows, stencil))
+			{
+				var t = columns;
+				columns = rows;
+				rows = t;
+				elements = stencil;
+				bounds = new Bounds(this);	
+				rotated = true;
+			}
+	}
+		
+	return rotated;
+}
+	
+
+function NotIntersect(x, y, rows, columns, stencil)
+{
+	x = (x) ? x : this.x;
+	y = (y) ? y : this.y;
+	rows = (rows) ? rows : this.rows;
+	columns = (columns) ? columns : this.columns;
+	stencil = (stencil) ? stencil : this.elements;
+	
+	if (x < 0 || x + columns > this.game.columns || y + rows > this.game.rows || y < 0) return false;
+	var answer = true;
+	for (i=0; i!=rows && answer; i++)
+		for (k=0; k!=columns && answer; k++)
+			answer = answer && !(this.game.cell[y + i][x + k] != this.game.EMPTY && stencil[i][k] != this.EMPTY);
+	return answer;
+}
+
+
+function GetNumOfNbh(x, y)
+{
+	if (x == null) x = this.x;
+	if (y == null) y = this.y;
+	var numofnbh = 0;
+	for (i=0;i!=this.rows;i++)		
+		for (k=0;k!=this.columns;k++)
+			if (this.elements[i][k] != this.EMPTY)
+			{
+				if (y + i == 0) numofnbh++;
+				else if (this.game.cell[y + i - 1][x + k] != this.game.EMPTY) numofnbh++;
+				if (y + i == this.game.rows - 1) numofnbh++;
+				else if (this.game.cell[y + i + 1][x + k] != this.game.EMPTY) numofnbh++;
+				if (x + k == 0) numofnbh++;
+				else if (this.game.cell[y + i][x + k - 1] != this.game.EMPTY) numofnbh++;
+				if (x + k == this.game.columns - 1) numofnbh++;
+				else if (this.game.cell[y + i][x + k + 1] != this.game.EMPTY) numofnbh++;
+			}
+	return numofnbh;
+}
+
+function GetNumOfMpt(x, y)
+{
+	if (x == null) x = this.x;
+	if (y == null) y = this.y;
+	var numofmpt = 0;
+	for (i=0;i!=this.rows;i++)		
+		for (k=0;k!=this.columns;k++)
+		if (this.elements[i][k] != this.EMPTY && y + i + 1 != this.game.rows)
+			if (i == this.rows - 1)
+				if (this.game.cell[y + i + 1][x + k] == this.game.EMPTY) numofmpt++; else;
+			else
+				if (this.elements[i + 1][k] == this.EMPTY && this.game.cell[y + i + 1][x + k] == this.game.EMPTY) numofmpt++;
+	return numofmpt;
+}
+
+function Drawer(game)
+{
+	this.game = game;
+	this.olddata = this.game.getCells();
+	this.newdata;
+	this.redraw = ReDraw;
+	this.fillCell = new Function("target", "row", "column", "cname", "target.rows[row].cells[column].className = cname;");
+	this.styles = styles;
+}
+
+function ReDraw(all)
+{
+	this.newdata = this.game.getCells();
+	
+	if (this.game.shape.state != this.game.shape.INACTIVE)
+	for (i=0;i!=this.game.shape.rows;i++)
+		for (k=0;k!=this.game.shape.columns;k++)
+			if (this.game.shape.elements[i][k] != this.game.EMPTY) this.newdata[this.game.shape.y + i][this.game.shape.x + k] = this.game.shape.elements[i][k];
+	
+	if (all) 
+	{
+		for (i=0;i!=this.game.rows;i++)	
+			for (k=0;k!=this.game.columns;k++)
+				this.fillCell(this.game.field, i, k, this.styles[this.newdata[i][k]]);
+
+		for (i=0;i!=5;i++)
+				for (k=0;k!=5;k++)
+					this.fillCell(this.game.fieldNext, i, k, this.styles[0]);
+					
+		if (this.game.allownext)
+		{
+			var xPos = Math.floor(2.5 - this.game.next.columns/2);
+			var yPos = Math.floor(2.5 - this.game.next.rows/2);			
+			with (this.game.next) 
+				for (i=0;i!=rows;i++)
+					for (k=0;k!=columns;k++)
+						this.fillCell(this.game.fieldNext, i + yPos, k + xPos, this.styles[elements[i][k]]);
+		}
+		
+		this.game.scorefield.innerHTML = "" + this.game.score + "(" + ((this.game.scoreSucc >= 0) ? "+" : "") + this.game.scoreSucc + ")";		
+	}
+	else	
+		for (i=0;i!=this.game.rows;i++)	
+			for (k=0;k!=this.game.columns;k++)
+				if (this.newdata[i][k] != this.olddata[i][k]) this.fillCell(this.game.field, i, k, this.styles[this.newdata[i][k]]);
+
+	this.olddata = this.newdata;
+}
+
+function setCookie(name, value, savefor, path, domain, secure) 
+{
+	var expires = null;
+	if (savefor)
+	{
+		now = new Date();
+		now.setTime(Date.parse(now) + savefor*24*60*60*1000);
+		expires = now.toGMTString();
+	}
+
+	var curCookie = name + "=" + escape(value) +
+		((expires) ? ";expires=" + expires : "") +
+		((path) ? ";path=" + path : "") +
+		((domain) ? ";domain=" + domain : "") +
+		((secure) ? ";secure" : "");
+		document.cookie = curCookie;
+}
+
+function getCookie(name)
+{
+	var prefix = name + "="
+	var cookieStartIndex = document.cookie.indexOf(prefix)
+	if (cookieStartIndex == -1)
+		return false
+	var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+	if (cookieEndIndex == -1)
+		cookieEndIndex = document.cookie.length
+	return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+function saveData(name, score)
+{
+	for (i=0;i!=maxRecords&&top10[i]&&score<=top10[i][1];i++);
+	for (k=maxRecords-1;k!=i-1;k--) top10[k] = top10[k - 1];
+	
+	var now = new Date();
+	top10[i] = new Array(name, score, now.toLocaleString());
+	
+	for (i=0;i!=maxRecords&&top10[i];i++)
+	{	
+		//setCookie(i + "n", top10[i][0], 365, document.location.pathname, document.location.host, true);
+		//setCookie(i + "s", top10[i][1], 365, document.location.pathname, document.location.host, true);
+		//setCookie(i + "d", top10[i][2], 365, document.location.pathname, document.location.host, true);
+		setCookie(i + "n", top10[i][0], 365);
+		setCookie(i + "s", top10[i][1], 365);
+		setCookie(i + "d", top10[i][2], 365);
+	}
+}
+
+function getData()
+{
+	for (i=0;getCookie(i + "n")&&getCookie(i + "s")&&i<maxRecords;i++)
+		top10[i] = new Array(getCookie(i + "n"), parseInt(getCookie(i + "s")), getCookie(i + "d"));
+}
+
+function clearData()
+{
+	for (i=0;i<maxRecords;i++)
+		top10[i] = new Array("&nbsp;&nbsp;&nbsp;", 0, "&nbsp;&nbsp;&nbsp;");
+}
+
+function displayTop10()
+{
+	var s = new String()
+	
+	s = "<table class=simple>";
+	s += "<tr><th colSpan=4>лидеры</th></tr>";
+	s += "<tr><th>#</th><th>имя</th><th>очки</th><th>дата</th></tr>";
+	
+	for (i=0;top10[i] && i < maxRecords;i++)
+		s += "<tr><td>" + (i + 1) + "</td><td>" + top10[i][0] + "</td><td>" + top10[i][1] + "</td><td>" + top10[i][2] + "</td></tr>";
+		
+	s += "<tr><td colSpan=4><div class=\"menu_passive\" onmouseover=\"this.className='menu_hover'\" onmouseout=\"this.className='menu_passive'\"  onmouseup=\"this.className='menu_hover'\"  onclick=\"if (ie) clearData();\" onmousedown=\"this.className='menu_active'\">очистить</div></td></tr>";	
+	s += "</table>";
+		
+	topten.innerHTML = s;
+	topten.style.visibility = "visible";
+}
+
+function getFieldHTML(rows, columns, cellh, cellw, style, idName)
+{
+	var s = new String()
+	
+	s = "<table id=" + idName + " name=" + idName + " class=" + style + ">";
+	
+	for (i = 0;i!=rows;i++)
+	{
+		s+="<tr>";
+		for (k = 0;k!=columns;k++) s+="<td style=\"height:" + cellh + "px;width:" + cellw + "px;\"></td>\n";
+		s+="</tr>\n"
+	}
+	
+	s += "</table>";
+	
+	return s;
+}
+
+function Manipulator(number, newpass)
+{
+	clearTimeout(TAct);// oh, shit!	
+	
+	var ms = (actions[number] == tetris.shape.DROP) ? 100 : 100;
+
+	if (enabledAction && number < actions.length)
+		TAct = setTimeout("tetris.shape.setState(actions[" + number + "]); Manipulator(" + (number + 1) + ");", ms);
+	else clearTimeout(TAct);
+}
+
+function KeyHooker(code)
+{
+	if (tetris && !tetris.selfmode)
+		with (tetris) switch (code)
+		{		
+			case 38 : shape.setState(shape.CHANGESHAPE);
+			break;
+			case 37 : shape.setState(shape.MOVELEFT);
+			break;
+			case 90 : shape.setState(shape.ROTATELEFT);
+			break;
+			case 88 : shape.setState(shape.ROTATERIGHT);
+			break;
+			case 39 : shape.setState(shape.MOVERIGHT);
+			break;
+			case 40 : shape.setState(shape.DROP);
+			break;
+			case 32 :
+				alert("Для продолжения нажмите OK...");
+			break;
+		}
+}
+
+function GetCompName(slog)
+{
+	var glasn = new Array("a","e","i","o","y","u","oo","ee","er","ea","or","ur");
+	var sglasn = new Array("b","c","dr","pr","st","bl","cr","ks","ph","h","sh","ch","kh","x","k");
+
+	name = new String();
+
+	for (i=0;i < slog;i++)
+		name += sglasn[Math.floor(Math.random() * sglasn.length)] + glasn[Math.floor(Math.random() * glasn.length)];
+
+	return name;
+}
+
+function Init()
+{
+	if (!firstplay)
+	{
+		if (tetris.active) tetris.destroy();
+		tetris.painter.redraw(true);
+	}
+	else firstplay = false;
+
+	var speed = document.optform.playerSpeed[document.optform.playerSpeed.selectedIndex].value;
+	var level = document.optform.playerLevel[document.optform.playerLevel.selectedIndex].value;
+	var allownext = document.optform.playerAllowNext.checked;
+	var selfmode = document.optform.selfMode.checked;
+	var playername = document.optform.playerName.value;
+
+	if (selfmode)
+	{
+		playername = GetCompName(Math.ceil(Math.random() * 3));
+		document.optform.playerName.value = playername;
+	}
+	
+	if (document.optform.tritix.checked) shapes = shapesForTritix;
+	if (document.optform.tetris.checked) shapes = shapesForTetris;
+	if (document.optform.pentix.checked) shapes = shapesForPentix;
+	
+	if (document.optform.colorstyle.checked) styles = colorStyles;
+	if (document.optform.simplestyle.checked) styles = simpleStyles;
+	
+	tetris = new Game(tetrisrows, tetriscolumns, "tetris", playername, totalscore, tetrisfield, tetrisfieldnext, scoreboard, speed, level, allownext, selfmode);
+	
+	if (selfmode) tetris.selfPlay(tetris.shape);
+}
+
+//-->
+</SCRIPT>
+
+<BODY>
+
+<TABLE STYLE="HEIGHT: 100%; WIDTH: 100%">
+<TR><TD>
+
+<TABLE CLASS=simple>
+    <TR>
+        <TD STYLE="TEXT-ALIGN: center">
+			<DIV ID=scoreboard STYLE="BACKGROUND: #696; BORDER-BOTTOM: #9c9 1px solid; BORDER-LEFT: #9c9 1px solid; BORDER-RIGHT: #9c9 1px solid; BORDER-TOP: #9c9 10px solid; FONT-FAMILY: arial; FONT-SIZE: 15pt; FONT-WEIGHT: 900; MARGIN: 10px; TEXT-ALIGN: center; " 
+           >WELCOME</DIV>
+        </TD>
+        <TD ROWSPAN="2">
+	<FORM ID=optform NAME=optform>
+		<TABLE CLASS=simple STYLE="BACKGROUND: #696; MARGIN: 10px" 
+           >
+			<TR>
+				<TD COLSPAN=2><CENTER>tetris v1.5</CENTER></TD>
+			</TR>
+			<TR>
+				<TD>Имя игрока:</TD>
+				<TD>
+					<INPUT MAXLENGTH=20 VALUE=anonimous NAME=playerName STYLE="WIDTH: 80%">
+				</TD>
+			</TR>
+			<TR>
+				<TD>Играть в:</TD>
+				<TD>
+					<INPUT TYPE="radio" NAME=gametype ID=tritix> тритикс
+					<INPUT TYPE="radio" NAME=gametype ID=tetris CHECKED> тетрис
+					<INPUT TYPE="radio" NAME=gametype ID=pentix> пентикс.					
+				</TD>
+			</TR>
+			<TR>
+				<TD>Фигуры:</TD>
+				<TD>
+					<INPUT TYPE="radio" NAME=color ID=colorstyle CHECKED> цветные
+					<INPUT TYPE="radio" NAME=color ID=simplestyle> простые.
+				</TD>
+			</TR>
+			<TR>
+				<TD>Скорость:</TD>
+				<TD>
+					<SELECT NAME=playerSpeed STYLE="WIDTH: 80%">
+						<OPTION VALUE="0">медлительно</OPTION>
+						<OPTION VALUE="1">тихо</OPTION> 
+						<OPTION VALUE="2" SELECTED>нормально</OPTION>
+						<OPTION VALUE="3">ходко</OPTION>
+						<OPTION VALUE="4">проворно</OPTION>
+						<OPTION VALUE="5">бойко</OPTION>
+						<OPTION VALUE="6">резво</OPTION>
+						<OPTION VALUE="7">прытко</OPTION>
+						<OPTION VALUE="8">шибко</OPTION>
+						<OPTION VALUE="9">стремительно</OPTION>
+					</SELECT> 
+				</TD>
+			</TR>
+			<TR>
+				<TD>Уровень:</TD>
+				<TD>
+					<SELECT NAME=playerLevel STYLE="WIDTH: 80%">
+						<OPTION VALUE="0" SELECTED>тривиально</OPTION>
+						<OPTION VALUE="1">пустяково</OPTION> 
+						<OPTION VALUE="2">легко</OPTION>
+						<OPTION VALUE="3">нетрудно</OPTION>
+						<OPTION VALUE="4">нормально</OPTION>
+						<OPTION VALUE="5">посильно</OPTION>
+						<OPTION VALUE="6">с хитрецой</OPTION>
+						<OPTION VALUE="7">непросто</OPTION>
+						<OPTION VALUE="8">замысловато</OPTION>
+						<OPTION VALUE="9">головоломно</OPTION>
+					</SELECT> 
+				</TD>
+			</TR>
+			<TR>
+				<TD COLSPAN=2><CENTER>Следующая фигура: <INPUT TYPE="checkbox" NAME=playerAllowNext CHECKED></CENTER></TD>
+			</TR>
+			<TR>
+				<TD COLSPAN=2><CENTER>Компьютер играет сам: <INPUT TYPE="checkbox" NAME=selfMode CHECKED></CENTER></TD>
+			</TR>
+			<TR>
+				<TD>
+					<DIV CLASS="menu_passive"
+					 
+					ONMOUSEOVER="this.className='menu_hover'" 
+					 
+					ONMOUSEOUT="this.className='menu_passive'" ONMOUSEUP 
+					="this.className='menu_hover'" 
+                  ONCLICK="if (ie) Init();" 
+                  ONMOUSEDOWN="this.className='menu_active'" 
+                 > 
+					Пуск
+					</DIV>
+				</TD>
+				<TD>
+					<DIV CLASS="menu_passive"
+					 
+					ONMOUSEOVER="this.className='menu_hover'" 
+					 
+					ONMOUSEOUT="this.className='menu_passive'" ONMOUSEUP 
+					="this.className='menu_hover'" 
+                  ONCLICK="if (ie) displayTop10();" 
+                  ONMOUSEDOWN="this.className='menu_active'" 
+                 > 
+					Top 5
+					</DIV>
+				</TD></TR>
+		</TABLE>
+	</FORM>
+	<HR>
+	<DIV ID=tetrisnextboard></DIV>
+	</TD>
+	</TR>
+	<TR>
+		<TD>
+		<DIV ID=tetrisboard></DIV>
+		</TD>
+	</TR>
+<TR>
+		<TD>
+			<DIV STYLE="COLOR: #363; FONT-SIZE: 7pt; MARGIN: 0px; PADDING-BOTTOM: 5px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; PADDING-TOP: 5px" 
+           >
+			(c) <A HREF="mailto:me@kusaku.su?subject=webmaster">kusaku</A> 2001
+			<BR> 
+			No rights reserved. 
+			<BR> 
+			Freeware: use this software on your own risk.
+			<BR> 
+			This game is a part of <A HREF="http://www.physfac.nm.ru/">Physfac@RU</A> site.
+			<BR>
+			</DIV>
+		</TD>
+		<TD>
+			<DIV STYLE="COLOR: #9c9; FONT-SIZE: 7pt; MARGIN: 0px; PADDING-BOTTOM: 5px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; PADDING-TOP: 5px" 
+           >
+			Управление:
+			<BR>
+			Пауза - Space Поворот Z - против / X - по часовой стрелке
+			<BR>
+			Движение >- вправо / <- влево / v- бросить, 
+			<BR>
+			Выбрать следующюю фигуру с уменьшением очков - ^.
+			</DIV>
+		</TD>
+	</TR>
+</TABLE>
+
+</TD></TR>
+</TABLE>
+
+<DIV ID=topten ONCLICK="this.style.visibility='hidden'" STYLE="BACKGROUND: #696; CURSOR: hand; LEFT: 10px; POSITION: absolute; TOP: 10px; VISIBILITY: hidden">
+</DIV>
+
+<SCRIPT LANGUAGE=javascript>
+<!--
+	var ie = (document.all) ? true : false;
+	if (ie)
+	{
+		tetrisboard.innerHTML = getFieldHTML(tetrisrows, tetriscolumns, cellhi, cellwi, "tetris", "tetrisfield");
+		tetrisnextboard.innerHTML = getFieldHTML(5, 5, cellhi, cellwi, "tetris", "tetrisfieldnext");
+		document.onkeydown = new Function("KeyHooker(event.keyCode)");
+		window.onload = new Function("getData();displayTop10()");
+		window.onunload = new Function("if (!firstplay && tetris.active) tetris.destroy();");
+	}
+	else alert("Sorry, only for IE!");
+//-->
+</SCRIPT>
+<INPUT TYPE="button" VALUE="Button" ONCLICK="ExploreObj(tetris, 'tetris')">
+</BODY>
+</HTML>

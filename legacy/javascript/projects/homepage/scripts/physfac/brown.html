@@ -1,0 +1,749 @@
+<html>
+<head>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<title>Brownian Motion</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<SCRIPT async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT type="text/JavaScript">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT type="text/JavaScript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<style>
+BODY
+{
+ background:#696 url('bgnd.gif');
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:scroll;
+ margin:10px;
+ font-family:arial;
+ color:#363;
+}
+
+INPUT, SELECT, OPTION
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+}
+</style>
+</head>
+<script language=javascript>
+<!--
+/*(c) kusaku 2001 */
+
+var TimeTick = .001
+var defForce = -5e5;
+var defBrownForce = -1e6;
+var dampingFactor = 1.0;
+var partcount = 16;
+var prad = 15;
+var brad = 15;
+var speed = 1;
+var maxInitVel = 3000;
+var use_gravity = false;
+var gravScale = 1000;
+var gravX = 0 * gravScale;
+var gravY = 60 * gravScale;
+var bounds;
+var dt = TimeTick;
+var	spd = speed;
+var part = new Array();
+
+var partImg = new Image();
+	partImg.src = "part.gif";
+var partfImg = new Image();
+	partfImg.src = "partf.gif";	
+var hhImg = new Image();
+	hhImg.src = "hothand.gif";
+
+function random(value)
+{
+	return value - (Math.random() * 2 * value);
+}
+
+function Particle(obj, x, y, vX, vY, rad, number)
+{
+	// particle or part of object
+	this.obj = obj;
+	this.number = number;
+	this.rad = rad;
+	this.x = x;
+	this.y = y;
+	this.vX = vX;
+	this.vY = vY;
+	this.dvX = 0;
+	this.dvY = 0;
+	this.distTo = new Array();
+	this.dist = Dist;
+	this.force = Force;
+	this.brownforce = brownForce;
+	this.integrate = Integrate;
+	this.brownintegrate = brownIntegrate;
+	this.set = Set;
+	this.isUnderForce = false;	
+	return this;
+}
+
+function Dist(x,y)
+{
+	return Math.sqrt((this.x - x)*(this.x - x) + (this.y - y)*(this.y - y));
+}
+
+function Integrate(that, dt)
+{
+	var dDist = this.dist(that.x, that.y);	
+	//if (dDist > this.rad) return;
+	dV = this.force(dDist) * dt;
+	dDist=(dDist==0)?1:dDist;
+	this.dvX += dV * (that.x - this.x)/dDist; //Cosinus
+	this.dvY += dV * (that.y - this.y)/dDist; //Sinus
+	this.isUnderForce = this.isUnderForce || dV;
+}
+
+function brownIntegrate(that, dt)
+{	
+	var dDist = this.dist(that.x, that.y);
+	//dV = this.brownforce(this.dist(that.x, that.y), that.number) * dt; // without damping
+	dV = this.brownforce(this.dist(that.x - (this.vX - that.vX)*dt*dampingFactor, that.y - (this.vY - that.vY)*dt*dampingFactor), that.number) * dt;
+	dDist=(dDist==0)?1:dDist;
+	this.dvX += dV * (that.x - this.x)/dDist; //Cosinus	
+	this.dvY += dV * (that.y - this.y)/dDist; //Sinus	
+}
+
+function Force(dist)
+{
+	if (dist < this.rad) return defForce * (this.rad - dist);
+	else return 0;
+}
+
+function brownForce(dist,i)
+{
+	if (this.distTo[i] < 3*this.rad) return defBrownForce * (this.distTo[i] - dist) / this.distTo[i];
+	else return 0;
+}
+
+function Set(dt)
+{
+	// border and hothand calculation
+	this.integrate(new Particle(null, minX, this.y, null, null, null, null), dt);
+	this.integrate(new Particle(null, maxX, this.y, null, null, null, null), dt);
+	this.integrate(new Particle(null, this.x, minY, null, null, null, null), dt);
+	this.integrate(new Particle(null, this.x, maxY, null, null, null, null), dt);
+	this.integrate(hotHand, dt);
+	// setting up new position
+	
+	if (use_gravity)
+	{
+	this.dvX += gravX * dt;
+	this.dvY += gravY * dt;
+	}		
+	this.vX += this.dvX;
+	this.vY += this.dvY;	
+	this.vX = (isNaN(this.vX))?0:this.vX;
+	this.vY = (isNaN(this.vY))?0:this.vY;
+	this.x += this.vX * dt;
+	this.y += this.vY * dt;
+	
+	if (this.x > maxX || this.x < minX || this.y > maxY || this.y < minY)
+		{
+			this.vX = 0;
+			this.vY = 0;
+		}
+					
+	this.dvX = 0;
+	this.dvY = 0;
+}
+
+function Time()
+{
+	// main time cycle
+	for (times=0; times!=spd; times++)
+	{
+		for (i=0; i!=bcnt; i++) for (k=bcnt; k!=(pcnt + bcnt); k++) if (k!=i) part[i].integrate(part[k], dt);
+		for (i=bcnt; i!=(bcnt + pcnt); i++) for (k=0; k!=(pcnt + bcnt); k++) if (k!=i) part[i].integrate(part[k], dt);
+		//for (i=0; i!=(bcnt + pcnt); i++) for (k=0; k!=(bcnt + pcnt); k++) if (k!=i) part[i].integrate(part[k], dt);
+		for (i=0; i!=bcnt; i++) for (k=0; k!=bcnt; k++) if (k!=i) part[i].brownintegrate(part[k], dt);
+		for (i=0; i!=(pcnt + bcnt); i++) part[i].set(dt);
+		my_framesrendered++;
+	}
+}
+
+function Draw()
+{
+	// main draw cycle
+	comx = 0;
+	comy = 0;
+	for (i=0;i!=(pcnt + bcnt); i++)
+	{
+	document.all[part[i].obj].style.left = Math.round(part[i].x) - 6;
+	document.all[part[i].obj].style.top = Math.round(part[i].y) - 6;
+	if (part[i].isUnderForce) document.all[part[i].obj].src = partfImg.src;
+	else document.all[part[i].obj].src = partImg.src;
+	part[i].isUnderForce = false;
+	};
+	document.all[hotHand.obj].style.left = hotHand.x - 6;
+	document.all[hotHand.obj].style.top = hotHand.y - 6;
+	my_frameshown++;
+}
+
+function Create(cnt)
+{
+	// html creator	
+	var s = "";
+	for (i=0;i!=cnt;i++)		
+	s += '<img src="part.gif" style="position:absolute;color:#363;cursor:crosshair;" id="' + part[i].obj + '">';
+	document.all.container.innerHTML = s;
+}
+
+function Reset(item)
+{
+	// reseting bounding box	
+	if (bounds)
+	{
+	minX = bounds.offsetLeft + parseInt(document.body.currentStyle.margin) + 2;
+	minY = bounds.offsetTop + parseInt(document.body.currentStyle.margin) + 2;
+	maxX = bounds.offsetWidth + minX;
+	maxY = bounds.offsetHeight + minY;
+	}
+}
+
+
+function AddObject()
+{
+	pleft = (maxX - minX)/2
+	ptop = (maxY - minY)/2	
+	
+	bcnt = 0;
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "none")
+	{
+	bcnt = 0;
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "square")
+	{
+	bcnt = 12;
+	part[ 0 ] = new Particle("part" +  0 ,  -15  + pleft,  -15  + ptop, 0, 0, brad,  0 );
+	part[ 1 ] = new Particle("part" +  1 ,  -5  + pleft,  -15  + ptop, 0, 0, brad,  1 );
+	part[ 2 ] = new Particle("part" +  2 ,  5  + pleft,  -15  + ptop, 0, 0, brad,  2 );
+	part[ 3 ] = new Particle("part" +  3 ,  15  + pleft,  -15  + ptop, 0, 0, brad,  3 );
+	part[ 4 ] = new Particle("part" +  4 ,  -15  + pleft,  -5  + ptop, 0, 0, brad,  4 );	
+	part[ 5 ] = new Particle("part" +  5 ,  15  + pleft,  -5  + ptop, 0, 0, brad,  5 );
+	part[ 6 ] = new Particle("part" +  6 ,  -15  + pleft,  5  + ptop, 0, 0, brad,  6 );	
+	part[ 7 ] = new Particle("part" +  7 ,  15  + pleft,  5  + ptop, 0, 0, brad,  7 );
+	part[ 8 ] = new Particle("part" +  8 ,  -15  + pleft,  15  + ptop, 0, 0, brad,  8 );
+	part[ 9 ] = new Particle("part" +  9 ,  -5  + pleft,  15  + ptop, 0, 0, brad,  9 );
+	part[ 10 ] = new Particle("part" +  10 ,  5  + pleft,  15  + ptop, 0, 0, brad,  10 );
+	part[ 11 ] = new Particle("part" +  11 ,  15  + pleft,  15  + ptop, 0, 0, brad,  11 );
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "solidsquare")
+	{
+	bcnt = 16;
+	part[ 0 ] = new Particle("part" +  0 ,  -15  + pleft,  -15  + ptop, 0, 0, brad,  0 );
+	part[ 1 ] = new Particle("part" +  1 ,  -5  + pleft,  -15  + ptop, 0, 0, brad,  1 );
+	part[ 2 ] = new Particle("part" +  2 ,  5  + pleft,  -15  + ptop, 0, 0, brad,  2 );
+	part[ 3 ] = new Particle("part" +  3 ,  15  + pleft,  -15  + ptop, 0, 0, brad,  3 );
+	part[ 4 ] = new Particle("part" +  4 ,  -15  + pleft,  -5  + ptop, 0, 0, brad,  4 );
+	part[ 5 ] = new Particle("part" +  5 ,  -5  + pleft,  -5  + ptop, 0, 0, brad,  5 );
+	part[ 6 ] = new Particle("part" +  6 ,  5  + pleft,  -5  + ptop, 0, 0, brad,  6 );
+	part[ 7 ] = new Particle("part" +  7 ,  15  + pleft,  -5  + ptop, 0, 0, brad,  7 );
+	part[ 8 ] = new Particle("part" +  8 ,  -15  + pleft,  5  + ptop, 0, 0, brad,  8 );
+	part[ 9 ] = new Particle("part" +  9 ,  -5  + pleft,  5  + ptop, 0, 0, brad,  9 );
+	part[ 10 ] = new Particle("part" +  10 ,  5  + pleft,  5  + ptop, 0, 0, brad,  10 );
+	part[ 11 ] = new Particle("part" +  11 ,  15  + pleft,  5  + ptop, 0, 0, brad,  11 );
+	part[ 12 ] = new Particle("part" +  12 ,  -15  + pleft,  15  + ptop, 0, 0, brad,  12 );
+	part[ 13 ] = new Particle("part" +  13 ,  -5  + pleft,  15  + ptop, 0, 0, brad,  13 );
+	part[ 14 ] = new Particle("part" +  14 ,  5  + pleft,  15  + ptop, 0, 0, brad,  14 );
+	part[ 15 ] = new Particle("part" +  15 ,  15  + pleft,  15  + ptop, 0, 0, brad,  15 );
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "round")
+	{
+	bcnt = 12;	
+	part[ 0 ] = new Particle("part" +  0 ,  17  + pleft,  10  + ptop, 0, 0, brad,  0 );
+	part[ 1 ] = new Particle("part" +  1 ,  10  + pleft,  17  + ptop, 0, 0, brad,  1 );
+	part[ 2 ] = new Particle("part" +  2 ,  0  + pleft,  20  + ptop, 0, 0, brad,  2 );
+	part[ 3 ] = new Particle("part" +  3 ,  -10  + pleft,  17  + ptop, 0, 0, brad,  3 );
+	part[ 4 ] = new Particle("part" +  4 ,  -17  + pleft,  10  + ptop, 0, 0, brad,  4 );
+	part[ 5 ] = new Particle("part" +  5 ,  -20  + pleft,  0  + ptop, 0, 0, brad,  5 );
+	part[ 6 ] = new Particle("part" +  6 ,  -17  + pleft,  -10  + ptop, 0, 0, brad,  6 );
+	part[ 7 ] = new Particle("part" +  7 ,  -10  + pleft,  -17  + ptop, 0, 0, brad,  7 );
+	part[ 8 ] = new Particle("part" +  8 ,  0  + pleft,  -20  + ptop, 0, 0, brad,  8 );
+	part[ 9 ] = new Particle("part" +  9 ,  10  + pleft,  -17  + ptop, 0, 0, brad,  9);
+	part[ 10 ] = new Particle("part" +  10 ,  17  + pleft,  -10  + ptop, 0, 0, brad,  10 );
+	part[ 11 ] = new Particle("part" +  11 ,  20  + pleft,  0  + ptop, 0, 0, brad,  11 );
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "solidround")
+	{
+	bcnt = 19;
+	part[ 0 ] = new Particle("part" +  0 ,  0  + pleft,  0  + ptop, 0, 0, brad,  0 );
+	part[ 1 ] = new Particle("part" +  1 ,  5  + pleft,  9  + ptop, 0, 0, brad,  1 );
+	part[ 2 ] = new Particle("part" +  2 ,  -5  + pleft,  9  + ptop, 0, 0, brad,  2 );
+	part[ 3 ] = new Particle("part" +  3 ,  -10  + pleft,  0  + ptop, 0, 0, brad,  3 );
+	part[ 4 ] = new Particle("part" +  4 ,  -5  + pleft,  -9  + ptop, 0, 0, brad,  4 );
+	part[ 5 ] = new Particle("part" +  5 ,  5  + pleft,  -9  + ptop, 0, 0, brad,  5 );
+	part[ 6 ] = new Particle("part" +  6 ,  10  + pleft,  0  + ptop, 0, 0, brad,  6 );
+	part[ 7 ] = new Particle("part" +  7 ,  17  + pleft,  10  + ptop, 0, 0, brad,  7 );
+	part[ 8 ] = new Particle("part" +  8 ,  10  + pleft,  17  + ptop, 0, 0, brad,  8 );
+	part[ 9 ] = new Particle("part" +  9 ,  0  + pleft,  20  + ptop, 0, 0, brad,  9 );
+	part[ 10 ] = new Particle("part" +  10 ,  -10  + pleft,  17  + ptop, 0, 0, brad,  10 );
+	part[ 11 ] = new Particle("part" +  11 ,  -17  + pleft,  10  + ptop, 0, 0, brad,  11 );
+	part[ 12 ] = new Particle("part" +  12 ,  -20  + pleft,  0  + ptop, 0, 0, brad,  12 );
+	part[ 13 ] = new Particle("part" +  13 ,  -17  + pleft,  -10  + ptop, 0, 0, brad,  13 );
+	part[ 14 ] = new Particle("part" +  14 ,  -10  + pleft,  -17  + ptop, 0, 0, brad,  14 );
+	part[ 15 ] = new Particle("part" +  15 ,  0  + pleft,  -20  + ptop, 0, 0, brad,  15 );
+	part[ 16 ] = new Particle("part" +  16 ,  10  + pleft,  -17  + ptop, 0, 0, brad,  16 );
+	part[ 17 ] = new Particle("part" +  17 ,  17  + pleft,  -10  + ptop, 0, 0, brad,  17 );
+	part[ 18 ] = new Particle("part" +  18 ,  20  + pleft,  0  + ptop, 0, 0, brad,  18 );
+	}
+
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "triangle")
+	{
+	bcnt = 12;
+	part[0] = new Particle("part" + 0, 15 + pleft, 9 + ptop, 0, 0, brad, 0);
+	part[1] = new Particle("part" + 1, 35 + pleft, 9 + ptop, 0, 0, brad, 1);
+	part[2] = new Particle("part" + 2, 30 + pleft, 35 + ptop, 0, 0, brad, 2);
+	part[3] = new Particle("part" + 3, 15 + pleft, 26 + ptop, 0, 0, brad, 3);
+	part[4] = new Particle("part" + 4, 25 + pleft, 9 + ptop, 0, 0, brad, 4);
+	part[5] = new Particle("part" + 5, 35 + pleft, 26 + ptop, 0, 0, brad, 5);
+	part[6] = new Particle("part" + 6, 5 + pleft, 9 + ptop, 0, 0, brad, 6);
+	part[7] = new Particle("part" + 7, 40 + pleft, 17 + ptop, 0, 0, brad, 7);
+	part[8] = new Particle("part" + 8, 10 + pleft, 17 + ptop, 0, 0, brad, 8);
+	part[9] = new Particle("part" + 9, 20 + pleft, 35 + ptop, 0, 0, brad, 9);
+	part[10] = new Particle("part" + 10, 45 + pleft, 9 + ptop, 0, 0, brad, 10);
+	part[11] = new Particle("part" + 11, 25 + pleft, 43 + ptop, 0, 0, brad, 11);
+	}
+
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "ring")
+	{
+	bcnt = 12;
+	part[8] = new Particle("part" + 8, 20 + pleft, 0 + ptop, 0, 0, brad, 8);
+	part[5] = new Particle("part" + 5, 8 + pleft, 5 + ptop, 0, 0, brad, 5);
+	part[10] = new Particle("part" + 10, 10 + pleft, 17 + ptop, 0, 0, brad, 10);
+	part[3] = new Particle("part" + 3, 0 + pleft, 10 + ptop, 0, 0, brad, 3);
+	part[11] = new Particle("part" + 11, -10 + pleft, 17 + ptop, 0, 0, brad, 11);
+	part[0] = new Particle("part" + 0, -8 + pleft, 5 + ptop, 0, 0, brad, 0);
+	part[4] = new Particle("part" + 4, -20 + pleft, 0 + ptop, 0, 0, brad, 4);
+	part[6] = new Particle("part" + 6, -8 + pleft, -5 + ptop, 0, 0, brad, 6);
+	part[7] = new Particle("part" + 7, -10 + pleft, -17 + ptop, 0, 0, brad, 7);
+	part[9] = new Particle("part" + 9, 0 + pleft, -10 + ptop, 0, 0, brad, 9);
+	part[1] = new Particle("part" + 1, 10 + pleft, -17 + ptop, 0, 0, brad, 1);
+	part[2] = new Particle("part" + 2, 8 + pleft, -5 + ptop, 0, 0, brad, 2);
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "hv")
+	{
+	bcnt = 19;
+	pleft -= 20;
+	ptop += 20;
+	part[14] = new Particle("part" + 14, 10 + pleft, 0 + ptop, 0, 0, brad, 14);
+	part[5] = new Particle("part" + 5, 10 + pleft, -10 + ptop, 0, 0, brad, 5);
+	part[3] = new Particle("part" + 3, 10 + pleft, -20 + ptop, 0, 0, brad, 3);
+	part[12] = new Particle("part" + 12, 10 + pleft, -30 + ptop, 0, 0, brad, 12);
+	part[10] = new Particle("part" + 10, 10 + pleft, -40 + ptop, 0, 0, brad, 10);
+	part[2] = new Particle("part" + 2, 10 + pleft, -50 + ptop, 0, 0, brad, 2);
+	part[16] = new Particle("part" + 16, 17 + pleft, -25 + ptop, 0, 0, brad, 16);
+	part[11] = new Particle("part" + 11, 26 + pleft, -27 + ptop, 0, 0, brad, 11);
+	part[0] = new Particle("part" + 0, 32 + pleft, -20 + ptop, 0, 0, brad, 0);
+	part[8] = new Particle("part" + 8, 32 + pleft, 0 + ptop, 0, 0, brad, 8);
+	part[7] = new Particle("part" + 7, 35 + pleft, -10 + ptop, 0, 0, brad, 7);
+	part[18] = new Particle("part" + 18, 45 + pleft, -20 + ptop, 0, 0, brad, 18);
+	part[13] = new Particle("part" + 13, 50 + pleft, -10 + ptop, 0, 0, brad, 13);
+	part[17] = new Particle("part" + 17, 55 + pleft, 0 + ptop, 0, 0, brad, 17);
+	part[4] = new Particle("part" + 4, 59 + pleft, -10 + ptop, 0, 0, brad, 4);
+	part[15] = new Particle("part" + 15, 63 + pleft, -20 + ptop, 0, 0, brad, 15);
+	part[9] = new Particle("part" + 9, 60 + pleft, -51 + ptop, 0, 0, brad, 9);
+	part[1] = new Particle("part" + 1, 65 + pleft, -30 + ptop, 0, 0, brad, 1);
+	part[6] = new Particle("part" + 6, 64 + pleft, -40 + ptop, 0, 0, brad, 6);
+	}
+	
+	if(MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "trial")
+	{
+	bcnt=10;
+	part[0] = new Particle("part" + 0, 0 + pleft, 0 + ptop, 0, 0, brad, 0);
+	part[4] = new Particle("part" + 4, -8 + pleft, 5 + ptop, 0, 0, brad, 4);
+	part[5] = new Particle("part" + 5, 0 + pleft, -10 + ptop, 0, 0, brad, 5);
+	part[1] = new Particle("part" + 1, 8 + pleft, 5 + ptop, 0, 0, brad, 1);
+	part[7] = new Particle("part" + 7, -17 + pleft, 10 + ptop, 0, 0, brad, 7);
+	part[6] = new Particle("part" + 6, 0 + pleft, -20 + ptop, 0, 0, brad, 6);
+	part[3] = new Particle("part" + 3, 17 + pleft, 10 + ptop, 0, 0, brad, 3);
+	part[8] = new Particle("part" + 8, -26 + pleft, 15 + ptop, 0, 0, brad, 8);
+	part[2] = new Particle("part" + 2, 0 + pleft, -30 + ptop, 0, 0, brad, 2);
+	part[9] = new Particle("part" + 9, 26 + pleft, 15 + ptop, 0, 0, brad, 9);
+	}
+
+	if(MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "cross")
+	{
+	bcnt=13;
+	part[5] = new Particle("part" + 5, 0 + pleft, 0 + ptop, 0, 0, brad, 5);
+	part[9] = new Particle("part" + 9, -7 + pleft, 7 + ptop, 0, 0, brad, 9);
+	part[0] = new Particle("part" + 0, -7 + pleft, -7 + ptop, 0, 0, brad, 0);
+	part[7] = new Particle("part" + 7, 7 + pleft, -7 + ptop, 0, 0, brad, 7);
+	part[10] = new Particle("part" + 10, 7 + pleft, 7 + ptop, 0, 0, brad, 10);
+	part[12] = new Particle("part" + 12, -14 + pleft, 14 + ptop, 0, 0, brad, 12);
+	part[1] = new Particle("part" + 1, -14 + pleft, -14 + ptop, 0, 0, brad, 1);
+	part[6] = new Particle("part" + 6, 14 + pleft, -14 + ptop, 0, 0, brad, 6);
+	part[11] = new Particle("part" + 11, 14 + pleft, 14 + ptop, 0, 0, brad, 11);
+	part[3] = new Particle("part" + 3, -21 + pleft, 21 + ptop, 0, 0, brad, 3);
+	part[4] = new Particle("part" + 4, -21 + pleft, -21 + ptop, 0, 0, brad, 4);
+	part[2] = new Particle("part" + 2, 21 + pleft, -21 + ptop, 0, 0, brad, 2);
+	part[8] = new Particle("part" + 8, 21 + pleft, 21 + ptop, 0, 0, brad, 8);
+	}
+
+	if(MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "star")
+	{
+	bcnt=16;
+	part[2] = new Particle("part" + 2, 0 + pleft, 0 + ptop, 0, 0, brad, 2);
+	part[12] = new Particle("part" + 12, 6 + pleft, 8 + ptop, 0, 0, brad, 12);
+	part[6] = new Particle("part" + 6, -6 + pleft, 8 + ptop, 0, 0, brad, 6);
+	part[8] = new Particle("part" + 8, -9 + pleft, -3 + ptop, 0, 0, brad, 8);
+	part[9] = new Particle("part" + 9, 0 + pleft, -10 + ptop, 0, 0, brad, 9);
+	part[11] = new Particle("part" + 11, 9 + pleft, -3 + ptop, 0, 0, brad, 11);
+	part[7] = new Particle("part" + 7, 12 + pleft, 16 + ptop, 0, 0, brad, 7);
+	part[10] = new Particle("part" + 10, -12 + pleft, 16 + ptop, 0, 0, brad, 10);
+	part[5] = new Particle("part" + 5, -19 + pleft, -6 + ptop, 0, 0, brad, 5);
+	part[15] = new Particle("part" + 15, 0 + pleft, -20 + ptop, 0, 0, brad, 15);
+	part[13] = new Particle("part" + 13, 19 + pleft, -6 + ptop, 0, 0, brad, 13);
+	part[1] = new Particle("part" + 1, 18 + pleft, 24 + ptop, 0, 0, brad, 1);
+	part[3] = new Particle("part" + 3, -18 + pleft, 24 + ptop, 0, 0, brad, 3);
+	part[0] = new Particle("part" + 0, -28 + pleft, -9 + ptop, 0, 0, brad, 0);
+	part[4] = new Particle("part" + 4, 0 + pleft, -30 + ptop, 0, 0, brad, 4);
+	part[14] = new Particle("part" + 14, 28 + pleft, -9 + ptop, 0, 0, brad, 14);
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "eight")
+	{
+	bcnt = 16;
+	part[0] = new Particle("part" + 0, 25 + pleft, 0 + ptop, 0, 0, brad, 0);
+	part[4] = new Particle("part" + 4, 22 + pleft, 9 + ptop, 0, 0, brad, 4);
+	part[14] = new Particle("part" + 14, 15 + pleft, 15 + ptop, 0, 0, brad, 14);
+	part[8] = new Particle("part" + 8, 6 + pleft, 14 + ptop, 0, 0, brad, 8);
+	part[5] = new Particle("part" + 5, 0 + pleft, 5 + ptop, 0, 0, brad, 5);
+	part[13] = new Particle("part" + 13, -6 + pleft, 14 + ptop, 0, 0, brad, 13);
+	part[11] = new Particle("part" + 11, -15 + pleft, 15 + ptop, 0, 0, brad, 11);
+	part[7] = new Particle("part" + 7, -22 + pleft, 9 + ptop, 0, 0, brad, 7);
+	part[6] = new Particle("part" + 6, -25 + pleft, 0 + ptop, 0, 0, brad, 6);
+	part[3] = new Particle("part" + 3, -22 + pleft, -9 + ptop, 0, 0, brad, 3);
+	part[10] = new Particle("part" + 10, -15 + pleft, -15 + ptop, 0, 0, brad, 10);
+	part[12] = new Particle("part" + 12, -6 + pleft, -14 + ptop, 0, 0, brad, 12);
+	part[1] = new Particle("part" + 1, 0 + pleft, -5 + ptop, 0, 0, brad, 1);
+	part[9] = new Particle("part" + 9, 6 + pleft, -14 + ptop, 0, 0, brad, 9);
+	part[2] = new Particle("part" + 2, 15 + pleft, -15 + ptop, 0, 0, brad, 2);
+	part[15] = new Particle("part" + 15, 22 + pleft, -9 + ptop, 0, 0, brad, 15);
+	}
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "arstar")
+	{
+	bcnt = 18;
+	part[ 14 ] = new Particle("part" +  14 ,  8  + pleft,  5  + ptop, 0, 0, brad,  14 );
+	part[ 4 ] = new Particle("part" +  4 ,  0  + pleft,  10  + ptop, 0, 0, brad,  4 );
+	part[ 10 ] = new Particle("part" +  10 ,  -8  + pleft,  5  + ptop, 0, 0, brad,  10 );
+	part[ 16 ] = new Particle("part" +  16 ,  -8  + pleft,  -5  + ptop, 0, 0, brad,  16 );
+	part[ 15 ] = new Particle("part" +  15 ,  0  + pleft,  -10  + ptop, 0, 0, brad,  15 );
+	part[ 5 ] = new Particle("part" +  5 ,  8  + pleft,  -5  + ptop, 0, 0, brad,  5 );
+	part[ 13 ] = new Particle("part" +  13 ,  17  + pleft,  10  + ptop, 0, 0, brad,  13 );
+	part[ 6 ] = new Particle("part" +  6 ,  0  + pleft,  20  + ptop, 0, 0, brad,  6 );
+	part[ 9 ] = new Particle("part" +  9 ,  -17  + pleft,  10  + ptop, 0, 0, brad,  9 );
+	part[ 11 ] = new Particle("part" +  11 ,  -17  + pleft,  -10  + ptop, 0, 0, brad,  11 );
+	part[ 0 ] = new Particle("part" +  0 ,  0  + pleft,  -20  + ptop, 0, 0, brad,  0 );
+	part[ 12 ] = new Particle("part" +  12 ,  17  + pleft,  -10  + ptop, 0, 0, brad,  12 );
+	part[ 1 ] = new Particle("part" +  1 ,  26  + pleft,  15  + ptop, 0, 0, brad,  1 );
+	part[ 2 ] = new Particle("part" +  2 ,  0  + pleft,  30  + ptop, 0, 0, brad,  2 );
+	part[ 17 ] = new Particle("part" +  17 ,  -26  + pleft,  15  + ptop, 0, 0, brad,  17 );
+	part[ 3 ] = new Particle("part" +  3 ,  -26  + pleft,  -15  + ptop, 0, 0, brad,  3 );
+	part[ 8 ] = new Particle("part" +  8 ,  0  + pleft,  -30  + ptop, 0, 0, brad,  8 );
+	part[ 7 ] = new Particle("part" +  7 ,  26  + pleft,  -15  + ptop, 0, 0, brad,  7 );
+	}
+
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "line")
+	{
+	bcnt = 21;
+	part[ 19 ] = new Particle("part" +  19 ,  0  + pleft,  0  + ptop, 0, 0, brad,  19 );
+	part[ 20 ] = new Particle("part" +  20 ,  -10  + pleft,  0  + ptop, 0, 0, brad,  20 );
+	part[ 11 ] = new Particle("part" +  11 ,  10  + pleft,  0  + ptop, 0, 0, brad,  11 );
+	part[ 3 ] = new Particle("part" +  3 ,  -20  + pleft,  0  + ptop, 0, 0, brad,  3 );
+	part[ 18 ] = new Particle("part" +  18 ,  20  + pleft,  0  + ptop, 0, 0, brad,  18 );
+	part[ 2 ] = new Particle("part" +  2 ,  -30  + pleft,  0  + ptop, 0, 0, brad,  2 );
+	part[ 17 ] = new Particle("part" +  17 ,  30  + pleft,  0  + ptop, 0, 0, brad,  17 );
+	part[ 5 ] = new Particle("part" +  5 ,  -40  + pleft,  0  + ptop, 0, 0, brad,  5 );
+	part[ 16 ] = new Particle("part" +  16 ,  40  + pleft,  0  + ptop, 0, 0, brad,  16 );
+	part[ 4 ] = new Particle("part" +  4 ,  -50  + pleft,  0  + ptop, 0, 0, brad,  4 );
+	part[ 6 ] = new Particle("part" +  6 ,  50  + pleft,  0  + ptop, 0, 0, brad,  6 );
+	part[ 7 ] = new Particle("part" +  7 ,  -60  + pleft,  0  + ptop, 0, 0, brad,  7 );
+	part[ 10 ] = new Particle("part" +  10 ,  60  + pleft,  0  + ptop, 0, 0, brad,  10 );
+	part[ 1 ] = new Particle("part" +  1 ,  -70  + pleft,  0  + ptop, 0, 0, brad,  1 );
+	part[ 14 ] = new Particle("part" +  14 ,  70  + pleft,  0  + ptop, 0, 0, brad,  14 );
+	part[ 9 ] = new Particle("part" +  9 ,  -80  + pleft,  0  + ptop, 0, 0, brad,  9 );
+	part[ 12 ] = new Particle("part" +  12 ,  80  + pleft,  0  + ptop, 0, 0, brad,  12 );
+	part[ 15 ] = new Particle("part" +  15 ,  -90  + pleft,  0  + ptop, 0, 0, brad,  15 );
+	part[ 0 ] = new Particle("part" +  0 ,  90  + pleft,  0  + ptop, 0, 0, brad,  0 );
+	part[ 13 ] = new Particle("part" +  13 ,  -100  + pleft,  0  + ptop, 0, 0, brad,  13 );
+	part[ 8 ] = new Particle("part" +  8 ,  100  + pleft,  0  + ptop, 0, 0, brad,  8 );
+	}
+	
+	if (MySuperForm.obj[MySuperForm.obj.selectedIndex].value == "random")
+	{
+	bcnt = 12;
+		do
+		{
+		bad = false;
+		for (i=0; i!=bcnt; i++) part[i] = new Particle("part" + i, random(30) + pleft, random(30) + ptop, 0, 0, brad, i);
+		for (i=0; i!=bcnt; i++) for (k=0; k!=bcnt; k++) if (k!=i)			
+			if (part[i].dist(part[k].x, part[k].y) < 10)
+			{
+				bad = true;
+				break;
+			}
+			else bad = bad || false;
+		}
+		while (bad)
+	}
+	
+	for (i = 0; i!=bcnt; i++)
+		for (k = 0; k!=bcnt; k++)
+			part[i].distTo[k] = part[i].dist(part[k].x, part[k].y);
+}
+
+function AddParticles()
+{
+	row = Math.ceil(Math.sqrt(pcnt));
+	
+	spx = (maxX - minX)/(row + 1)
+	spy = (maxY - minY)/(row + 1)
+	
+	if (MySuperForm.part[MySuperForm.part.selectedIndex].value == "ordered")
+	{
+		
+		for (i=0; i!=row; i++)
+			for (k=0; k!=row; k++)
+				part[bcnt + i * row + k] = new Particle("part" + bcnt + i * row + k, (k + 1) * spx, (i + 1) * spy, 0, 0, prad, bcnt + i * row + k);
+	}
+	
+	if (MySuperForm.part[MySuperForm.part.selectedIndex].value == "random")	
+		for (i=bcnt; i!=(bcnt + pcnt); i++) part[i] = new Particle("part" + i, Math.abs(random(maxX - minX*6)) + minX*3, Math.abs(random(maxY - minY*6)) + minY*3, 0, 0, prad, i);
+		
+	if (!MySuperForm.zeroVel.checked)
+		for (i=bcnt; i!=(bcnt + pcnt); i++) 
+			{
+				part[i].vX = random(maxInitVel);
+				part[i].vY = random(maxInitVel);
+			}
+}
+
+
+function Init()
+{
+	// initial settings
+	pcnt = partcount;
+	bcnt = 0;
+	dragging = false;
+	showparts = true;	
+
+	my_frameshown = 0;
+	my_framesrendered = 0;
+	my_fps = new String("measurement...");
+	
+	bounds = window.document.all.container;
+		
+	Reset();
+
+	AddObject();
+	
+	AddParticles();
+	
+	hotHand = new Particle("hothand_id", minX + 10, minY + 10, 0, 0, 50, null);
+	
+	Create(bcnt + pcnt);
+	TTime = window.setInterval("Time()", 1);
+	TDraw = window.setInterval("Draw()", 50);
+	//TStat = window.setInterval("Stat()", 250);
+	//TFps = window.setInterval("countFPS()", 10000);
+}
+
+function Reinit()
+{
+	window.clearInterval(TTime);
+	window.clearInterval(TDraw);
+	//window.clearInterval(TStat);
+	//window.clearInterval(TFps);
+	Init();
+}
+
+function countFPS()
+{
+	my_fps = my_frameshown / 10 + " frames shown and " + my_framesrendered / 10 + " rendered, ratio is " + Math.round(my_frameshown * 10 / my_framesrendered * spd) / 10;
+	my_frameshown = 0;
+	my_framesrendered = 0;
+}
+
+function SwitchShow()
+{
+	showparts = !showparts;
+	if (showparts) 
+		for (i=bcnt; i!=(bcnt + pcnt); i++) document.all[part[i].obj].style.display = "block";
+	else
+		for (i=bcnt; i!=(bcnt + pcnt); i++) document.all[part[i].obj].style.display = "none";
+}
+
+function Stat()
+{
+	var maxVel = 0
+	var minVel = 1e10;
+	var VMean = 0;
+	var VMeanSqrt = 0;
+	
+	for (i=0; i!=(pcnt + bcnt); i++)
+	{
+		if (maxVel < (part[i].vX*part[i].vX + part[i].vY*part[i].vY)) maxVel = (part[i].vX*part[i].vX + part[i].vY*part[i].vY); 
+		if (minVel > (part[i].vX*part[i].vX + part[i].vY*part[i].vY)) minVel = (part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+		VMean += Math.sqrt(part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+		VMeanSqrt += (part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+	}
+	
+	maxVel = Math.sqrt(maxVel);
+	minVel = Math.sqrt(minVel);
+	VMean /= (pcnt + bcnt);
+	FNrg = VMeanSqrt / 2;
+	VMeanSqrt = Math.sqrt(VMeanSqrt/(pcnt + bcnt));
+	
+	meter.innerText = "Full Kinetic Energy: " + Math.ceil(FNrg) +
+	"; Minimal Speed: " + Math.ceil(minVel) + 
+	"; Maximal Speed: " + Math.ceil(maxVel) + 
+	"\nMost Probably Speed: " + Math.ceil(VMean) +
+	"; Mean Quadratic Speed: " + Math.ceil(VMeanSqrt) +
+	"; Current fps: " + my_fps ;
+}
+
+function isParticle(name)
+{
+	for (i=0; i!= bcnt + pcnt; i++)	if (part[i].obj == name) return i + 1;
+	return false;
+}
+
+function clProcess()
+{
+	// auxiliary function to process hothand	
+	var id = event.srcElement.id
+	isTruePart = isParticle(id)	
+	if (isTruePart)	
+	{
+		dragging = !dragging;
+		dragging ? TDrag = setInterval("Drag(part[" + (isTruePart - 1) + "])", 25) : clearInterval(TDrag);	
+	}
+	else if (id==hotHand.obj || id=="container")	
+	{
+		dragging = !dragging;
+		dragging ? TDrag = setInterval("Drag(hotHand)", 25) : clearInterval(TDrag);
+	}	
+	else 
+		{
+		if (dragging) clearInterval(TDrag);
+		dragging = false;
+		}
+}
+
+function mmProcess()
+{	
+	mx = event.x + document.body.scrollLeft;
+	my = event.y + document.body.scrollTop;
+}
+
+function Drag(part)
+{
+	part.x = Math.max(Math.min(mx,maxX),minX);
+	part.y = Math.max(Math.min(my,maxY),minY);
+	part.vX = 0;
+	part.vY = 0;
+}
+
+//-->
+</script>
+
+<body  onload="Init()">
+<table style="border:0px;border-collapse:collapse;width:100%;height:70%;">
+	<tr>
+		<td style="border:1px solid #9c9;">
+		<img id="hothand_id" style="position:absolute;color:#363;cursor:crosshair;" src="hothand.gif">
+		<div id="container" style="height:100%;width:100%;border:1px solid #9c9;cursor:crosshair;">
+		</div>
+		</td>
+	</tr>
+	<tr>
+		<td style = "border:1px solid #9c9;height:20px">
+		<div style="padding-left:5px;color:#363;font-size:8pt;background:#9c9"><img src="part.gif"> - Normal Particle <img src="partf.gif"> - Particle under Force <img src="hothand.gif"> - HotHand (simple particle manipulator). Use mouse to move, click to start or stop move.</div>
+		<!--div id = meter style="padding-left:5px;color:#363;font-size:8pt;background:#9c9">&nbsp;<br>&nbsp;</div-->
+		</td>
+	</tr>
+</table>
+
+<form id=MySuperForm name=MySuperForm>
+        World control:<input type="button" value="Rew/Fwd" onclick = "dt=-dt">
+        <input type="button" value="Pause" onclick = "if (spd==0) {spd = lastspd; this.value='Pause'} else {lastspd=spd; spd=0;this.value='  Play '}">
+        Speed control: 
+        <input type="button" value="Increase" onclick = "if (spd!=256) spd*=2"><input type="button" value="Decrease" onclick= "if (spd!=1) spd/=2">
+        Display: <input type="button" value="Switch Visibility" onclick="SwitchShow()">        
+        Precision control: 
+        <input type="button" value="Reset" onclick = "dt = TimeTick">
+        <input type="button" value="dt *= 2" onclick = "dt *= 2">
+        <input type="button" value="dt *= 10" onclick = "dt *= 10">
+        <input type="button" value="dt /= 2" onclick = "dt /= 2">
+        <input type="button" value="dt /= 10" onclick = "dt /= 10">
+        Initial conditions:
+        Create 
+        <select id=obj>
+        <option value="none" selected>none</option>
+        <option value="round">round</option>        
+        <option value="solidround">solidround</option>
+        <option value="square">square</option>
+        <option value="solidsquare">solidsquare</option>
+        <option value="triangle">triangle</option>
+        <option value="line">line</option>
+        <option value="trial">three-ray star</option>
+        <option value="cross">cross</option>
+        <option value="star">star</option>
+        <option value="arstar">arabic star</option>
+        <option value="eight">infinity sign</option>
+        <option value="hv">hv</option>
+        <option value="random">random (long!)</option>
+        </select> object with radius
+        <input type="text" size=2 maxlength=2 value=15 onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 0 && val < 100) brad=val">
+        and <input type="text" size=2 maxlength=2 value=16 onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 0 && val < 100) partcount=val">
+        <select id=part>
+        <option value="ordered" selected>ordered</option>
+        <option value="random">random</option>
+        </select>
+        located molecules with radius
+        <input type="text" size=2 maxlength=2 value=15 onchange="if (!isNaN(val = parseInt(this.value))) if (val >= 0 && val < 100) prad=val">.
+        <input type="checkbox" id=zeroVel> Reinit at zero velocity
+        <input type="checkbox" onclick="use_gravity = this.checked;status = use_gravity"> use gravity at axis X 
+        <input type="text" size=3 maxlength=4 value=0 onchange="if (!isNaN(val = parseInt(this.value))) gravX=val*gravScale;">
+        and Y 
+        <input type="text" size=3 maxlength=4 value=60 onchange="if (!isNaN(val = parseInt(this.value))) gravY=val*gravScale;">
+        <input type="button" value="Reinit" onclick = "Reinit()">        
+	</form>	
+<center>
+<div style="font-size:7pt;color:#9c9">
+(c) <a href="mailto:me@kusaku.su?subject=brown" style="color:#9c9;">kusaku</a> 2001<br>
+No rights reserved
+</center>
+</div>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<HTML>
+<HEAD>
+<META NAME="description" CONTENT="Arranger — layout/slider tool. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/tools/arranger/arranger_modern.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Arranger - Legacy - Kirill Arkhipenko">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/tools/arranger/arranger_modern.html">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Arranger - Legacy - Kirill Arkhipenko">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<META NAME="GENERATOR" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE>Arranger</TITLE>
+<STYLE>
+        BODY
+        {
+            background:#006;
+            margin:0px;
+            color:#66f;
+            font-family:Tahoma,Arial;
+            font-size:8pt;
+        }
+
+        TABLE
+        {
+            border:none;
+            border-collapse:collapse;
+        }
+
+        TD
+        {
+            font-family:Tahoma,Arial;
+            font-size:8pt;
+        }
+
+
+        A{color:#99f; text-decoration:none;}
+        A:hover{color:#990;text-decoration:none;}
+        A:active{color:#ff0;text-decoration:none;}
+        A:visited{color:#99f;text-decoration:none;}
+
+
+        INPUT, SELECT, OPTION, TEXTAREA
+        {
+            background:#03a;
+            color:#66f;
+            border:1px solid #66f;
+            margin:2px;
+            cursor:pointer;
+            font-family:Tahoma,Arial;
+            font-size:8pt;
+            overflow:hidden;
+        }
+
+        HR
+        {
+            height:1px;
+            width:100%;
+            color:#66f;
+        }
+
+        .slider-container {
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .slider-label {
+            color: #66f;
+            font-size: 8pt;
+            margin-bottom: 5px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 20px;
+            background: #03a;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #66f;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #66f;
+            cursor: pointer;
+            border: none;
+        }
+
+    </STYLE>
+<SCRIPT LANGUAGE=javascript>
+        <!--
+
+        var files = new Array();
+        var containers = new Array();
+        var bestArrange = null;
+        var n;
+        var N;
+        var minDisp;
+
+        function Container(limit)
+        {
+            this.size = 0;
+            this.limit = limit;
+            this.files = new Array();
+            this.addFile = new Function("file", "this.files[this.files.length] = file; this.size+=file.size; file.isDropped = true;");
+            this.delFile = new Function("file", "this.files.length--; this.size-=file.size; file.isDropped = false;");
+            this.getDisp = new Function("return this.limit - this.size;");
+        }
+
+        function File(size, name)
+        {
+            this.size = size;
+            this.name = name;
+            this.isDropped = false;
+        }
+
+        function Init()
+        {
+            var cdsizes = 0
+            var fisizes = 0
+            var cds = 0
+
+            for (var i=0; i<files.length; i++)
+            {
+                fisizes += files[i].size;
+            }
+
+            var sliderElement = document.getElementById('sli_conts');
+            var maxDisks = sliderElement ? parseInt(sliderElement.max) : 8;
+            for (var i=0; i<maxDisks; i++)
+            {
+                fisizes -= parseFloat(myform["cdsize" + i].value);
+                cds++;
+                if (fisizes < 0) break;
+            }
+
+            if (fisizes > 0)
+            {
+                alert("Места на всех дисках не хватит!\nНадо выкинуть часть файлов...")
+                return false;
+            }
+
+            if (myform.autoset.checked)
+            {
+                containers = new Array(cds)
+                if (sliderElement) {
+                    sliderElement.value = cds;
+                    var sliderValueSpan = document.getElementById('slider-value');
+                    if (sliderValueSpan) sliderValueSpan.textContent = cds;
+                }
+                for (var i=0; i<cds; i++)
+                    containers[i] = new Container(parseFloat(myform["cdsize" + i].value))
+            }
+            else
+            {
+                var sliderValue = sliderElement ? parseInt(sliderElement.value) : 8;
+                containers = new Array(sliderValue)
+                for (var i=0; i<sliderValue; i++)
+                    containers[i] = new Container(parseFloat(myform["cdsize" + i].value))
+            }
+
+            n = files.length;
+            N = containers.length;
+            minDisp = 0;
+            status = "";
+            return true;
+        }
+
+        function fixvisCds()
+        {
+            var sliderElement = document.getElementById('sli_conts');
+            if (!sliderElement) return;
+            var sliderValue = parseInt(sliderElement.value);
+            status = "У нас теперь " + sliderValue + " CD!" ;
+            for (var i=0; i<sliderValue; i++)
+            {
+                var cdElement = document.getElementById("cd" + i);
+                if (cdElement) cdElement.style.visibility = "visible";
+            }
+            for (var i=sliderValue; i<parseInt(sliderElement.max); i++)
+            {
+                var cdElement = document.getElementById("cd" + i);
+                if (cdElement) cdElement.style.visibility = "hidden";
+            }
+        }
+
+        function addFile()
+        {
+            var fsize = parseFloat(myform.fsize.value);
+            var fname = myform.fname.value;
+            if (isNaN(fsize)) return;
+            if (fname.length == 0) fname = "file of " + fsize + "Mb";
+            files[files.length] = new File(fsize, fname);
+            myform.flist.add(new Option(files[files.length - 1].name + " - " + files[files.length - 1].size + " Mb"));
+        }
+
+        function delFile()
+        {
+            var file_to_remove = myform.flist.selectedIndex;
+            if (file_to_remove == -1) file_to_remove = files.length - 1;
+            for (var i=file_to_remove; i<files.length - 1; i++)
+            {
+                files[i] = files[i + 1];
+            }
+            if (files.length > 0)
+            {
+                files.length--;
+                myform.flist.remove(file_to_remove);
+            }
+        }
+
+        var oo = 0;
+
+        function DropFile(number)
+        {
+            oo++;
+
+            for (var i = 0; i < N; i++)
+            if (containers[i].size + files[number].size < containers[i].limit)
+            {
+                containers[i].addFile(files[number]);
+                if (number < n - 1)
+                    DropFile(number + 1);
+                else
+                    DoStat();
+                containers[i].delFile(files[number]);
+            }
+        }
+
+        function DoStat()
+        {
+            var disp = 0;
+            for (var i=0; i<N; i++)
+                disp += (containers[i].size)*(containers[i].size);
+            if (minDisp < 0 || minDisp < disp)
+            {
+                var delta = minDisp < 0 ? disp : (disp - minDisp);
+                minDisp = disp;
+                status = disp + ":" + delta + ":" + oo;
+                oo = 0;
+                for (var i=0; i<N; i++)
+                {
+                    bestArrange[i] = new Array(containers[i].files.length);
+                    for (var k=0; k<containers[i].files.length; k++)
+                        bestArrange[i][k] = containers[i].files[k];
+                }
+            }
+        }
+
+        function Run()
+        {
+            if (files.length == 0) 
+            {
+                alert("Сначала добавьте файлы!");
+                return;
+            }
+            
+            oo = 0;
+            if (!Init()) 
+            {
+                return;
+            }
+            
+            bestArrange = new Array(N);
+            for (var i=0; i<N; i++)
+                bestArrange[i] = new Array();
+            
+            minDisp = -1;
+            DropFile(0);
+            
+            if (bestArrange.length == 0 || bestArrange[0] == undefined || minDisp < 0)
+            {
+                alert("Невозможно разместить файлы так, чтобы они\nзанимали минимальное количество дисков!\nНеобходимо разбить часть файлов\nили добавить еще один диск...");
+            }
+            else
+            {
+                display();
+            }
+        }
+
+
+        function display()
+        {
+
+            for (var i=0; i<8; i++)
+            {
+                var selectElement = myform["cdcont" + i];
+                if (selectElement) {
+                    while (selectElement.options.length > 0)
+                        selectElement.remove(0);
+                }
+            }
+
+            for (var i=0; i<bestArrange.length; i++)
+            {
+                var size = 0
+                var selectElement = myform["cdcont" + i];
+                if (!selectElement) continue;
+                for (var k=0; k<bestArrange[i].length; k++)
+                {
+                    var file = bestArrange[i][k];
+                    var opt = new Option(file.name);
+                    size += file.size;
+                    selectElement.add(opt);
+                }
+                var opt = new Option("->total: " + size + "Mb<-");
+                selectElement.add(opt);
+                var opt = new Option("->free: " + (containers[i].limit - size) + "Mb<-");
+                selectElement.add(opt);
+            }
+        }
+
+        function addRandomFiles()
+        {
+            for (var i=0; i<10; i++)
+            {
+                myform.fsize.value = Math.round(Math.random() * 699);
+                addFile();
+            }
+        }
+
+        function initPage()
+        {
+            fixvisCds();
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            initPage();
+            var sli_conts_elem = document.getElementById('sli_conts');
+            var sliderValueSpan = document.getElementById('slider-value');
+            if (sli_conts_elem && sliderValueSpan) {
+                sliderValueSpan.textContent = sli_conts_elem.value;
+                sli_conts_elem.addEventListener('input', function() {
+                    sliderValueSpan.textContent = sli_conts_elem.value;
+                    fixvisCds();
+                });
+            }
+        });
+
+        -->
+    </SCRIPT>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<BODY STYLE="margin:0; padding:0;">
+<DIV CLASS="slider-container">
+    <DIV CLASS="slider-label">Количество дисков: <SPAN ID="slider-value">8</SPAN></DIV>
+    <INPUT TYPE="range" ID="sli_conts" MIN="0" MAX="8" VALUE="8" STEP="1">
+</DIV>
+<FORM ID=myform>
+    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+        <TR>
+            <TD COLSPAN=8>
+                <CENTER>Наши болванки:</CENTER>
+            </TD>
+        </TR>
+        <TR>
+            <TD WIDTH="12%" ALIGN=center ID=cd0>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont0>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize0 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd1>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont1>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize1 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd2>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont2>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize2 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd3>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont3>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize3 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd4>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont4>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize4 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd5>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont5>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize5 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd6>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont6>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize6 SIZE=3 VALUE=700>Mb
+            </TD>
+            <TD WIDTH="12%" ALIGN=center ID=cd7>
+                <SELECT SIZE=6 STYLE="WIDTH: 100%" ID=cdcont7>
+                    <OPTION>empty
+                </SELECT>
+                <INPUT TYPE="text" ID=cdsize7 SIZE=3 VALUE=700>Mb
+            </TD>
+        </TR>
+        <TR>
+            <TD WIDTH="100%" COLSPAN=8>
+                <CENTER>Наши файлы:</CENTER>
+                <SELECT ID=flist SIZE=10 STYLE="WIDTH: 100%">
+                </SELECT>
+            </TD>
+        </TR>
+        <TR>
+            <TD WIDTH="100%" COLSPAN=8>
+                <CENTER>
+                    наше имя (не обязательно):
+                    <INPUT TYPE="text" ID=fname>
+                    наш размер файла:
+                    <INPUT TYPE="text" ID=fsize>
+                    <INPUT TYPE="button" VALUE="Добавить" ONCLICK="addFile()">
+                    <INPUT TYPE="button" VALUE="Удалить" ONCLICK="delFile()">
+                    <INPUT TYPE="button" VALUE="Добавить случайные" ONCLICK="addRandomFiles()">
+                    <INPUT TYPE="button" VALUE="Показать результат" ONCLICK="display()">
+                    <HR>
+                    <INPUT TYPE="checkbox" ID=autoset CHECKED>
+                    наше автоопределение нашего количества наших болванок (работает не всегда хорошо)
+                    <HR>
+                    <INPUT TYPE="button" VALUE="...и сказал: Поехали!.." ONCLICK="Run()">
+                    <HR>
+                    Цель нашего скрипта - помочь разместить наше большое количество наших файлов
+                    на нескольких наших дисках, максимально полно используя их емкость.
+                    Например, наш набор файлов 123, 234, 345, 456, 567 Мб на трех 700 Мб наших болванках можно разместить так:<BR>
+                    Наш CD1: 345, 234 - 579 Мб total<BR>
+                    Наш CD2: 123, 456 - 579 Мб total<BR>
+                    Наш CD3: 567 - 567 Мб total<BR>
+                    Несмотря на то, что в сумме на наших дисках осталось 375 Мб свободно, на них нельзя
+                    записать из-за фрагментации наш файл размером более 133 Мб. Но используя наш оптимизатор размещения,
+                    появляется возможность записать наш файл размером 355 Мб!
+                    Количество наших болванок устанавливается нашим верхним ползунком.
+                    <HR>
+                    (c) <A HREF=http://kusaku.su>kusaku</A> 2003
+                    <HR>
+                </CENTER>
+            </TD>
+        </TR>
+    </TABLE>
+</FORM>
+</BODY>
+</HTML>

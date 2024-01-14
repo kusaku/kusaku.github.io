@@ -1,0 +1,405 @@
+<HTML>
+<HEAD>
+<LINK REL="icon" TYPE="image/png" SIZES="32x32" HREF="/favicon-32x32.png">
+<LINK REL="icon" TYPE="image/png" SIZES="16x16" HREF="/favicon-16x16.png">
+<META NAME="generator" CONTENT="Microsoft Visual Studio 6.0">
+<TITLE>Maxwell Distribution</TITLE>
+<STYLE>
+BODY
+{
+ background: url("bgnd.gif") #9c9;
+ color:#363;
+ font-family:arial;
+ font-size:10pt;
+ overflow:hidden;
+ margin:10px;
+}
+
+INPUT
+{
+ background:#9c9;
+ color:#363;
+ border:1px solid #363;
+ margin:2px;
+ cursor:hand;
+ font-family:arial;
+ font-size:10pt;
+}
+</STYLE>
+<SCRIPT ASYNC SRC="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></SCRIPT>
+<SCRIPT>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J8N1Q1GVVB');
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
+    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</SCRIPT>
+<META NAME="description" CONTENT="Maxwell's demon simulation. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="keywords" CONTENT="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
+<META NAME="author" CONTENT="Kirill Arkhipenko">
+<LINK REL="canonical" HREF="https://kusaku.su/legacy/javascript/projects/physfac/maxwell.html">
+<LINK REL="alternate" HREFLANG="en" HREF="https://kusaku.su/legacy/javascript/projects/physfac/maxwell.html">
+<LINK REL="alternate" HREFLANG="ru" HREF="https://kusaku.su/legacy/javascript/projects/physfac/maxwell.html">
+<META NAME="robots" CONTENT="index, follow">
+<META PROPERTY="og:title" CONTENT="Maxwell Distribution">
+<META PROPERTY="og:description" CONTENT="Maxwell's demon simulation. Legacy JavaScript by Kirill Arkhipenko.">
+<META PROPERTY="og:url" CONTENT="https://kusaku.su/legacy/javascript/projects/physfac/maxwell.html">
+<META PROPERTY="og:type" CONTENT="website">
+<META PROPERTY="og:site_name" CONTENT="kusaku.su">
+<META PROPERTY="og:image" CONTENT="https://kusaku.su/avatar.webp">
+<META NAME="twitter:card" CONTENT="summary">
+<META NAME="twitter:title" CONTENT="Maxwell Distribution">
+<META NAME="twitter:description" CONTENT="Maxwell's demon simulation. Legacy JavaScript by Kirill Arkhipenko.">
+<META NAME="twitter:image" CONTENT="https://kusaku.su/avatar.webp">
+</HEAD>
+<SCRIPT LANGUAGE=javascript>
+<!--
+/*(c) kusaku 2001 */
+
+var TimeTick = .001
+var defForce = -5e5;
+var partcount = 20;
+var speed = 2;
+var maxInitVel = 3000;
+var bounds;
+var dt = TimeTick;
+var	spd = speed;
+var part = new Array();
+
+var partImg = new Image();
+	partImg.src = "part.gif";
+var partfImg = new Image();
+	partfImg.src = "partf.gif";	
+var hhImg = new Image();
+	hhImg.src = "hothand.gif";
+
+function random(value)
+{
+	return value - (Math.random() * 2 * value);
+}
+
+function Particle(obj, x, y, vX, vY, rad, number)
+{
+	// particle or part of object
+	this.obj = obj;
+	this.number = number;
+	this.rad = rad;
+	this.x = x;
+	this.y = y;
+	this.vX = vX;
+	this.vY = vY;
+	this.dvX = 0;
+	this.dvY = 0;
+	this.distTo = new Array();
+	this.dist = Dist;
+	this.force = Force;
+	this.integrate = Integrate;
+	this.set = Set;
+	this.isUnderForce = false;	
+	return this;
+}
+
+function Dist(x,y)
+{
+	return Math.sqrt((this.x - x)*(this.x - x) + (this.y - y)*(this.y - y));
+}
+
+function Integrate(that, dt)
+{
+	var dDist = this.dist(that.x, that.y);	
+	//if (dDist > this.rad) return;
+	dV = this.force(dDist) * dt;
+	dDist=(dDist==0)?1:dDist;
+	this.dvX += dV * (that.x - this.x)/dDist; //Cosinus
+	this.dvY += dV * (that.y - this.y)/dDist; //Sinus
+	this.isUnderForce = this.isUnderForce || dV;
+}
+
+function Force(dist)
+{
+	if (dist < this.rad) return defForce * (this.rad - dist);
+	else return 0;
+}
+
+function Set(dt)
+{
+	// border and hothand calculation
+	this.integrate(new Particle(null, minX, this.y, null, null, null, null), dt);
+	this.integrate(new Particle(null, maxX, this.y, null, null, null, null), dt);
+	this.integrate(new Particle(null, this.x, minY, null, null, null, null), dt);
+	this.integrate(new Particle(null, this.x, maxY, null, null, null, null), dt);
+	this.integrate(hotHand, dt);
+	// setting up new position	
+	this.vX += this.dvX;
+	this.vY += this.dvY;	
+	this.vX = (isNaN(this.vX))?0:this.vX;
+	this.vY = (isNaN(this.vY))?0:this.vY;
+	this.x += this.vX * dt;
+	this.y += this.vY * dt;
+	this.dvX = 0;
+	this.dvY = 0;
+}
+
+function Time()
+{
+	// main time cycle
+	for (times=0; times!=spd; times++)
+	{		
+		for (i=0; i!=cnt; i++) for (k=0; k!=cnt; k++) if (k!=i) part[i].integrate(part[k], dt);
+		for (i=0; i!=cnt; i++) part[i].set(dt);
+		my_framesrendered++;
+	}	
+}
+
+function Draw()
+{
+	// main draw cycle
+	for (i=0;i!=cnt; i++)
+	{
+	document.all[part[i].obj].style.left = Math.round(part[i].x) - 6;
+	document.all[part[i].obj].style.top = Math.round(part[i].y) - 6;
+	if (part[i].isUnderForce) document.all[part[i].obj].src = partfImg.src;
+	else document.all[part[i].obj].src = partImg.src;
+	part[i].isUnderForce = false;
+	};
+	document.all[hotHand.obj].style.left = hotHand.x - 6;
+	document.all[hotHand.obj].style.top = hotHand.y - 6;
+	my_frameshown++;
+}
+
+function Create(cnt)
+{
+	// html creator	
+	var s = "";
+	for (i=0;i!=cnt;i++)		
+	s += '<img src="/legacy/javascript/projects/physfac/part.gif" style="position:absolute;color:#363;cursor:crosshair;" id="' + part[i].obj + '">';
+	document.all.container.innerHTML = s;
+}
+
+function Reset(item)
+{
+	// reseting bounding box	
+	if (bounds)
+	{
+	minX = bounds.offsetLeft + parseInt(document.body.currentStyle.margin) + 2;
+	minY = bounds.offsetTop + parseInt(document.body.currentStyle.margin) + 2;
+	maxX = bounds.offsetWidth + minX;
+	maxY = bounds.offsetHeight + minY;
+	maxBarwidth = mxwll.offsetWidth;
+	}
+}
+
+function Init()
+{
+	// initial settings
+	cnt = partcount;	
+	dragging = false;
+
+	my_frameshown = 0;
+	my_framesrendered = 0;
+	my_fps = new String("measurement...");
+	
+	bounds = window.document.all.container;
+		
+	Reset();
+	
+	if (MySuperForm.zeroVel.checked)
+		for (i=0; i!=cnt; i++) part[i] = new Particle("part" + i, Math.abs(random(maxX - minX*6)) + minX*3, Math.abs(random(maxY - minY*6)) + minY*3, 0, 0, 15, i);
+	else
+		for (i=0; i!=cnt; i++) part[i] = new Particle("part" + i, Math.abs(random(maxX - minX*6)) + minX*3, Math.abs(random(maxY - minY*6)) + minY*3, random(maxInitVel), random(maxInitVel), 15, i);
+
+	hotHand = new Particle("hothand_id", minX + 10, minY + 10, 0, 0, 50, null);
+	
+	Create(cnt);
+	TTime = window.setInterval("Time()", 1);
+	TDraw = window.setInterval("Draw()", 50);
+	TMaxwell = window.setInterval("Maxwell()", 250);
+	TFps = window.setInterval("countFPS()", 10000);
+}
+
+function Reinit()
+{
+	window.clearInterval(TTime);
+	window.clearInterval(TDraw);	
+	window.clearInterval(TMaxwell);
+	window.clearInterval(TFps);
+	Init();
+}
+
+function countFPS()
+{
+	my_fps = my_frameshown / 10 + " frames shown and " + my_framesrendered / 10 + " rendered, ratio is " + Math.round(my_frameshown * 10 / my_framesrendered * spd) / 10;
+	my_frameshown = 0;
+	my_framesrendered = 0;
+}
+
+function Maxwell()
+{
+	// calculates Maxwell distribution
+	var bar;
+	var barscnt = 10; // number of bars
+	var maxVel = 0
+	var minVel = 1e10;
+	var VMean = 0;
+	var VMeanSqrt = 0;
+	
+	for (i=0; i!=cnt; i++)
+	{
+		if (maxVel < (part[i].vX*part[i].vX + part[i].vY*part[i].vY)) maxVel = (part[i].vX*part[i].vX + part[i].vY*part[i].vY); 
+		if (minVel > (part[i].vX*part[i].vX + part[i].vY*part[i].vY)) minVel = (part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+		VMean += Math.sqrt(part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+		VMeanSqrt += (part[i].vX*part[i].vX + part[i].vY*part[i].vY);
+	}
+	
+	maxVel = Math.sqrt(maxVel);
+	minVel = Math.sqrt(minVel);
+	VMean /= cnt;
+	FNrg = VMeanSqrt / 2;
+	VMeanSqrt = Math.sqrt(VMeanSqrt/cnt);
+	
+	for (i=0; i!=barscnt; i++){
+		bar = 0;
+		for (k=0; k!=cnt; k++)
+		{
+			partVel = Math.sqrt(part[k].vX*part[k].vX + part[k].vY*part[k].vY);
+			if ((partVel >= maxVel / barscnt * i)&&(partVel <= maxVel / barscnt * (i + 1))) bar += 1;
+		}
+		
+	document.all["maxw" + i].innerText = bar + " moleculas\n" + Math.ceil(maxVel/barscnt*i) + "-" + Math.ceil(maxVel/barscnt*(i+1));
+	document.all["maxw" + i].style.width = Math.ceil(bar * (maxBarwidth - 70)/cnt + 60);
+	}
+	//meter.style.width = Math.ceil(VMean*maxX/50000000);	
+	meter.innerText = "Full Kinetic Energy: " + Math.ceil(FNrg) +
+	"; Minimal Speed: " + Math.ceil(minVel) + 
+	"; Maximal Speed: " + Math.ceil(maxVel) + 
+	"\nMost Probably Speed: " + Math.ceil(VMean) +
+	"; Mean Quadratic Speed: " + Math.ceil(VMeanSqrt) +
+	"; Temperature: " + Math.ceil(VMeanSqrt/10 - 273.15) + "°C" + 
+	"; Current fps: " + my_fps ;
+}
+
+function isParticle(name)
+{
+	for (i=0; i!=cnt; i++) if (part[i].obj == name) return i + 1;
+	return false;
+}
+
+function clProcess()
+{
+	// auxiliary function to process hothand	
+	var id = event.srcElement.id
+	isTruePart = isParticle(id)	
+	if (isTruePart)	
+	{
+		dragging = !dragging;
+		dragging ? TDrag = setInterval("Drag(part[" + (isTruePart - 1) + "])", 25) : clearInterval(TDrag);	
+	}
+	else if (id==hotHand.obj || id=="container")	
+	{
+		dragging = !dragging;
+		dragging ? TDrag = setInterval("Drag(hotHand)", 25) : clearInterval(TDrag);
+	}	
+	else 
+		{
+		if (dragging) clearInterval(TDrag);
+		dragging = false;
+		}
+}
+
+function mmProcess()
+{	
+	mx = event.x + document.body.scrollLeft;
+	my = event.y + document.body.scrollTop;
+}
+
+function Drag(part)
+{
+	part.x = Math.max(Math.min(mx,maxX),minX);
+	part.y = Math.max(Math.min(my,maxY),minY);
+	part.vX = 0;
+	part.vY = 0;
+}
+
+//-->
+</SCRIPT>
+
+<BODY ONLOAD="Init()">
+<TABLE STYLE="border:0px;border-collapse:collapse;width:100%;height:75%">
+	<TR>
+		<TD STYLE="width:70%;border:1px solid #9c9;">
+		<IMG ID="hothand_id" STYLE="position:absolute;color:#363;cursor:crosshair;" SRC="hothand.gif">
+		<DIV ID=container STYLE="height:100%;width:100%;border:1px solid #9c9;cursor:crosshair;"></DIV>
+		</TD>
+		<TD ID=mxwll STYLE = "width:30%;border:1px solid #9c9;">
+		<SPAN STYLE="font-size:8pt;color:#9c9">&nbsp;&nbsp;Maxwell distribution:<SPAN>
+		<DIV ID= maxw0 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw1 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw2 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw3 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw4 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw5 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw6 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw7 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw8 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<DIV ID= maxw9 STYLE="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</DIV>
+		<!--div id= maxw10 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw11 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw12 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw13 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw14 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw15 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw16 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw17 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw18 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		<div id= maxw19 style="height:4%;width:100%;color:#363;background:#9c9;margin:2px;">&nbsp;<BR>&nbsp;</div>
+		You can increase count of bars by adding new tags (like example above) whith suitable proprtis.-->
+		</TD>
+	</TR>
+	<TR> 
+		<TD COLSPAN=2 STYLE = "border:1px solid #9c9;height:20px">
+		<DIV ID = meter STYLE="padding-left:5px;color:#363;font-size:8pt;background:#9c9">&nbsp;<BR>&nbsp;</DIV>
+		</TD>
+	</TR>
+</TABLE>
+	<FORM ID=MySuperForm NAME=MySuperForm>
+        World control:<INPUT TYPE="button" VALUE="Rew/Fwd" ONCLICK = "dt=-dt">
+        <INPUT TYPE="button" VALUE="Pause" ONCLICK = "if (spd==0) {spd = lastspd; this.value='Pause'} else {lastspd=spd; spd=0;this.value=' Play '}">
+        Speed control: 
+        <INPUT TYPE="button" VALUE="Increase" ONCLICK = "if (spd!=256) spd*=2"><INPUT TYPE="button" VALUE="Decrease" ONCLICK= "if (spd!=1) spd/=2">
+        Precision control: 
+        <INPUT TYPE="button" VALUE="Reset" ONCLICK = "dt = TimeTick">
+        <INPUT TYPE="button" VALUE="dt *= 2" ONCLICK = "dt *= 2">
+        <INPUT TYPE="button" VALUE="dt *= 10" ONCLICK = "dt *= 10">
+        <INPUT TYPE="button" VALUE="dt /= 2" ONCLICK = "dt /= 2">
+        <INPUT TYPE="button" VALUE="dt /= 10" ONCLICK = "dt /= 10">
+        Initial condition:
+        Create 
+        <INPUT TYPE="text" SIZE=2 MAXLENGTH=2 VALUE=20 ONCHANGE="if (!isNaN(val = parseInt(this.value))) if (val >= 0 && val < 100) partcount=val"> moleculas.
+        <INPUT TYPE="checkbox" ID=zeroVel> Reinit at zero velocity        
+        <INPUT TYPE="button" VALUE="Reinit" ONCLICK = "Reinit()">
+	</FORM>
+<CENTER>
+<DIV STYLE="font-size:7pt;color:#9c9">
+(c) <A HREF="mailto:me@kusaku.su?subject=brown" STYLE="color:#9c9;">kusaku</A> 2001<BR>
+No rights reserved
+</CENTER>
+</DIV>
+</BODY>
+<SCRIPT>
+<!--
+	window.onerror = null;
+	window.onresize = Reset;
+	document.onmousemove = mmProcess;
+	document.onclick = clProcess;	
+//-->
+</SCRIPT>
+</HTML>
+
