@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Location History HeatMap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+    <style>
+        #map {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center">
+    <input type="file" onchange="parseJson()" id="historyFile" accept=".json" multiple style="float: left"/>
+    <output id="message"></output>
+    <span style="float: right">
+        <label><input type="radio" onchange="drawMap()" name="tiles" value="osm-bike">OSM-bike</label>
+        <label><input type="radio" onchange="drawMap()" name="tiles" value="osm">OSM</label>
+        <label><input type="radio" onchange="drawMap()" name="tiles" value="satellite">Satellite</label>
+    </span>
+    </div>
+        <input type="range" oninput="updatemessageDisplay()" onchange="drawPoints()" id="leftSlider" step="1" style="width: 100%"/>
+        <input type="range" oninput="updatemessageDisplay()" onchange="drawPoints()" id="rightSlider" step="1" style="width: 100%"/>
+    </div>
+</div>
+<div id="map"></div>
+<script>
+    const filesInput = document.getElementById('historyFile');
+    const message = document.getElementById('message');
+    const radioButtons = document.getElementsByName('tiles');
+    const leftSlider = document.getElementById('leftSlider');
+    const rightSlider = document.getElementById('rightSlider');
+
+    const map = L.map('map').setView([52.5094088, 13.501611], 12);
+
+    let tileLayer;
+    let heatLayer;
+    let pointsHistory = new Map();
+    let points = [];
+    let minTimestamp = Infinity;
+    let maxTimestamp = -Infinity;
+
+    function drawMap() {
+        const selectedValue = Array.from(radioButtons).find(radioButton => radioButton.checked)?.value;
+        const tileUrls = {
+            'satellite': 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            'osm': 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'osm-bike': 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png'
+        };
+        const tileUrl = tileUrls[selectedValue] || tileUrls.satellite;
+
+        if (tileLayer) map.removeLayer(tileLayer);
+        if (heatLayer) map.removeLayer(heatLayer);
+
+        tileLayer = L.tileLayer(tileUrl).addTo(map);
+        heatLayer = L.heatLayer(points, {max: 0.0000001, radius: 2, blur: 2}).addTo(map);
+    }
+
+    drawMap();
+
+    function parseJson() {
+        if (filesInput.files.length > 0) {
+            pointsHistory = new Map();
+            minTimestamp = Infinity;
+            maxTimestamp = -Infinity;
+            message.textContent = 'loading';
+
+            Array.from(filesInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const fileName = file.name;
+                        message.textContent = `${fileName} loaded`;
+                        JSON.parse(e.target.result)['locations'].forEach(entry => {
+                            if ('latitudeE7' in entry && 'longitudeE7' in entry && 'timestamp' in entry) {
+                                const timestamp = new Date(entry.timestamp).getTime();
+                                const latitude = entry.latitudeE7 / 10e6;
+                                const longitude = entry.longitudeE7 / 10e6;
+                                minTimestamp = Math.min(minTimestamp, timestamp);
+                                maxTimestamp = Math.max(maxTimestamp, timestamp);
+                                pointsHistory.set(timestamp, [latitude, longitude]);
+                            }
+                        });
+                        leftSlider.min = minTimestamp;
+                        leftSlider.max = maxTimestamp;
+                        leftSlider.value = minTimestamp;
+                        rightSlider.min = minTimestamp;
+                        rightSlider.max = maxTimestamp;
+                        rightSlider.value = maxTimestamp;
+                        message.textContent = `${fileName} parsed`;
+                        drawPoints();
+                    } catch (error) {
+                        console.error(`Error parsing JSON from file "${file.name}":`, error);
+                    }
+                };
+                reader.readAsText(file);
+            });
+        } else {
+            console.error('No files selected.');
+        }
+    }
+
+    parseJson();
+
+    function updatemessageDisplay() {
+        const leftValue = new Date(parseInt(leftSlider.value)).toISOString();
+        const rightValue = new Date(parseInt(rightSlider.value)).toISOString();
+        message.textContent = `${leftValue} - ${rightValue}`;
+    }
+
+    function drawPoints() {
+        const leftValue = parseInt(leftSlider.value);
+        const rightValue = parseInt(rightSlider.value);
+        points = Array.from(pointsHistory.entries())
+            .filter(([timestamp]) => timestamp >= leftValue && timestamp <= rightValue)
+            .map(([, [latitude, longitude]]) => [latitude, longitude]);
+        heatLayer.setLatLngs(points);
+    }
+</script>
+</body>
+</html>
