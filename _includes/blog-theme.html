@@ -1,0 +1,128 @@
+<script>
+  (function () {
+    var theme = localStorage.theme || 'system';
+    var isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.toggle('dark', isDark);
+    document.documentElement.classList.toggle('light', !isDark);
+  })();
+</script>
+<style>
+  html.light body { background: #ffffff; color: #24292f; }
+  html.light .bg-white { background-color: #ffffff; }
+  html.light .bg-gray-50 { background-color: #f6f8fa; }
+  html.light .text-gray-500,
+  html.light .text-gray-600 { color: #57606a; }
+  html.light .text-gray-700,
+  html.light .text-gray-800,
+  html.light .text-gray-900 { color: #24292f; }
+  html.light .border-gray-200 { border-color: #d0d7de; }
+  html.light .theme-shell {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: #d0d7de;
+  }
+  html.light .theme-btn.theme-active,
+  html.light .theme-btn.theme-active:hover {
+    background-color: #0969da;
+    color: #ffffff;
+  }
+  html.light .theme-btn:hover,
+  html.light .blog-pill:hover,
+  html.light .blog-chip:hover,
+  html.light .blog-row:hover {
+    background-color: #f6f8fa;
+  }
+  html.light .theme-btn:hover { color: #171515; }
+  html.light .blog-pill:hover,
+  html.light .blog-chip:hover,
+  html.light .blog-subtle-link:hover,
+  html.light .blog-row:hover .blog-row-title {
+    color: #0f172a;
+  }
+  html.light .blog-panel { box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); }
+  html.light .blog-row:hover { border-color: #d0d7de; }
+
+  html.dark body { background: #0d1117; color: #c9d1d9; }
+  html.dark .bg-white { background-color: #161b22; }
+  html.dark .bg-gray-50 { background-color: #0d1117; }
+  html.dark .text-gray-500,
+  html.dark .text-gray-600 { color: #8b949e; }
+  html.dark .text-gray-700,
+  html.dark .text-gray-800,
+  html.dark .text-gray-900 { color: #c9d1d9; }
+  html.dark .border-gray-200 { border-color: #30363d; }
+  html.dark .theme-shell {
+    background-color: rgba(22, 27, 34, 0.92);
+    border-color: #30363d;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  html.dark .theme-btn.theme-active,
+  html.dark .theme-btn.theme-active:hover {
+    background-color: #1f6feb;
+    color: #c9d1d9;
+  }
+  html.dark .theme-btn:hover,
+  html.dark .blog-pill:hover,
+  html.dark .blog-chip:hover,
+  html.dark .blog-row:hover {
+    background-color: #21262d;
+  }
+  html.dark .theme-btn:hover,
+  html.dark .blog-pill:hover,
+  html.dark .blog-chip:hover,
+  html.dark .blog-subtle-link:hover,
+  html.dark .blog-row:hover .blog-row-title {
+    color: #f0f6fc;
+  }
+  html.dark .blog-panel { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28); }
+  html.dark .blog-row:hover { border-color: #30363d; }
+  html.dark .blog-content p,
+  html.dark .blog-content li { color: #c9d1d9; }
+  html.dark .blog-content h2,
+  html.dark .blog-content h3 { color: #c9d1d9; }
+  html.dark .blog-content a { color: #58a6ff; }
+  html.dark .blog-content code {
+    background: #21262d;
+    color: #c9d1d9;
+  }
+  html.dark .blog-content pre {
+    background: #010409;
+    color: #f5f5f4;
+  }
+</style>
+<script>
+  const getBlogSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const applyBlogTheme = () => {
+    const theme = localStorage.theme ?? 'system';
+    const isDark = theme === 'system' ? getBlogSystemPreference() : theme === 'dark';
+    document.documentElement.classList.toggle('light', !isDark);
+    document.documentElement.classList.toggle('dark', isDark);
+    ['system', 'light', 'dark'].forEach((key) => {
+      const btn = document.getElementById(`theme-${key}`);
+      if (btn) btn.classList.toggle('theme-active', key === theme);
+    });
+  };
+
+  const setBlogTheme = (theme) => {
+    if (theme === 'system') {
+      localStorage.removeItem('theme');
+    } else {
+      localStorage.theme = theme;
+    }
+    applyBlogTheme();
+  };
+
+  const initBlogTheme = () => {
+    applyBlogTheme();
+    ['system', 'light', 'dark'].forEach((theme) => {
+      document.getElementById(`theme-${theme}`)?.addEventListener('click', () => setBlogTheme(theme));
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (!localStorage.theme || localStorage.theme === 'system') applyBlogTheme();
+    });
+  };
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', initBlogTheme)
+    : initBlogTheme();
+</script>

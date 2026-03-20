@@ -1,67 +1,31 @@
+---
+layout: null
+permalink: /sitemap.xml
+---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% assign html_pages = site.pages | sort: "url" %}
+{% for page in html_pages %}
+  {% if page.url and page.name != "sitemap.xml" and page.sitemap != false %}
   <url>
-    <loc>https://kusaku.su/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/"/>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <loc>{{ page.url | replace: 'index.html', '' | absolute_url }}</loc>
   </url>
+  {% endif %}
+{% endfor %}
+{% for post in site.posts %}
+  {% unless post.private_review or post.sitemap == false %}
   <url>
-    <loc>https://kusaku.su/legacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <loc>{{ post.url | absolute_url }}</loc>
+    <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
   </url>
+  {% endunless %}
+{% endfor %}
+{% assign static_files_sorted = site.static_files | sort: "path" %}
+{% for file in static_files_sorted %}
+  {% if file.path contains '/legacy/' and file.extname == '.html' %}
   <url>
-    <loc>https://kusaku.su/legacy/javascript/projects.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/projects.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/projects.html"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>{{ file.path | replace: 'index.html', '' | absolute_url }}</loc>
   </url>
-  <url>
-    <loc>https://kusaku.su/legacy/javascript/tools.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/tools.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/tools.html"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://kusaku.su/legacy/javascript/experiments.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/javascript/experiments.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/javascript/experiments.html"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://kusaku.su/legacy/fortran/fortran.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/fortran/fortran.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/fortran/fortran.html"/>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://kusaku.su/legacy/quickbasic/quickbasic.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/quickbasic/quickbasic.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/quickbasic/quickbasic.html"/>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://kusaku.su/legacy/perl/perl.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/perl/perl.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/perl/perl.html"/>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://kusaku.su/legacy/turbopascal/turbopascal.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/turbopascal.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/turbopascal.html"/>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
+  {% endif %}
+{% endfor %}
 </urlset>

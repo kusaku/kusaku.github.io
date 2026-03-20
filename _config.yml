@@ -1,0 +1,61 @@
+title: kusaku.su
+name: Kirill Arkhipenko
+description: Personal website of Kirill Arkhipenko (Кирилл Архипенко). Projects, tools, legacy experiments, and blog posts.
+url: https://kusaku.su
+lang: en
+timezone: Europe/Berlin
+author:
+  name: Kirill Arkhipenko
+  aliases:
+    - Кирилл Архипенко
+    - kusaku
+    - retrewert
+    - aks1983
+  image: /assets/main/avatar.webp
+keywords:
+  - Kirill Arkhipenko
+  - Кирилл Архипенко
+  - kusaku
+  - retrewert
+  - aks1983
+  - developer
+  - software engineer
+  - projects
+  - tools
+same_as:
+  - https://github.com/kusaku
+  - https://www.linkedin.com/in/kirill-arkhipenko/
+  - https://www.instagram.com/kirill.arkhipenko/
+  - https://t.me/aks1983
+  - https://vk.com/id109300
+  - https://ok.ru/profile/570720576532
+analytics:
+  google_id: G-J8N1Q1GVVB
+  yandex_id: 105986243
+theme_color:
+  light: "#ffffff"
+  dark: "#0d1117"
+geo_region: DE
+permalink: pretty
+markdown: kramdown
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      permalink: /blog/:year/:month/:day/:title/
+      image: /assets/main/avatar.webp
+      og_type: article
+      body_class: min-h-screen
+exclude:
+  - README.md
+  - .idea/
+  - __pycache__/
+  - legacy/**/.DS_Store
+  - legacy/**/__pycache__/
+  - "*.pyc"
+  - .DS_Store
+  - _site/
+  - .jekyll-cache/
+  - vendor/

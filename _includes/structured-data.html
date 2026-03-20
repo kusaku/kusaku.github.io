@@ -1,0 +1,63 @@
+{% assign description = page.description | default: site.description %}
+{% assign image_path = page.image | default: site.author.image %}
+{% assign image_url = image_path | absolute_url %}
+{% assign canonical_url = page.canonical_url | default: page.url | replace: 'index.html', '' | absolute_url %}
+{% if page.schema_type == "person" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ site.author.name | jsonify }},
+  "alternateName": {{ site.author.aliases | jsonify }},
+  "url": {{ site.url | jsonify }},
+  "image": {{ image_url | jsonify }},
+  "sameAs": {{ site.same_as | jsonify }},
+  "description": {{ description | jsonify }}
+}
+</script>
+{% elsif page.collection == "posts" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ description | jsonify }},
+  "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+  "dateModified": {{ page.date | date_to_xmlschema | jsonify }},
+  "image": {{ image_url | jsonify }},
+  "mainEntityOfPage": {{ canonical_url | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ site.author.name | jsonify }}
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": {{ site.author.name | jsonify }}
+  }
+}
+</script>
+{% elsif page.blog_index %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": {{ page.title | jsonify }},
+  "description": {{ description | jsonify }},
+  "url": {{ canonical_url | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ site.author.name | jsonify }}
+  }
+}
+</script>
+{% else %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": {{ page.title | default: site.title | jsonify }},
+  "description": {{ description | jsonify }},
+  "url": {{ canonical_url | jsonify }}
+}
+</script>
+{% endif %}

@@ -1,0 +1,121 @@
+<style>
+  html.light body { background: #ffffff; }
+  html.light .bg-white { background-color: #ffffff; }
+  html.light .text-gray-600, html.light .text-gray-500 { color: #57606a; }
+  html.light .text-gray-700, html.light .text-gray-900 { color: #24292f; }
+  html.light .border-gray-200 { border-color: #d0d7de; }
+
+  html.dark body { background: #0d1117; }
+  html.dark .bg-white { background-color: #161b22; }
+  html.dark .text-gray-600, html.dark .text-gray-500 { color: #8b949e; }
+  html.dark .text-gray-700, html.dark .text-gray-900 { color: #c9d1d9; }
+  html.dark .border-gray-200 { border-color: #30363d; }
+
+  html.light .theme-btn.theme-active { background-color: #0969da; color: #ffffff; }
+  html.dark .theme-btn.theme-active { background-color: #1f6feb; color: #c9d1d9; }
+  html.light .theme-btn.theme-active:hover { background-color: #0969da; color: #ffffff; }
+  html.dark .theme-btn.theme-active:hover { background-color: #1f6feb; color: #c9d1d9; }
+  html.light .theme-btn:hover { background-color: #f3f4f6; color: #171515; }
+  html.dark .theme-btn:hover { background-color: #21262d; color: #c9d1d9; }
+
+  html.light .group:hover .group-hover\:text-blue-600 { color: #0969da; }
+  html.dark .group:hover .group-hover\:text-blue-600 { color: #1f6feb; }
+  html.light .group:hover .group-hover\:text-green-600 { color: #16a34a; }
+  html.dark .group:hover .group-hover\:text-green-600 { color: #3fb950; }
+  html.light .group:hover .group-hover\:text-purple-600 { color: #9333ea; }
+  html.dark .group:hover .group-hover\:text-purple-600 { color: #a855f7; }
+  html.light .group:hover .group-hover\:text-amber-600 { color: #d97706; }
+  html.dark .group:hover .group-hover\:text-amber-600 { color: #f59e0b; }
+
+  html.light .contact-github:hover, html.light .contact-github:hover * { color: #171515; }
+  html.dark .contact-github:hover, html.dark .contact-github:hover * { color: #c9d1d9; }
+  html.light .contact-linkedin:hover, html.light .contact-linkedin:hover * { color: #0077b5; }
+  html.dark .contact-linkedin:hover, html.dark .contact-linkedin:hover * { color: #4da3d4; }
+  html.light .contact-instagram:hover, html.light .contact-instagram:hover * { color: #e1306c; }
+  html.dark .contact-instagram:hover, html.dark .contact-instagram:hover * { color: #fd1d1d; }
+  html.light .contact-vk:hover, html.light .contact-vk:hover * { color: #0077ff; }
+  html.dark .contact-vk:hover, html.dark .contact-vk:hover * { color: #4da3ff; }
+  html.light .contact-ok:hover, html.light .contact-ok:hover * { color: #ee8208; }
+  html.dark .contact-ok:hover, html.dark .contact-ok:hover * { color: #ff9d2e; }
+  html.light .contact-max:hover, html.light .contact-max:hover * { color: #9333ea; }
+  html.dark .contact-max:hover, html.dark .contact-max:hover * { color: #a855f7; }
+  html.light .contact-telegram:hover, html.light .contact-telegram:hover * { color: #24a1de; }
+  html.dark .contact-telegram:hover, html.dark .contact-telegram:hover * { color: #5bb3e8; }
+  html.light .contact-whatsapp:hover, html.light .contact-whatsapp:hover * { color: #25d366; }
+  html.dark .contact-whatsapp:hover, html.dark .contact-whatsapp:hover * { color: #4ade80; }
+  html.light .contact-email:hover, html.light .contact-email:hover * { color: #111827; }
+  html.dark .contact-email:hover, html.dark .contact-email:hover * { color: #c9d1d9; }
+  html.light .contact-about:hover, html.light .contact-about:hover * { color: #f59e0b; }
+  html.dark .contact-about:hover, html.dark .contact-about:hover * { color: #fbbf24; }
+
+  html.dark #bio-modal .bg-white { background-color: #161b22; }
+  html.dark #bio-modal h2,
+  html.dark #bio-modal h3,
+  html.dark #bio-modal .text-gray-700,
+  html.dark #bio-modal .text-gray-900 { color: #c9d1d9; }
+  html.dark #bio-modal p,
+  html.dark #bio-modal .text-gray-600,
+  html.dark #bio-modal .text-gray-500 { color: #8b949e; }
+  html.light #bio-modal button:hover { color: #111827; }
+  html.dark #bio-modal button:hover { color: #c9d1d9; }
+</style>
+<script>
+  const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const applyTheme = () => {
+    const theme = localStorage.theme ?? 'system';
+    const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
+    document.documentElement.classList.toggle('light', !isDark);
+    document.documentElement.classList.toggle('dark', isDark);
+    ['system', 'light', 'dark'].forEach((key) => {
+      const btn = document.getElementById(`theme-${key}`);
+      if (btn) btn.classList.toggle('theme-active', key === theme);
+    });
+  };
+
+  const setTheme = (theme) => {
+    if (theme === 'system') {
+      localStorage.removeItem('theme');
+    } else {
+      localStorage.theme = theme;
+    }
+    applyTheme();
+  };
+
+  const initEmail = () => {
+    const emailLink = document.getElementById('email-link');
+    const emailText = document.getElementById('email-text');
+    if (emailLink && emailText) {
+      const email = atob('bWVAa3VzYWt1LnN1');
+      emailLink.href = `mailto:${email}?subject=Hello&body=Hi%20Kirill%2C%20I%20found%20you%20via%20your%20site`;
+      emailText.textContent = email;
+    }
+  };
+
+  const toggleBio = () => {
+    const modal = document.getElementById('bio-modal');
+    if (!modal) return;
+    const isHidden = modal.classList.toggle('hidden');
+    document.body.style.overflow = isHidden ? '' : 'hidden';
+  };
+
+  const closeBio = () => {
+    document.getElementById('bio-modal')?.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+
+  const init = () => {
+    applyTheme();
+    initEmail();
+    ['system', 'light', 'dark'].forEach((theme) => {
+      document.getElementById(`theme-${theme}`)?.addEventListener('click', () => setTheme(theme));
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (!localStorage.theme || localStorage.theme === 'system') applyTheme();
+    });
+  };
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', init)
+    : init();
+</script>

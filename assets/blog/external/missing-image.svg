@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title>Image no longer available</title>
+  <desc>The original external image is no longer available and has been replaced with a local placeholder.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="64" y="64" width="832" height="412" rx="28" stroke="#6b7280" stroke-opacity="0.32" stroke-width="6" stroke-dasharray="14 18"/>
+    <rect x="250" y="118" width="460" height="214" rx="18" stroke="#6b7280" stroke-opacity="0.46" stroke-width="10"/>
+    <circle cx="364" cy="186" r="24" stroke="#6b7280" stroke-opacity="0.42" stroke-width="10"/>
+    <path d="M292 292l102-112 80 82 86-106 108 136H292z" stroke="#6b7280" stroke-opacity="0.42" stroke-width="10"/>
+    <path d="M284 340l392-230" stroke="#ef4444" stroke-opacity="0.42" stroke-width="16"/>
+  </g>
+  <text x="480" y="392" fill="#4b5563" fill-opacity="0.72" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" text-anchor="middle">Image no longer available</text>
+  <text x="480" y="432" fill="#6b7280" fill-opacity="0.68" font-family="Arial, Helvetica, sans-serif" font-size="20" text-anchor="middle">The original hotlinked file could not be recovered.</text>
+</svg>

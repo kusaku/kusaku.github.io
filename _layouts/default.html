@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang }}" class="light">
+  <head>
+    {% assign display_title = page.title | to_s | strip %}
+    {% if page.collection == "posts" and display_title == "" %}
+      {% assign display_title = "&lt;no title&gt;" %}
+    {% elsif display_title == "" %}
+      {% assign display_title = site.title %}
+    {% endif %}
+    {% assign page_title = display_title %}
+    {% assign page_description = page.description | default: site.description %}
+    {% assign page_keywords = page.keywords | default: site.keywords %}
+    {% assign canonical_url = page.canonical_url | default: page.url | replace: 'index.html', '' | absolute_url %}
+    {% assign image_path = page.image | default: site.author.image %}
+    {% assign image_url = image_path | absolute_url %}
+    {% assign og_type = page.og_type | default: 'website' %}
+    {% if page.private_review %}
+      {% assign robots_content = "noindex, nofollow, noarchive" %}
+    {% else %}
+      {% assign robots_content = page.robots | default: "index, follow, max-image-preview:large" %}
+    {% endif %}
+    {% if page.seo_title %}
+      {% assign document_title = page.seo_title %}
+    {% elsif page.url == "/" %}
+      {% assign document_title = page_title %}
+    {% else %}
+      {% assign document_title = page_title | append: " | " | append: site.title %}
+    {% endif %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ document_title }}</title>
+    <meta name="description" content="{{ page_description }}">
+    <meta name="keywords" content="{{ page_keywords | join: ', ' }}">
+    <meta name="author" content="{{ site.author.name }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="alternate" hreflang="en" href="{{ canonical_url }}">
+    <link rel="alternate" hreflang="ru" href="{{ canonical_url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | relative_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ '/favicon-16x16.png' | relative_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | relative_url }}">
+    <meta property="og:title" content="{{ document_title }}">
+    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:type" content="{{ og_type }}">
+    <meta property="og:site_name" content="{{ site.title }}">
+    <meta property="og:image" content="{{ image_url }}">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ru_RU">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ document_title }}">
+    <meta name="twitter:description" content="{{ page_description }}">
+    <meta name="twitter:image" content="{{ image_url }}">
+    <meta name="robots" content="{{ robots_content }}">
+    <meta name="theme-color" content="{{ site.theme_color.light }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="{{ site.theme_color.dark }}" media="(prefers-color-scheme: dark)">
+    <meta name="geo.region" content="{{ site.geo_region }}">
+    {% include structured-data.html %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% include analytics.html %}
+    {% if page.home_assets %}
+      {% include home-head.html %}
+    {% endif %}
+    {% if page.blog_index or page.collection == "posts" %}
+      {% include blog-theme.html %}
+    {% endif %}
+    {% if page.blog_index or page.collection == "posts" %}
+      <style>
+        .blog-content > * + * { margin-top: 1.25rem; }
+        .blog-content p,
+        .blog-content li { color: #24292f; line-height: 1.8; }
+        .blog-content br + br { display: none; }
+        .blog-content p > br:first-child { display: none; }
+        .blog-content h2,
+        .blog-content h3 { color: #24292f; font-weight: 700; line-height: 1.2; }
+        .blog-content h2 { font-size: 1.875rem; margin-top: 2.5rem; }
+        .blog-content h3 { font-size: 1.5rem; margin-top: 2rem; }
+        .blog-content a { color: #0969da; text-decoration: underline; }
+        .blog-content code {
+          background: #f6f8fa;
+          border-radius: 0.375rem;
+          color: #24292f;
+          padding: 0.125rem 0.375rem;
+        }
+        .blog-content pre {
+          background: #161b22;
+          border-radius: 1rem;
+          color: #f5f5f4;
+          overflow-x: auto;
+          padding: 1rem 1.25rem;
+        }
+        .blog-content pre code {
+          background: transparent;
+          color: inherit;
+          padding: 0;
+        }
+        .blog-content ul,
+        .blog-content ol { padding-left: 1.5rem; }
+        .blog-content ul { list-style: disc; }
+        .blog-content ol { list-style: decimal; }
+      </style>
+    {% endif %}
+  </head>
+  <body class="{{ page.body_class | default: '' }}">
+    {{ content }}
+  </body>
+</html>
