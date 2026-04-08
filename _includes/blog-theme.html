@@ -7,6 +7,25 @@
   })();
 </script>
 <style>
+  html.light {
+    --blog-inline-code-bg: #f6f8fa;
+    --blog-inline-code-text: #24292f;
+    --blog-code-bg: #f6f8fa;
+    --blog-code-border: #d0d7de;
+    --blog-code-text: #24292f;
+    --blog-code-muted: #6e7781;
+    --blog-code-keyword: #cf222e;
+    --blog-code-string: #0a3069;
+    --blog-code-number: #0550ae;
+    --blog-code-name: #8250df;
+    --blog-code-operator: #0550ae;
+    --blog-code-error: #cf222e;
+    --blog-table-bg: #ffffff;
+    --blog-table-header-bg: #f6f8fa;
+    --blog-table-border: #d0d7de;
+    --blog-table-row-border: #eaeef2;
+  }
+
   html.light body { background: #ffffff; color: #24292f; }
   html.light .bg-white { background-color: #ffffff; }
   html.light .bg-gray-50 { background-color: #f6f8fa; }
@@ -40,6 +59,25 @@
   }
   html.light .blog-panel { box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); }
   html.light .blog-row:hover { border-color: #d0d7de; }
+
+  html.dark {
+    --blog-inline-code-bg: #21262d;
+    --blog-inline-code-text: #c9d1d9;
+    --blog-code-bg: #0d1117;
+    --blog-code-border: #30363d;
+    --blog-code-text: #c9d1d9;
+    --blog-code-muted: #8b949e;
+    --blog-code-keyword: #ff7b72;
+    --blog-code-string: #a5d6ff;
+    --blog-code-number: #79c0ff;
+    --blog-code-name: #d2a8ff;
+    --blog-code-operator: #79c0ff;
+    --blog-code-error: #ff7b72;
+    --blog-table-bg: #161b22;
+    --blog-table-header-bg: #21262d;
+    --blog-table-border: #30363d;
+    --blog-table-row-border: #21262d;
+  }
 
   html.dark body { background: #0d1117; color: #c9d1d9; }
   html.dark .bg-white { background-color: #161b22; }
@@ -80,14 +118,6 @@
   html.dark .blog-content h2,
   html.dark .blog-content h3 { color: #c9d1d9; }
   html.dark .blog-content a { color: #58a6ff; }
-  html.dark .blog-content code {
-    background: #21262d;
-    color: #c9d1d9;
-  }
-  html.dark .blog-content pre {
-    background: #010409;
-    color: #f5f5f4;
-  }
 </style>
 <script>
   const getBlogSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
