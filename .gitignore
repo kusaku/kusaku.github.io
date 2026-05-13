@@ -8,3 +8,7 @@ __pycache__/
 legacy/**/__pycache__/
 *.pyc
 .idea/
+.dev.vars
+.env
+.env.*
+.tmp/

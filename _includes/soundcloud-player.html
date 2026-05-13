@@ -1,0 +1,81 @@
+<section
+  id="soundcloud-player"
+  class="soundcloud-player mb-12 overflow-hidden rounded-lg bg-white shadow-xl"
+  data-api-base="https://soundcloud-api.kusaku.su/api/soundcloud"
+  data-user-id="1061043028"
+>
+  <div class="soundcloud-shell">
+    <canvas id="soundcloud-spectrum" class="soundcloud-spectrum" aria-hidden="true"></canvas>
+    <a id="soundcloud-open" href="https://soundcloud.com/kusakusu" target="_blank" rel="noopener noreferrer" class="soundcloud-open" aria-label="Open current track on SoundCloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17 17 7M8 7h9v9"></path>
+      </svg>
+    </a>
+
+    <div class="soundcloud-art">
+      <img id="soundcloud-artwork" alt="" class="hidden">
+      <svg id="soundcloud-art-fallback" class="soundcloud-art-fallback" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M11.9 18.9h7.5a4.1 4.1 0 0 0 .4-8.1A5.9 5.9 0 0 0 8.4 8.9a3.8 3.8 0 0 0-5.8 3.3 3.8 3.8 0 0 0 3.8 3.8h.8V9.7h1.2v6.4h1.1V7.7h1.2v8.4h1.2V6.8h1.2v12.1Z"></path>
+      </svg>
+    </div>
+
+    <div class="soundcloud-main">
+      <div class="soundcloud-meta">
+        <h2 id="soundcloud-title">Loading tracks</h2>
+        <p id="soundcloud-artist">Release date</p>
+      </div>
+
+      <audio id="soundcloud-audio" preload="none"></audio>
+
+      <div class="soundcloud-controls">
+        <button type="button" id="soundcloud-shuffle" class="soundcloud-control" aria-label="Shuffle off" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M3 17h2.7a4 4 0 0 0 3.4-1.9l3.7-6.2A4 4 0 0 1 16.3 7H21m0 0-2-2m2 2-2 2"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M3 7h2.7a4 4 0 0 1 2.9 1.2M21 17h-4.7a4 4 0 0 1-2.9-1.2M21 17l-2 2m2-2-2-2"></path>
+          </svg>
+        </button>
+        <button type="button" id="soundcloud-prev" class="soundcloud-control" aria-label="Previous track">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6 6h2v12H6V6Zm3.5 6 8.5 6V6l-8.5 6Z"></path>
+          </svg>
+        </button>
+        <button type="button" id="soundcloud-play" class="soundcloud-control soundcloud-play" aria-label="Play">
+          <svg class="soundcloud-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7L8 5Z"></path>
+          </svg>
+          <svg class="soundcloud-icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"></path>
+          </svg>
+        </button>
+        <button type="button" id="soundcloud-next" class="soundcloud-control" aria-label="Next track">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M16 6h2v12h-2V6ZM6 18l8.5-6L6 6v12Z"></path>
+          </svg>
+        </button>
+        <button type="button" id="soundcloud-repeat" class="soundcloud-control" aria-label="Repeat off" aria-pressed="false">
+          <svg class="soundcloud-repeat-all-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m19 5 2 2m0 0-2 2m2-2H7"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m5 19-2-2m0 0 2-2m-2 2h14"></path>
+            <path stroke-linecap="round" stroke-width="2.25" d="M3 11a4 4 0 0 1 4-4M21 13a4 4 0 0 1-4 4"></path>
+          </svg>
+          <svg class="soundcloud-repeat-one-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M21 9V4l-2 1"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M15 7H7"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m5 19-2-2m0 0 2-2m-2 2h14"></path>
+            <path stroke-linecap="round" stroke-width="2.25" d="M3 11a4 4 0 0 1 4-4M21 13a4 4 0 0 1-4 4"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="soundcloud-timeline">
+        <span id="soundcloud-elapsed">0:00</span>
+        <input id="soundcloud-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Track progress">
+        <span id="soundcloud-duration">0:00</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="soundcloud-tracks" class="soundcloud-tracks" aria-label="SoundCloud tracks"></div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" defer></script>
+<script src="{{ '/assets/main/soundcloud-player.js' | relative_url }}" defer></script>

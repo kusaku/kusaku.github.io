@@ -1,0 +1,63 @@
+name: Deploy SoundCloud API
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "soundcloud-api/**"
+      - ".github/workflows/deploy-soundcloud-api.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: soundcloud-api
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Add host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.DEPLOY_PORT || '22' }}" "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+        working-directory: .
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: soundcloud-api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check application
+        run: npm run check
+
+      - name: Sync files
+        run: |
+          rsync -az --delete \
+            --exclude ".env" \
+            --exclude "node_modules" \
+            -e "ssh -p ${{ secrets.DEPLOY_PORT || '22' }}" \
+            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.SOUNDCLOUD_API_APP_DIR }}/
+
+      - name: Install and restart service
+        run: |
+          ssh -p "${{ secrets.DEPLOY_PORT || '22' }}" ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << EOF
+            set -e
+            cd "${{ secrets.SOUNDCLOUD_API_APP_DIR }}"
+            npm ci --omit=dev
+            sudo -n /usr/bin/systemctl restart "${{ secrets.SOUNDCLOUD_API_SERVICE }}"
+            sudo -n /usr/bin/systemctl status "${{ secrets.SOUNDCLOUD_API_SERVICE }}" --no-pager
+          EOF
