@@ -1,6 +1,6 @@
 ---
 title: "у меня появилась привычка"
-description: "раньше я думал, что привычка - это всегда что-то скучное. а потом оказалось, что можно привыкнуть к человеку, и это будет счастье."
+description: "про привычку к человеку, которая неожиданно оказывается счастьем."
 date: 2010-07-05 00:22:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/17666.html>
+> Original URL: <a href="http://aks1983.livejournal.com/17666.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/17666.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/content.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> content</td></tr>

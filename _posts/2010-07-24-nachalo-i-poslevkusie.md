@@ -1,6 +1,6 @@
 ---
 title: "начало... и послевкусие"
-description: "редкая штука: кино закончилось, а ты еще полвечера продолжаешь в нем внутренне жить, как будто оно не отпустило."
+description: "про фильм, который закончился, но ещё долго не отпускает."
 date: 2010-07-24 01:37:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/17791.html>
+> Original URL: <a href="http://aks1983.livejournal.com/17791.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/17791.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/contemplative.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> contemplative</td></tr>

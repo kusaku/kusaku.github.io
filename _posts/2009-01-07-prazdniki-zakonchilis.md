@@ -1,6 +1,6 @@
 ---
 title: "праздники закончились. слава богу?"
-description: "все эти огоньки, елки и поздравления только сильнее подчеркивают, если внутри не праздник, а какое-то тихое недоверие к себе."
+description: "после праздников внутри почему-то совсем не празднично."
 date: 2009-01-07 02:26:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/14607.html>
+> Original URL: <a href="http://aks1983.livejournal.com/14607.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/14607.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/bored.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> bored</td></tr>

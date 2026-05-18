@@ -1,0 +1,64 @@
+html.light {
+  --kusaku-link-hover: #9333ea;
+}
+
+html.dark {
+  --kusaku-link-hover: #a855f7;
+}
+
+.legacy-panel,
+.legacy-index .project-card,
+.legacy-code-card {
+  border-radius: 0.5rem;
+}
+
+.legacy-content a.text-blue-600,
+.legacy-content a.text-gray-900,
+.legacy-index h2 a {
+  font-weight: 400;
+}
+
+.legacy-code-card {
+  padding: 1.5rem;
+}
+
+.legacy-code-card h2 {
+  color: var(--kusaku-text);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.legacy-code-description {
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.legacy-code-description,
+.legacy-code-note {
+  color: var(--kusaku-muted);
+}
+
+.legacy-code-note {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.legacy-index .project-card {
+  transition: transform 180ms ease;
+}
+
+.legacy-index .project-card li {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legacy-index .group:hover .project-card {
+  transform: translateY(-4px);
+}
+
+@media (min-width: 640px) {
+  .legacy-code-card {
+    padding: 2rem;
+  }
+}

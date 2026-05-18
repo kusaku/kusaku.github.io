@@ -4,10 +4,7 @@
   if (player.dataset.soundcloudInitialized === 'true') return;
   player.dataset.soundcloudInitialized = 'true';
 
-  const configuredApiBase = player.dataset.apiBase?.replace(/\/$/, '');
-  const localApiBase = 'http://127.0.0.1:8787/api/soundcloud';
-  const isLocalSite = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-  const apiBase = isLocalSite && window.location.port !== '8787' ? localApiBase : configuredApiBase;
+  const apiBase = player.dataset.apiBase;
   const userId = player.dataset.userId;
   const audio = document.getElementById('soundcloud-audio');
   const artwork = document.getElementById('soundcloud-artwork');
@@ -25,16 +22,17 @@
   const duration = document.getElementById('soundcloud-duration');
   const trackList = document.getElementById('soundcloud-tracks');
   const spectrum = document.getElementById('soundcloud-spectrum');
-  const spectrumContext = spectrum?.getContext('2d');
+  const spectrumContext = spectrum.getContext('2d');
   const spectrumBuffer = document.createElement('canvas');
   const spectrumBufferContext = spectrumBuffer.getContext('2d');
+  const storageKey = 'kusaku.soundcloud.player.v1';
 
   const spectrumSettings = {
     fftSize: 2048,
     minIntensity: 0.025,
     smoothingTimeConstant: 0,
     scrollPixelsPerSecond: 120,
-    visibleBinRatio: 0.7,
+    visibleBinRatio: 0.666,
   };
 
   const spectrumColors = {
@@ -64,6 +62,8 @@
   let seeking = false;
   let shuffleEnabled = false;
   let repeatMode = 'all';
+  let restoringState = false;
+  let stateSaveTimer = null;
   const visualizer = {
     analyser: null,
     audioContext: null,
@@ -72,10 +72,6 @@
     frame: null,
     lastFrameTime: null,
     scrollRemainder: 0,
-  };
-
-  const logStatus = (message) => {
-    console.info(`[SoundCloud] ${message}`);
   };
 
   const formatTime = (seconds) => {
@@ -87,54 +83,64 @@
 
   const formatDuration = (milliseconds) => formatTime(milliseconds / 1000);
 
-  const formatDateParts = (year, month, day) => {
-    if (!year) return '';
+  const readSavedState = () => {
+    if (player.dataset.skipState === 'true') return null;
 
-    const date = new Date(Date.UTC(year, month ? month - 1 : 0, day || 1));
-    if (!Number.isFinite(date.getTime())) return String(year);
-
-    if (month && day) {
-      return date.toLocaleDateString(undefined, {
-        day: 'numeric',
-        month: 'short',
-        timeZone: 'UTC',
-        year: 'numeric',
-      });
+    try {
+      const state = JSON.parse(localStorage.getItem(storageKey) || 'null');
+      return state && typeof state === 'object' ? state : null;
+    } catch (_error) {
+      return null;
     }
-
-    if (month) {
-      return date.toLocaleDateString(undefined, {
-        month: 'short',
-        timeZone: 'UTC',
-        year: 'numeric',
-      });
-    }
-
-    return String(year);
   };
 
-  const formatDateString = (value) => {
-    const parts = String(value || '').match(/^(\d{4})(?:[-/](\d{1,2})(?:[-/](\d{1,2}))?)?/);
+  const writeSavedState = () => {
+    if (player.dataset.skipState === 'true' || restoringState || !tracks.length) return;
+
+    const track = tracks[activeIndex];
+    if (!track) return;
+    const currentTime = String(loadedTrackId) === String(track.id) && Number.isFinite(audio.currentTime)
+      ? audio.currentTime
+      : 0;
+
+    const state = {
+      isPlaying: !audio.paused && !audio.ended,
+      positionSeconds: currentTime,
+      repeatMode,
+      shuffleEnabled,
+      trackId: track.id,
+      updatedAt: Date.now(),
+    };
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    } catch (_error) {
+      // Browsers may reject storage in private contexts; playback should still work.
+    }
+  };
+
+  const scheduleStateSave = () => {
+    if (stateSaveTimer) return;
+    stateSaveTimer = window.setTimeout(() => {
+      stateSaveTimer = null;
+      writeSavedState();
+    }, 750);
+  };
+
+  const formatTrackDate = (createdAt) => {
+    const parts = String(createdAt).match(/^(\d{4})\/(\d{2})\/(\d{2})/);
     if (!parts) return '';
 
-    return formatDateParts(Number(parts[1]), Number(parts[2] || 0), Number(parts[3] || 0));
+    const date = new Date(Date.UTC(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3])));
+    return date.toLocaleDateString(undefined, {
+      day: 'numeric',
+      month: 'short',
+      timeZone: 'UTC',
+      year: 'numeric',
+    });
   };
 
-  const formatTrackDate = (track) => {
-    const releaseYear = Number(track.release_year || track.releaseYear || 0);
-    const releaseMonth = Number(track.release_month || track.releaseMonth || 0);
-    const releaseDay = Number(track.release_day || track.releaseDay || 0);
-    const releaseDate = formatDateParts(releaseYear, releaseMonth, releaseDay);
-
-    if (releaseDate) return releaseDate;
-
-    return formatDateString(track.release || track.releaseDate) || formatDateString(track.created_at || track.createdAt);
-  };
-
-  const upgradeArtwork = (url) => {
-    if (!url) return '';
-    return url.replace(/-(large|t\d+x\d+|crop)\./, '-t500x500.');
-  };
+  const upgradeArtwork = (url) => (url ? url.replace('-large.jpg', '-t500x500.jpg') : '');
 
   const resizeSpectrum = () => {
     if (!spectrum || !spectrumContext || !spectrumBufferContext) return null;
@@ -270,6 +276,7 @@
   };
 
   const startSpectrum = () => {
+    if (!visualizer.analyser) return;
     if (visualizer.frame) return;
     visualizer.lastFrameTime = performance.now();
     visualizer.frame = requestAnimationFrame(drawLiveSpectrum);
@@ -285,18 +292,28 @@
   };
 
   const normalizeTracks = (payload) => {
-    const collection = Array.isArray(payload) ? payload : payload.tracks || payload.collection || [];
-    return collection
+    return payload.tracks
       .filter((track) => track && track.id)
-      .map((track) => ({
-        id: track.id,
-        title: track.title || 'Untitled',
-        dateLabel: formatTrackDate(track),
-        duration: Number(track.duration) || 0,
-        artworkUrl: upgradeArtwork(track.artwork_url || track.artworkUrl || track.user?.avatar_url),
-        permalinkUrl: track.permalink_url || track.permalinkUrl || '',
-        userUrl: track.user?.permalink_url || track.userUrl || '',
+      .map(({ artwork_url, created_at, duration, id, permalink_url, title }) => ({
+        id,
+        title,
+        dateLabel: formatTrackDate(created_at),
+        duration: Number(duration),
+        artworkUrl: upgradeArtwork(artwork_url),
+        permalinkUrl: permalink_url,
       }));
+  };
+
+  const formatTrackTooltip = (track) => {
+    return `"${track.title}" by kusaku${track.dateLabel ? `\nreleased on ${track.dateLabel}` : ''}`;
+  };
+
+  const selectTrackById = (id, shouldPlay) => {
+    if (!id) return;
+
+    const requestedIndex = tracks.findIndex((track) => String(track.id) === String(id));
+    if (requestedIndex < 0) return;
+    selectTrack(requestedIndex, shouldPlay);
   };
 
   const renderTrackList = () => {
@@ -309,7 +326,7 @@
       button.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
       button.classList.toggle('is-active', index === activeIndex);
       button.innerHTML = `
-        <span class="soundcloud-track-index">${String(index + 1).padStart(2, '0')}</span>
+        <span class="soundcloud-track-index">${String(tracks.length - index).padStart(2, '0')}</span>
         <span class="soundcloud-track-title"></span>
         <span class="soundcloud-track-duration">${formatDuration(track.duration)}</span>
       `;
@@ -319,29 +336,169 @@
     });
   };
 
+  const showArtworkFallback = () => {
+    artwork.removeAttribute('src');
+    artwork.hidden = true;
+    artworkFallback.removeAttribute('hidden');
+  };
+
+  const showArtwork = (artworkUrl) => {
+    if (!artworkUrl) {
+      showArtworkFallback();
+      return;
+    }
+
+    artworkFallback.setAttribute('hidden', '');
+    artwork.hidden = true;
+    artwork.src = artworkUrl;
+    if (artwork.complete && artwork.naturalWidth) {
+      artwork.hidden = false;
+    }
+  };
+
   const renderActiveTrack = () => {
     const track = tracks[activeIndex];
     if (!track) return;
 
+    const trackTooltip = formatTrackTooltip(track);
     title.textContent = track.title;
+    title.title = trackTooltip;
     artist.textContent = track.dateLabel || '';
+    artist.title = trackTooltip;
     duration.textContent = formatDuration(track.duration);
-    openLink.href = track.permalinkUrl || track.userUrl || 'https://soundcloud.com/';
+    openLink.href = track.permalinkUrl;
 
-    if (track.artworkUrl) {
-      artwork.src = track.artworkUrl;
-      artwork.classList.remove('hidden');
-      artworkFallback.classList.add('hidden');
-    } else {
-      artwork.removeAttribute('src');
-      artwork.classList.add('hidden');
-      artworkFallback.classList.remove('hidden');
-    }
+    showArtwork(track.artworkUrl);
 
     [...trackList.children].forEach((item, index) => {
       item.classList.toggle('is-active', index === activeIndex);
       item.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
     });
+    updateMiniControls();
+  };
+
+  const getMiniElements = () => {
+    const widget = document.getElementById('soundcloud-widget');
+    if (!widget) return null;
+
+    return {
+      artist: document.getElementById('soundcloud-mini-artist'),
+      artLink: document.getElementById('soundcloud-mini-open'),
+      artwork: document.getElementById('soundcloud-mini-artwork'),
+      next: document.getElementById('soundcloud-mini-next'),
+      minimize: document.getElementById('soundcloud-widget-minimize'),
+      panel: document.getElementById('soundcloud-widget-panel'),
+      panelToggle: document.getElementById('soundcloud-mini-panel-toggle'),
+      play: document.getElementById('soundcloud-mini-play'),
+      previous: document.getElementById('soundcloud-mini-prev'),
+      title: document.getElementById('soundcloud-mini-title'),
+      widget,
+    };
+  };
+
+  const updateMiniControls = () => {
+    const mini = getMiniElements();
+    if (!mini) return;
+
+    const track = tracks[activeIndex];
+    mini.widget.classList.toggle('is-playing', !audio.paused);
+
+    const label = audio.paused ? 'Play' : 'Pause';
+    mini.play.setAttribute('aria-label', label);
+    mini.play.title = label;
+
+    const tooltip = track ? formatTrackTooltip(track) : title.title;
+    mini.title.textContent = track ? track.title : title.textContent;
+    mini.title.title = tooltip;
+    mini.artist.textContent = track ? track.dateLabel : artist.textContent;
+    mini.artist.title = tooltip;
+    mini.artLink.href = track ? track.permalinkUrl : openLink.href;
+
+    if (track?.artworkUrl) {
+      mini.artwork.src = track.artworkUrl;
+      mini.artwork.hidden = false;
+    } else {
+      mini.artwork.removeAttribute('src');
+      mini.artwork.hidden = true;
+    }
+  };
+
+  const setWidgetOpen = (isOpen) => {
+    const mini = getMiniElements();
+    if (!mini) return;
+
+    mini.panel.hidden = !isOpen;
+    mini.widget.classList.toggle('is-open', isOpen);
+    mini.panelToggle.setAttribute('aria-expanded', String(isOpen));
+    mini.panelToggle.setAttribute('aria-label', 'Show player');
+    mini.panelToggle.title = 'Show player';
+    mini.minimize.setAttribute('aria-expanded', String(isOpen));
+    mini.minimize.setAttribute('aria-label', 'Minimize player');
+    mini.minimize.title = 'Minimize player';
+
+    if (isOpen) requestAnimationFrame(resizeSpectrum);
+  };
+
+  const toggleWidget = () => {
+    const mini = getMiniElements();
+    if (!mini) return;
+    setWidgetOpen(mini.panel.hidden);
+  };
+
+  const canScrollInDirection = (element, deltaY) => {
+    if (element.scrollHeight <= element.clientHeight) return false;
+    if (deltaY < 0) return element.scrollTop > 0;
+    if (deltaY > 0) return element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+    return false;
+  };
+
+  const findTrackScroller = (target) => (
+    target instanceof Element ? target.closest('.soundcloud-tracks') : null
+  );
+
+  const bindWidgetScrollGuard = (widget) => {
+    if (widget.dataset.soundcloudScrollReady === 'true') return;
+
+    widget.dataset.soundcloudScrollReady = 'true';
+    let lastTouchY = 0;
+
+    const guardScroll = (event, deltaY) => {
+      const tracks = findTrackScroller(event.target);
+      event.stopPropagation();
+      if (!tracks || !canScrollInDirection(tracks, deltaY)) event.preventDefault();
+    };
+
+    widget.addEventListener('wheel', (event) => guardScroll(event, event.deltaY), { passive: false });
+
+    widget.addEventListener('touchstart', (event) => {
+      lastTouchY = event.touches[0]?.clientY || 0;
+    }, { passive: true });
+
+    widget.addEventListener('touchmove', (event) => {
+      const touchY = event.touches[0]?.clientY || lastTouchY;
+      const deltaY = lastTouchY - touchY;
+      lastTouchY = touchY;
+      guardScroll(event, deltaY);
+    }, { passive: false });
+  };
+
+  const bindSoundCloudWidget = () => {
+    const mini = getMiniElements();
+    if (!mini) return;
+
+    const bindMiniButton = (button, handler) => {
+      if (button.dataset.soundcloudReady === 'true') return;
+      button.dataset.soundcloudReady = 'true';
+      button.addEventListener('click', handler);
+    };
+
+    bindMiniButton(mini.previous, playPrevious);
+    bindMiniButton(mini.play, togglePlayback);
+    bindMiniButton(mini.next, playNext);
+    bindMiniButton(mini.panelToggle, toggleWidget);
+    bindMiniButton(mini.minimize, () => setWidgetOpen(false));
+    bindWidgetScrollGuard(mini.widget);
+    updateMiniControls();
   };
 
   const updatePlaybackModeControls = () => {
@@ -383,13 +540,34 @@
     return stream;
   };
 
-  const playLoadedAudio = async () => {
+  const playLoadedAudio = async ({ resumeAnalyzer = true } = {}) => {
     try {
-      await resumeAudioAnalyzer();
+      if (resumeAnalyzer) await resumeAudioAnalyzer();
       await audio.play();
     } catch (error) {
       console.warn('[SoundCloud] Playback was blocked by the browser.', error);
     }
+  };
+
+  const waitForAudioMetadata = () => {
+    if (audio.readyState >= 1) return Promise.resolve();
+
+    return new Promise((resolve) => {
+      let timeoutId = 0;
+      const cleanup = () => {
+        window.clearTimeout(timeoutId);
+        audio.removeEventListener('loadedmetadata', handleReady);
+        audio.removeEventListener('canplay', handleReady);
+      };
+      const handleReady = () => {
+        cleanup();
+        resolve();
+      };
+
+      timeoutId = window.setTimeout(handleReady, 3000);
+      audio.addEventListener('loadedmetadata', handleReady, { once: true });
+      audio.addEventListener('canplay', handleReady, { once: true });
+    });
   };
 
   const loadTrack = async (track, shouldPlay) => {
@@ -398,7 +576,6 @@
       return;
     }
 
-    logStatus(`Loading stream for "${track.title}"`);
     const requestId = ++loadRequestId;
     destroyHls();
     audio.pause();
@@ -436,12 +613,20 @@
     renderActiveTrack();
     progress.value = '0';
     elapsed.textContent = '0:00';
+    writeSavedState();
+    player.dispatchEvent(new CustomEvent('soundcloud:track-change', {
+      detail: { id: selectedTrack.id },
+    }));
 
     try {
       await loadTrack(selectedTrack, shouldPlay);
     } catch (error) {
       console.warn('[SoundCloud] Could not load this track.', error);
     }
+  };
+
+  const handleTrackSelectionRequest = (event) => {
+    selectTrackById(event.detail?.id, Boolean(event.detail?.play));
   };
 
   const getShuffledIndex = () => {
@@ -465,6 +650,9 @@
     if (nextIndex === null) {
       audio.pause();
       audio.currentTime = 0;
+      progress.value = '0';
+      elapsed.textContent = '0:00';
+      writeSavedState();
       return;
     }
     selectTrack(nextIndex, true);
@@ -500,6 +688,48 @@
     }
   };
 
+  const restorePlayerState = async () => {
+    const savedState = readSavedState();
+
+    if (savedState) {
+      const restoredIndex = tracks.findIndex((track) => String(track.id) === String(savedState.trackId));
+      if (restoredIndex >= 0) activeIndex = restoredIndex;
+      shuffleEnabled = Boolean(savedState.shuffleEnabled);
+      repeatMode = ['all', 'one', 'off'].includes(savedState.repeatMode) ? savedState.repeatMode : 'all';
+    }
+
+    renderActiveTrack();
+    updatePlaybackModeControls();
+
+    if (!savedState) return;
+
+    const savedPosition = Number(savedState.positionSeconds) || 0;
+    const shouldRestoreAudio = savedPosition > 0 || savedState.isPlaying;
+    if (!shouldRestoreAudio) return;
+
+    restoringState = true;
+    try {
+      const track = tracks[activeIndex];
+      if (!track) return;
+
+      await loadTrack(track, false);
+      await waitForAudioMetadata();
+
+      const nextTime = Math.max(0, Math.min(savedPosition, audio.duration || Infinity));
+      if (Number.isFinite(nextTime)) {
+        audio.currentTime = nextTime;
+        progress.value = audio.duration ? String(Math.round((nextTime / audio.duration) * 1000)) : '0';
+        elapsed.textContent = formatTime(nextTime);
+      }
+    } catch (error) {
+      console.warn('[SoundCloud] Could not restore the saved player state.', error);
+    } finally {
+      restoringState = false;
+    }
+
+    if (savedState.isPlaying) await playLoadedAudio({ resumeAnalyzer: false });
+  };
+
   const loadTracks = async () => {
     if (!apiBase || !userId) {
       console.warn('[SoundCloud] API is not configured.');
@@ -515,68 +745,100 @@
     tracks = normalizeTracks(await response.json());
     if (!tracks.length) {
       title.textContent = 'No tracks found';
+      title.title = 'No tracks found';
       artist.textContent = '';
+      artist.title = '';
+      showArtworkFallback();
       return;
     }
 
     renderTrackList();
-    renderActiveTrack();
+    await restorePlayerState();
+    player.dataset.tracksReady = 'true';
+    player.dispatchEvent(new CustomEvent('soundcloud:tracks-ready', {
+      detail: { count: tracks.length },
+    }));
   };
 
-  shuffleButton.addEventListener('click', () => {
-    shuffleEnabled = !shuffleEnabled;
-    updatePlaybackModeControls();
-  });
-  playButton.addEventListener('click', togglePlayback);
-  prevButton.addEventListener('click', playPrevious);
-  nextButton.addEventListener('click', playNext);
-  repeatButton.addEventListener('click', () => {
-    repeatMode = repeatMode === 'all' ? 'one' : repeatMode === 'one' ? 'off' : 'all';
-    updatePlaybackModeControls();
-  });
+  const bindPlayerEvents = () => {
+    artwork.addEventListener('load', () => {
+      artwork.hidden = false;
+      artworkFallback.setAttribute('hidden', '');
+    });
+    artwork.addEventListener('error', showArtworkFallback);
 
-  audio.addEventListener('play', () => {
-    player.classList.add('is-playing');
-    playButton.setAttribute('aria-label', 'Pause');
-    startSpectrum();
-  });
+    player.addEventListener('soundcloud:select-track', handleTrackSelectionRequest);
 
-  audio.addEventListener('pause', () => {
-    player.classList.remove('is-playing');
-    playButton.setAttribute('aria-label', 'Play');
-    stopSpectrum();
-  });
+    shuffleButton.addEventListener('click', () => {
+      shuffleEnabled = !shuffleEnabled;
+      updatePlaybackModeControls();
+      writeSavedState();
+    });
+    playButton.addEventListener('click', togglePlayback);
+    prevButton.addEventListener('click', playPrevious);
+    nextButton.addEventListener('click', playNext);
+    repeatButton.addEventListener('click', () => {
+      repeatMode = repeatMode === 'all' ? 'one' : repeatMode === 'one' ? 'off' : 'all';
+      updatePlaybackModeControls();
+      writeSavedState();
+    });
 
-  audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('play', () => {
+      player.classList.add('is-playing');
+      playButton.setAttribute('aria-label', 'Pause');
+      updateMiniControls();
+      startSpectrum();
+      writeSavedState();
+    });
+    audio.addEventListener('pause', () => {
+      player.classList.remove('is-playing');
+      playButton.setAttribute('aria-label', 'Play');
+      updateMiniControls();
+      stopSpectrum();
+      writeSavedState();
+    });
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('timeupdate', () => {
+      if (seeking || !audio.duration) return;
+      progress.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
+      elapsed.textContent = formatTime(audio.currentTime);
+      scheduleStateSave();
+    });
+    audio.addEventListener('durationchange', () => {
+      if (audio.duration) duration.textContent = formatTime(audio.duration);
+    });
 
-  audio.addEventListener('timeupdate', () => {
-    if (seeking || !audio.duration) return;
-    progress.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
-    elapsed.textContent = formatTime(audio.currentTime);
-  });
+    progress.addEventListener('input', () => {
+      seeking = true;
+      const nextTime = (Number(progress.value) / 1000) * (audio.duration || 0);
+      elapsed.textContent = formatTime(nextTime);
+    });
+    progress.addEventListener('change', () => {
+      const nextTime = (Number(progress.value) / 1000) * (audio.duration || 0);
+      if (Number.isFinite(nextTime)) audio.currentTime = nextTime;
+      seeking = false;
+      writeSavedState();
+    });
 
-  audio.addEventListener('durationchange', () => {
-    if (audio.duration) duration.textContent = formatTime(audio.duration);
-  });
-
-  progress.addEventListener('input', () => {
-    seeking = true;
-    const nextTime = (Number(progress.value) / 1000) * (audio.duration || 0);
-    elapsed.textContent = formatTime(nextTime);
-  });
-
-  progress.addEventListener('change', () => {
-    const nextTime = (Number(progress.value) / 1000) * (audio.duration || 0);
-    if (Number.isFinite(nextTime)) audio.currentTime = nextTime;
-    seeking = false;
-  });
+    window.addEventListener('pagehide', writeSavedState);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') writeSavedState();
+    });
+    document.addEventListener('turbo:load', bindSoundCloudWidget);
+  };
 
   updatePlaybackModeControls();
   clearSpectrum();
+  bindSoundCloudWidget();
+  bindPlayerEvents();
 
   loadTracks().catch(() => {
     title.textContent = 'SoundCloud unavailable';
+    title.title = 'SoundCloud unavailable';
     artist.textContent = '';
+    artist.title = '';
+    showArtworkFallback();
+    updateMiniControls();
     console.warn('[SoundCloud] Could not load tracks from the SoundCloud API.');
   });
 })();

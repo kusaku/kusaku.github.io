@@ -1,6 +1,6 @@
 ---
 title: "всё, еду в Токсово."
-description: "всё, еду в Токсово. полтора часа в душных поездах - и я на воле. никак не могу выбрать, чего бы закачать в плеер. вчера весь вечер слушал драм, позавчера - земфиру, что будет…"
+description: "поездка в Токсово и выбор музыки для дороги на волю."
 date: 2006-06-24 14:30:00
 lang: "ru"
 historical_import: true
@@ -17,7 +17,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/7773.html>
+> Original URL: <a href="http://aks1983.livejournal.com/7773.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/7773.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/awake.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> awake</td></tr>

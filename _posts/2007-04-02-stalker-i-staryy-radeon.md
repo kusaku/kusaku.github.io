@@ -1,6 +1,6 @@
 ---
 title: "сталкер... и старый radeon"
-description: "игра, конечно, атмосферная до неприличия. а вот моя видеокарта на это все смотрит как умирающий астматик."
+description: "S.T.A.L.K.E.R., атмосфера и старая видеокарта на последнем дыхании."
 date: 2007-04-02 01:18:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/10677.html>
+> Original URL: <a href="http://aks1983.livejournal.com/10677.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/10677.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/weird.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> weird</td></tr>

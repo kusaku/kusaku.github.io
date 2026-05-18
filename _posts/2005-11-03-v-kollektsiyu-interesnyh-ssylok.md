@@ -17,10 +17,10 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/3169.html>
+> Original URL: <a href="http://aks1983.livejournal.com/3169.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/3169.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current music:</b></td><td>Theory Of A Deadman - Hello Lonely</td></tr>
 </table>
 
-<p><a href="http://web.okaygo.co.uk/apps/scratchpad/flashcom/index.htm">http://web.okaygo.co.uk/apps/scratc<wbr />hpad/flashcom/index.htm</a></p>
+<p><a href="http://web.okaygo.co.uk/apps/scratchpad/flashcom/index.htm" target="_blank" rel="noopener noreferrer">http://web.okaygo.co.uk/apps/scratc<wbr />hpad/flashcom/index.htm</a></p>

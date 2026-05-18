@@ -17,6 +17,6 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/1180.html>
+> Original URL: <a href="http://aks1983.livejournal.com/1180.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/1180.html</a>
 
 <p>убить время, чтобы оно убило меня.</p>

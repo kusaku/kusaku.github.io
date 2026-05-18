@@ -1,0 +1,28 @@
+<div id="bio-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 p-4" role="dialog" aria-modal="true" aria-labelledby="bio-modal-title" data-bio-modal>
+  <div class="mx-auto flex min-h-full max-w-2xl items-center justify-center">
+    <div class="bio-modal-panel kusaku-surface max-h-[90vh] w-full overflow-y-auto">
+      <div class="p-8">
+        <div class="mb-6 flex items-start justify-between">
+          <h2 id="bio-modal-title" class="text-3xl font-bold text-gray-900">About</h2>
+          <button type="button" class="text-2xl leading-none text-gray-500 transition-colors" aria-label="Close biography" data-bio-close>&times;</button>
+        </div>
+        <div class="mb-6 flex flex-col gap-8 md:flex-row">
+          <div class="flex-shrink-0">
+            <img src="{{ '/assets/photo.webp' | relative_url }}" alt="Kirill Arkhipenko" class="h-64 w-64 rounded-lg object-cover shadow-lg md:h-80 md:w-80">
+          </div>
+          <div class="flex-1">
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">Kirill Arkhipenko</h3>
+            <p class="mb-4 text-sm text-gray-600">Кирилл Архипенко</p>
+          </div>
+        </div>
+        <div class="space-y-4 text-gray-700">
+          <p>I spend a noticeable portion of my life trying to understand how things work, why they fail, and why people keep insisting this time will be different.</p>
+          <p>I like systems because they eventually tell the truth. Under enough load, pressure, or human optimism, everything reveals its weak spots. I find a strange comfort in that. Complexity tends to be self-inflicted, clarity is always expensive, and the most permanent decisions are usually labeled "temporary."</p>
+          <p>I'm interested in technology, architecture, games, and the quiet joy of making something less complicated than it was before. I don't believe in perfect solutions. I believe in trade-offs you can live with and explain without creative storytelling.</p>
+          <p>Most days I try to build things that last longer than the enthusiasm that created them, avoid unnecessary drama, and remain curious enough to not turn into a walking checklist of opinions.</p>
+          <p class="pt-2 font-medium">Sincerely yours,<br>Kirill Arkhipenko</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

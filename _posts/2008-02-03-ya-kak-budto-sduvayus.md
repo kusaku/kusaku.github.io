@@ -1,6 +1,6 @@
 ---
 title: "я как-будто сдуваюсь"
-description: "зима какая-то долгая, голова ватная, и даже маленькие неприятности почему-то звучат внутри как приговор."
+description: "зимняя запись про ватную голову и маленькие неприятности."
 date: 2008-02-03 03:11:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/12622.html>
+> Original URL: <a href="http://aks1983.livejournal.com/12622.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/12622.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/sleepy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> sleepy</td></tr>

@@ -1,6 +1,6 @@
 ---
 title: "client mode. all the time."
-description: "magento, drupal, sharepoint, dynamics crm extensions. the main skill is not coding, it is switching contexts without dropping your brain."
+description: "про жизнь в режиме клиента и вечное переключение контекстов."
 date: 2013-06-11 00:11:00
 lang: "en"
 historical_import: true
@@ -21,7 +21,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/23871.html>
+> Original URL: <a href="http://aks1983.livejournal.com/23871.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/23871.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/busy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> busy</td></tr>

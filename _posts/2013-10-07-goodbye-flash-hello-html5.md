@@ -1,6 +1,6 @@
 ---
 title: "goodbye flash, hello html5"
-description: "one of the nicer 2013 feelings: taking something flash-based and making it survive in a browser without apology."
+description: "a small 2013 victory: moving Flash-era work into HTML5."
 date: 2013-10-07 23:27:00
 lang: "en"
 historical_import: true
@@ -20,7 +20,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/24618.html>
+> Original URL: <a href="http://aks1983.livejournal.com/24618.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/24618.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/productive.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> productive</td></tr>

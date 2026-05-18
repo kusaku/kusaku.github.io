@@ -1,8 +1,8 @@
-{% assign description = page.description | default: site.description %}
-{% assign image_path = page.image | default: site.author.image %}
-{% assign image_url = image_path | absolute_url %}
-{% assign canonical_url = page.canonical_url | default: page.url | replace: 'index.html', '' | absolute_url %}
-{% if page.schema_type == "person" %}
+{%- assign description = page.meta_description | default: page.description | default: site.description -%}
+{%- assign image_path = page.image | default: site.author.image -%}
+{%- assign image_url = image_path | absolute_url -%}
+{%- assign canonical_url = page.canonical_url | default: page.url | replace: 'index.html', '' | absolute_url -%}
+{%- if page.url == "/" %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -15,7 +15,7 @@
   "description": {{ description | jsonify }}
 }
 </script>
-{% elsif page.collection == "posts" %}
+{%- elsif page.collection == "posts" %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,7 +36,7 @@
   }
 }
 </script>
-{% elsif page.blog_index %}
+{%- elsif page.url == "/blog/" %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -50,7 +50,22 @@
   }
 }
 </script>
-{% else %}
+{%- elsif page.url == "/legacy/" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ page.title | jsonify }},
+  "description": {{ description | jsonify }},
+  "url": {{ canonical_url | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ site.author.name | jsonify }},
+    "alternateName": {{ site.author.aliases | jsonify }}
+  }
+}
+</script>
+{%- else %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -60,4 +75,4 @@
   "url": {{ canonical_url | jsonify }}
 }
 </script>
-{% endif %}
+{%- endif %}

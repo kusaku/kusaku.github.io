@@ -1,6 +1,6 @@
 ---
 title: "новости врут. спокойно так"
-description: "включаешь телевизор - там все хорошо, стабильно и правильно. выходишь на улицу - и как-то не очень совпадает."
+description: "про новости, стабильность на экране и жизнь, которая не совпадает."
 date: 2007-11-19 01:08:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/12055.html>
+> Original URL: <a href="http://aks1983.livejournal.com/12055.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/12055.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/frustrated.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> frustrated</td></tr>

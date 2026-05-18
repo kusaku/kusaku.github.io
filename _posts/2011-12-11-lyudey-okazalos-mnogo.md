@@ -1,6 +1,6 @@
 ---
 title: "людей, оказывается, много"
-description: "странное чувство: долго думал, что всем все равно, а потом вышел на улицу и увидел, что нет, не всем."
+description: "про внезапное чувство, что не всем всё равно."
 date: 2011-12-11 23:58:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/20588.html>
+> Original URL: <a href="http://aks1983.livejournal.com/20588.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/20588.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/hopeful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> hopeful</td></tr>

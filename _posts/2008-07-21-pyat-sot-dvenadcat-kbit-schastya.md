@@ -1,6 +1,6 @@
 ---
 title: "512 кбит счастья!!!"
-description: "если интернет становится быстрее, человек сразу начинает верить в прогресс. даже если прогресс пока помещается в полмегабита."
+description: "полмегабита интернета и внезапная вера в прогресс."
 date: 2008-07-21 00:47:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/13542.html>
+> Original URL: <a href="http://aks1983.livejournal.com/13542.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/13542.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/happy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> happy</td></tr>

@@ -1,6 +1,6 @@
 ---
 title: "все как-то мимо"
-description: "работа есть. люди вокруг есть. даже планы иногда есть. а ощущения, что жизнь попадает точно в меня, почему-то нет."
+description: "когда всё вроде есть, но жизнь почему-то проходит мимо."
 date: 2007-08-26 01:43:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/11493.html>
+> Original URL: <a href="http://aks1983.livejournal.com/11493.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/11493.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/pensive.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> pensive</td></tr>

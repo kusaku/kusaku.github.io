@@ -1,6 +1,6 @@
 ---
 title: "таблетки... и вата в голове"
-description: "странное чувство, когда тебе вроде бы должно становиться легче, но сначала просто становишься каким-то не совсем своим."
+description: "про лечение, ожидание облегчения и ощущение не совсем своей головы."
 date: 2007-09-17 00:59:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/11721.html>
+> Original URL: <a href="http://aks1983.livejournal.com/11721.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/11721.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/confused.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> confused</td></tr>

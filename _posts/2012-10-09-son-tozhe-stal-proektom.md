@@ -1,6 +1,6 @@
 ---
 title: "сон тоже стал проектом"
-description: "в какой-то момент даже сон превращается в техобслуживание: режим, таблетки, время, побочки и тихое раздражение."
+description: "про сон, который внезапно превратился в техобслуживание."
 date: 2012-10-09 00:36:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/22211.html>
+> Original URL: <a href="http://aks1983.livejournal.com/22211.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/22211.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/sleepy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> sleepy</td></tr>

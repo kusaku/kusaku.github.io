@@ -1,6 +1,6 @@
 ---
 title: "от телевизора - плохо"
-description: "когда война начинает выглядеть как спортивная трансляция, что-то совсем не так уже не с телевизором, а с людьми."
+description: "про войну в телевизоре и неприятные вопросы к людям."
 date: 2008-08-10 23:57:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/13674.html>
+> Original URL: <a href="http://aks1983.livejournal.com/13674.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/13674.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/scared.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> anxious</td></tr>

@@ -1,6 +1,6 @@
 ---
 title: "а я, кстати, не был на своем выпускном."
-description: "а я, кстати, не был на своем выпускном. мое отсутствие было жестом \"фи\", который я приберег на последний день школьной жизни. так что никаких ассоциаций алые паруса у меня не…"
+description: "воспоминание о пропущенном выпускном и личном жесте протеста."
 date: 2006-06-23 23:12:00
 lang: "ru"
 historical_import: true
@@ -17,7 +17,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/7621.html>
+> Original URL: <a href="http://aks1983.livejournal.com/7621.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/7621.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/frustrated.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> frustrated</td></tr>

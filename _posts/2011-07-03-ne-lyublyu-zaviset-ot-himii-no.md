@@ -1,6 +1,6 @@
 ---
 title: "не люблю зависеть от химии"
-description: "очень неприятно признавать, что иногда без помощи снаружи ты просто не вытаскиваешь себя на ровную поверхность."
+description: "про неприятное признание, что иногда без помощи снаружи не выбраться."
 date: 2011-07-03 00:44:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/19618.html>
+> Original URL: <a href="http://aks1983.livejournal.com/19618.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/19618.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/thoughtful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> thoughtful</td></tr>

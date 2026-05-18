@@ -1,6 +1,6 @@
 ---
 title: "steam... вместо коробочек?"
-description: "до сих пор не могу решить, радоваться ли цифровой жизни или грустить по дискам, коробкам и той странной осязаемости."
+description: "про Steam, цифровые покупки и тоску по коробкам с дисками."
 date: 2009-11-27 01:22:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/16502.html>
+> Original URL: <a href="http://aks1983.livejournal.com/16502.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/16502.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/thoughtful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> thoughtful</td></tr>

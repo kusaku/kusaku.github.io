@@ -1,0 +1,174 @@
+---
+title: String Utilities
+seo_title: String Utilities - Turbo Pascal Programs
+description: String manipulation utilities used by the MP3 tag editor. Includes functions
+  for text processing and normalization.
+keywords:
+- Kirill Arkhipenko
+- Кирилл Архипенко
+- kusaku
+- retrewert
+- aks1983
+- legacy
+- Turbo Pascal
+- source code
+---
+<div class="legacy-code-card kusaku-surface">
+<p class="legacy-code-description">String manipulation utilities used by the MP3 tag editor. Includes functions for text processing and normalization.</p>
+<h2>Source Code</h2>
+{% highlight pascal %}
+function EmptyTag(Rec:TKeys):boolean;
+
+var i: integer;
+    Ch: char;
+
+begin
+     i:=1;
+     EmptyTag:=True;
+     case Rec of
+     Title..Album,Comment:
+              case Rec of
+                    Title:   EmptyTag:=(Tag.Title=Blank30);
+                    Artist:  EmptyTag:=(Tag.Artist=Blank30);
+                    Album:   EmptyTag:=(Tag.Album=Blank30);
+                    Comment: EmptyTag:=(Tag.Comment=Blank30);
+              end;
+
+     Year:    repeat
+                  EmptyTag:=(Tag.Year[i]=Blank);
+                  Inc(i);
+              until not (Ch=Blank) or (i=YearRecLen);
+
+     Genre:  EmptyTag:=(Tag.Genre=#255);
+     else WriteLn(StatMsg[IEr],',',KeySet[Rec],',',i);
+     end;
+end;
+
+
+function ConvGen(var S:string):string;
+begin
+     ConvGen:=S;
+end;
+
+
+function StrEd(S: string; Mode: TKeys; RL: Byte): string;
+
+var i:  byte;
+    S2: string;
+
+begin
+case Mode of
+Capit:  begin
+          S:=StrEd(S,LowCase,0);
+          if S[1] in ['a'..'z'] then S[1]:=Chr(Ord(S[1])-32);
+          for i:=Length(S) downto 2 do
+              if (S[i-1]=Blank) and (S[i] in ['a'..'z'])
+              then S[i]:=Chr(Ord(S[i])-32);
+          StrEd:=S;
+      end;
+UnCapit: begin
+          S:=StrEd(S,UpCase,0);
+          if S[1] in ['A'..'Z'] then S[1]:=Chr(Ord(S[1])+32);
+          for i:=Length(S) downto 2 do
+              if (S[i-1]=Blank) and (S[i] in ['A'..'Z'])
+              then S[i]:=Chr(Ord(S[i])+32);
+          StrEd:=S;
+       end;
+UpCase:  begin
+          for i:=1 to Length(S) do
+          if S[i] in ['a'..'z'] then S[i]:=Chr(Ord(S[i])-32);
+          StrEd:=S;
+      end;
+LowCase: begin
+          for i:=1 to Length(S) do
+          if S[i] in ['A'..'Z'] then S[i]:=Chr(Ord(S[i])+32);
+          StrEd:=S;
+      end;
+ReplUS: begin
+            for i:=1 to Length(S) do
+                if S[i]=US then S[i]:=Blank;
+            StrEd:=S;
+        end;
+Normize: begin
+            S:=StrEd(S,ReplUS,1);
+            while (S[1]=Blank) and (Length(S)>0) do Delete(S,1,1);
+            for i:=Length(S) downto 2 do
+            if (S[i]=Blank) and (S[i-1]=Blank) then Delete(S,i,1);
+            WriteLn(S);
+            if Length(S) < RL then while Length(S) < RL do S:= S + Blank;
+            if Length(S) > RL then Delete(S, RL + 1, Length(S) - RL);
+            StrEd:=S;
+         end;
+end;
+end;
+
+procedure Match;
+
+begin
+with Tag do begin
+     Title:=StrEd(Title,Normize,NormRecLen);
+     Artist:=StrEd(Artist,Normize,NormRecLen);
+     Album:=StrEd(Album,Normize,NormRecLen);
+     Comment:=StrEd(Comment,Normize,NormRecLen);
+{with Options do begin
+     if Capit then begin
+     Title:=StrEd(Title,Capit,NormRecLen);
+     Artist:=StrEd(Artist,Capit,NormRecLen);
+     Album:=StrEd(Album,Capit,NormRecLen);
+     Comment:=StrEd(Comment,Capit,NormRecLen);
+     end;
+     if UnCapit then begin
+     Title:=StrEd(Title,UnCapit,NormRecLen);
+     Artist:=StrEd(Artist,UnCapit,NormRecLen);
+     Album:=StrEd(Album,UnCapit,NormRecLen);
+     Comment:=StrEd(Comment,UnCapit,NormRecLen);
+     end;
+     if UpCase then begin
+     Title:=StrEd(Title,UpCase,NormRecLen);
+     Artist:=StrEd(Artist,UpCase,NormRecLen);
+     Album:=StrEd(Album,UpCase,NormRecLen);
+     Comment:=StrEd(Comment,UpCase,NormRecLen);
+     end;
+     if LowCase then begin
+     Title:=StrEd(Title,LowCase,NormRecLen);
+     Artist:=StrEd(Artist,LowCase,NormRecLen);
+     Album:=StrEd(Album,LowCase,NormRecLen);
+     Comment:=StrEd(Comment,LowCase,NormRecLen);
+     end;
+end;}
+end;
+end;
+
+
+
+function ReadParam: TStat;
+
+var
+    P,S:   string;
+    i,n:   byte;
+    Key:   TKeys;
+
+begin
+    ReadParam:=Ok;
+    for i:=2 to ParamCount do
+        for Key:=Low(TKeys) to High(TKeys) do
+            if StrEd(Copy(ParamStr(i),1,Length(KeySet[Key])),LowCase,1)=KeySet[Key] then
+            case Key of
+            Title:   if EmptyTag(Title) then Tag.Title:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            Artist:  if EmptyTag(Artist) then Tag.Artist:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            Album:   if EmptyTag(Album) then Tag.Album:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            Year:    if EmptyTag(Year) then Tag.Year:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            Genre:   if EmptyTag(Genre) then Tag.Genre:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            Comment: if EmptyTag(Comment) then Tag.Comment:=Copy(ParamStr(i),1,Length(KeySet[Key]));
+            ReWrTag: Options.ReWrTag:=True;
+            Capit:   Options.Capit:=True;
+            UnCapit: Options.UnCapit:=True;
+            UpCase:  Options.UpCase:=True;
+            LowCase: Options.LowCase:=True;
+            ReplUS:  Options.ReplUS:=True;
+            Normize: Options.Normize:=True;
+            else ReadParam:=PEr;
+            end;
+end;
+{% endhighlight %}
+</div>

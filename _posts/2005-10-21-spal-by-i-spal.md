@@ -1,6 +1,6 @@
 ---
 title: "спал бы и спал..."
-description: "с годами я стал черствее. пофигизм развивается во всю. мне накласть на всех. в душе. а внешне я просто лапочка. и на это все клюют. а потом - плакают. а мне пофиг."
+description: "очень сонная и колючая запись про усталость от людей."
 date: 2005-10-21 06:09:06
 lang: "ru"
 historical_import: true
@@ -17,6 +17,6 @@ tags:
 
 > Historical import from **Diary.ru** via Wayback Machine.
 >
-> Original URL: <https://diary.ru/~aks/p7973290.htm>
+> Original URL: <a href="https://diary.ru/~aks/p7973290.htm" target="_blank" rel="noopener noreferrer">https://diary.ru/~aks/p7973290.htm</a>
 
 <p>с годами я стал черствее. пофигизм развивается во всю. мне накласть на всех. в душе. а внешне я просто лапочка. и на это все клюют. а потом - плакают. а мне пофиг.</p>

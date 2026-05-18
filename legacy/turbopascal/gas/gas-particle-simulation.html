@@ -1,122 +1,25 @@
-<!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gas Particle Simulation - Turbo Pascal Programs</title>
-<meta name="description" content="Gas Particle Simulation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
-<meta name="author" content="Kirill Arkhipenko">
-<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/gas/gas-particle-simulation.html">
-<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/gas/gas-particle-simulation.html">
-<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/gas/gas-particle-simulation.html">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="Gas Particle Simulation - Turbo Pascal Programs">
-<meta property="og:description" content="Gas Particle Simulation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/gas/gas-particle-simulation.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="kusaku.su">
-<meta property="og:image" content="https://kusaku.su/avatar.webp">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gas Particle Simulation - Turbo Pascal Programs">
-<meta name="twitter:description" content="Gas Particle Simulation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<style>
-        html.light body { background: #ffffff; color: #24292f; }
-        html.dark body { background: #0d1117; color: #c9d1d9; }
-        html.light .bg-white { background-color: #ffffff; }
-        html.dark .bg-white { background-color: #161b22; }
-        html.light .text-gray-600 { color: #57606a; }
-        html.dark .text-gray-600 { color: #8b949e; }
-        html.light .text-gray-700 { color: #24292f; }
-        html.dark .text-gray-700 { color: #c9d1d9; }
-        html.light .text-gray-900 { color: #24292f; }
-        html.dark .text-gray-900 { color: #c9d1d9; }
-        html.light .border-gray-200 { border-color: #d0d7de; }
-        html.dark .border-gray-200 { border-color: #30363d; }
-        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
-        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
-
-        /* Link hover effects */
-        html.light a:hover { color: #0969da; }
-        html.dark a:hover { color: #1f6feb; }
-        html.dark pre { background: #161b22 !important; }
-        html.dark pre code { color: #c9d1d9; background: transparent !important; }
-        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
-        html.dark .hljs-keyword { color: #ff7b72; }
-        html.dark .hljs-string { color: #a5d6ff; }
-        html.dark .hljs-number { color: #79c0ff; }
-        html.dark .hljs-comment { color: #8b949e; }
-        html.dark .hljs-function { color: #d2a8ff; }
-        html.dark .hljs-variable { color: #ffa657; }
-    </style>
-<script>
-        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const applyTheme = () => {
-            const theme = localStorage.theme ?? 'system';
-            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
-            document.documentElement.classList.toggle('light', !isDark);
-            document.documentElement.classList.toggle('dark', isDark);
-        };
-        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
-        hljs.highlightAll();
-    </script>    <script>
-        // Register Pascal language for highlight.js
-        hljs.registerLanguage('pascal', function(hljs) {
-            return {
-                keywords: {
-                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
-                    built_in: 'boolean char integer real text string',
-                    literal: 'true false'
-                },
-                contains: [
-                    hljs.C_LINE_COMMENT_MODE,
-                    hljs.C_BLOCK_COMMENT_MODE,
-                    hljs.APOS_STRING_MODE,
-                    hljs.QUOTE_STRING_MODE,
-                    hljs.C_NUMBER_MODE
-                ]
-            };
-        });
-    </script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J8N1Q1GVVB');
-</script>
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
-    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
-</script>
-</head>
-<body class="min-h-screen p-4 sm:p-6 lg:p-8">
-    <div class="max-w-7xl mx-auto">
-        <nav class="mb-6">
-            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Back to Turbo Pascal Projects
-            </a>
-        </nav>
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">Gas Particle Simulation</h1>
-        <p class="text-gray-600 mb-6">A particle physics simulation program that models ideal gas behavior. Uses object-oriented programming to simulate particles with velocity, acceleration, and forces. Features graphical visualization using BGI graphics, particle interactions, statistical analysis, and real-time rendering.</p>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
-            <pre><code class="language-pascal">﻿program Gas;
+---
+title: Gas Particle Simulation
+seo_title: Gas Particle Simulation - Turbo Pascal Programs
+description: A particle physics simulation program that models ideal gas behavior.
+  Uses object-oriented programming to simulate particles with velocity, acceleration,
+  and forces. Features graphical visualization using BGI graphics, particle interactions,
+  statistical analysis, and real-time rendering.
+keywords:
+- Kirill Arkhipenko
+- Кирилл Архипенко
+- kusaku
+- retrewert
+- aks1983
+- legacy
+- Turbo Pascal
+- source code
+---
+<div class="legacy-code-card kusaku-surface">
+<p class="legacy-code-description">A particle physics simulation program that models ideal gas behavior. Uses object-oriented programming to simulate particles with velocity, acceleration, and forces. Features graphical visualization using BGI graphics, particle interactions, statistical analysis, and real-time rendering.</p>
+<h2>Source Code</h2>
+{% highlight pascal %}
+program Gas;
 
 uses
   Crt, Graph;
@@ -223,7 +126,7 @@ var resS: Double;
 begin
    dist := DistTo(That);
    resS := (That^.radius + radius) - dist;
-   if resS &gt; 0 then resS := resS * sforce
+   if resS > 0 then resS := resS * sforce
    else resS := 0;
    with That^.cur do
    begin
@@ -276,14 +179,14 @@ begin
      acc.y := acc.y + force.y;
 
      for i:=1 to container.count do
-         if i&lt;&gt;number then
+         if i<>number then
               begin
                    force := GetForce(container.part[i])^;
                    acc.x := acc.x + force.x;
                    acc.y := acc.y + force.y;
               end;
 
-     if (acc.x &lt;&gt; 0) or (acc.y &lt;&gt; 0) then
+     if (acc.x <> 0) or (acc.y <> 0) then
         underF := True
      else underF := False;
 
@@ -298,7 +201,7 @@ begin
      cur.x := cur.x + vel.x * dt;
      cur.y := cur.y + vel.y * dt;
      with container, cur do
-     isFree := (x &gt; maxX) or (x &lt; minX) or (y &gt; maxY) or (y &lt; minY);
+     isFree := (x > maxX) or (x < minX) or (y > maxY) or (y < minY);
 end;
 {рисуем частицу}
 procedure TParticleObj.Draw;
@@ -420,8 +323,8 @@ var i,k: Integer;
     cvel: Double;
     gapW: Double;
 begin
-     if (statistic.curStat &gt;= statistic.fromStat) and
-     (statistic.curStat &lt;= statistic.toStat) then
+     if (statistic.curStat >= statistic.fromStat) and
+     (statistic.curStat <= statistic.toStat) then
      begin
      gapW := 3 * container.maxVel / statistic.statGaps; {промежуток скоростей}
      with statistic do
@@ -431,12 +334,12 @@ begin
                begin
                     if isFree then continue;
                     cvel := Sqrt(vel.x * vel.x + vel.y * vel.y);
-                    if (cvel &gt; gapW * (i - 1)) and (cvel &lt; gapW * i) then
+                    if (cvel > gapW * (i - 1)) and (cvel < gapW * i) then
                     Inc(statData[i]);
                end;
      end;
      Inc(statistic.curStat);
-     MessageFrame(Concat(&#x27;Current measure #&#x27;, IntToStr(statistic.curStat)));
+     MessageFrame(Concat('Current measure #', IntToStr(statistic.curStat)));
 end;
 {рисуем гистограмму}
 procedure DrawStatPlot;
@@ -450,7 +353,7 @@ begin
          maxStat := 0;
 
          for i:=1 to statGaps do
-             if maxStat &lt; statData[i] then maxStat := statData[i];
+             if maxStat < statData[i] then maxStat := statData[i];
 
          ChangePage;
          SetFillStyle(SolidFill, 1);
@@ -498,12 +401,12 @@ end;
 procedure Remove(That : pTParticleObj);
 var i: 	 Integer;
 begin
-     MessageFrame(&#x27;Particle #&#x27; + IntToStr(That^.number) + &#x27; has gone far...&#x27;);
+     MessageFrame('Particle #' + IntToStr(That^.number) + ' has gone far...');
      Dec(container.count);
      for i:= That^.number to container.count do
-     	 begin
-         	container.part[i] := container.part[i + 1];
-			container.part[i]^.number := i;
+       begin
+          container.part[i] := container.part[i + 1];
+   container.part[i]^.number := i;
          end
      container.part[container.firstcount] := That;
 {     Dispose(That);}
@@ -546,14 +449,14 @@ begin
     Done := False;
     Str(param, StrVal);
        repeat
-           MessageFrame(Concat(Msg, &#x27; : &#x27;, StrVal));
+           MessageFrame(Concat(Msg, ' : ', StrVal));
            Ch:=ReadKey;
            case Ch of
                #13: Done:=True;
-               &#x27;0&#x27;..&#x27;9&#x27; : StrVal := Concat(StrVal, Ch);{только цифры}
+               '0'..'9' : StrVal := Concat(StrVal, Ch);{только цифры}
                #8: Delete(StrVal, Length(StrVal), 1);{enter - конец ввода}
            else
-               MessageFrame(&#x27;Must be a numeric value!&#x27;);
+               MessageFrame('Must be a numeric value!');
                repeat until KeyPressed;
                ReadKey;
            end;
@@ -568,22 +471,22 @@ var Ch : Char;
     i: Integer;
 begin
     Done := False;
-    if param then StrVal := &#x27;Y&#x27;
-    else StrVal := &#x27;N&#x27;;
+    if param then StrVal := 'Y'
+    else StrVal := 'N';
        repeat
-           MessageFrame(Concat(Msg, &#x27; [Y/N]: &#x27;, StrVal));
+           MessageFrame(Concat(Msg, ' [Y/N]: ', StrVal));
            Ch:=ReadKey;
            case Ch of
                #13: Done:=True;
-               &#x27;y&#x27;,&#x27;Y&#x27;,&#x27;n&#x27;,&#x27;N&#x27; : StrVal := Ch;
+               'y','Y','n','N' : StrVal := Ch;
                #8: Delete(StrVal, Length(StrVal), 1);
            else
-               MessageFrame(&#x27;Must be &quot;y&quot; or &quot;n&quot;!&#x27;);
+               MessageFrame('Must be "y" or "n"!');
                repeat until KeyPressed;
                ReadKey;
            end;
        until Done and (Length(StrVal) = 1);
-    param := (StrVal = &#x27;y&#x27;) or (StrVal = &#x27;Y&#x27;);
+    param := (StrVal = 'y') or (StrVal = 'Y');
 end;
 {создает контейнер с частицами}
 procedure MakeContainer;
@@ -595,54 +498,54 @@ begin
             for i:=1 to container.firstcount do
                     Dispose(container.part[i]);
      repeat
-         InputParam(container.firstcount, &#x27;Input quantity of particles (1..1000)&#x27;);
-         if (container.count &lt; 1) or (container.count &gt; MaxCount) then
+         InputParam(container.firstcount, 'Input quantity of particles (1..1000)');
+         if (container.count < 1) or (container.count > MaxCount) then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not ((container.count &lt; 1) or (container.count &gt; MaxCount));
+     until not ((container.count < 1) or (container.count > MaxCount));
      container.count := container.firstcount;
      repeat
-         InputParam(container.radius, &#x27;Input radius of particles (1..20)&#x27;);
-         if (container.radius &lt; 1) or (container.radius &gt; 20) then
+         InputParam(container.radius, 'Input radius of particles (1..20)');
+         if (container.radius < 1) or (container.radius > 20) then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not ((container.radius &lt; 1) or (container.radius &gt; 20));
+     until not ((container.radius < 1) or (container.radius > 20));
      repeat
-         InputParam(container.sforce, &#x27;Input spring force of particles (0..100000)&#x27;);
-         if (container.sforce &gt; 100000) then
+         InputParam(container.sforce, 'Input spring force of particles (0..100000)');
+         if (container.sforce > 100000) then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not ((container.sforce &gt; 100000));
+     until not ((container.sforce > 100000));
      repeat
-         InputParam(container.minVel, &#x27;Input minimal velocity of particles&#x27;);
-         InputParam(container.maxVel, &#x27;Input maximal velocity of particles&#x27;);
-         if container.minVel &gt; container.minVel then
+         InputParam(container.minVel, 'Input minimal velocity of particles');
+         InputParam(container.maxVel, 'Input maximal velocity of particles');
+         if container.minVel > container.minVel then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not (container.minVel &gt; container.maxVel);
-     InputParamB(container.enableGraph, &#x27;Enable graphics&#x27;);
+     until not (container.minVel > container.maxVel);
+     InputParamB(container.enableGraph, 'Enable graphics');
      if (container.enableGraph) then
      repeat
-         InputParam(container.skipFrames, &#x27;Amount of skipped frames per calculation (0..50)&#x27;);
-         if (container.skipFrames &lt; 0) or (container.skipFrames &gt; 50) then
+         InputParam(container.skipFrames, 'Amount of skipped frames per calculation (0..50)');
+         if (container.skipFrames < 0) or (container.skipFrames > 50) then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not ((container.skipFrames &lt; 0) or (container.skipFrames &gt; 50));
+     until not ((container.skipFrames < 0) or (container.skipFrames > 50));
 
     for i:=1 to container.count do
     begin
@@ -661,37 +564,37 @@ procedure MakeStatistic;
 var i : Integer;
 begin
      repeat
-         InputParam(statistic.statCount, &#x27;Input amount of measurements (&lt;100)&#x27;);
-         if statistic.statCount &gt; maxStat then
+         InputParam(statistic.statCount, 'Input amount of measurements (<100)');
+         if statistic.statCount > maxStat then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not (statistic.statCount &gt; maxStat);
+     until not (statistic.statCount > maxStat);
      repeat
-         InputParam(statistic.fromStat, &#x27;Input first measure of statistics&#x27;);
-         InputParam(statistic.toStat, &#x27;Input last measure of statistics&#x27;);
-         if (statistic.fromStat &gt; statistic.toStat) or
-         (statistic.fromStat &gt; statistic.statCount) or
-         (statistic.toStat &gt; statistic.statCount) then
+         InputParam(statistic.fromStat, 'Input first measure of statistics');
+         InputParam(statistic.toStat, 'Input last measure of statistics');
+         if (statistic.fromStat > statistic.toStat) or
+         (statistic.fromStat > statistic.statCount) or
+         (statistic.toStat > statistic.statCount) then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not ((statistic.fromStat &gt; statistic.toStat) or
-                (statistic.fromStat &gt; statistic.statCount) or
-                (statistic.toStat &gt; statistic.statCount));
+     until not ((statistic.fromStat > statistic.toStat) or
+                (statistic.fromStat > statistic.statCount) or
+                (statistic.toStat > statistic.statCount));
      repeat
-         InputParam(statistic.statGaps, &#x27;Input number of columns on histogram (&lt;100)&#x27;);
-         if statistic.statGaps &gt; 100 then
+         InputParam(statistic.statGaps, 'Input number of columns on histogram (<100)');
+         if statistic.statGaps > 100 then
          begin
-              MessageFrame(&#x27;Wrong input!&#x27;);
+              MessageFrame('Wrong input!');
               repeat until KeyPressed;
               ReadKey;
          end;
-     until not (statistic.statGaps &gt; 100);
+     until not (statistic.statGaps > 100);
      statistic.curStat:=0;
      for i:=1 to statistic.statCount do statistic.statData[i] := 0;
 end;
@@ -706,12 +609,12 @@ begin
   Ch := ReadKey;
   if Ch = #27 then
    begin
-      InputParamB(WantExit, &#x27;Do you really want to exit?&#x27;);
+      InputParamB(WantExit, 'Do you really want to exit?');
       if WantExit then
       begin
           CloseGraph;
           RestoreCrtMode;
-          Writeln(&#x27;Have a nice day!&#x27;);
+          Writeln('Have a nice day!');
       end;
    end;
 end;
@@ -723,13 +626,13 @@ begin
   begin
     Ch := ReadKey;
     case Ch of
-    &#x27;n&#x27;,&#x27;N&#x27;: begin
+    'n','N': begin
              MakeContainer;
              MakeStatistic;
              end;
-    &#x27;s&#x27;,&#x27;S&#x27;: AddMeasure;
+    's','S': AddMeasure;
     else
-        WaitOrExit(&#x27;Press any key to continue, Esc quits&#x27;);
+        WaitOrExit('Press any key to continue, Esc quits');
     end;
   end;
 end;
@@ -737,16 +640,16 @@ end;
 procedure Demo;
 const
     WelcomeStr : Array[1..4] of String =
-    (&#x27;WELCOME!!!&#x27;,
-     &#x27; &#x27;,
-     &#x27;This program illustrates&#x27;,
-     &#x27;Maxwell distribution for Ideal Gases&#x27;
+    ('WELCOME!!!',
+     ' ',
+     'This program illustrates',
+     'Maxwell distribution for Ideal Gases'
     );
 var wpart: pTPartWlkmObj;
     cur, vel: TVector;
     i,k : Integer;
 begin
-     MessageFrame(&#x27;LOADING...&#x27;);
+     MessageFrame('LOADING...');
     begin
      container.firstcount := 49;
      container.count := 0;
@@ -770,7 +673,7 @@ begin
     for i:=1 to 4 do
         for k:=1 to Length(WelcomeStr[i]) do
             begin
-            if WelcomeStr[i,k] = &#x27; &#x27; then continue;
+            if WelcomeStr[i,k] = ' ' then continue;
             cur.x := (maxX + minX - Length(WelcomeStr[i]) * (TextWi + 1)) /2 +  k * (TextWi + 1);
             cur.y := (maxY + minY - 8 * (TextHi + 2)) / 2 + i * (TextHi + 2);
             vel.x := 300 * (0.5 - Random);
@@ -783,7 +686,7 @@ begin
     begin
      for i:=1 to 100 do MainCycle(dt);
 
-     MessageFrame(&#x27;Displaying Demo!&#x27;);
+     MessageFrame('Displaying Demo!');
 
      for i:=1 to 100 do
      begin
@@ -798,19 +701,19 @@ begin
      OutTextXY(
                Trunc((maxX + minX) / 2),
                Trunc((maxY + minY) / 2 + 3 * (TextHi + 2)),
-               &#x27;Arkhipenko Kirill, group #212.&#x27;);
+               'Arkhipenko Kirill, group #212.');
      SetColor(2);
      OutTextXY(
                Trunc((maxX + minX) / 2),
                Trunc((maxY + minY) / 2 + 4 * (TextHi + 2)),
-               &#x27;Term paper.&#x27;);
+               'Term paper.');
      SetColor(10);
      OutTextXY(
                Trunc((maxX + minX) / 2),
                Trunc((maxY + minY) / 2 + 6 * (TextHi + 2)),
-               &#x27;Visit http://www.physfac.nm.ru/ to get more!&#x27;);
+               'Visit http://www.physfac.nm.ru/ to get more!');
      ChangePage;
-     WaitOrExit(&#x27;Press Any key to continue or Esc to exit.&#x27;);
+     WaitOrExit('Press Any key to continue or Esc to exit.');
     end;
 end;
 
@@ -822,13 +725,13 @@ begin
      MakeContainer;
      MakeStatistic;
 
-     MessageFrame(&#x27;Press &quot;n&quot;, &quot;s&quot; or &quot;p&quot;, Esc quits, any other key pauses.&#x27;);
+     MessageFrame('Press "n", "s" or "p", Esc quits, any other key pauses.');
 
      counter := container.skipFrames;
      repeat
            MainCycle(dt);
            if container.enableGraph then
-              if counter &gt; container.skipFrames then
+              if counter > container.skipFrames then
                  begin
                       DrawPoints;
                       counter := 0;
@@ -841,8 +744,8 @@ end;
 
 procedure TestGraphError(GraphErr: integer);
 begin
-  if GraphErr &lt;&gt; grOk then begin
-    Writeln(&#x27;Graphics error: &#x27;, GraphErrorMsg(GraphErr));
+  if GraphErr <> grOk then begin
+    Writeln('Graphics error: ', GraphErrorMsg(GraphErr));
     repeat until KeyPressed;
     ReadKey;
     Halt(1);
@@ -891,15 +794,15 @@ begin
                   end;
 
   end;
-  InitGraph(GraphDriver, GraphMode, &#x27;&#x27;);
+  InitGraph(GraphDriver, GraphMode, '');
   TestGraphError(GraphResult);
   SetGraphMode(1);
   SetTextStyle(DefaultFont, HorizDir, 1);
   SetTextJustify(CenterText, TopText);
   Xmax := GetMaxX;
   Ymax := GetMaxY;
-  TextHi := TextHeight(&#x27;M&#x27;);
-  TextWi := TextWidth(&#x27;M&#x27;);
+  TextHi := TextHeight('M');
+  TextWi := TextWidth('M');
   ViewXmax := Xmax - 2;
   ViewYmax := (Ymax - (TextHi + 4) - 1) - 2;
 end;
@@ -911,11 +814,8 @@ begin
       Demo;
       DoMagic;
       DrawStatPlot;
-      WaitOrExit(&#x27;Press any key to start again or Esc to exit.&#x27;);
+      WaitOrExit('Press any key to start again or Esc to exit.');
    until False;
 end.
-</code></pre>
-        </div>
-    </div>
-</body>
-</html>
+{% endhighlight %}
+</div>

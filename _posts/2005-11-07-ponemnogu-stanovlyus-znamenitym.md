@@ -1,6 +1,6 @@
 ---
 title: "понемногу становлюсь знаменитым."
-description: "понемногу становлюсь знаменитым. здесь на меня ссылается автор плагина для Maxthon, который взял мой скрипт за основу"
+description: "маленький момент славы: чужой плагин ссылается на мой скрипт."
 date: 2005-11-07 05:35:00
 lang: "ru"
 historical_import: true
@@ -17,10 +17,10 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/3806.html>
+> Original URL: <a href="http://aks1983.livejournal.com/3806.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/3806.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current music:</b></td><td>greentone & maestroh - eskalationway</td></tr>
 </table>
 
-<p><a href="http://www.refropkb.ru/Download/Program.html">здесь</a>&nbsp;на меня ссылается автор плагина для Maxthon, который взял <a href="/legacy/javascript/projects/carrot/carrot_modern.html">мой скрипт</a> за основу</p>
+<p><a href="http://www.refropkb.ru/Download/Program.html" target="_blank" rel="noopener noreferrer">здесь</a>&nbsp;на меня ссылается автор плагина для Maxthon, который взял <a href="/legacy/javascript/projects/carrot/carrot_modern.html" target="_blank" rel="noopener noreferrer">мой скрипт</a> за основу</p>

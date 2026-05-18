@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/25207.html>
+> Original URL: <a href="http://aks1983.livejournal.com/25207.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/25207.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/frustrated.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> frustrated</td></tr>

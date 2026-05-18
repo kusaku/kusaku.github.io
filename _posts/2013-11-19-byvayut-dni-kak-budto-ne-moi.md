@@ -1,6 +1,6 @@
 ---
 title: "бывают дни... как-будто не мои"
-description: "эта грусть оказалась менее кинематографичной, чем я думал. она носит чистую одежду, отвечает на письма и все равно чувствует себя немного отсутствующей."
+description: "про грусть, которая выглядит буднично, но всё равно не отпускает."
 date: 2013-11-19 23:19:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/24804.html>
+> Original URL: <a href="http://aks1983.livejournal.com/24804.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/24804.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/thoughtful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> thoughtful</td></tr>

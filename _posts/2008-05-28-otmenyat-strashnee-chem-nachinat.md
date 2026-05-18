@@ -1,6 +1,6 @@
 ---
 title: "отменять страшнее, чем начинать"
-description: "вся история с лечением почему-то меньше всего похожа на прямую дорогу. больше на очень нервное хождение по лестнице в темноте."
+description: "про лечение, отмены и нервное движение без прямой дороги."
 date: 2008-05-28 01:42:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/13204.html>
+> Original URL: <a href="http://aks1983.livejournal.com/13204.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/13204.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/pensive.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> pensive</td></tr>

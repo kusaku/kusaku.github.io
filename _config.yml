@@ -11,7 +11,7 @@ author:
     - kusaku
     - retrewert
     - aks1983
-  image: /assets/main/avatar.webp
+  image: /assets/avatar.webp
 keywords:
   - Kirill Arkhipenko
   - Кирилл Архипенко
@@ -49,9 +49,15 @@ defaults:
     values:
       layout: post
       permalink: /blog/:year/:month/:day/:title/
-      image: /assets/main/avatar.webp
+      image: /assets/avatar.webp
       og_type: article
-      body_class: min-h-screen
+  - scope:
+      path: "legacy"
+      type: pages
+    values:
+      layout: legacy
+      image: /assets/legacy/avatar.webp
+      permalink: /:path/:basename:output_ext
 exclude:
   - README.md
   - .idea/

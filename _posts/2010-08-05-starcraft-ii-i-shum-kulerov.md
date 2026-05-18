@@ -1,6 +1,6 @@
 ---
 title: "starcraft ii и шум кулеров"
-description: "если игра хорошая, ты готов простить ей бессонницу, перегрев и то, что компьютер начинает звучать как взлетающий автобус."
+description: "StarCraft II, бессонница и компьютер, звучащий как взлетающий автобус."
 date: 2010-08-05 02:03:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/17891.html>
+> Original URL: <a href="http://aks1983.livejournal.com/17891.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/17891.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/busy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> busy</td></tr>

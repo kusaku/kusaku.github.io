@@ -1,6 +1,6 @@
 ---
 title: "игры весят как жизнь"
-description: "раньше игру приносили на диске. теперь одну игру иногда качаешь так, будто перевозишь квартиру через интернет."
+description: "про игры, которые теперь скачиваются как переезд квартиры."
 date: 2013-01-12 01:11:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/22840.html>
+> Original URL: <a href="http://aks1983.livejournal.com/22840.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/22840.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/curious.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> curious</td></tr>

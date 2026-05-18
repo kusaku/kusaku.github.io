@@ -1,6 +1,6 @@
 ---
 title: "ну и денек сегодня!"
-description: "ну и денек сегодня! похоже, погода решила усторить питерцам испытание на жаропрочность и стрессоустойчивость. вод вечер с неба полилось это, липкое и склизкое, которое через…"
+description: "питерская жара, липкий дождь и испытание на стрессоустойчивость."
 date: 2006-06-23 20:20:00
 lang: "ru"
 historical_import: true
@@ -17,7 +17,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/7209.html>
+> Original URL: <a href="http://aks1983.livejournal.com/7209.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/7209.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/exausted.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> exhausted</td></tr>

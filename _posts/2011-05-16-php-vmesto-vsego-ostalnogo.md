@@ -1,6 +1,6 @@
 ---
 title: "php вместо всего остального"
-description: "вот и допрыгался: теперь я не просто собираю сайты, а пишу внутреннюю crm-ку и тикетную кухню на yii."
+description: "про переход от сайтов к CRM и тикетной кухне на Yii."
 date: 2011-05-16 23:36:00
 lang: "ru"
 historical_import: true
@@ -20,7 +20,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/19387.html>
+> Original URL: <a href="http://aks1983.livejournal.com/19387.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/19387.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/productive.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> productive</td></tr>

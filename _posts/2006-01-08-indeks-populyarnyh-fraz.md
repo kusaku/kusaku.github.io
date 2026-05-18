@@ -1,6 +1,6 @@
 ---
 title: "индекс популярных фраз"
-description: "индекс популярных фраз 1. аффтар жжот 2. аццкий сотона 3. аццтой 4. боян 5. бугага 6. в бобруйск, животное 7. выпей йаду 8. гламурно 9. готично 10. дайте две 11. зачот 12. кг/ам…"
+description: "небольшой архив сетевых мемов и словечек середины нулевых."
 date: 2006-01-08 17:18:00
 lang: "ru"
 historical_import: true
@@ -18,10 +18,10 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/5250.html>
+> Original URL: <a href="http://aks1983.livejournal.com/5250.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/5250.html</a>
 
 <table border=0>
-<tr><td align=right><b>Entry tags:</b></td><td><a href='http://aks1983.livejournal.com/tag/%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81'>индекс</a></td></tr>
+<tr><td align=right><b>Entry tags:</b></td><td><a href='http://aks1983.livejournal.com/tag/%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81' target="_blank" rel="noopener noreferrer">индекс</a></td></tr>
 </table>
 
 <ol>

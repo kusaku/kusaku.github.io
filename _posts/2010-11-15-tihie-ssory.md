@@ -1,6 +1,6 @@
 ---
 title: "тихие ссоры - хуже"
-description: "когда никто не кричит, не бьет дверьми и даже все стараются вести себя спокойно, это совсем не значит, что не больно."
+description: "про тихие ссоры, в которых больно даже без хлопанья дверьми."
 date: 2010-11-15 00:38:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/18377.html>
+> Original URL: <a href="http://aks1983.livejournal.com/18377.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/18377.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/contemplative.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> contemplative</td></tr>

@@ -1,0 +1,123 @@
+---
+title: File I/O Utilities
+seo_title: File I/O Utilities - Turbo Pascal Programs
+description: File input/output utilities for the MP3 tag editor. Handles reading and
+  writing MP3 tag data.
+keywords:
+- Kirill Arkhipenko
+- Кирилл Архипенко
+- kusaku
+- retrewert
+- aks1983
+- legacy
+- Turbo Pascal
+- source code
+---
+<div class="legacy-code-card kusaku-surface">
+<p class="legacy-code-description">File input/output utilities for the MP3 tag editor. Handles reading and writing MP3 tag data.</p>
+<h2>Source Code</h2>
+{% highlight pascal %}
+function HaveTag:boolean;
+
+var Hdr:  array [1..TagHdrLen] of char;
+    i:	  byte;
+
+begin
+     for i:=1 to TagHdrLen do Read(F,Hdr[i]);
+     if Hdr=TagHdr then HaveTag:=True else HaveTag:=False;
+end;
+
+
+function ReadTag(Path:string):TStat;
+
+var Fs:   LongInt;
+    i:	  byte;
+
+begin
+     ReadTag:=Ok;
+     {$I-}
+     Assign(F,Path);
+     Reset(F);
+     {$I+}
+     if IOResult<>0 then
+ begin
+      ReadTag:=IOEr;
+      Exit;
+ end;
+
+     Fs:=FileSize(F);
+
+     if Fs < TagLen then
+ begin
+      ReadTag:=FEr;
+      Exit;
+ end
+     else Seek(F,FileSize(F)-TagLen);
+
+     if not HaveTag then
+ begin
+             ReadTag:=TEr;
+      Exit;
+ end;
+
+     with Tag do
+  begin
+       for i:=1 to NormRecLen do Read(F,Title[i]);
+       for i:=1 to NormRecLen do Read(F,Artist[i]);
+       for i:=1 to NormRecLen do Read(F,Album[i]);
+       for i:=1 to YearRecLen do Read(F,Year[i]);
+       for i:=1 to NormRecLen do Read(F,Comment[i]);
+{	      Read(F,Genre[1]);}
+  end;
+     Close(F);
+end;
+
+function WriteTag(Path:string):TStat;
+
+var Fs: LongInt;
+    i:	byte;
+
+begin
+     WriteTag:=Ok;
+     {$I-}
+     Assign(F,Path);
+     Reset(F);
+     {$I+}
+
+     if IOResult<>0 then
+ begin
+      WriteTag:=IOEr;
+      Exit;
+ end;
+
+     Fs:=FileSize(F);
+
+     if Fs <= TagLen then
+ begin
+      Seek(F,Fs);
+      WriteTag:=FEr;
+ end
+     else
+ begin
+             if not HaveTag then
+   begin
+        WriteTag:=TEr;
+        Seek(F,Fs);
+   end
+      else Seek(F,FileSize(F)-TagLen);
+ end;
+
+     with Tag do
+  begin
+       for i:=1 to NormRecLen do Write(F,Title[i]);
+       for i:=1 to NormRecLen do Write(F,Artist[i]);
+       for i:=1 to NormRecLen do Write(F,Album[i]);
+       for i:=1 to YearRecLen do Write(F,Year[i]);
+       for i:=1 to NormRecLen do Write(F,Comment[i]);
+       Write(F,#255);{Genre[1]);}
+  end;
+              Close(F);
+
+end;
+{% endhighlight %}
+</div>

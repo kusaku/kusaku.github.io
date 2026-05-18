@@ -1,0 +1,48 @@
+<div id="soundcloud-widget" class="soundcloud-widget" aria-label="Music player">
+  <div id="soundcloud-widget-panel" class="soundcloud-widget-panel" hidden>
+    <button type="button" id="soundcloud-widget-minimize" class="soundcloud-widget-minimize" aria-label="Minimize player" title="Minimize player">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m6 9 6 6 6-6"></path>
+      </svg>
+    </button>
+    {% include soundcloud-player.html %}
+  </div>
+
+  <div class="soundcloud-mini kusaku-surface" role="group" aria-label="Music controls">
+    <a id="soundcloud-mini-open" class="soundcloud-mini-art" href="https://soundcloud.com/kusakusu" target="_blank" rel="noopener noreferrer" aria-label="Open current track on SoundCloud">
+      <img id="soundcloud-mini-artwork" alt="" hidden>
+    </a>
+
+    <div class="soundcloud-mini-meta">
+      <span id="soundcloud-mini-title" title="Loading tracks">Loading tracks</span>
+      <span id="soundcloud-mini-artist" title="SoundCloud">SoundCloud</span>
+    </div>
+
+    <button type="button" id="soundcloud-mini-prev" class="soundcloud-mini-button" aria-label="Previous track" title="Previous track">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6 6h2v12H6V6Zm3.5 6 8.5 6V6l-8.5 6Z"></path>
+      </svg>
+    </button>
+
+    <button type="button" id="soundcloud-mini-play" class="soundcloud-mini-button soundcloud-mini-play" aria-label="Play" title="Play">
+      <svg class="soundcloud-mini-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7L8 5Z"></path>
+      </svg>
+      <svg class="soundcloud-mini-icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"></path>
+      </svg>
+    </button>
+
+    <button type="button" id="soundcloud-mini-next" class="soundcloud-mini-button" aria-label="Next track" title="Next track">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M16 6h2v12h-2V6ZM6 18l8.5-6L6 6v12Z"></path>
+      </svg>
+    </button>
+
+    <button type="button" id="soundcloud-mini-panel-toggle" class="soundcloud-mini-button" aria-label="Show player" title="Show player" aria-expanded="false" aria-controls="soundcloud-widget-panel">
+      <svg class="soundcloud-mini-icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m6 15 6-6 6 6"></path>
+      </svg>
+    </button>
+  </div>
+</div>

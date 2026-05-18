@@ -1,6 +1,6 @@
 ---
-title: "postgres vs clickhouse for bulk dataframe io: csv, records, native, parquet"
-description: "i benchmarked bulk read/write paths from pandas and polars into postgres and clickhouse, and the transport format mattered more than i expected."
+title: "Postgres vs ClickHouse for Bulk DataFrame IO: CSV, Records, Native, Parquet"
+description: "Benchmarking bulk DataFrame IO into Postgres and ClickHouse."
 date: 2026-04-07 12:40:00 +0200
 lang: "en"
 tags:
@@ -513,7 +513,7 @@ The result was much stronger than ordinary row fetch and even clearly stronger t
 
 ### Postgres `pg_parquet`
 
-Postgres does not support Parquet in core, so I used the [`pg_parquet`](https://github.com/CrunchyData/pg_parquet) extension.
+Postgres does not support Parquet in core, so I used the [`pg_parquet`](https://github.com/CrunchyData/pg_parquet){: target="_blank" rel="noopener noreferrer" } extension.
 
 In this benchmark, the write path was file-based:
 

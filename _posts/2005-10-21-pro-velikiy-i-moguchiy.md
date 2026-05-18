@@ -1,6 +1,6 @@
 ---
 title: "про великий и могучий"
-description: "про великий и могучий как-то незаметно для меня в Сети появились выражения типа \"афтар жжот\", \"выпей йаду\", \"КГ/АМ\".. пропустил момент, так сказать. стала интересна полная…"
+description: "заметка о сетевом сленге, который внезапно стал повсюду."
 date: 2005-10-21 05:59:00
 lang: "ru"
 historical_import: true
@@ -17,11 +17,11 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/2131.html>
+> Original URL: <a href="http://aks1983.livejournal.com/2131.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/2131.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td>надо бы спать...</td></tr>
 <tr><td align=right><b>Current music:</b></td><td>Viggo - Eso Es</td></tr>
 </table>
 
-<p>как-то незаметно для меня в Сети появились выражения типа "афтар жжот", "выпей йаду", "КГ/АМ".. пропустил момент, так сказать. стала интересна полная семантика феномена, и вот накопал статейку: <a href="http://speakrus.ru/gg/microprosa_erratica-1.htm">http://speakrus.ru/gg/microprosa_errati<wbr />ca-1.htm</a></p>
+<p>как-то незаметно для меня в Сети появились выражения типа "афтар жжот", "выпей йаду", "КГ/АМ".. пропустил момент, так сказать. стала интересна полная семантика феномена, и вот накопал статейку: <a href="http://speakrus.ru/gg/microprosa_erratica-1.htm" target="_blank" rel="noopener noreferrer">http://speakrus.ru/gg/microprosa_errati<wbr />ca-1.htm</a></p>

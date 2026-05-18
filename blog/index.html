@@ -2,26 +2,14 @@
 layout: default
 title: Blog
 description: Blog posts by Kirill Arkhipenko about software engineering, systems, side projects, and maintaining a personal website on the open web.
-permalink: /blog/
-image: /assets/main/avatar.webp
-body_class: min-h-screen p-4 sm:p-6 lg:p-8
-blog_index: true
+image: /assets/avatar.webp
 ---
 <main class="min-h-screen">
   {% include theme-toggle.html %}
-  <div class="mx-auto max-w-5xl pt-12">
-    <header class="mb-12 text-center">
-      <img src="{{ '/assets/main/avatar.webp' | relative_url }}" alt="Kirill Arkhipenko" class="mx-auto mb-6 h-32 w-32 rounded-full object-cover">
-      <h1 class="mb-3 text-4xl font-bold text-gray-900">Blog</h1>
-      <p class="mx-auto max-w-2xl text-xl text-gray-600">Notes, links, and preserved fragments from different periods of the site.</p>
-    </header>
+  <div class="mx-auto max-w-5xl">
+    {% include site-header.html title="Blog" description="Notes, old fragments, and things I apparently once needed to say out loud." %}
 
-    <nav class="mb-12 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-600">
-      <a class="blog-pill rounded-full border border-gray-200 bg-white px-4 py-2 transition-colors" href="{{ '/' | relative_url }}">Home</a>
-      <a class="blog-pill rounded-full border border-gray-200 bg-white px-4 py-2 transition-colors" href="{{ '/legacy/' | relative_url }}">Legacy</a>
-    </nav>
-
-    <section class="blog-panel mb-12 rounded-lg bg-white p-8 shadow-xl">
+    <section class="blog-panel kusaku-surface mb-6 p-8">
       <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div class="text-left">
           <h2 class="mb-1 text-2xl font-bold text-gray-900">Archive</h2>
@@ -30,39 +18,57 @@ blog_index: true
         <div class="flex flex-wrap gap-2 text-sm">
           {% assign year_groups = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
           {% for year in year_groups %}
-          <a class="blog-chip rounded-full border border-gray-200 bg-gray-50 px-4 py-2 transition-colors" href="#year-{{ year.name }}">{{ year.name }} <span class="text-gray-500">({{ year.items | size }})</span></a>
+          <a class="blog-chip" href="#year-{{ year.name }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"></path>
+            </svg>
+            <span>{{ year.name }}</span>
+            <span class="text-gray-500">({{ year.items | size }})</span>
+          </a>
           {% endfor %}
         </div>
       </div>
     </section>
 
-    <section class="space-y-8">
+    <section class="space-y-6">
       {% for year in year_groups %}
       <section id="year-{{ year.name }}">
-        <div class="blog-panel rounded-lg bg-white p-8 shadow-xl">
+        <div class="blog-panel kusaku-surface p-8">
           <div class="mb-6 flex items-center justify-between gap-4">
             <div>
               <h2 class="text-3xl font-bold text-gray-900">{{ year.name }}</h2>
               <p class="text-sm text-gray-600">{{ year.items | size }} posts</p>
             </div>
-            <a class="blog-subtle-link text-sm font-medium text-gray-600 transition-colors" href="{{ '/blog/' | relative_url }}">Back to top</a>
+            <a class="blog-subtle-link text-sm" href="{{ '/blog/' | relative_url }}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 7-7 7 7M12 19V5"></path>
+              </svg>
+              <span>Back to top</span>
+            </a>
           </div>
           <div class="space-y-2">
             {% assign posts = year.items | sort: "date" | reverse %}
             {% for post in posts %}
-            {% assign post_title = post.title | to_s | strip %}
-            {% if post_title == "" %}
-              {% assign post_title = "&lt;no title&gt;" %}
-            {% endif %}
-            <a class="blog-row flex flex-col gap-1 rounded-lg border border-transparent px-4 py-3 text-gray-900 transition-colors md:flex-row md:items-center md:justify-between" href="{{ post.url | relative_url }}">
-              <span class="blog-row-title text-lg font-medium transition-colors">{{ post_title }}</span>
-              <span class="text-sm text-gray-500 md:text-right">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span>
-            </a>
+            <div class="blog-row grid gap-1 md:grid-cols-[minmax(0,1fr)_9.5rem] md:items-center md:gap-6">
+              <a class="blog-row-link blog-row-main flex min-w-0 items-center gap-1" href="{{ post.url | relative_url }}">
+                <svg class="blog-row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.5 21H6.5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2Z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 3v4H6.5m3 5h5m-5 4h5M6.5 12h.01M6.5 16h.01"></path>
+                </svg>
+                <span class="blog-row-title min-w-0 text-base font-normal">{{ post.title }}</span>
+                <svg class="blog-row-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6"></path>
+                </svg>
+              </a>
+              <span class="blog-row-date text-sm text-gray-500 md:text-right">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span>
+            </div>
             {% endfor %}
           </div>
         </div>
       </section>
       {% endfor %}
     </section>
+    {% include site-footer.html %}
   </div>
+  {% include bio-modal.html %}
 </main>

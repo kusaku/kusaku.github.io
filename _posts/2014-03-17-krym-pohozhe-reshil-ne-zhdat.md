@@ -1,6 +1,6 @@
 ---
 title: "крым, похоже, решил не ждать"
-description: "как ни крути, я могу понять людей, которые не захотели спокойно принимать чужой хаос как новую норму."
+description: "про Крым, хаос и людей, которым не захотелось ждать."
 date: 2014-03-17 00:41:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/25318.html>
+> Original URL: <a href="http://aks1983.livejournal.com/25318.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/25318.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/hopeful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> hopeful</td></tr>

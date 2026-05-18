@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<main class="min-h-screen">
+  {% include theme-toggle.html %}
+  <div class="mx-auto max-w-5xl">
+    {% assign legacy_header_description = page.description %}
+    {% if page.keywords contains "source code" %}
+      {% assign legacy_header_description = "Source code listing from the legacy archive" %}
+    {% endif %}
+    {% include site-header.html title=page.title description=legacy_header_description avatar="/assets/legacy/avatar.webp" avatar_alt="Kirill Arkhipenko in 2001" %}
+
+    <section class="legacy-content space-y-6">
+      {{ content }}
+    </section>
+    {% include site-footer.html %}
+  </div>
+  {% include bio-modal.html %}
+</main>

@@ -1,6 +1,6 @@
 ---
 title: "...и так прошло 2 года"
-description: "Запись сохранена с мягкой маскировкой самых частных деталей о личной жизни и других людях."
+description: "запись сохранена с мягкой маскировкой самых частных деталей о личной жизни и других людях."
 date: 2005-04-19 06:19:21
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **Diary.ru** via Wayback Machine.
 >
-> Original URL: <https://diary.ru/~aks/p4646203.htm>
+> Original URL: <a href="https://diary.ru/~aks/p4646203.htm" target="_blank" rel="noopener noreferrer">https://diary.ru/~aks/p4646203.htm</a>
 
 <p>ну вот и прошло 2 года с момента моей первой записи. и кажется за это время почти ничего не изменилось.</p>
 

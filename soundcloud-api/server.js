@@ -118,30 +118,14 @@ const normalizeTrack = ({
   created_at,
   duration,
   artwork_url,
-  metadata_artist,
   permalink_url,
-  release,
-  release_day,
-  release_month,
-  release_year,
-  user,
 }) => ({
   id,
   title,
   created_at,
   duration,
   artwork_url,
-  metadata_artist,
   permalink_url,
-  release,
-  release_day,
-  release_month,
-  release_year,
-  user: user && {
-    username: user.username,
-    permalink_url: user.permalink_url,
-    avatar_url: user.avatar_url,
-  },
 });
 
 const getTracks = async (requestUrl) => {

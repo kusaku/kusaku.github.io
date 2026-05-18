@@ -1,6 +1,6 @@
 ---
 title: "сервера, юзеры, баннеры"
-description: "вот уж чего я не ожидал, так это того, что меня одновременно посадят чинить винду, возиться с сетью и ковырять drupal."
+description: "первые рабочие недели: Windows, сеть и Drupal в одном наборе."
 date: 2007-02-14 23:18:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/10421.html>
+> Original URL: <a href="http://aks1983.livejournal.com/10421.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/10421.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/weird.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> weird</td></tr>

@@ -1,6 +1,6 @@
 ---
 title: "skype briefing, oh well"
-description: "the awkward moment when you realize you are discussing business logic in english and it somehow works."
+description: "discussing business logic in English, awkwardly but successfully."
 date: 2013-04-03 22:42:00
 lang: "en"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/23405.html>
+> Original URL: <a href="http://aks1983.livejournal.com/23405.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/23405.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/scared.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> anxious</td></tr>

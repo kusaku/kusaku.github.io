@@ -1,6 +1,6 @@
 ---
 title: "четыре человека и двадцать сайтов"
-description: "маленькая студия - это когда ты одновременно программист, верстальщик, менеджер, техподдержка и иногда психотерапевт."
+description: "маленькая студия, двадцать сайтов и слишком много ролей сразу."
 date: 2010-10-28 01:26:00
 lang: "ru"
 historical_import: true
@@ -20,7 +20,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/18199.html>
+> Original URL: <a href="http://aks1983.livejournal.com/18199.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/18199.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/productive.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> productive</td></tr>

@@ -1,6 +1,6 @@
 ---
 title: "надо бы что-нибудь поменять"
-description: "надоело распыляться по мелочам в своих занятиях, пора осуществить какой-нибудь глобальный проект. однако, сначала хочется закончить начатое, а это непочатый край. вот дилемма."
+description: "про желание сделать большой проект и застревание в куче незавершённого."
 date: 2005-11-18 10:31:00
 lang: "ru"
 historical_import: true
@@ -17,6 +17,6 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/4314.html>
+> Original URL: <a href="http://aks1983.livejournal.com/4314.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/4314.html</a>
 
 <p>надоело распыляться по мелочам в своих занятиях, пора осуществить какой-нибудь глобальный проект. однако, сначала хочется закончить начатое, а это непочатый край. вот дилемма.</p>

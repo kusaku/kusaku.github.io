@@ -1,6 +1,6 @@
 ---
 title: "sbs, галстук... ну да"
-description: "походил на курсы, послушал про маленький и средний бизнес. все это правильно, но принтеры от этого все равно не чинятся."
+description: "курсы про бизнес, галстук и всё те же непокорные принтеры."
 date: 2007-04-27 22:58:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/10792.html>
+> Original URL: <a href="http://aks1983.livejournal.com/10792.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/10792.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/thoughtful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> thoughtful</td></tr>

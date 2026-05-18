@@ -1,0 +1,17 @@
+{% assign header_avatar = include.avatar | default: '/assets/avatar.webp' %}
+{% assign header_avatar_alt = include.avatar_alt | default: 'Kirill Arkhipenko' %}
+<header class="site-header mb-10">
+  <div class="site-header-avatar site-magnify-container" data-site-magnify>
+    <img src="{{ header_avatar | relative_url }}" alt="{{ header_avatar_alt }}" class="site-header-image h-36 w-36 rounded-full object-cover" data-site-magnify-image>
+    <div class="site-magnify-lens" data-site-magnify-lens></div>
+  </div>
+  <div class="site-header-copy">
+    {% if include.title %}
+    <h1 class="mb-2 text-4xl font-bold text-gray-900">{{ include.title }}</h1>
+    {% endif %}
+    {% if include.description %}
+    <p class="max-w-2xl text-xl text-gray-600">{{ include.description }}</p>
+    {% endif %}
+    {% include site-nav.html %}
+  </div>
+</header>

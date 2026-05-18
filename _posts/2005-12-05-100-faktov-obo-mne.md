@@ -1,6 +1,6 @@
 ---
 title: "100 фактов [обо мне]"
-description: "Часть очень личных пунктов в этой исторической записи мягко замаскирована для публичного архива."
+description: "часть очень личных пунктов в этой исторической записи мягко замаскирована для публичного архива."
 date: 2005-12-05 14:43:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/5049.html>
+> Original URL: <a href="http://aks1983.livejournal.com/5049.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/5049.html</a>
 
 <ol>
 <li>Меня зовут Кирилл. В переводе с персидского это означает «солнце» или «господин».</li>

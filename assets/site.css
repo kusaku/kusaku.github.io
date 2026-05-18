@@ -1,0 +1,1142 @@
+html.light body { background: #ffffff; }
+html.light {
+  --kusaku-page-bg: #ffffff;
+  --kusaku-page-bg-soft: #f6f8fa;
+  --kusaku-text: #24292f;
+  --kusaku-muted: #57606a;
+  --kusaku-border: #d0d7de;
+  --kusaku-surface-bg: #ffffff;
+  --kusaku-surface-border: #d0d7de;
+  --kusaku-surface-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.18);
+  --kusaku-widget-edge: 1rem;
+  --kusaku-link-text: #24292f;
+  --kusaku-link-hover: #d97706;
+  --kusaku-inline-code-bg: #f6f8fa;
+  --kusaku-inline-code-text: #24292f;
+  --kusaku-code-bg: #f6f8fa;
+  --kusaku-code-border: #d0d7de;
+  --kusaku-code-text: #24292f;
+  --kusaku-code-muted: #6e7781;
+  --kusaku-code-keyword: #cf222e;
+  --kusaku-code-string: #0a3069;
+  --kusaku-code-number: #0550ae;
+  --kusaku-code-name: #8250df;
+  --kusaku-code-operator: #0550ae;
+  --kusaku-code-error: #cf222e;
+}
+html.light .bg-white { background-color: var(--kusaku-page-bg); }
+html.light .bg-gray-50 { background-color: var(--kusaku-page-bg-soft); }
+html.light .text-gray-600, html.light .text-gray-500 { color: var(--kusaku-muted); }
+html.light .text-gray-700, html.light .text-gray-800, html.light .text-gray-900 { color: var(--kusaku-text); }
+html.light .border-gray-200 { border-color: var(--kusaku-border); }
+
+html.dark body { background: #0d1117; }
+html.dark {
+  --kusaku-page-bg: #0d1117;
+  --kusaku-page-bg-soft: #0d1117;
+  --kusaku-text: #c9d1d9;
+  --kusaku-muted: #8b949e;
+  --kusaku-border: #30363d;
+  --kusaku-surface-bg: #161b22;
+  --kusaku-surface-border: #30363d;
+  --kusaku-surface-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.38);
+  --kusaku-widget-edge: 1rem;
+  --kusaku-link-text: #c9d1d9;
+  --kusaku-link-hover: #f59e0b;
+  --kusaku-inline-code-bg: #21262d;
+  --kusaku-inline-code-text: #c9d1d9;
+  --kusaku-code-bg: #0d1117;
+  --kusaku-code-border: #30363d;
+  --kusaku-code-text: #c9d1d9;
+  --kusaku-code-muted: #8b949e;
+  --kusaku-code-keyword: #ff7b72;
+  --kusaku-code-string: #a5d6ff;
+  --kusaku-code-number: #79c0ff;
+  --kusaku-code-name: #d2a8ff;
+  --kusaku-code-operator: #79c0ff;
+  --kusaku-code-error: #ff7b72;
+}
+html.dark .bg-white { background-color: var(--kusaku-surface-bg); }
+html.dark .bg-gray-50 { background-color: var(--kusaku-page-bg); }
+html.dark .text-gray-600, html.dark .text-gray-500 { color: var(--kusaku-muted); }
+html.dark .text-gray-700, html.dark .text-gray-800, html.dark .text-gray-900 { color: var(--kusaku-text); }
+html.dark .border-gray-200 { border-color: var(--kusaku-border); }
+
+.kusaku-surface,
+.site-header-image {
+  background: var(--kusaku-surface-bg);
+  border: 1px solid var(--kusaku-surface-border);
+  box-shadow: var(--kusaku-surface-shadow);
+}
+
+html.light .theme-btn.theme-active { background-color: #0969da; color: #ffffff; }
+html.dark .theme-btn.theme-active { background-color: #1f6feb; color: #c9d1d9; }
+html.light .theme-btn.theme-active:hover { background-color: #0969da; color: #ffffff; }
+html.dark .theme-btn.theme-active:hover { background-color: #1f6feb; color: #c9d1d9; }
+html.light .theme-btn:hover { background-color: #f3f4f6; color: #171515; }
+html.dark .theme-btn:hover { background-color: #21262d; color: #c9d1d9; }
+
+html.light .group:hover .group-hover\:text-blue-600 { color: #0969da; }
+html.dark .group:hover .group-hover\:text-blue-600 { color: #1f6feb; }
+html.light .group:hover .group-hover\:text-green-600 { color: #16a34a; }
+html.dark .group:hover .group-hover\:text-green-600 { color: #3fb950; }
+html.light .group:hover .group-hover\:text-purple-600 { color: #9333ea; }
+html.dark .group:hover .group-hover\:text-purple-600 { color: #a855f7; }
+html.light .group:hover .group-hover\:text-rose-600 { color: #e11d48; }
+html.dark .group:hover .group-hover\:text-rose-600 { color: #fb7185; }
+
+html.light .contact-github:hover, html.light .contact-github:hover * { color: #171515; }
+html.dark .contact-github:hover, html.dark .contact-github:hover * { color: #c9d1d9; }
+html.light .contact-linkedin:hover, html.light .contact-linkedin:hover * { color: #0077b5; }
+html.dark .contact-linkedin:hover, html.dark .contact-linkedin:hover * { color: #4da3d4; }
+html.light .contact-instagram:hover, html.light .contact-instagram:hover * { color: #e1306c; }
+html.dark .contact-instagram:hover, html.dark .contact-instagram:hover * { color: #fd1d1d; }
+html.light .contact-vk:hover, html.light .contact-vk:hover * { color: #0077ff; }
+html.dark .contact-vk:hover, html.dark .contact-vk:hover * { color: #4da3ff; }
+html.light .contact-ok:hover, html.light .contact-ok:hover * { color: #ee8208; }
+html.dark .contact-ok:hover, html.dark .contact-ok:hover * { color: #ff9d2e; }
+html.light .contact-max:hover, html.light .contact-max:hover * { color: #9333ea; }
+html.dark .contact-max:hover, html.dark .contact-max:hover * { color: #a855f7; }
+html.light .contact-telegram:hover, html.light .contact-telegram:hover * { color: #24a1de; }
+html.dark .contact-telegram:hover, html.dark .contact-telegram:hover * { color: #5bb3e8; }
+html.light .contact-whatsapp:hover, html.light .contact-whatsapp:hover * { color: #25d366; }
+html.dark .contact-whatsapp:hover, html.dark .contact-whatsapp:hover * { color: #4ade80; }
+html.light .contact-email:hover, html.light .contact-email:hover * { color: #111827; }
+html.dark .contact-email:hover, html.dark .contact-email:hover * { color: #c9d1d9; }
+html.light .contact-about:hover, html.light .contact-about:hover * { color: #f59e0b; }
+html.dark .contact-about:hover, html.dark .contact-about:hover * { color: #fbbf24; }
+
+.site-footer a,
+.site-footer button,
+.site-nav-link {
+  transform-origin: center;
+  transition: color 150ms ease, transform 150ms ease;
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible,
+.site-footer button:hover,
+.site-footer button:focus-visible,
+.site-nav-link:hover,
+.site-nav-link:focus-visible {
+  transform: translateY(-1px);
+}
+
+.site-footer button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.rich-content,
+.blog-content,
+.legacy-content {
+  color: var(--kusaku-text);
+}
+
+:is(.rich-content, .blog-content, .legacy-content) > * + * {
+  margin-top: 1.25rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) p,
+:is(.rich-content, .blog-content, .legacy-content) li {
+  color: var(--kusaku-text);
+  line-height: 1.8;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) br + br,
+:is(.rich-content, .blog-content, .legacy-content) p > br:first-child {
+  display: none;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) h2,
+:is(.rich-content, .blog-content, .legacy-content) h3 {
+  color: var(--kusaku-text);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) h2 {
+  font-size: 1.875rem;
+  margin-top: 2.5rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) a {
+  color: var(--kusaku-link-text);
+  text-decoration: none;
+  transition: color 150ms ease, transform 150ms ease;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) a:hover {
+  color: var(--kusaku-link-hover);
+  transform: translateY(-1px);
+}
+
+:is(.rich-content, .blog-content, .legacy-content) :not(pre) > code {
+  background: var(--kusaku-inline-code-bg);
+  border-radius: 0.375rem;
+  color: var(--kusaku-inline-code-text);
+  padding: 0.125rem 0.375rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) .highlighter-rouge,
+:is(.rich-content, .blog-content, .legacy-content) .highlight {
+  border-radius: 1rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) div.highlighter-rouge {
+  margin: 1.75rem 0;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) pre {
+  background: var(--kusaku-code-bg);
+  border: 1px solid var(--kusaku-code-border);
+  border-radius: 1rem;
+  color: var(--kusaku-code-text);
+  overflow-x: auto;
+  padding: 1.25rem 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) pre code {
+  background: transparent;
+  color: inherit;
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  min-width: max-content;
+  padding: 0;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) pre.highlight {
+  margin: 0;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) .highlight {
+  color: var(--kusaku-code-text);
+}
+
+:is(.rich-content, .blog-content, .legacy-content) .highlight :is(.c, .c1, .cm) { color: var(--kusaku-code-muted); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight :is(.k, .kc, .kd, .kn, .kr) { color: var(--kusaku-code-keyword); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight :is(.m, .mi, .mf) { color: var(--kusaku-code-number); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight :is(.s, .s1, .s2, .se) { color: var(--kusaku-code-string); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight :is(.na, .nc, .nf, .nn) { color: var(--kusaku-code-name); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight .o { color: var(--kusaku-code-operator); }
+:is(.rich-content, .blog-content, .legacy-content) .highlight .err { color: var(--kusaku-code-error); }
+
+:is(.rich-content, .blog-content, .legacy-content) table :not(pre) > code {
+  font-size: 0.88em;
+  padding: 0.04rem 0.26rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) ul,
+:is(.rich-content, .blog-content, .legacy-content) ol {
+  padding-left: 1.5rem;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) ul {
+  list-style: disc;
+}
+
+:is(.rich-content, .blog-content, .legacy-content) ol {
+  list-style: decimal;
+}
+
+@media (max-width: 72rem) {
+  body.has-soundcloud-widget .site-footer {
+    padding-bottom: max(5.75rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 720px) {
+  body.has-soundcloud-widget .site-footer {
+    padding-bottom: max(6.25rem, env(safe-area-inset-bottom));
+  }
+}
+
+html.dark #bio-modal h2,
+html.dark #bio-modal h3,
+html.dark #bio-modal .text-gray-700,
+html.dark #bio-modal .text-gray-900 { color: #c9d1d9; }
+html.dark #bio-modal p,
+html.dark #bio-modal .text-gray-600,
+html.dark #bio-modal .text-gray-500 { color: #8b949e; }
+html.light #bio-modal button:hover { color: #111827; }
+html.dark #bio-modal button:hover { color: #c9d1d9; }
+
+#theme-toggle {
+  right: var(--kusaku-widget-edge);
+  top: var(--kusaku-widget-edge);
+}
+
+.theme-shell,
+.soundcloud-mini,
+#bio-modal .bio-modal-panel {
+  border-radius: 0.75rem;
+}
+
+.site-tile {
+  border-radius: 0.5rem;
+  display: block;
+  transition: transform 180ms ease;
+}
+
+.site-tile:hover {
+  transform: translateY(-0.25rem);
+}
+
+.site-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  text-align: right;
+}
+
+.site-header-avatar {
+  flex: 0 0 auto;
+}
+
+.site-header-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.site-header nav {
+  justify-content: flex-end;
+}
+
+.site-header-copy p {
+  margin-left: auto;
+}
+
+.site-magnify-container {
+  cursor: none;
+  display: inline-block;
+  position: relative;
+  touch-action: none;
+}
+
+.site-magnify-lens {
+  background: #ffffff;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: none;
+  height: min(400px, 78vw);
+  overflow: hidden;
+  pointer-events: none;
+  position: fixed;
+  width: min(400px, 78vw);
+  z-index: 1000;
+}
+
+html.dark .site-magnify-lens {
+  background: #0d1117;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.site-magnify-lens-img {
+  border-radius: calc(var(--img-border-radius, 9999px) * 2);
+  display: block;
+  max-height: none;
+  max-width: none;
+  position: absolute;
+}
+
+.site-nav-link {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.site-nav-link svg {
+  height: 1.25rem;
+  overflow: visible;
+  width: 1.25rem;
+}
+
+.site-nav-link:hover,
+.site-nav-link:focus-visible {
+  text-decoration: none;
+}
+
+html.light .site-nav-home:hover {
+  color: #0969da;
+}
+
+html.dark .site-nav-home:hover {
+  color: #58a6ff;
+}
+
+html.light .site-nav-blog:hover {
+  color: #e11d48;
+}
+
+html.dark .site-nav-blog:hover {
+  color: #fb7185;
+}
+
+html.light .site-nav-music:hover {
+  color: #ff5500;
+}
+
+html.dark .site-nav-music:hover {
+  color: #ff9b73;
+}
+
+html.light .site-nav-legacy:hover {
+  color: #9333ea;
+}
+
+html.dark .site-nav-legacy:hover {
+  color: #a855f7;
+}
+
+.soundcloud-player,
+.soundcloud-widget {
+  --sc-accent: #ff5500;
+  --sc-accent-strong: #ff6a1f;
+  --sc-panel: #ffffff;
+  --sc-panel-soft: #f6f8fa;
+  --sc-border: #d0d7de;
+  --sc-control-bg: rgba(255, 255, 255, 0.9);
+  --sc-panel-glow: rgba(255, 255, 255, 0.72);
+  --sc-panel-text-glow: rgba(255, 255, 255, 0.95);
+  --sc-element-shadow: 0 0 1.9rem 0.7rem var(--sc-panel-glow);
+  --sc-element-filter-shadow: drop-shadow(0 0 1.9rem var(--sc-panel-glow)) drop-shadow(0 0 0.7rem var(--sc-panel-glow));
+  --sc-text-shadow: 0 0.1rem 0.45rem var(--sc-panel-text-glow), 0 0.08rem 0.35rem var(--sc-panel-text-glow);
+  --sc-text: #24292f;
+  --sc-muted: #57606a;
+  color: var(--sc-text);
+}
+
+html.dark .soundcloud-player,
+html.dark .soundcloud-widget {
+  --sc-panel: #161b22;
+  --sc-panel-soft: #0d1117;
+  --sc-border: #30363d;
+  --sc-control-bg: rgba(22, 27, 34, 0.82);
+  --sc-panel-glow: rgba(22, 27, 34, 0.78);
+  --sc-panel-text-glow: rgba(22, 27, 34, 0.92);
+  --sc-text: #c9d1d9;
+  --sc-muted: #8b949e;
+}
+
+.soundcloud-shell {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  gap: 1.25rem;
+  overflow: hidden;
+  padding: 1.25rem;
+  position: relative;
+}
+
+.soundcloud-spectrum {
+  display: block;
+  filter: contrast(1.18) saturate(1.55);
+  height: 100%;
+  inset: 0;
+  opacity: 0.94;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.soundcloud-art {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #ff5500 0%, #1f2937 100%);
+  border-radius: 0.5rem;
+  display: grid;
+  filter: var(--sc-element-filter-shadow);
+  overflow: hidden;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.soundcloud-art img {
+  display: block;
+  grid-area: 1 / 1;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.soundcloud-art-fallback {
+  color: #ffffff;
+  grid-area: 1 / 1;
+  opacity: 0.92;
+  width: 42%;
+}
+
+.soundcloud-art-open {
+  align-items: center;
+  background: var(--sc-control-bg);
+  border: 1px solid var(--sc-border);
+  border-radius: 0.5rem;
+  color: var(--sc-text);
+  display: inline-flex;
+  grid-area: 1 / 1;
+  height: 2.25rem;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0.65rem;
+  top: 0.65rem;
+  transform: translateY(-2px);
+  transition: opacity 150ms ease, transform 150ms ease, border-color 150ms ease, color 150ms ease, background-color 150ms ease;
+  width: 2.25rem;
+  z-index: 3;
+}
+
+.soundcloud-art-open::before {
+  border-radius: inherit;
+  box-shadow: var(--sc-element-shadow);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.soundcloud-art-open svg {
+  height: 1.15rem;
+  overflow: visible;
+  position: relative;
+  width: 1.15rem;
+  z-index: 1;
+}
+
+.soundcloud-art:hover .soundcloud-art-open,
+.soundcloud-art:focus-within .soundcloud-art-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.soundcloud-art-open:hover,
+.soundcloud-art-open:focus-visible {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+  color: color-mix(in srgb, var(--sc-accent) 70%, var(--sc-text));
+  transform: translateY(-1px);
+}
+
+.soundcloud-art-open:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--sc-accent) 72%, #ffffff);
+  outline-offset: 3px;
+}
+
+#soundcloud-player [hidden],
+#soundcloud-widget [hidden] {
+  display: none !important;
+}
+
+.soundcloud-meta {
+  min-width: 0;
+  text-shadow: var(--sc-text-shadow);
+}
+
+.soundcloud-meta h2 {
+  color: var(--sc-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.soundcloud-meta p {
+  color: var(--sc-muted);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.soundcloud-control {
+  align-items: center;
+  background: var(--sc-control-bg);
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  color: var(--sc-text);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 2.75rem;
+  isolation: isolate;
+  justify-content: center;
+  position: relative;
+  transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease, transform 150ms ease;
+  width: 2.75rem;
+}
+
+.soundcloud-control svg {
+  height: 1.25rem;
+  overflow: visible;
+  position: relative;
+  text-shadow: none;
+  z-index: 1;
+  width: 1.25rem;
+}
+
+.soundcloud-control:hover {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+  color: color-mix(in srgb, var(--sc-accent) 70%, var(--sc-text));
+  transform: translateY(-1px);
+}
+
+.soundcloud-control:active {
+  transform: translateY(0);
+}
+
+.soundcloud-main {
+  display: grid;
+  gap: 1.35rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100%;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.soundcloud-controls {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  filter: var(--sc-element-filter-shadow);
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+.soundcloud-control.is-active {
+  border-color: var(--sc-border);
+  color: var(--sc-accent);
+}
+
+.soundcloud-control.is-active:hover {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+}
+
+.soundcloud-control.is-active svg {
+  filter: drop-shadow(0 0 0.35rem rgba(255, 85, 0, 0.42));
+  stroke-width: 2.65;
+}
+
+.soundcloud-play {
+  background: var(--sc-accent);
+  border-color: var(--sc-accent);
+  color: #ffffff;
+  height: 3.35rem;
+  width: 3.35rem;
+}
+
+.soundcloud-play:hover {
+  background: var(--sc-accent-strong);
+  border-color: var(--sc-accent-strong);
+  color: #ffffff;
+}
+
+.soundcloud-repeat-one-icon {
+  display: none;
+}
+
+.soundcloud-player.repeat-one .soundcloud-repeat-all-icon {
+  display: none;
+}
+
+.soundcloud-player.repeat-one .soundcloud-repeat-one-icon {
+  display: block;
+}
+
+.soundcloud-icon-pause,
+.soundcloud-player.is-playing .soundcloud-icon-play {
+  display: none;
+}
+
+.soundcloud-player.is-playing .soundcloud-icon-pause {
+  display: block;
+}
+
+.soundcloud-timeline {
+  align-items: center;
+  color: var(--sc-muted);
+  display: grid;
+  font-size: 0.82rem;
+  gap: 0.75rem;
+  grid-template-columns: 2.75rem 1fr 2.75rem;
+  text-shadow: var(--sc-text-shadow);
+}
+
+.soundcloud-timeline input {
+  accent-color: var(--sc-accent);
+  filter: var(--sc-element-filter-shadow);
+  cursor: pointer;
+  min-width: 0;
+  width: 100%;
+}
+
+.soundcloud-tracks {
+  border-top: 1px solid var(--sc-border);
+  display: grid;
+  max-height: 15rem;
+  overscroll-behavior: contain;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.soundcloud-track {
+  align-items: center;
+  border-bottom: 1px solid var(--sc-border);
+  color: var(--sc-text);
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: 2.25rem 1fr auto;
+  min-height: 3.75rem;
+  padding: 0.75rem 1.25rem;
+  text-align: left;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.soundcloud-track:hover,
+.soundcloud-track.is-active {
+  background: var(--sc-panel-soft);
+}
+
+.soundcloud-track.is-active {
+  color: var(--sc-accent);
+}
+
+.soundcloud-track-index,
+.soundcloud-track-duration {
+  color: var(--sc-muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.soundcloud-track-title {
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soundcloud-player-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 2rem);
+  justify-content: center;
+  width: 100%;
+}
+
+.soundcloud-player-page .soundcloud-player {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  max-height: calc(100% - 2.75rem);
+}
+
+.soundcloud-player-page .soundcloud-shell {
+  flex: 0 0 auto;
+}
+
+.soundcloud-player-page .soundcloud-tracks {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .soundcloud-player-page {
+    height: calc(100vh - 3rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .soundcloud-player-page {
+    height: calc(100vh - 4rem);
+  }
+}
+
+.soundcloud-widget {
+  bottom: var(--kusaku-widget-edge);
+  display: grid;
+  gap: 0.75rem;
+  justify-items: stretch;
+  position: fixed;
+  right: var(--kusaku-widget-edge);
+  overscroll-behavior: contain;
+  width: min(24rem, calc(100vw - var(--kusaku-widget-edge) - var(--kusaku-widget-edge)));
+  z-index: 60;
+}
+
+.soundcloud-widget.is-open {
+  width: min(32rem, calc(100vw - var(--kusaku-widget-edge) - var(--kusaku-widget-edge)));
+}
+
+.soundcloud-widget-panel {
+  min-height: 0;
+  min-width: 0;
+  overflow: visible;
+  overscroll-behavior: contain;
+  position: relative;
+  width: 100%;
+}
+
+.soundcloud-widget-panel .soundcloud-player {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  max-height: min(42rem, calc(100vh - 7.5rem));
+  min-height: 0;
+}
+
+.soundcloud-widget-panel .soundcloud-tracks {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
+  touch-action: pan-y;
+}
+
+.soundcloud-widget.is-open .soundcloud-mini {
+  display: none;
+}
+
+.soundcloud-widget-minimize {
+  align-items: center;
+  background: var(--sc-control-bg);
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  color: var(--sc-text);
+  display: inline-flex;
+  height: 2.5rem;
+  justify-content: center;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease, transform 150ms ease;
+  width: 2.5rem;
+  z-index: 4;
+}
+
+.soundcloud-widget-minimize svg {
+  height: 1.15rem;
+  width: 1.15rem;
+}
+
+.soundcloud-widget-minimize:hover {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+  color: color-mix(in srgb, var(--sc-accent) 70%, var(--sc-text));
+  transform: translateY(-1px);
+}
+
+.soundcloud-widget-panel .soundcloud-shell {
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 1.25rem;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  padding: 1rem;
+}
+
+.soundcloud-widget-panel .soundcloud-art {
+  max-width: 10rem;
+  width: 10rem;
+}
+
+.soundcloud-widget-panel .soundcloud-main {
+  gap: 1.1rem;
+  justify-content: center;
+}
+
+.soundcloud-widget-panel .soundcloud-meta {
+  padding-right: 3.25rem;
+  text-align: left;
+}
+
+.soundcloud-widget-panel .soundcloud-meta h2 {
+  font-size: clamp(1.15rem, 2.7vw, 1.5rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soundcloud-mini {
+  align-items: center;
+  background: var(--sc-panel);
+  color: var(--sc-text);
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: 3rem minmax(8rem, 1fr) repeat(4, 2.35rem);
+  min-width: 0;
+  padding: 0.35rem;
+  pointer-events: auto;
+  width: 100%;
+}
+
+.soundcloud-mini-art,
+.soundcloud-mini-meta,
+.soundcloud-mini-button {
+  align-items: center;
+  border: 1px solid var(--sc-border);
+  color: var(--sc-text);
+  display: inline-flex;
+  justify-content: center;
+  transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease, transform 150ms ease;
+}
+
+.soundcloud-mini-art {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #ff5500 0%, #1f2937 100%);
+  border-radius: 0.55rem;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+}
+
+.soundcloud-mini-meta {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0.5rem;
+  display: grid;
+  justify-content: start;
+  justify-items: start;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.2rem 0.35rem;
+  text-align: left;
+}
+
+.soundcloud-mini-meta span {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.soundcloud-mini-meta span:first-child {
+  color: var(--sc-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.soundcloud-mini-meta span:last-child {
+  color: var(--sc-muted);
+  font-size: 0.74rem;
+  line-height: 1.2;
+}
+
+.soundcloud-mini-art img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.soundcloud-mini-art:hover,
+.soundcloud-mini-art:focus-visible {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+  color: color-mix(in srgb, var(--sc-accent) 70%, var(--sc-text));
+  transform: translateY(-1px);
+}
+
+.soundcloud-mini-art:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--sc-accent) 72%, #ffffff);
+  outline-offset: 2px;
+}
+
+.soundcloud-mini-button {
+  background: var(--sc-control-bg);
+  border-radius: 999px;
+  height: 2.35rem;
+  width: 2.35rem;
+}
+
+.soundcloud-mini-button svg {
+  height: 1.15rem;
+  width: 1.15rem;
+}
+
+.soundcloud-mini-button:hover {
+  border-color: color-mix(in srgb, var(--sc-accent) 55%, var(--sc-border));
+  color: color-mix(in srgb, var(--sc-accent) 70%, var(--sc-text));
+  transform: translateY(-1px);
+}
+
+.soundcloud-mini-play {
+  background: var(--sc-accent);
+  border-color: var(--sc-accent);
+  color: #ffffff;
+}
+
+.soundcloud-mini-play:hover {
+  background: var(--sc-accent-strong);
+  border-color: var(--sc-accent-strong);
+  color: #ffffff;
+}
+
+.soundcloud-mini-icon-pause,
+.soundcloud-widget.is-playing .soundcloud-mini-icon-play {
+  display: none;
+}
+
+.soundcloud-widget.is-playing .soundcloud-mini-icon-pause {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  html.light,
+  html.dark {
+    --kusaku-widget-edge: 0.75rem;
+  }
+
+  .site-header {
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .site-header nav {
+    justify-content: center;
+  }
+
+  .site-header p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .soundcloud-player {
+    text-align: center;
+  }
+
+  .soundcloud-shell {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .soundcloud-art {
+    justify-self: center;
+    max-height: 18rem;
+    max-width: 18rem;
+    width: 100%;
+  }
+
+  .soundcloud-main {
+    gap: 1.1rem;
+  }
+
+  .soundcloud-track {
+    grid-template-columns: 2rem minmax(0, 1fr) 3.4rem;
+    text-align: left;
+  }
+
+  .soundcloud-track-duration {
+    display: inline;
+    text-align: right;
+  }
+
+  .soundcloud-widget {
+    left: var(--kusaku-widget-edge);
+    right: var(--kusaku-widget-edge);
+    width: auto;
+  }
+
+  .soundcloud-mini {
+    grid-template-columns: 3rem minmax(0, 1fr) repeat(4, 2.35rem);
+  }
+}
+
+@media (max-width: 1024px), (max-height: 560px) {
+  .soundcloud-widget.is-open {
+    display: flex;
+    flex-direction: column;
+    bottom: var(--kusaku-widget-edge);
+    min-height: 0;
+    top: var(--kusaku-widget-edge);
+  }
+
+  .soundcloud-widget.is-open .soundcloud-widget-panel {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .soundcloud-widget.is-open .soundcloud-player {
+    flex: 1 1 auto;
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .soundcloud-widget.is-open .soundcloud-tracks {
+    flex: 1 1 0;
+    min-height: 4rem;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .soundcloud-widget.is-open {
+    left: var(--kusaku-widget-edge);
+    right: var(--kusaku-widget-edge);
+    width: auto;
+  }
+}
+
+@media (max-height: 560px) {
+  .soundcloud-widget-panel .soundcloud-track {
+    gap: 0.9rem;
+    grid-template-columns: 2.25rem minmax(0, 1fr) 3.4rem;
+    min-height: 3.25rem;
+    padding: 0.55rem 1.25rem;
+  }
+}
+
+@media (max-width: 720px) and (orientation: portrait) {
+  .soundcloud-widget-panel .soundcloud-shell {
+    align-items: stretch;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+
+  .soundcloud-widget-panel .soundcloud-art {
+    justify-self: center;
+    max-width: 14rem;
+    width: min(100%, 14rem);
+  }
+
+  .soundcloud-widget-panel .soundcloud-main {
+    gap: 1rem;
+  }
+
+  .soundcloud-widget-panel .soundcloud-meta {
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .soundcloud-widget-panel .soundcloud-meta h2 {
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}

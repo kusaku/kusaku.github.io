@@ -17,8 +17,8 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/3482.html>
+> Original URL: <a href="http://aks1983.livejournal.com/3482.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/3482.html</a>
 
 <p>интересно было послушать</p>
 
-<p><a href="http://www.rambler-audio.ru/asx/video/legends_03_08_12a.asx">http://www.rambler-audio.ru/asx/video/l<wbr />egends_03_08_12a.asx</a></p>
+<p><a href="http://www.rambler-audio.ru/asx/video/legends_03_08_12a.asx" target="_blank" rel="noopener noreferrer">http://www.rambler-audio.ru/asx/video/l<wbr />egends_03_08_12a.asx</a></p>

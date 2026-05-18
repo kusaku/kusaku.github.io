@@ -1,6 +1,6 @@
 ---
 title: "странная смесь надежды и брезгливости"
-description: "москва, петербург, речи, флаги, комментарии, вранье. и где-то внутри этого всего - очень дурацкий маленький кусочек надежды."
+description: "про митинги, недоверие и маленький кусочек надежды внутри шума."
 date: 2012-02-05 01:09:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/20931.html>
+> Original URL: <a href="http://aks1983.livejournal.com/20931.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/20931.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/hopeful.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> hopeful</td></tr>

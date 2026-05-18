@@ -1,6 +1,6 @@
 ---
 title: "drupal как образ жизни"
-description: "views, ubercart, поля, типы материалов, а еще заказчики, которые хотят интернет-магазин \"ну простой\"."
+description: "drupal, views, ubercart и заказчики с простыми просьбами."
 date: 2008-11-26 01:54:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/14390.html>
+> Original URL: <a href="http://aks1983.livejournal.com/14390.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/14390.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/exausted.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> exhausted</td></tr>

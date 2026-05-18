@@ -1,6 +1,6 @@
 ---
 title: "первый раз делаю визитку"
-description: "первый раз делаю визитку сейчас, за три часа, сварганил следующие вещи: а вопрос сколько же это может стоить, так и не решил..."
+description: "первый опыт с визиткой и вечный вопрос: сколько стоит такая работа."
 date: 2005-10-07 01:08:00
 lang: "ru"
 historical_import: true
@@ -17,7 +17,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/1781.html>
+> Original URL: <a href="http://aks1983.livejournal.com/1781.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/1781.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td>в носу свербит</td></tr>

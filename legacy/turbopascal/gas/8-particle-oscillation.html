@@ -1,122 +1,22 @@
-<!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>8-Particle Oscillation - Turbo Pascal Programs</title>
-<meta name="description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta name="keywords" content="Kirill Arkhipenko, Кирилл Архипенко, kusaku, retrewert, aks1983, legacy">
-<meta name="author" content="Kirill Arkhipenko">
-<link rel="canonical" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
-<link rel="alternate" hreflang="en" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
-<link rel="alternate" hreflang="ru" href="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="8-Particle Oscillation - Turbo Pascal Programs">
-<meta property="og:description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta property="og:url" content="https://kusaku.su/legacy/turbopascal/gas/8-particle-oscillation.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="kusaku.su">
-<meta property="og:image" content="https://kusaku.su/avatar.webp">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="8-Particle Oscillation - Turbo Pascal Programs">
-<meta name="twitter:description" content="8-Particle Oscillation - Turbo Pascal program by Kirill Arkhipenko (kusaku, retrewert, aks1983).">
-<meta name="twitter:image" content="https://kusaku.su/avatar.webp">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<style>
-        html.light body { background: #ffffff; color: #24292f; }
-        html.dark body { background: #0d1117; color: #c9d1d9; }
-        html.light .bg-white { background-color: #ffffff; }
-        html.dark .bg-white { background-color: #161b22; }
-        html.light .text-gray-600 { color: #57606a; }
-        html.dark .text-gray-600 { color: #8b949e; }
-        html.light .text-gray-700 { color: #24292f; }
-        html.dark .text-gray-700 { color: #c9d1d9; }
-        html.light .text-gray-900 { color: #24292f; }
-        html.dark .text-gray-900 { color: #c9d1d9; }
-        html.light .border-gray-200 { border-color: #d0d7de; }
-        html.dark .border-gray-200 { border-color: #30363d; }
-        html.light .hover\:bg-gray-50:hover { background-color: #f6f8fa; }
-        html.dark .hover\:bg-gray-50:hover { background-color: #21262d; }
-
-        /* Link hover effects */
-        html.light a:hover { color: #0969da; }
-        html.dark a:hover { color: #1f6feb; }
-        html.dark pre { background: #161b22 !important; }
-        html.dark pre code { color: #c9d1d9; background: transparent !important; }
-        html.dark .hljs { background: #161b22 !important; color: #c9d1d9; }
-        html.dark .hljs-keyword { color: #ff7b72; }
-        html.dark .hljs-string { color: #a5d6ff; }
-        html.dark .hljs-number { color: #79c0ff; }
-        html.dark .hljs-comment { color: #8b949e; }
-        html.dark .hljs-function { color: #d2a8ff; }
-        html.dark .hljs-variable { color: #ffa657; }
-    </style>
-<script>
-        const getSystemPreference = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const applyTheme = () => {
-            const theme = localStorage.theme ?? 'system';
-            const isDark = theme === 'system' ? getSystemPreference() : theme === 'dark';
-            document.documentElement.classList.toggle('light', !isDark);
-            document.documentElement.classList.toggle('dark', isDark);
-        };
-        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', applyTheme) : applyTheme();
-    </script>
-<script>
-        // Register Pascal language for highlight.js
-        hljs.registerLanguage('pascal', function(hljs) {
-            return {
-                keywords: {
-                    keyword: 'and array begin case const div do downto else end file for function goto if in label mod nil not of or packed procedure program record repeat set then to type until var while with',
-                    built_in: 'boolean char integer real text string',
-                    literal: 'true false'
-                },
-                contains: [
-                    hljs.C_LINE_COMMENT_MODE,
-                    hljs.C_BLOCK_COMMENT_MODE,
-                    hljs.APOS_STRING_MODE,
-                    hljs.QUOTE_STRING_MODE,
-                    hljs.C_NUMBER_MODE
-                ]
-            };
-        });
-        hljs.highlightAll();
-    </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8N1Q1GVVB"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J8N1Q1GVVB');
-</script>
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105986243', 'ym');
-    ym(105986243, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
-</script>
-</head>
-<body class="min-h-screen p-4 sm:p-6 lg:p-8">
-    <div class="max-w-7xl mx-auto">
-        <nav class="mb-6">
-            <a href="/legacy/turbopascal/turbopascal.html" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Back to Turbo Pascal Projects
-            </a>
-        </nav>
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">8-Particle Oscillation</h1>
-        <p class="text-gray-600 mb-6">An oscillation simulation with 8 particles.</p>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-            <h2 class="font-semibold text-gray-900 mb-4">Source Code:</h2>
-            <pre><code class="language-pascal">﻿      {$N+}
+---
+title: 8-Particle Oscillation
+seo_title: 8-Particle Oscillation - Turbo Pascal Programs
+description: An oscillation simulation with 8 particles.
+keywords:
+- Kirill Arkhipenko
+- Кирилл Архипенко
+- kusaku
+- retrewert
+- aks1983
+- legacy
+- Turbo Pascal
+- source code
+---
+<div class="legacy-code-card kusaku-surface">
+<p class="legacy-code-description">An oscillation simulation with 8 particles.</p>
+<h2>Source Code</h2>
+{% highlight pascal %}
+      {$N+}
 program Oscill;
 uses
   Crt, Graph;
@@ -181,7 +81,7 @@ procedure Parametres;
 var N,i:integer;
 
 begin
-  assign(fp,&#x27;koord.dat&#x27;{Input path!});
+  assign(fp,'koord.dat'{Input path!});
   reset(fp);
        N:=1;
       for i:=1 to N do
@@ -245,77 +145,77 @@ begin
     Line(330,50,315,45);    Line(330,50,315,55);
 
     SetColor(15);
-    OutTextXY(275,40,&#x27;(a,0)&#x27;);    OutTextXY(280,295,&#x27;(a,b)&#x27;);
-    OutTextXY(55,295,&#x27;(0,b)&#x27;);    OutTextXY(40,40,&#x27;O&#x27;);
-    OutTextXY(100,90,&#x27;(x1,y1)&#x27;);  OutTextXY(103,108,&#x27;m1&#x27;);
-    OutTextXY(180,90,&#x27;(x2,y2)&#x27;);  OutTextXY(223,108,&#x27;m2&#x27;);
-    OutTextXY(100,240,&#x27;(x4,y4)&#x27;); OutTextXY(103,227,&#x27;m4&#x27;);
-    OutTextXY(180,240,&#x27;(x3,y3)&#x27;); OutTextXY(223,227,&#x27;m3&#x27;);
+    OutTextXY(275,40,'(a,0)');    OutTextXY(280,295,'(a,b)');
+    OutTextXY(55,295,'(0,b)');    OutTextXY(40,40,'O');
+    OutTextXY(100,90,'(x1,y1)');  OutTextXY(103,108,'m1');
+    OutTextXY(180,90,'(x2,y2)');  OutTextXY(223,108,'m2');
+    OutTextXY(100,240,'(x4,y4)'); OutTextXY(103,227,'m4');
+    OutTextXY(180,240,'(x3,y3)'); OutTextXY(223,227,'m3');
 
-    OutTextXY(75,75,&#x27;1&#x27;);   OutTextXY(170,110,&#x27;2&#x27;); OutTextXY(255,75,&#x27;3&#x27;);
-    OutTextXY(230,170,&#x27;4&#x27;); OutTextXY(255,255,&#x27;5&#x27;); OutTextXY(170,230,&#x27;6&#x27;);
-    OutTextXY(75,255,&#x27;7&#x27;);  OutTextXY(110,170,&#x27;8&#x27;);
-    OutTextXY(480,10,&#x27;Русская версия.&#x27;);
-    OutTextXY(150,20,&#x27;Рисунок для демонстрации системы!&#x27;);
-    OutTextXY(150,22,&#x27;_________________________________&#x27;);
-    OutTextXY(345,65,&#x27;Далее необходимо задать начальные&#x27;);
-    OutTextXY(340,80,&#x27;условия и параметры системы.&#x27;);
-    OutTextXY(345,100,&#x27;Надо задать:&#x27;);
-    OutTextXY(345,101,&#x27;____________&#x27;);
-    OutTextXY(340,115,&#x27;1.Параметры - a,b&#x27;);
-    OutTextXY(340,130,&#x27;2.Начальные координаты - (Xi,Yi)&#x27;);
-    OuttextXY(340,145,&#x27;3.Начальные скорости-(VelXi,VelYi)&#x27;);
-    OutTextXY(340,160,&#x27;4.Массы шариков - mi, где i=1,..,4&#x27;);
-    OutTextXY(340,175,&#x27;5.Жесткость пружины - Kj&#x27;);
-    OutTextXY(340,190,&#x27;6.Длину нерастянутых пружин - L0j&#x27;);
-    OutTextXY(340,205,&#x27;        где j=1,..,8&#x27;);
-    OutTextXY(360,230,&#x27;Замечания:&#x27;);
-    OutTextXY(360,232,&#x27;__________&#x27;);
-    OutTextXY(345,245,&#x27;Значения вводятся в соответствии&#x27;);
-    OutTextXY(340,260,&#x27;с приведенным рисунком из тексто-&#x27;);
-    OutTexTXY(340,275,&#x27;вого файла &#x27;&#x27;Koord.dat&#x27;&#x27;.&#x27;);
-    OutTextXY(80,320,&#x27;Проверьте пвавильнось введенных данных:&#x27;);
-    OutTExtXY(80,322,&#x27;_______________________________________&#x27;);
-    OutTextXY(330,40,&#x27;X&#x27;); OutTextXY(35,320,&#x27;Y&#x27;);
+    OutTextXY(75,75,'1');   OutTextXY(170,110,'2'); OutTextXY(255,75,'3');
+    OutTextXY(230,170,'4'); OutTextXY(255,255,'5'); OutTextXY(170,230,'6');
+    OutTextXY(75,255,'7');  OutTextXY(110,170,'8');
+    OutTextXY(480,10,'Русская версия.');
+    OutTextXY(150,20,'Рисунок для демонстрации системы!');
+    OutTextXY(150,22,'_________________________________');
+    OutTextXY(345,65,'Далее необходимо задать начальные');
+    OutTextXY(340,80,'условия и параметры системы.');
+    OutTextXY(345,100,'Надо задать:');
+    OutTextXY(345,101,'____________');
+    OutTextXY(340,115,'1.Параметры - a,b');
+    OutTextXY(340,130,'2.Начальные координаты - (Xi,Yi)');
+    OuttextXY(340,145,'3.Начальные скорости-(VelXi,VelYi)');
+    OutTextXY(340,160,'4.Массы шариков - mi, где i=1,..,4');
+    OutTextXY(340,175,'5.Жесткость пружины - Kj');
+    OutTextXY(340,190,'6.Длину нерастянутых пружин - L0j');
+    OutTextXY(340,205,'        где j=1,..,8');
+    OutTextXY(360,230,'Замечания:');
+    OutTextXY(360,232,'__________');
+    OutTextXY(345,245,'Значения вводятся в соответствии');
+    OutTextXY(340,260,'с приведенным рисунком из тексто-');
+    OutTexTXY(340,275,'вого файла ''Koord.dat''.');
+    OutTextXY(80,320,'Проверьте пвавильнось введенных данных:');
+    OutTExtXY(80,322,'_______________________________________');
+    OutTextXY(330,40,'X'); OutTextXY(35,320,'Y');
 
-    OutTextXY(50,360,&#x27;a=&#x27;);  S:= IntegerToStr(a); OutTextXY(65,360,&#x27;&#x27;+S);
-    OutTextXY(50,375,&#x27;b=&#x27;);  S:= IntegerToStr(b); OutTextXY(65,375,&#x27;&#x27;+S);
+    OutTextXY(50,360,'a=');  S:= IntegerToStr(a); OutTextXY(65,360,''+S);
+    OutTextXY(50,375,'b=');  S:= IntegerToStr(b); OutTextXY(65,375,''+S);
 
-    OutTextXY(110,340,&#x27;(Xi , Yi)&#x27;);
+    OutTextXY(110,340,'(Xi , Yi)');
     i:=0;
     repeat i:=i+1;
        S:=IntegerToStr(X[i]); S1:= IntegerToStr(Y[i]);
-       OutTextXY(110,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
-    until i&gt;3;
+       OutTextXY(110,345+i*10,'('+S+', '+S1+')');
+    until i>3;
 
-    OutTextXY(200,340,&#x27;(VelXi,VelYi)&#x27;);
+    OutTextXY(200,340,'(VelXi,VelYi)');
     i:=0;
     repeat i:=i+1;
     S:= DoubleToStr(VelX1[i]); S1:= DoubleToStr(VelY1[i]);
-    OutTextXY(200,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
-    until i&gt;3;
+    OutTextXY(200,345+i*10,'('+S+', '+S1+')');
+    until i>3;
 
-    OutTextXY(340,340,&#x27; mi &#x27;);
+    OutTextXY(340,340,' mi ');
     i:=0;
     repeat i:=i+1;
     S:= DoubleToStr(m[i]);
-    OutTextXY(340,345+i*10,&#x27;&#x27;+S);
-    until i&gt;3;
+    OutTextXY(340,345+i*10,''+S);
+    until i>3;
 
-    OutTextXY(420,340,&#x27; Kj&#x27;);
+    OutTextXY(420,340,' Kj');
     i:=0;
     repeat i:=i+1;
-    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,&#x27;&#x27;+S);
-    until i&gt;7;
+    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,''+S);
+    until i>7;
 
-    OutTextXY(500,340,&#x27; L0j&#x27;);
+    OutTextXY(500,340,' L0j');
     i:=0;
     repeat i:=i+1;
-    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,&#x27;&#x27;+S);
-    until i&gt;7;
+    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,''+S);
+    until i>7;
 
     SetColor(1);
-    OutTextXY(200,450,&#x27;Press any key to continue!&#x27;);
+    OutTextXY(200,450,'Press any key to continue!');
     Rectangle(195,445,415,463);
 
     ReadKey;
@@ -352,78 +252,78 @@ begin
     Line(330,50,315,45);    Line(330,50,315,55);
 
     SetColor(15);
-    OutTextXY(275,40,&#x27;(a,0)&#x27;);    OutTextXY(280,295,&#x27;(a,b)&#x27;);
-    OutTextXY(55,295,&#x27;(0,b)&#x27;);    OutTextXY(40,40,&#x27;O&#x27;);
-    OutTextXY(100,90,&#x27;(x1,y1)&#x27;);  OutTextXY(103,108,&#x27;m1&#x27;);
-    OutTextXY(180,90,&#x27;(x2,y2)&#x27;);  OutTextXY(223,108,&#x27;m2&#x27;);
-    OutTextXY(100,240,&#x27;(x4,y4)&#x27;); OutTextXY(103,227,&#x27;m4&#x27;);
-    OutTextXY(180,240,&#x27;(x3,y3)&#x27;); OutTextXY(223,227,&#x27;m3&#x27;);
+    OutTextXY(275,40,'(a,0)');    OutTextXY(280,295,'(a,b)');
+    OutTextXY(55,295,'(0,b)');    OutTextXY(40,40,'O');
+    OutTextXY(100,90,'(x1,y1)');  OutTextXY(103,108,'m1');
+    OutTextXY(180,90,'(x2,y2)');  OutTextXY(223,108,'m2');
+    OutTextXY(100,240,'(x4,y4)'); OutTextXY(103,227,'m4');
+    OutTextXY(180,240,'(x3,y3)'); OutTextXY(223,227,'m3');
 
-    OutTextXY(75,75,&#x27;1&#x27;);   OutTextXY(170,110,&#x27;2&#x27;); OutTextXY(255,75,&#x27;3&#x27;);
-    OutTextXY(230,170,&#x27;4&#x27;); OutTextXY(255,255,&#x27;5&#x27;); OutTextXY(170,230,&#x27;6&#x27;);
-    OutTextXY(75,255,&#x27;7&#x27;);  OutTextXY(110,170,&#x27;8&#x27;);
+    OutTextXY(75,75,'1');   OutTextXY(170,110,'2'); OutTextXY(255,75,'3');
+    OutTextXY(230,170,'4'); OutTextXY(255,255,'5'); OutTextXY(170,230,'6');
+    OutTextXY(75,255,'7');  OutTextXY(110,170,'8');
    {   SetColor(4);   }
-    OutTextXY(480,10,&#x27;English vertion.&#x27;);
-    OutTextXY(130,20,&#x27;Picture for demonstration physical sistem!&#x27;);
-    OutTextXY(130,22,&#x27;__________________________________________&#x27;);
-    OutTextXY(345,65,&#x27;Late is necesary set initial condi-&#x27;);
-    OutTextXY(340,80,&#x27;tions and parametres of our system.&#x27;);
-    OutTextXY(345,100,&#x27;Need input:&#x27;);
-    OutTextXY(345,101,&#x27;___________&#x27;);
-    OutTextXY(340,115,&#x27;1.Parametres - a,b&#x27;);
-    OutTextXY(340,130,&#x27;2.Initial koordinates - (Xi,Yi)&#x27;);
-    OuttextXY(340,145,&#x27;3.Initial velocities-(VelXi,VelYi)&#x27;);
-    OutTextXY(340,160,&#x27;4.Balls mass - mi, where i=1,..,4&#x27;);
-    OutTextXY(340,175,&#x27;5.Springs force - Kj&#x27;);
-    OutTextXY(340,190,&#x27;6.Lenght unextending spring - L0j&#x27;);
-    OutTextXY(340,205,&#x27;      where j=1,..,8&#x27;);
-    OutTextXY(360,230,&#x27;Remarks:&#x27;);
-    OutTextXY(360,232,&#x27;________&#x27;);
-    OutTextXY(345,245,&#x27;Value input in compliance with&#x27;);
-    OutTextXY(340,260,&#x27;demonstrate pictures from text&#x27;);
-    OutTexTXY(340,275,&#x27;file &#x27;&#x27;Koord.dat&#x27;&#x27;.&#x27;);
-    OutTextXY(80,320,&#x27;Control accuracy input values:&#x27;);
-    OutTExtXY(80,322,&#x27;______________________________&#x27;);
-    OutTextXY(330,40,&#x27;X&#x27;); OutTextXY(35,320,&#x27;Y&#x27;);
+    OutTextXY(480,10,'English vertion.');
+    OutTextXY(130,20,'Picture for demonstration physical sistem!');
+    OutTextXY(130,22,'__________________________________________');
+    OutTextXY(345,65,'Late is necesary set initial condi-');
+    OutTextXY(340,80,'tions and parametres of our system.');
+    OutTextXY(345,100,'Need input:');
+    OutTextXY(345,101,'___________');
+    OutTextXY(340,115,'1.Parametres - a,b');
+    OutTextXY(340,130,'2.Initial koordinates - (Xi,Yi)');
+    OuttextXY(340,145,'3.Initial velocities-(VelXi,VelYi)');
+    OutTextXY(340,160,'4.Balls mass - mi, where i=1,..,4');
+    OutTextXY(340,175,'5.Springs force - Kj');
+    OutTextXY(340,190,'6.Lenght unextending spring - L0j');
+    OutTextXY(340,205,'      where j=1,..,8');
+    OutTextXY(360,230,'Remarks:');
+    OutTextXY(360,232,'________');
+    OutTextXY(345,245,'Value input in compliance with');
+    OutTextXY(340,260,'demonstrate pictures from text');
+    OutTexTXY(340,275,'file ''Koord.dat''.');
+    OutTextXY(80,320,'Control accuracy input values:');
+    OutTExtXY(80,322,'______________________________');
+    OutTextXY(330,40,'X'); OutTextXY(35,320,'Y');
 
-    OutTextXY(50,360,&#x27;a=&#x27;);  S:= IntegerToStr(a); OutTextXY(65,360,&#x27;&#x27;+S);
-    OutTextXY(50,375,&#x27;b=&#x27;);  S:= IntegerToStr(b); OutTextXY(65,375,&#x27;&#x27;+S);
+    OutTextXY(50,360,'a=');  S:= IntegerToStr(a); OutTextXY(65,360,''+S);
+    OutTextXY(50,375,'b=');  S:= IntegerToStr(b); OutTextXY(65,375,''+S);
 
-    OutTextXY(110,340,&#x27;(Xi , Yi)&#x27;);
+    OutTextXY(110,340,'(Xi , Yi)');
     i:=0;
     repeat i:=i+1;
        S:=IntegerToStr(X[i]); S1:= IntegerToStr(Y[i]);
-       OutTextXY(110,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
-    until i&gt;3;
+       OutTextXY(110,345+i*10,'('+S+', '+S1+')');
+    until i>3;
 
-    OutTextXY(200,340,&#x27;(VelXi,VelYi)&#x27;);
+    OutTextXY(200,340,'(VelXi,VelYi)');
     i:=0;
     repeat i:=i+1;
     S:= DoubleToStr(VelX1[i]); S1:= DoubleToStr(VelY1[i]);
-    OutTextXY(200,345+i*10,&#x27;(&#x27;+S+&#x27;, &#x27;+S1+&#x27;)&#x27;);
-    until i&gt;3;
+    OutTextXY(200,345+i*10,'('+S+', '+S1+')');
+    until i>3;
 
-    OutTextXY(340,340,&#x27; mi &#x27;);
+    OutTextXY(340,340,' mi ');
     i:=0;
     repeat i:=i+1;
     S:= DoubleToStr(m[i]);
-    OutTextXY(340,345+i*10,&#x27;&#x27;+S);
-    until i&gt;3;
+    OutTextXY(340,345+i*10,''+S);
+    until i>3;
 
-    OutTextXY(420,340,&#x27; Kj&#x27;);
+    OutTextXY(420,340,' Kj');
     i:=0;
     repeat i:=i+1;
-    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,&#x27;&#x27;+S);
-    until i&gt;7;
+    S:= DoubleToStr(K[i]);  OutTextXY(420,345+i*10,''+S);
+    until i>7;
 
-    OutTextXY(500,340,&#x27; L0j&#x27;);
+    OutTextXY(500,340,' L0j');
     i:=0;
     repeat i:=i+1;
-    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,&#x27;&#x27;+S);
-    until i&gt;7;
+    S:= DoubleToStr(L0[i]);  OutTextXY(500,345+i*10,''+S);
+    until i>7;
 
     SetColor(1);
-    OutTextXY(200,450,&#x27;Press any key to continue!&#x27;);
+    OutTextXY(200,450,'Press any key to continue!');
     Rectangle(195,445,415,463);
     ReadKey;
     CloseGraph;
@@ -436,16 +336,16 @@ var  Chr : char;
 begin
   GraphDriver:=Detect;
   Graphmode:=vgahi;
-  InitGraph(GraphDriver,GraphMode,&#x27;E:\pascal\bin&#x27;);
+  InitGraph(GraphDriver,GraphMode,'E:\pascal\bin');
   SetBKColor(3);
   SetTextStyle(0,0,1);
 
-  OutTextXY(110,70,&#x27;Term paper on programming a student 211 group&#x27;);
-  OutTextXY(400,85,&#x27;Modin Artem.&#x27;);
-  OutTextXY(100,150,&#x27;Building physical model by numerical methods.&#x27;);
-  OutTextXY(100,152,&#x27;_____________________________________________&#x27;);
-  OutTextXY(115,185,&#x27;Oscilling Balls.&#x27;);
-  OutTextXY(550,10,&#x27;Ver.1.0&#x27;);
+  OutTextXY(110,70,'Term paper on programming a student 211 group');
+  OutTextXY(400,85,'Modin Artem.');
+  OutTextXY(100,150,'Building physical model by numerical methods.');
+  OutTextXY(100,152,'_____________________________________________');
+  OutTextXY(115,185,'Oscilling Balls.');
+  OutTextXY(550,10,'Ver.1.0');
   SetColor(1);
   Rectangle(100,200,300,360);
   SetColor(4);
@@ -457,9 +357,9 @@ begin
   FillEllipse(150,240,4,4); FillEllipse(250,240,4,4);
   FillEllipse(150,320,4,4); FillEllipse(250,320,4,4);
 
-  OutTextXY(80,400,&#x27;Choose language:&#x27; );
-  OutTextXY(80,415,&#x27;1. Press &#x27;&#x27;E&#x27;&#x27;-English.&#x27;);
-  OutTextXY(80,430,&#x27;2. Press &#x27;&#x27;R&#x27;&#x27;-Russian.&#x27;);
+  OutTextXY(80,400,'Choose language:' );
+  OutTextXY(80,415,'1. Press ''E''-English.');
+  OutTextXY(80,430,'2. Press ''R''-Russian.');
 
    repeat
       proba:=false;
@@ -481,7 +381,7 @@ begin
      if (not  proba) then begin
        SetColor(4);
        Rectangle(175,445,440,462);
-       OutTextXY(180,450,&#x27;Once again press key &#x27;&#x27;E&#x27;&#x27; or &#x27;&#x27;R&#x27;&#x27;!&#x27;);
+       OutTextXY(180,450,'Once again press key ''E'' or ''R''!');
      end;
    until proba=true;
  end;
@@ -534,7 +434,7 @@ begin
    SetColor(4);
     for i:=1 to 4 do  FillEllipse(Round(CurX[i]),Round(CurY[i]),6,6);
    SetColor(15);
-    for i:=1 to 4 do OutTextXY(Round(g[i]),Round(h[i])-3,&#x27;+&#x27;);
+    for i:=1 to 4 do OutTextXY(Round(g[i]),Round(h[i])-3,'+');
    SetColor(1);
    Rectangle(Round(BoxXmin), Round(BoxYmin), Round(BoxXmax), Round(BoxYmax));
    SetLineStyle(UserBitLn, $FFFF, $FF);
@@ -542,10 +442,10 @@ begin
   for i:=1 to 4 do xx[i]:=CurX[i];
   for i:=1 to 4 do yy[i]:=CurY[i];
 
-  if (xx[1]&gt;xx[2]) or (yy[1]&gt;yy[4]) or (xx[3]&lt;xx[4]) or (yy[2]&gt;yy[3])
+  if (xx[1]>xx[2]) or (yy[1]>yy[4]) or (xx[3]<xx[4]) or (yy[2]>yy[3])
   then spring:=false   else spring:=true;
-  if (yy[1]&lt;25) or (yy[2]&lt;25) or (yy[3]&gt;b+25) or (yy[4]&gt;b+25)
-     or (xx[1]&lt;25) or (xx[2]&gt;a+25) or (xx[3]&gt;a+25) or (xx[4]&lt;25)
+  if (yy[1]<25) or (yy[2]<25) or (yy[3]>b+25) or (yy[4]>b+25)
+     or (xx[1]<25) or (xx[2]>a+25) or (xx[3]>a+25) or (xx[4]<25)
   then spring1:=false  else spring1:=true;
 
    key:=true;
@@ -641,10 +541,10 @@ end;
      {8.-----------Внешняя рамка (на последнем рис)--------------}
 procedure Frame;
 begin
-  SetViewPort(0, 0, Xmax, Ymax-(TextHeight(&#x27;M&#x27;)+4)-2,ClipOn);
+  SetViewPort(0, 0, Xmax, Ymax-(TextHeight('M')+4)-2,ClipOn);
   SetColor(MaxColors);
-  Rectangle(0, 0, Xmax-1, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-2)-1);
-  SetViewPort(1, 1, Xmax-2, (Ymax-(TextHeight(&#x27;M&#x27;)+4)-2)-2,ClipOn);
+  Rectangle(0, 0, Xmax-1, (Ymax-(TextHeight('M')+4)-2)-1);
+  SetViewPort(1, 1, Xmax-2, (Ymax-(TextHeight('M')+4)-2)-2,ClipOn);
 end;
 
      {9.------------------------------------------------------------}
@@ -664,9 +564,9 @@ begin
   SetTextJustify(CenterText, TopText);
   SetLineStyle(SolidLn, 0, NormWidth);
   SetFillStyle(EmptyFill, 0);
-  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
-  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
-  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2),Msg);
+  Bar(0, Ymax-(TextHeight('M')+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight('M')+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight('M')+2),Msg);
   { Go back to the main window }
   Frame;
 
@@ -677,9 +577,9 @@ begin
   SetTextJustify(CenterText, TopText);
   SetLineStyle(SolidLn, 0, NormWidth);
   SetFillStyle(EmptyFill, 0);
-  Bar(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
-  Rectangle(0, Ymax-(TextHeight(&#x27;M&#x27;)+4), Xmax, Ymax);
-  OutTextXY(Xmax div 2, Ymax-(TextHeight(&#x27;M&#x27;)+2), Msg);
+  Bar(0, Ymax-(TextHeight('M')+4), Xmax, Ymax);
+  Rectangle(0, Ymax-(TextHeight('M')+4), Xmax, Ymax);
+  OutTextXY(Xmax div 2, Ymax-(TextHeight('M')+2), Msg);
   { Go back to the main window }
   Frame;
 end;  { MessageFrame }
@@ -689,25 +589,25 @@ procedure WaitToGo;   {процедура производящая остано�
 var
   Ch : char;
 begin
- if key=false  then MessageFrame(&#x27;Invalid system, press Esc to quit&#x27;)
- else  messageFrame(&#x27;Press any key to continue... Esc aborts&#x27;);
+ if key=false  then MessageFrame('Invalid system, press Esc to quit')
+ else  messageFrame('Press any key to continue... Esc aborts');
   repeat until KeyPressed;
   Ch:=ReadKey;
   if Ch=#27 then begin
       CloseGraph;
-      Writeln(&#x27;All done.&#x27;);
+      Writeln('All done.');
       Halt(1);
     end
   else
     ClearViewPort;
-  MessageFrame(&#x27;Press any key to stop motion, Esc quits.&#x27;);
+  MessageFrame('Press any key to stop motion, Esc quits.');
 end; { WaitToGo }
 
     {12. -------------------------------------------------------}
 procedure TestGraphError(GraphErr: integer);
 begin
-  if GraphErr &lt;&gt; grOk then begin
-    Writeln(&#x27;Graphics error: &#x27;, GraphErrorMsg(GraphErr));
+  if GraphErr <> grOk then begin
+    Writeln('Graphics error: ', GraphErrorMsg(GraphErr));
     repeat until keypressed;
     ch:=readkey;
     Halt(1);
@@ -723,15 +623,15 @@ var
   s: string;
 begin
   Resolution:=Lower;
-  if paramcount&gt;0 then begin
+  if paramcount>0 then begin
     s:=paramstr(1);
-    if s[1]=&#x27;/&#x27; then
-      if upcase(s[2])=&#x27;H&#x27; then
+    if s[1]='/' then
+      if upcase(s[2])='H' then
         Resolution:=Higher;
     end;
 
 
-  InitGraph(GraphDriver, GraphMode, &#x27;&#x27;);
+  InitGraph(GraphDriver, GraphMode, '');
   TestGraphError(GraphResult);
   SetGraphMode(1);
   SetTextStyle(DefaultFont, HorizDir, 1);
@@ -750,7 +650,7 @@ procedure CheckForUserInput;
 begin
   if KeyPressed then begin
     Ch := ReadKey;
-    if (Ch &lt;&gt; #27)  then WaitToGo;
+    if (Ch <> #27)  then WaitToGo;
   end;
     if key=false then WaitToGo;
 end;
@@ -813,14 +713,11 @@ begin
    if FlagRE then SxemaRus else SxemaEng;
    Init;
    Frame;
-   MessageFrame(&#x27;Press any key to stop motion, Esc quits.&#x27;);
+   MessageFrame('Press any key to stop motion, Esc quits.');
    DoMagic;
    CloseGraph;
    RestoreCrtMode;
-   writeln(&#x27;The end.&#x27;);
+   writeln('The end.');
 end.
-</code></pre>
-        </div>
-    </div>
-</body>
-</html>
+{% endhighlight %}
+</div>

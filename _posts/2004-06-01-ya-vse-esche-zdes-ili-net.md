@@ -1,6 +1,6 @@
 ---
 title: "я все еще здесь... или [не совсем]?"
-description: "Запись сохранена, но отдельные семейные и личные детали мягко приглушены."
+description: "запись сохранена, но отдельные семейные и личные детали мягко приглушены."
 date: 2004-06-01 16:40:32
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **Diary.ru** via Wayback Machine.
 >
-> Original URL: <https://diary.ru/~aks/p1759085.htm>
+> Original URL: <a href="https://diary.ru/~aks/p1759085.htm" target="_blank" rel="noopener noreferrer">https://diary.ru/~aks/p1759085.htm</a>
 
 <p>даже не буду говорить, о том что давно не писал.</p>
 

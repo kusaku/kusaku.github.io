@@ -1,6 +1,6 @@
 ---
 title: "ничего страшного. просто пусто."
-description: "самое неприятное состояние не истерика и не паника. самое неприятное - когда просто ничего не хочется, и даже на это уже нет сил злиться."
+description: "про состояние, где уже даже злиться на пустоту не хватает сил."
 date: 2011-09-18 01:04:00
 lang: "ru"
 historical_import: true
@@ -18,7 +18,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/19942.html>
+> Original URL: <a href="http://aks1983.livejournal.com/19942.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/19942.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/sleepy.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> sleepy</td></tr>

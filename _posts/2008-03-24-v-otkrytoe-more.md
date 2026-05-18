@@ -1,6 +1,6 @@
 ---
 title: "ушел в вольное плавание"
-description: "ну что, похоже я сам себе веб-мастер, верстальщик, друпалист, хостер и человек который виноват во всем."
+description: "фриланс, Drupal, хостинг и ощущение, что теперь виноват ты сам."
 date: 2008-03-24 02:21:00
 lang: "ru"
 historical_import: true
@@ -19,7 +19,7 @@ tags:
 
 > Historical import from **LiveJournal** via Wayback Machine.
 >
-> Original URL: <http://aks1983.livejournal.com/12911.html>
+> Original URL: <a href="http://aks1983.livejournal.com/12911.html" target="_blank" rel="noopener noreferrer">http://aks1983.livejournal.com/12911.html</a>
 
 <table border=0>
 <tr><td align=right><b>Current mood:</b></td><td><img src="/assets/blog/external/livejournal/moods/curious.gif" width='40' height='40' alt='' style='display:inline-block; vertical-align:middle; border:0;' /> curious</td></tr>
