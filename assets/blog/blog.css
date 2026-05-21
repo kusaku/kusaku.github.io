@@ -1,5 +1,5 @@
 html.light {
-  --kusaku-link-hover: #e11d48;
+  --kusaku-link-hover: var(--kusaku-accent-blog);
   --kusaku-table-bg: #ffffff;
   --kusaku-table-header-bg: #f6f8fa;
   --kusaku-table-border: #d0d7de;
@@ -7,7 +7,7 @@ html.light {
 }
 
 html.dark {
-  --kusaku-link-hover: #fb7185;
+  --kusaku-link-hover: var(--kusaku-accent-blog);
   --kusaku-table-bg: #161b22;
   --kusaku-table-header-bg: #21262d;
   --kusaku-table-border: #30363d;
@@ -136,22 +136,11 @@ html.dark {
   width: 1%;
 }
 
-.blog-content table:has(td[align="right"] > b) {
-  max-width: 100%;
-  width: max-content;
-}
-
 .blog-content table:has(td[align="right"] > b) td {
   vertical-align: middle;
-  white-space: nowrap;
 }
 
-.blog-content table:has(td[align="right"] > b) td:first-child,
-.blog-content table:has(td[align="right"] > b) td:nth-child(2) {
-  width: 1%;
-}
-
-@media (max-width: 767px) {
+@media (max-width: 48rem) {
   .blog-row-link {
     justify-self: start;
     max-width: 100%;
@@ -160,15 +149,5 @@ html.dark {
   .blog-row-date {
     padding-left: 0;
     text-align: left;
-  }
-}
-
-@media (max-width: 640px) {
-  .blog-content table:has(td[align="right"] > b) {
-    width: 100%;
-  }
-
-  .blog-content table:has(td[align="right"] > b) td {
-    white-space: normal;
   }
 }

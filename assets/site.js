@@ -40,7 +40,6 @@
         const zoomImg = img.cloneNode(true);
         zoomImg.className = 'site-magnify-lens-img';
         zoomImg.removeAttribute('data-site-magnify-image');
-        zoomImg.style.setProperty('--img-border-radius', `${parseFloat(getComputedStyle(img).borderTopLeftRadius) || 9999}px`);
         Object.assign(zoomImg.style, {
           width: `${naturalWidth}px`,
           height: `${naturalHeight}px`,

@@ -2,8 +2,7 @@
   id="soundcloud-player"
   class="soundcloud-player kusaku-surface mb-12 overflow-hidden rounded-lg"
   data-turbo-permanent
-  data-api-base="{% if jekyll.environment == 'development' %}http://127.0.0.1:8787/api/soundcloud{% else %}https://soundcloud-api.kusaku.su/api/soundcloud{% endif %}"
-  data-user-id="1061043028"
+  data-api-base="{% if jekyll.environment == 'development' %}http://127.0.0.1:8787{% else %}https://soundcloud-api.kusaku.su{% endif %}"
 >
   <div class="soundcloud-shell">
     <canvas id="soundcloud-spectrum" class="soundcloud-spectrum" aria-hidden="true"></canvas>
@@ -35,25 +34,25 @@
 
     <div class="soundcloud-main">
       <div class="soundcloud-meta">
-        <h2 id="soundcloud-title" title="Loading tracks">Loading tracks</h2>
-        <p id="soundcloud-artist" title="Release date">Release date</p>
+        <h2 id="soundcloud-title">Loading tracks</h2>
+        <p id="soundcloud-artist">SoundCloud</p>
       </div>
 
       <audio id="soundcloud-audio" preload="none"></audio>
 
       <div class="soundcloud-controls">
-        <button type="button" id="soundcloud-shuffle" class="soundcloud-control" aria-label="Shuffle off" aria-pressed="false">
+        <button type="button" id="soundcloud-shuffle" class="soundcloud-control" aria-label="Shuffle off" title="Shuffle off" aria-pressed="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M3 17h2.7a4 4 0 0 0 3.4-1.9l3.7-6.2A4 4 0 0 1 16.3 7H21m0 0-2-2m2 2-2 2"></path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M3 7h2.7a4 4 0 0 1 2.9 1.2M21 17h-4.7a4 4 0 0 1-2.9-1.2M21 17l-2 2m2-2-2-2"></path>
           </svg>
         </button>
-        <button type="button" id="soundcloud-prev" class="soundcloud-control" aria-label="Previous track">
+        <button type="button" id="soundcloud-prev" class="soundcloud-control" aria-label="Previous track" title="Previous track">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M6 6h2v12H6V6Zm3.5 6 8.5 6V6l-8.5 6Z"></path>
           </svg>
         </button>
-        <button type="button" id="soundcloud-play" class="soundcloud-control soundcloud-play" aria-label="Play">
+        <button type="button" id="soundcloud-play" class="soundcloud-control soundcloud-play" aria-label="Play" title="Play">
           <svg class="soundcloud-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M8 5v14l11-7L8 5Z"></path>
           </svg>
@@ -61,12 +60,12 @@
             <path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"></path>
           </svg>
         </button>
-        <button type="button" id="soundcloud-next" class="soundcloud-control" aria-label="Next track">
+        <button type="button" id="soundcloud-next" class="soundcloud-control" aria-label="Next track" title="Next track">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M16 6h2v12h-2V6ZM6 18l8.5-6L6 6v12Z"></path>
           </svg>
         </button>
-        <button type="button" id="soundcloud-repeat" class="soundcloud-control" aria-label="Repeat off" aria-pressed="false">
+        <button type="button" id="soundcloud-repeat" class="soundcloud-control" aria-label="Repeat off" title="Repeat off" aria-pressed="false">
           <svg class="soundcloud-repeat-all-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m19 5 2 2m0 0-2 2m2-2H7"></path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="m5 19-2-2m0 0 2-2m-2 2h14"></path>

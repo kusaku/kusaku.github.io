@@ -1,11 +1,12 @@
 import http from 'node:http';
+import fs from 'node:fs';
 
 const API_BASE = 'https://api.soundcloud.com';
 const AUTH_URL = 'https://secure.soundcloud.com/oauth/token';
 const API_HOST = 'api.soundcloud.com';
-const PORT = Number(process.env.PORT) || 8787;
+
 const TOKEN_SKEW_MS = 90_000;
-const MAX_TRACK_PAGES = 10;
+
 const RETRY_CODES = new Set(['UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_HEADERS_TIMEOUT', 'ECONNRESET', 'ETIMEDOUT']);
 const DIRECT_MEDIA_HOSTS = new Set([
   'cf-hls-media.sndcdn.com',
@@ -13,33 +14,33 @@ const DIRECT_MEDIA_HOSTS = new Set([
   'media.sndcdn.com',
   'playback.media-streaming.soundcloud.cloud',
 ]);
+
 const STREAM_FIELDS = [
   ['hls_aac_160_url', 'hls'],
-  ['hls_aac_96_url', 'hls'],
   ['hls_mp3_128_url', 'hls'],
-  ['hls_opus_64_url', 'hls'],
   ['http_mp3_128_url', 'progressive'],
   ['preview_mp3_128_url', 'progressive'],
 ];
 
-let tokenCache;
-
-const env = (name, fallback = '') => process.env[name] || fallback;
 const requiredEnv = (name) => {
   const value = process.env[name];
   if (!value) throw new Error(`Missing ${name}`);
   return value;
 };
 
-const allowedOrigins = env('ALLOWED_ORIGIN', '*')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const host = process.env.HOST || '127.0.0.1';
+const port = Number(process.env.PORT) || 8787;
+const allowedOrigin = process.env.ALLOWED_ORIGIN || '*';
+const tokenCachePath = process.env.TOKEN_CACHE_PATH || '/tmp/soundcloud-api-token.json';
+const playlistId = requiredEnv('SOUNDCLOUD_PLAYLIST_ID');
+const clientId = requiredEnv('SOUNDCLOUD_CLIENT_ID');
+const clientSecret = requiredEnv('SOUNDCLOUD_CLIENT_SECRET');
+
+let tokenCache = readTokenCache();
+let tokenRequest;
 
 const corsHeaders = (request, headers = {}) => ({
-  'access-control-allow-origin': allowedOrigins.includes('*')
-    ? '*'
-    : allowedOrigins.includes(request.headers.origin) ? request.headers.origin : 'null',
+  'access-control-allow-origin': allowedOrigin,
   'access-control-allow-methods': 'GET, OPTIONS',
   'access-control-allow-headers': 'content-type, accept',
   ...headers,
@@ -58,8 +59,6 @@ const sendJson = (response, request, status, body, headers = {}) => send(
   { 'content-type': 'application/json; charset=utf-8', ...headers },
 );
 
-const isRetryable = (error) => RETRY_CODES.has(error?.code) || RETRY_CODES.has(error?.cause?.code);
-
 const fetchUpstream = async (url, options = {}) => {
   let lastError;
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -67,113 +66,146 @@ const fetchUpstream = async (url, options = {}) => {
       return await fetch(url, options);
     } catch (error) {
       lastError = error;
-      if (attempt || !isRetryable(error)) break;
+      if (attempt || (!RETRY_CODES.has(error?.code) && !RETRY_CODES.has(error?.cause?.code))) break;
     }
   }
   throw lastError;
 };
 
-const accessToken = async () => {
-  const now = Date.now();
-  if (tokenCache?.expiresAt > now + TOKEN_SKEW_MS) return tokenCache.value;
+function readTokenCache() {
+  try {
+    return JSON.parse(fs.readFileSync(tokenCachePath, 'utf8'));
+  } catch (error) {
+    console.warn('[SoundCloud] Could not read token cache.', error.message);
+  }
+}
 
-  const credentials = Buffer.from(
-    `${requiredEnv('SOUNDCLOUD_CLIENT_ID')}:${requiredEnv('SOUNDCLOUD_CLIENT_SECRET')}`,
-  ).toString('base64');
-  const response = await fetchUpstream(AUTH_URL, {
-    method: 'POST',
-    headers: {
-      accept: 'application/json; charset=utf-8',
-      authorization: `Basic ${credentials}`,
-      'content-type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({ grant_type: 'client_credentials' }),
-  });
+const writeTokenCache = () => {
+  try {
+    fs.writeFileSync(tokenCachePath, JSON.stringify(tokenCache), { mode: 0o600 });
+  } catch (error) {
+    console.warn('[SoundCloud] Could not write token cache.', error.message);
+  }
+};
 
-  if (!response.ok) throw new Error(`SoundCloud token request failed with ${response.status}`);
-
-  const token = await response.json();
-  tokenCache = {
-    value: token.access_token,
-    expiresAt: now + (Number(token.expires_in) || 3600) * 1000,
+const requestToken = async (body, { useBasicAuth = false } = {}) => {
+  const headers = {
+    accept: 'application/json; charset=utf-8',
+    'content-type': 'application/x-www-form-urlencoded',
   };
-  return tokenCache.value;
-};
 
-const soundCloudJson = async (pathOrUrl) => {
-  const response = await fetchUpstream(pathOrUrl.startsWith('https://') ? pathOrUrl : `${API_BASE}${pathOrUrl}`, {
-    headers: {
-      accept: 'application/json; charset=utf-8',
-      authorization: `OAuth ${await accessToken()}`,
-    },
-  });
-
-  if (!response.ok) throw new Error(`SoundCloud request failed with ${response.status}`);
-  return response.json();
-};
-
-const normalizeTrack = ({
-  id,
-  title,
-  created_at,
-  duration,
-  artwork_url,
-  permalink_url,
-}) => ({
-  id,
-  title,
-  created_at,
-  duration,
-  artwork_url,
-  permalink_url,
-});
-
-const getTracks = async (requestUrl) => {
-  const userId = requestUrl.searchParams.get('user_id') || env('SOUNDCLOUD_USER_ID');
-  if (!userId) return { tracks: [] };
-
-  const tracks = [];
-  let nextUrl = `${API_BASE}/users/${encodeURIComponent(userId)}/tracks?linked_partitioning=true&limit=200&access=playable`;
-
-  for (let page = 0; nextUrl && page < MAX_TRACK_PAGES; page += 1) {
-    const data = await soundCloudJson(nextUrl);
-    const collection = Array.isArray(data) ? data : data.collection || [];
-    tracks.push(...collection.filter((track) => track.id).map(normalizeTrack));
-    nextUrl = Array.isArray(data) ? null : data.next_href || null;
+  if (useBasicAuth) {
+    headers.authorization = `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`;
+  } else {
+    body.set('client_id', clientId);
+    body.set('client_secret', clientSecret);
   }
 
-  return { tracks };
+  const response = await fetchUpstream(AUTH_URL, {
+    method: 'POST',
+    headers,
+    body,
+  });
+
+  if (!response.ok) {
+    const error = new Error(`SoundCloud token request failed with ${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+
+  const token = await response.json();
+  if (!token.access_token) throw new Error('SoundCloud token response did not include an access token');
+
+  tokenCache = {
+    accessToken: token.access_token,
+    expiresAt: Date.now() + (Number(token.expires_in) || 3600) * 1000,
+    refreshToken: token.refresh_token,
+  };
+  writeTokenCache();
+  return tokenCache.accessToken;
+};
+
+const accessToken = async () => {
+  const now = Date.now();
+  if (tokenCache?.expiresAt > now + TOKEN_SKEW_MS) return tokenCache.accessToken;
+  if (tokenRequest) return tokenRequest;
+
+  tokenRequest = (async () => {
+    if (tokenCache?.refreshToken) {
+      try {
+        return await requestToken(new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: tokenCache.refreshToken,
+        }));
+      } catch (error) {
+        if (![400, 401].includes(error.status)) throw error;
+      }
+    }
+
+    return requestToken(
+      new URLSearchParams({ grant_type: 'client_credentials' }),
+      { useBasicAuth: true },
+    );
+  })();
+
+  try {
+    return await tokenRequest;
+  } finally {
+    tokenRequest = null;
+  }
+};
+
+const soundCloudJson = async (path) => {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetchUpstream(`${API_BASE}${path}`, {
+      headers: {
+        accept: 'application/json; charset=utf-8',
+        authorization: `OAuth ${await accessToken()}`,
+      },
+    });
+    const text = await response.text();
+
+    if (!response.ok) throw new Error(`SoundCloud request failed with ${response.status}`);
+    if (!text.trim() && response.status === 202 && attempt < 2) {
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+      continue;
+    }
+    if (!text.trim()) throw new Error(`SoundCloud request returned an empty ${response.status} response`);
+
+    return JSON.parse(text);
+  }
+};
+
+const getPlaylistTracks = async () => {
+  const data = await soundCloudJson(
+    `/playlists/${encodeURIComponent(playlistId)}/tracks?${new URLSearchParams({ linked_partitioning: 'true' })}`,
+  );
+  const tracks = Array.isArray(data.collection) ? data.collection : [];
+
+  return {
+    tracks: tracks.filter((track) => track.id && track.access === 'playable'),
+  };
 };
 
 const manifestUrl = (requestUrl, targetUrl) => {
-  const url = new URL('/api/soundcloud/proxy', requestUrl.origin);
+  const url = new URL('/proxy', requestUrl.origin);
   url.searchParams.set('url', targetUrl);
   return url.href;
 };
 
-const pickStream = (streams) => {
-  const field = STREAM_FIELDS.find(([name]) => streams[name]);
-  if (field) return { url: streams[field[0]], protocol: field[1], format: field[0] };
-  if (!streams.url) return null;
-  return {
-    url: streams.url,
-    protocol: streams.url.includes('.m3u8') ? 'hls' : 'progressive',
-    format: streams.mime_type || 'unknown',
-  };
-};
-
 const getTrackStream = async (trackId, requestUrl) => {
-  let streams;
-  try {
-    streams = await soundCloudJson(`/tracks/${encodeURIComponent(trackId)}/streams`);
-  } catch {
-    streams = await soundCloudJson(`/tracks/${encodeURIComponent(trackId)}/stream`);
-  }
+  const streams = await soundCloudJson(`/tracks/${encodeURIComponent(trackId)}/streams`);
+  const field = STREAM_FIELDS.find(([name]) => streams[name]);
+  if (!field) throw new Error('No playable SoundCloud stream found');
 
-  const stream = pickStream(streams);
-  if (!stream) throw new Error('No playable SoundCloud stream found');
+  const stream = { url: streams[field[0]], protocol: field[1], format: field[0] };
   if (stream.protocol === 'hls') stream.url = manifestUrl(requestUrl, stream.url);
   return stream;
+};
+
+const requestUrlFor = (request) => {
+  const forwardedProto = String(request.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  return new URL(request.url, `${forwardedProto || 'http'}://${request.headers.host}`);
 };
 
 const rewriteManifest = (manifest, sourceUrl, requestUrl) => {
@@ -193,24 +225,20 @@ const rewriteManifest = (manifest, sourceUrl, requestUrl) => {
     .join('\n');
 };
 
-const targetUrlFrom = (request, response, requestUrl) => {
+const proxyManifest = async (request, response, requestUrl) => {
   const rawUrl = requestUrl.searchParams.get('url');
   if (!rawUrl) {
     send(response, request, 400, 'Missing url');
-    return null;
+    return;
   }
 
+  let targetUrl;
   try {
-    return new URL(rawUrl);
+    targetUrl = new URL(rawUrl);
   } catch {
     send(response, request, 400, 'Invalid url');
-    return null;
+    return;
   }
-};
-
-const proxyManifest = async (request, response, requestUrl) => {
-  const targetUrl = targetUrlFrom(request, response, requestUrl);
-  if (!targetUrl) return;
 
   if (DIRECT_MEDIA_HOSTS.has(targetUrl.hostname)) {
     send(response, request, 302, '', {
@@ -227,6 +255,7 @@ const proxyManifest = async (request, response, requestUrl) => {
       authorization: `OAuth ${await accessToken()}`,
     },
   });
+
   if (!upstream.ok) return send(response, request, upstream.status, 'Manifest request failed');
 
   const contentType = upstream.headers.get('content-type') || '';
@@ -240,11 +269,6 @@ const proxyManifest = async (request, response, requestUrl) => {
   });
 };
 
-const requestUrlFor = (request) => {
-  const forwardedProto = String(request.headers['x-forwarded-proto'] || '').split(',')[0].trim();
-  return new URL(request.url, `${forwardedProto || 'http'}://${request.headers.host}`);
-};
-
 const route = async (request, response) => {
   if (request.method === 'OPTIONS') return send(response, request, 204);
   if (request.method !== 'GET') return sendJson(response, request, 405, { error: 'Method not allowed' });
@@ -256,12 +280,12 @@ const route = async (request, response) => {
     if (path === '/health') {
       return sendJson(response, request, 200, { status: 'ok' }, { 'cache-control': 'no-store' });
     }
-    if (path === '/api/soundcloud/tracks') {
-      return sendJson(response, request, 200, await getTracks(requestUrl), { 'cache-control': 'public, max-age=300' });
+    if (path === '/tracks') {
+      return sendJson(response, request, 200, await getPlaylistTracks(), { 'cache-control': 'public, max-age=300' });
     }
-    if (path === '/api/soundcloud/proxy') return proxyManifest(request, response, requestUrl);
+    if (path === '/proxy') return proxyManifest(request, response, requestUrl);
 
-    const streamMatch = path.match(/^\/api\/soundcloud\/tracks\/([^/]+)\/stream$/);
+    const streamMatch = path.match(/^\/tracks\/([^/]+)\/stream$/);
     if (streamMatch) {
       return sendJson(response, request, 200, await getTrackStream(streamMatch[1], requestUrl), {
         'cache-control': 'private, max-age=30',
@@ -280,6 +304,6 @@ http.createServer((request, response) => {
     console.error(error);
     sendJson(response, request, 500, { error: 'Internal server error' });
   });
-}).listen(PORT, '127.0.0.1', () => {
-  console.log(`SoundCloud API listening on 127.0.0.1:${PORT}`);
+}).listen(port, host, () => {
+  console.log(`[SoundCloud] API listening on ${host}:${port}`);
 });

@@ -1,57 +1,93 @@
 ---
 layout: default
 title: Music
-seo_title: kusaku music
 description: Listen to kusaku tracks and share direct links to the music.
 soundcloud_widget: false
 ---
-<main class="soundcloud-player-page mx-auto max-w-6xl">
-  {% include site-nav.html class="mb-4 flex flex-wrap items-center justify-center gap-6 text-gray-600" %}
+<main
+  class="soundcloud-player-page site-page"
+  data-soundcloud-page
+  data-soundcloud-base-title="{{ page.title | append: ' | ' | append: site.title | escape }}"
+>
+  {% include site-nav.html class="mb-4 flex flex-nowrap items-center justify-center text-gray-600" %}
 
   {% include soundcloud-player.html %}
 </main>
 
 <script>
 (() => {
-  const player = document.getElementById('soundcloud-player');
-  if (!player) return;
+  const state = window.kusakuSoundCloudMusicPage || (window.kusakuSoundCloudMusicPage = {});
 
-  const controller = new AbortController();
-  const { signal } = controller;
+  const cleanup = () => {
+    if (!state.controller) return;
 
-  const selectRequestedTrack = () => {
-    if (player.dataset.tracksReady !== 'true') return;
-
-    const requestedTrackId = new URLSearchParams(window.location.search).get('id');
-    if (!requestedTrackId) return;
-
-    player.dispatchEvent(new CustomEvent('soundcloud:select-track', {
-      detail: {
-        id: requestedTrackId,
-        play: false,
-      },
-    }));
+    delete state.player?.dataset.skipState;
+    state.controller.abort();
+    state.controller = null;
+    state.player = null;
   };
 
-  const updateTrackUrl = (event) => {
-    const trackId = event.detail?.id;
-    if (!trackId) return;
+  const init = () => {
+    const page = document.querySelector('[data-soundcloud-page]');
+    const player = document.getElementById('soundcloud-player');
 
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('id') === String(trackId)) return;
+    cleanup();
+    if (!page || !player) return;
 
-    url.searchParams.set('id', trackId);
-    window.history.replaceState(null, '', url);
+    const controller = new AbortController();
+    const { signal } = controller;
+    const baseTitle = page.dataset.soundcloudBaseTitle || document.title;
+
+    state.controller = controller;
+    state.player = player;
+    player.dataset.skipState = 'true';
+
+    const selectRequestedTrack = () => {
+      if (player.dataset.tracksReady !== 'true') return;
+
+      const requestedTrackId = new URLSearchParams(window.location.search).get('id');
+      if (!requestedTrackId) return;
+
+      player.dispatchEvent(new CustomEvent('soundcloud:select-track', {
+        detail: {
+          id: requestedTrackId,
+          play: false,
+        },
+      }));
+    };
+
+    const updateTrackUrl = (event) => {
+      const trackId = event.detail?.id;
+      if (!trackId) return;
+
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('id') === String(trackId)) return;
+
+      url.searchParams.set('id', trackId);
+      window.history.replaceState(null, '', url);
+    };
+
+    const updatePageTitle = ({ detail = {} }) => {
+      if (!detail.title) return;
+
+      const trackLabel = detail.artist ? `${detail.title} by ${detail.artist}` : detail.title;
+      document.title = `${trackLabel} | ${baseTitle}`;
+    };
+
+    player.addEventListener('soundcloud:track-change', updateTrackUrl, { signal });
+    player.addEventListener('soundcloud:track-meta', updatePageTitle, { signal });
+    player.addEventListener('soundcloud:tracks-ready', selectRequestedTrack, { signal });
+    document.addEventListener('turbo:before-render', cleanup, { once: true, signal });
+
+    selectRequestedTrack();
+    player.dispatchEvent(new CustomEvent('soundcloud:request-track-meta'));
   };
 
-  player.dataset.skipState = 'true';
-  player.addEventListener('soundcloud:track-change', updateTrackUrl, { signal });
-  player.addEventListener('soundcloud:tracks-ready', selectRequestedTrack, { signal });
-  document.addEventListener('turbo:before-render', () => {
-    delete player.dataset.skipState;
-    controller.abort();
-  }, { once: true, signal });
+  if (!state.ready) {
+    state.ready = true;
+    document.addEventListener('turbo:load', init);
+  }
 
-  selectRequestedTrack();
+  init();
 })();
 </script>

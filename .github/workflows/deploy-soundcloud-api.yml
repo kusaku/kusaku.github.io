@@ -52,12 +52,10 @@ jobs:
             -e "ssh -p ${{ secrets.DEPLOY_PORT || '22' }}" \
             ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.SOUNDCLOUD_API_APP_DIR }}/
 
-      - name: Install and restart service
+      - name: Restart service
         run: |
           ssh -p "${{ secrets.DEPLOY_PORT || '22' }}" ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << EOF
             set -e
-            cd "${{ secrets.SOUNDCLOUD_API_APP_DIR }}"
-            npm ci --omit=dev
             sudo -n /usr/bin/systemctl restart "${{ secrets.SOUNDCLOUD_API_SERVICE }}"
-            sudo -n /usr/bin/systemctl status "${{ secrets.SOUNDCLOUD_API_SERVICE }}" --no-pager
+            sudo -n /usr/bin/systemctl status "${{ secrets.SOUNDCLOUD_API_SERVICE }}"
           EOF

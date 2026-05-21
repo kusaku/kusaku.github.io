@@ -63,11 +63,11 @@
       <link rel="stylesheet" href="{{ '/assets/blog/blog.css' | relative_url }}">
     {%- endif %}
     {%- if page.url == "/legacy/" or page.layout == "legacy" %}
-      <link rel="stylesheet" href="{{ '/assets/legacy.css' | relative_url }}">
+      <link rel="stylesheet" href="{{ '/assets/legacy/legacy.css' | relative_url }}">
     {%- endif %}
     <script src="{{ '/assets/site.js' | relative_url }}"></script>
   </head>
-  <body class="min-h-screen p-4 sm:p-6 lg:p-8{% unless page.soundcloud_widget == false %} has-soundcloud-widget{% endunless %}">
+  <body class="min-h-screen{% unless page.soundcloud_widget == false %} has-soundcloud-widget{% endunless %}">
     {{ content }}
     {% unless page.soundcloud_widget == false %}
       {% include soundcloud-player-widget.html %}

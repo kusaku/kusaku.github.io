@@ -1,9 +1,9 @@
 html.light {
-  --kusaku-link-hover: #9333ea;
+  --kusaku-link-hover: var(--kusaku-accent-legacy);
 }
 
 html.dark {
-  --kusaku-link-hover: #a855f7;
+  --kusaku-link-hover: var(--kusaku-accent-legacy);
 }
 
 .legacy-panel,
@@ -57,7 +57,7 @@ html.dark {
   transform: translateY(-4px);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40rem) {
   .legacy-code-card {
     padding: 2rem;
   }
