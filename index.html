@@ -63,19 +63,24 @@ soundcloud_widget: false
       </div>
     </a>
 
-    <a href="{{ '/blog/' | relative_url }}" class="site-tile kusaku-surface group p-8">
-      <div class="flex flex-col items-center text-center">
-        <div class="mb-4">
-          <svg class="h-16 w-16 text-gray-900 transition-all group-hover:scale-110 group-hover:text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.5 21H6.5a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v14a2 2 0 01-2 2z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 3v4H6.5m3 5h5m-5 4h5M6.5 12h.01M6.5 16h.01"></path>
-          </svg>
-        </div>
-        <h2 class="mb-2 text-2xl font-bold text-gray-900 transition-colors group-hover:text-rose-600">Blog</h2>
-        <p class="mb-4 text-gray-600">Notes on software, systems, and side projects</p>
-        <span class="text-sm font-medium text-gray-900 transition-colors group-hover:text-rose-600">Read the blog →</span>
-      </div>
-    </a>
+    <div class="atlas-links" aria-label="Political atlases">
+        <a href="https://kusaku.su/russia-political-map/" target="_blank" rel="noopener noreferrer" class="atlas-tile kusaku-surface atlas-russia">
+          <svg class="atlas-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0039a6"/><rect y="13.33" width="30" height="6.67" fill="#d52b1e"/></svg>
+          <span class="atlas-copy"><b>Russia</b><small>Political atlas · federal subjects</small></span>
+        </a>
+        <a href="https://kusaku.su/usa-political-map/" target="_blank" rel="noopener noreferrer" class="atlas-tile kusaku-surface atlas-usa">
+          <svg class="atlas-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><path d="M0 0h30v2.86H0zm0 5.71h30v2.86H0zm0 5.72h30v2.86H0zm0 5.71h30V20H0z" fill="#b22234"/><rect width="12" height="11.43" fill="#3c3b6e"/></svg>
+          <span class="atlas-copy"><b>USA</b><small>Political atlas · states</small></span>
+        </a>
+        <a href="https://kusaku.su/germany-political-map/" target="_blank" rel="noopener noreferrer" class="atlas-tile kusaku-surface atlas-germany">
+          <svg class="atlas-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="6.67" fill="#111"/><rect y="6.67" width="30" height="6.67" fill="#dd0000"/><rect y="13.33" width="30" height="6.67" fill="#ffce00"/></svg>
+          <span class="atlas-copy"><b>Germany</b><small>Political atlas · Länder</small></span>
+        </a>
+        <a href="https://kusaku.su/berlin-political-map/" target="_blank" rel="noopener noreferrer" class="atlas-tile kusaku-surface atlas-berlin">
+          <svg class="atlas-flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="30" height="3" fill="#e32636"/><rect y="17" width="30" height="3" fill="#e32636"/><g fill="#171b22"><path d="M14.9 4.1c-1.4 0-2.3 1.1-2.3 2.3v2l-1.5 1.1.7 1.1 1.4-.5-.1 3.1h1.5l.4-1.7.4 1.7h1.5l-.1-3.1 1.4.5.7-1.1-1.5-1.1v-2c0-1.2-.9-2.3-2.3-2.3Z"/><circle cx="13.1" cy="4.8" r=".7"/><circle cx="16.7" cy="4.8" r=".7"/></g><path d="M15 7.4l.8.5-.8.5-.8-.5Z" fill="#e32636"/></svg>
+          <span class="atlas-copy"><b>Berlin</b><small>Political atlas · boroughs</small></span>
+        </a>
+    </div>
   </div>
 
   {% include soundcloud-player.html %}

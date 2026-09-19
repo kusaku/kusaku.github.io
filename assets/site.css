@@ -312,6 +312,77 @@ html.dark #bio-modal button:hover { color: #c9d1d9; }
   transform: translateY(-0.25rem);
 }
 
+.atlas-links {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.atlas-tile {
+  align-items: center;
+  border-radius: 0.5rem;
+  color: var(--kusaku-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  justify-content: center;
+  min-height: 8rem;
+  min-width: 0;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  transition: transform 180ms ease;
+}
+
+.atlas-tile:hover {
+  transform: translateY(-0.25rem);
+}
+
+.atlas-russia { --atlas-accent: #2f7cff; }
+.atlas-usa { --atlas-accent: #d23b4b; }
+.atlas-germany { --atlas-accent: #c99700; }
+.atlas-berlin { --atlas-accent: #e32636; }
+
+.atlas-tile:hover .atlas-copy b {
+  color: var(--atlas-accent);
+}
+
+.atlas-copy {
+  display: grid;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+.atlas-copy b {
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.atlas-copy small {
+  color: var(--kusaku-muted);
+  font-size: 0.7rem;
+  margin-top: 0.18rem;
+}
+
+.atlas-flag {
+  border: 1px solid rgba(127, 127, 127, 0.45);
+  border-radius: 0.15rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+  flex: 0 0 auto;
+  height: auto;
+  width: 2.15rem;
+}
+
+@media (max-width: 520px) {
+  .atlas-tile {
+    min-height: 7.25rem;
+    padding: 0.75rem 0.4rem;
+  }
+
+  .atlas-copy b { font-size: 0.8rem; }
+  .atlas-copy small { font-size: 0.59rem; }
+  .atlas-flag { width: 1.9rem; }
+}
+
 .site-header {
   align-items: center;
   display: flex;
