@@ -18,6 +18,11 @@ html.dark {
   border-radius: 0.5rem;
 }
 
+.blog-content a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .blog-chip,
 .blog-subtle-link {
   align-items: center;
