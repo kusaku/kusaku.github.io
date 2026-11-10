@@ -19,19 +19,6 @@ bundle install
 bundle exec jekyll serve
 ```
 
-For local SoundCloud API testing, provide the required environment variables
-locally and run:
-
-```bash
-cd soundcloud-api
-PORT=8787 npm run dev
-```
-
-The homepage JavaScript automatically uses
-`http://127.0.0.1:8787/api/soundcloud` when the site is opened from localhost.
-
 ## Deployment
 
-The static site deploys through GitHub Pages. The SoundCloud API deploys through
-its own GitHub Actions workflow and expects its runtime secrets to be configured
-outside the repository.
+GitHub Actions deploys the site to GitHub Pages and the SoundCloud API separately.

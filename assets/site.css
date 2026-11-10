@@ -389,6 +389,7 @@ html.dark #bio-modal button:hover { color: #c9d1d9; }
   flex-direction: column;
   gap: 1rem;
   justify-content: space-between;
+  padding-top: 3rem;
   text-align: center;
 }
 
