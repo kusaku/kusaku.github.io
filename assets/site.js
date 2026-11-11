@@ -141,14 +141,13 @@
     delete element.dataset.themeReady;
     delete element.dataset.bioReady;
     delete element.dataset.siteMagnifyReady;
-    delete element.dataset.soundcloudReady;
-    delete element.dataset.soundcloudScrollReady;
   };
 
   const resetTurboCachedState = () => {
+    closeBio();
     document.querySelectorAll('[data-site-magnify-lens]').forEach((lens) => lens.replaceChildren());
     document
-      .querySelectorAll('[data-theme-ready], [data-bio-ready], [data-site-magnify-ready], [data-soundcloud-ready], [data-soundcloud-scroll-ready]')
+      .querySelectorAll('[data-theme-ready], [data-bio-ready], [data-site-magnify-ready]')
       .forEach(resetReadyFlags);
   };
 
