@@ -69,3 +69,4 @@ exclude:
   - _site/
   - .jekyll-cache/
   - vendor/
+  - soundcloud-api/

@@ -31,8 +31,6 @@
     <meta name="keywords" content="{{ page_keywords | join: ', ' | escape }}">
     <meta name="author" content="{{ site.author.name | escape }}">
     <link rel="canonical" href="{{ canonical_url | escape }}">
-    <link rel="alternate" hreflang="en" href="{{ canonical_url | escape }}">
-    <link rel="alternate" hreflang="ru" href="{{ canonical_url | escape }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | relative_url }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ '/favicon-16x16.png' | relative_url }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | relative_url }}">
@@ -42,8 +40,7 @@
     <meta property="og:type" content="{{ og_type | escape }}">
     <meta property="og:site_name" content="{{ site.title | escape }}">
     <meta property="og:image" content="{{ image_url | escape }}">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:locale:alternate" content="ru_RU">
+    <meta property="og:locale" content="{% if page.lang == 'ru' %}ru_RU{% else %}en_US{% endif %}">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ twitter_title | escape }}">
     <meta name="twitter:description" content="{{ twitter_description | escape }}">
@@ -53,19 +50,19 @@
     <meta name="theme-color" content="{{ site.theme_color.dark | escape }}" media="(prefers-color-scheme: dark)">
     <meta name="geo.region" content="{{ site.geo_region | escape }}">
 {% include structured-data.html %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8/dist/turbo.es2017-umd.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.23/dist/turbo.es2017-umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js" defer></script>
     <script src="{{ '/assets/player.js' | relative_url }}" defer></script>
-{% include analytics.html %}
-    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+{% if jekyll.environment == "production" %}{% include analytics.html %}{% endif %}
+    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}" data-turbo-track="reload">
     {%- if page.url == "/blog/" or page.collection == "posts" %}
-      <link rel="stylesheet" href="{{ '/assets/blog/blog.css' | relative_url }}">
+      <link rel="stylesheet" href="{{ '/assets/blog/blog.css' | relative_url }}" data-turbo-track="dynamic">
     {%- endif %}
     {%- if page.url == "/legacy/" or page.layout == "legacy" %}
-      <link rel="stylesheet" href="{{ '/assets/legacy/legacy.css' | relative_url }}">
+      <link rel="stylesheet" href="{{ '/assets/legacy/legacy.css' | relative_url }}" data-turbo-track="dynamic">
     {%- endif %}
-    <script src="{{ '/assets/site.js' | relative_url }}"></script>
+    <script src="{{ '/assets/site.js' | relative_url }}" data-turbo-track="reload"></script>
   </head>
   <body class="min-h-screen{% unless page.soundcloud_widget == false %} has-soundcloud-widget{% endunless %}">
     {{ content }}

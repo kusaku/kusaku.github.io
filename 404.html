@@ -1,0 +1,23 @@
+---
+layout: default
+title: Page not found
+description: This page does not exist or has moved.
+permalink: /404.html
+robots: noindex
+sitemap: false
+---
+{% include theme-toggle.html %}
+
+<div class="site-page">
+  {% include site-header.html title="Kirill Arkhipenko" description="Projects, notes, music, and a small museum of internet leftovers" %}
+
+  <section class="kusaku-surface mb-6 rounded-lg px-8 py-16 text-center">
+    <h2 class="mb-2 text-5xl font-bold text-gray-900">404</h2>
+    <p class="mb-4 text-2xl font-semibold text-gray-900">Page not found</p>
+    <p class="mx-auto max-w-xl text-gray-600">It’s not you, it’s the cable.</p>
+  </section>
+
+  {% include site-footer.html %}
+</div>
+
+{% include bio-modal.html %}

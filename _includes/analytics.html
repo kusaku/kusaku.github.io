@@ -5,15 +5,6 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '{{ site.analytics.google_id }}');
-    window.kusakuLastAnalyticsUrl = window.location.href;
-    document.addEventListener('turbo:load', function () {
-        if (window.location.href === window.kusakuLastAnalyticsUrl) return;
-        window.kusakuLastAnalyticsUrl = window.location.href;
-        gtag('config', '{{ site.analytics.google_id }}', {
-            page_path: window.location.pathname + window.location.search,
-            page_title: document.title
-        });
-    });
 </script>
 {%- endif %}
 {%- if site.analytics.yandex_id %}
@@ -25,13 +16,15 @@
         k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id={{ site.analytics.yandex_id }}', 'ym');
     ym({{ site.analytics.yandex_id }}, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
-    window.kusakuLastYandexUrl = window.location.href;
-    document.addEventListener('turbo:load', function () {
-        if (window.location.href === window.kusakuLastYandexUrl || !window.ym) return;
-        window.kusakuLastYandexUrl = window.location.href;
-        ym({{ site.analytics.yandex_id }}, 'hit', window.location.href, {
-            title: document.title
+</script>
+<script>
+    // GA4 tracks Turbo's history changes itself; Metrica needs explicit hits.
+    (function (id, last) {
+        document.addEventListener('turbo:load', function () {
+            if (location.href === last) return;
+            ym(id, 'hit', location.href, { title: document.title, referer: last });
+            last = location.href;
         });
-    });
+    })({{ site.analytics.yandex_id }}, location.href);
 </script>
 {%- endif %}
