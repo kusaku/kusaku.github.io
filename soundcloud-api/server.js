@@ -177,14 +177,17 @@ const soundCloudJson = async (path) => {
 };
 
 const getPlaylistTracks = async () => {
-  const data = await soundCloudJson(
-    `/playlists/${encodeURIComponent(playlistId)}/tracks?${new URLSearchParams({ linked_partitioning: 'true' })}`,
-  );
-  const tracks = Array.isArray(data.collection) ? data.collection : [];
+  const tracks = [];
+  let url = new URL(`/playlists/${encodeURIComponent(playlistId)}/tracks?linked_partitioning=true&limit=200`, API_BASE);
 
-  return {
-    tracks: tracks.filter((track) => track.id && track.access === 'playable'),
-  };
+  while (url) {
+    if (url.origin !== API_BASE) throw new Error('Unexpected SoundCloud pagination URL');
+    const data = await soundCloudJson(url.pathname + url.search);
+    if (Array.isArray(data.collection)) tracks.push(...data.collection);
+    url = data.next_href ? new URL(data.next_href, API_BASE) : null;
+  }
+
+  return { tracks: tracks.filter((track) => track.id && track.access === 'playable') };
 };
 
 const manifestUrl = (requestUrl, targetUrl) => {

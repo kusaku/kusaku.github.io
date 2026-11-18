@@ -1,7 +1,7 @@
 ---
 title: "Postgres vs ClickHouse for Bulk DataFrame IO: CSV, Records, Native, Parquet"
 description: "Benchmarking bulk DataFrame IO into Postgres and ClickHouse."
-date: 2026-04-07 12:40:00 +0200
+date: 2026-04-25 12:40:00 +0200
 lang: "en"
 tags:
   - "code"

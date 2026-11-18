@@ -1,7 +1,7 @@
 ---
 title: "Берлинские школы-близнецы: история SK Berlin"
 description: "Почему больше сотни школ Восточного Берлина похожи друг на друга: история серии SK Berlin, фотографии и адреса с Google Maps."
-date: 2026-11-03 12:00:00 +0100
+date: 2026-09-12 12:00:00 +0200
 lang: "ru"
 image: /assets/blog/2026/11/berlin-sk68/friedrichsfelder-schule-grundschule-54636525817.jpg
 tags:
